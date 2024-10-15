@@ -10,20 +10,14 @@
 
 ### ✔️TODO
 
-<!--
-- [] 일반 프로필 마이페이지 조회
-- [] 직원 프로필
--->
+- [ ] 
 
 ### 📌ETC
 
-<!--
-- Dto 이름 수정 (response -> resultDto)
--->
+<!-- 라이브러리 설치 등 특이사항 작성 -->
 
-## :heavy_plus_sign: 지라 링크
+### :heavy_plus_sign: 지라 링크
 
 <!--
 - S11P21D203-153(https://ssafy.atlassian.net/browse/S11P21D203-153)
-- S11P21D203-160(https://ssafy.atlassian.net/browse/S11P21D203-160)
 -->
