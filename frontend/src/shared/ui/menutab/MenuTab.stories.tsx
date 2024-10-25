@@ -2,10 +2,8 @@ import React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 import { MenuTab } from '.';
 import { MenuTabProps } from './MenuTab.types';
-import {
-  FontWeight,
-  Palette,
-} from '@/shared/model/globalstyle/globalStyleTypes';
+import { FontWeight, Palette } from '@/shared/model/globalStylesTyes';
+
 
 const meta = {
   title: 'UI/Components/MenuTab',
@@ -71,7 +69,9 @@ const colors: Palette[] = [
   'primary',
   'secondary',
   'danger',
-  'grey',
+  'indigo',
+  'blue',
+  'success',
   'dark',
   'light',
 ];
