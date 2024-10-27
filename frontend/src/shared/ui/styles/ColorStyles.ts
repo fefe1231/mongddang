@@ -32,11 +32,11 @@ const ColorStyle = {
     disabled: Colors.indigo['300'],
   },
   blue: {
-    main: Colors.indigo['500'],
+    main: Colors.blue['500'],
     contrastText: '#fff',
-    hover: Colors.indigo['A200'],
-    active: Colors.indigo['300'],
-    disabled: Colors.indigo['300'],
+    hover: Colors.blue['A200'],
+    active: Colors.blue['300'],
+    disabled: Colors.blue['300'],
   },
   success: {
     main: Colors.success['500'],

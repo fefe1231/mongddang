@@ -22,7 +22,7 @@ const meta = {
   argTypes: {
     color: {
       description: '선택된 버튼의 색입니다.',
-      options: ['primary', 'secondary', 'danger', 'grey', 'dark', 'light'],
+      options: ['primary', 'secondary','success', 'danger','indigo','blue', 'dark', 'light'],
       control: 'select',
     },
     children: {

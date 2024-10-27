@@ -1,7 +1,7 @@
-import { Palette, FontWeight } from "@/shared/model/globalstyle/globalStyleTypes";
+
+import { FontWeight, Palette } from "@/shared/model/globalStylesTyes";
 import React, { ReactNode } from "react";
  
-
 
 export interface MenuTabProps extends React.ComponentProps<'div'> {
   children: ReactNode[];
