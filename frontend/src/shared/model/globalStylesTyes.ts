@@ -2,8 +2,10 @@ export type TColor = Record<ColorScale, string>;
 export type Palette =
   | 'primary'
   | 'secondary'
-  | 'grey'
+  | 'success'
   | 'danger'
+  | 'indigo'
+  | 'blue'
   | 'dark'
   | 'light';
 export type ColorScale =

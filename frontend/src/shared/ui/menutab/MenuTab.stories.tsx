@@ -2,10 +2,8 @@ import React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 import { MenuTab } from '.';
 import { MenuTabProps } from './MenuTab.types';
-import {
-  FontWeight,
-  Palette,
-} from '@/shared/model/globalstyle/globalStyleTypes';
+import { FontWeight, Palette } from '@/shared/model/globalStylesTyes';
+
 
 const meta = {
   title: 'UI/Components/MenuTab',
@@ -24,7 +22,7 @@ const meta = {
   argTypes: {
     color: {
       description: '선택된 버튼의 색입니다.',
-      options: ['primary', 'secondary', 'danger', 'grey', 'dark', 'light'],
+      options: ['primary', 'secondary','success', 'danger','indigo','blue', 'dark', 'light'],
       control: 'select',
     },
     children: {
@@ -71,7 +69,9 @@ const colors: Palette[] = [
   'primary',
   'secondary',
   'danger',
-  'grey',
+  'indigo',
+  'blue',
+  'success',
   'dark',
   'light',
 ];
