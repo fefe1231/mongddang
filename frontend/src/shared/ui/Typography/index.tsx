@@ -7,7 +7,7 @@ export const Typography = ({
   children = 'Typography',
   color = 'primary',
   scale,
-  size = 1,
+  size = '1',
   weight = 100,
   ...props
 }: TypographyProps) => {

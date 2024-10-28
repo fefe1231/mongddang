@@ -6,6 +6,7 @@ import {
   FontWeight,
   Palette,
 } from '@/shared/model/globalStylesTyes';
+import { Tsize } from './Typography.types';
 
 const meta = {
   title: 'UI/Components/Typography',
@@ -46,11 +47,11 @@ const meta = {
       control: 'select',
     },
     size: {
-      description: '적용할 사이즈입니다.\nrem 단위로 입력하면 됩니다.',
+      description: '적용할 사이즈입니다.\nrem단위입니다..',
     },
     weight: {
       description: '적용할 굵기입니다.',
-      options: [100, 200, 300, 400, 500, 600, 700, 800, 900],
+      options: [400, 500, 600, 700],
       control: 'select',
     },
   },
@@ -64,7 +65,7 @@ export const Primary: Story = {
   args: {
     children: 'Typography',
     color: 'dark',
-    size: 1,
+    size: '1',
     weight: 700,
   },
 };
@@ -95,8 +96,8 @@ const scales: ColorScale[] = [
   'A400',
   'A700',
 ];
-const sizes: number[] = [0.5, 0.625, 0.75, 0.875, 1, 1.125, 1.25];
-const weights: FontWeight[] = [100, 200, 300, 400, 500, 600, 700, 800, 900];
+const sizes: Tsize[] = ['0.75', '1', '1.25', '1.5','1.75'];
+const weights: FontWeight[] = [400, 500, 600, 700];
 
 export const MainColors: Story = {
   args: {
