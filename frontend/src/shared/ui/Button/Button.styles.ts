@@ -8,15 +8,15 @@ import ColorStyle from '../styles/colorStyles';
 export const base = (
   color: Palette,
   fullwidth: boolean,
-  rounded: number,
-  scale?: ColorScale,
+  scale?: ColorScale
 ) => css`
   box-sizing: border-box;
   transition: all 100ms ease;
   user-select: none;
   padding: 0.55rem 1rem;
-  border-radius: ${rounded}rem;
-  border: 0.125rem solid ${!scale ? ColorStyle[color].main : Colors[color][scale]};
+  border-radius: 0.625rem;
+  border: 0.125rem solid
+    ${!scale ? ColorStyle[color].main : Colors[color][scale]};
   font-family: 'Paperlogy';
 
   :enabled {
@@ -24,14 +24,15 @@ export const base = (
     :active {
       background-color: ${ColorStyle[color].active};
       border: 0.125rem solid ${ColorStyle[color].active};
+      box-shadow: inset 0 -2px 2px rgba(0, 0, 0, 0.5); /* 상단에만 내부 그림자 추가 */
     }
   }
 
   :disabled {
     cursor: default;
     color: ${ColorStyle[color].contrastText};
-    background-color: ${ColorStyle[color].disabled};
-    border: 0.125rem solid ${ColorStyle[color].disabled};
+    background-color: #b6b3b3;
+    border: 0.125rem solid #b6b3b3;
   }
 
   ${fullwidth &&
@@ -43,12 +44,14 @@ export const base = (
 export const variantCss = (
   variant: ButtonVariant,
   color: Palette,
-  scale?: ColorScale,
+  scale?: ColorScale
 ) => {
   switch (variant) {
     case 'contained':
       return css`
-        background-color: ${!scale ? ColorStyle[color].main : Colors[color][scale]};
+        background-color: ${!scale
+          ? ColorStyle[color].main
+          : Colors[color][scale]};
         color: ${ColorStyle[color].contrastText};
       `;
 

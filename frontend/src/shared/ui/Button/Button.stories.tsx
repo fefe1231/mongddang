@@ -38,9 +38,6 @@ const meta = {
     fullwidth: {
       description: '`width`를 상위 노드의 크기에 맞출지 여부입니다.',
     },
-    rounded: {
-      description: '테두리의 둥근 정도입니다. 단위는 rem 기준으로 적용됩니다.',
-    },
     handler: {
       description: '버튼을 클릭했을 때의 핸들러 함수입니다.',
     },
@@ -58,8 +55,6 @@ export const Primary: Story = {
     variant: 'contained',
     disabled: false,
     fullwidth: false,
-    rounded: 0,
-    
   },
 };
 
@@ -67,6 +62,9 @@ const colors: Palette[] = [
   'primary',
   'secondary',
   'danger',
+  'indigo',
+  'blue',
+  'success',
   'dark',
   'light',
 ];
@@ -134,8 +132,7 @@ export const ColorsWithScales: Story = {
           key={color}
           style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem' }}
         >
-          {color != 'dark' &&
-            color != 'light' &&
+          {color != 'light' &&
             scales.map((scale) => (
               <Button key={scale} {...args} color={color} scale={scale}>
                 {scale}
