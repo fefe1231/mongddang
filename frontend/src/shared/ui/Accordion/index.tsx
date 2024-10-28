@@ -19,8 +19,10 @@ export const Accordion = ({
   content = '식단내용',
   icon,
   size = 3,
-  fontsize,
-  fontweight,
+  titleSize,
+  titleWeight,
+  contentSize,
+  contentWeight,
   onHandler = () => {},
 }: AccordionProps) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -45,26 +47,20 @@ export const Accordion = ({
         <Typography
           css={titleContent}
           color="dark"
-          size={fontsize}
-          weight={fontweight}
+          size={titleSize}
+          weight={titleWeight}
         >
-          <Icon size={3}>
+          <Icon size={size}>
             <img alt="icon-0" src={icon} />
           </Icon>
           {title}
         </Typography>
-        {/* <div>
-          <Icon size={3}>
-            <img alt="icon-0" src={icon} />
-          </Icon>
-          {title}
-        </div> */}
         <Icon css={[arrowIcon, iconRotation(isOpen)]} size={size}>
           <SlArrowRight />
         </Icon>
       </div>
       <div css={[accordionContent, animatedContent]} ref={contentRef}>
-        <Typography color="dark" size={fontsize} weight={fontweight}>
+        <Typography color="dark" size={contentSize} weight={contentWeight}>
           {content}
         </Typography>
       </div>
