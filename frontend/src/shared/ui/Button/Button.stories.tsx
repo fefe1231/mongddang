@@ -3,7 +3,6 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Button } from './index';
 import { ColorScale, Palette } from '@/shared/model/globalStylesTyes';
 
-
 const meta = {
   title: 'UI/Components/Button',
   component: Button,
@@ -27,13 +26,43 @@ const meta = {
     },
     color: {
       description: '적용할 컬러 팔레트입니다.',
+      options: [
+        'primary',
+        'secondary',
+        'success',
+        'danger',
+        'indigo',
+        'blue',
+        'dark',
+        'light',
+      ],
+      control: 'select',
     },
     scale: {
       description:
         '적용할 컬러스케일입니다.\n입력되지 않으면 MainColor가 적용됩니다.',
+      options: [
+        '100',
+        '200',
+        '300',
+        '400',
+        '500',
+        '600',
+        '700',
+        '800',
+        '900',
+        'A100',
+        'A200',
+        'A400',
+        'A700',
+      ],
+      control: 'select',
     },
     disabled: {
       description: '버튼의 비활성화 여부입니다.',
+    },
+    isShadow: {
+      description: '버튼 아래의 그림자유무입니다.',
     },
     fullwidth: {
       description: '`width`를 상위 노드의 크기에 맞출지 여부입니다.',
@@ -55,6 +84,7 @@ export const Primary: Story = {
     variant: 'contained',
     disabled: false,
     fullwidth: false,
+    isShadow: false,
   },
 };
 

@@ -54,7 +54,7 @@ const ColorStyle = {
   },
   light: {
     main: '#fff',
-    contrastText: '#fff',
+    contrastText: '#000',
     hover: '#f2f2f2',
     active: '#e4e4e4',
     disabled: '#eee',

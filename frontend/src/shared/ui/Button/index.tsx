@@ -2,7 +2,6 @@
 import React from 'react';
 import { ButtonProps } from './Button.types';
 import { base, variantCss } from './Button.styles';
-
 export const Button = ({
   children,
   variant = 'contained',
@@ -10,13 +9,14 @@ export const Button = ({
   scale,
   disabled = false,
   fullwidth = false,
+  isShadow = false,
   handler,
   ...props
 }: ButtonProps) => {
   return (
     <button
       css={[
-        base(color, fullwidth, scale),
+        base(color, fullwidth, scale, isShadow),  // isShadow 전달
         variantCss(variant, color, scale),
       ]}
       disabled={disabled}

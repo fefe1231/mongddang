@@ -8,7 +8,8 @@ import ColorStyle from '../styles/colorStyles';
 export const base = (
   color: Palette,
   fullwidth: boolean,
-  scale?: ColorScale
+  scale?: ColorScale,
+  isShadow?: boolean  // isShadow 파라미터 추가
 ) => css`
   box-sizing: border-box;
   transition: all 100ms ease;
@@ -16,15 +17,22 @@ export const base = (
   padding: 0.55rem 1rem;
   border-radius: 0.625rem;
   border: 0.125rem solid
-    ${!scale ? ColorStyle[color].main : Colors[color][scale]};
+    ${color === 'light'
+      ? '#d9d9d9'
+      : !scale
+        ? ColorStyle[color].main
+        : Colors[color][scale]};
   font-family: 'Paperlogy';
+  ${isShadow && css`
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  `}
 
   :enabled {
     cursor: pointer;
     :active {
       background-color: ${ColorStyle[color].active};
       border: 0.125rem solid ${ColorStyle[color].active};
-      box-shadow: inset 0 -2px 2px rgba(0, 0, 0, 0.5); /* 상단에만 내부 그림자 추가 */
+      box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.5);
     }
   }
 
@@ -58,7 +66,7 @@ export const variantCss = (
     case 'outlined':
       return css`
         background-color: transparent;
-        color: ${!scale ? ColorStyle[color].main : Colors[color][scale]};
+        color: ${color === 'light' ? '#000' : !scale ? ColorStyle[color].main : Colors[color][scale]};
       `;
   }
 };
