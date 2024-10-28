@@ -46,7 +46,7 @@ const ColorStyle = {
     disabled: Colors.success['300'],
   },
   dark: {
-    main: Colors.dark['900'],
+    main: '#000',
     contrastText: '#fff',
     hover: Colors.dark['700'],
     active: Colors.dark['500'],
