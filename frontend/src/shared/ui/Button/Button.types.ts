@@ -1,4 +1,4 @@
-import { ColorScale, Palette, Size } from '@/shared/model/globalStylesTyes';
+import { ColorScale, Palette } from '@/shared/model/globalStylesTyes';
 import { ReactNode } from 'react';
 import { Tsize } from '../Typography/Typography.types';
 
