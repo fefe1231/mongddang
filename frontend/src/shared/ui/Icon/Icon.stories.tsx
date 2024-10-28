@@ -20,7 +20,7 @@ const meta = {
   tags: ['!autodocs'],
   argTypes: {
     size: {
-      description: '아이콘 크기입니다.',
+      description: '아이콘 크기입니다. rem 단위로 측정됩니다.',
     },
     children: {
       control: false,

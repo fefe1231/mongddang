@@ -29,6 +29,9 @@ const meta = {
       description: '메뉴의 선택 여부입니다',
       control: 'boolean',
     },
+    size: {
+      description: '아이콘의 크기입니다. rem 기준입니다.'
+    }
   },
 } satisfies Meta<typeof IconTypo>;
 

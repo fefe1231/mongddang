@@ -1,5 +1,9 @@
+import { Tsize } from "../Typography/Typography.types";
+
 export interface IconTypoProps {
-  icon: string;  // ReactElement 대신 string으로 변경
+  icon: string; 
   menu: string;
   selected?: boolean;
+  size?: number;
+  fontSize?: Tsize;
 }
