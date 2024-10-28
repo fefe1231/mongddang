@@ -85,6 +85,7 @@ export const Primary: Story = {
     disabled: false,
     fullwidth: false,
     isShadow: false,
+    fontSize: '1'
   },
 };
 

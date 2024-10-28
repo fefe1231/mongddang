@@ -9,8 +9,10 @@ export const base = (
   color: Palette,
   fullwidth: boolean,
   scale?: ColorScale,
-  isShadow?: boolean  // isShadow 파라미터 추가
+  isShadow?: boolean,
+  fontSize?: string
 ) => css`
+  font-size: ${fontSize}rem;
   box-sizing: border-box;
   transition: all 100ms ease;
   user-select: none;
@@ -23,7 +25,8 @@ export const base = (
         ? ColorStyle[color].main
         : Colors[color][scale]};
   font-family: 'Paperlogy';
-  ${isShadow && css`
+  ${isShadow &&
+  css`
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   `}
 
@@ -66,7 +69,11 @@ export const variantCss = (
     case 'outlined':
       return css`
         background-color: transparent;
-        color: ${color === 'light' ? '#000' : !scale ? ColorStyle[color].main : Colors[color][scale]};
+        color: ${color === 'light'
+          ? '#000'
+          : !scale
+            ? ColorStyle[color].main
+            : Colors[color][scale]};
       `;
   }
 };

@@ -10,13 +10,14 @@ export const Button = ({
   disabled = false,
   fullwidth = false,
   isShadow = false,
+  fontSize = '1',
   handler,
   ...props
 }: ButtonProps) => {
   return (
     <button
       css={[
-        base(color, fullwidth, scale, isShadow),  // isShadow 전달
+        base(color, fullwidth, scale, isShadow,fontSize),  // isShadow 전달
         variantCss(variant, color, scale),
       ]}
       disabled={disabled}
