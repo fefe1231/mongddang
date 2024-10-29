@@ -39,6 +39,9 @@ dependencies {
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.4.0'
 	//mysql 의존성
 	runtimeOnly 'com.mysql:mysql-connector-j'
+
+	// Google Firebase Admin
+	implementation 'com.google.firebase:firebase-admin:9.2.0'
 }
 
 tasks.named('test') {
