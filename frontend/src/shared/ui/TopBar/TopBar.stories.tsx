@@ -31,48 +31,5 @@ export default meta;
 type Story = StoryObj<typeof TopBar>;
 
 export const Primary: Story = {
-  args: {},
-  render: () => (
-    <div style={{ width: '360px' }}>
-      <TopBar></TopBar>
-    </div>
-  ),
-};
-
-export const WithoutBack: Story = {
-  args: {},
-  render: () => (
-    <div style={{ width: '360px' }}>
-      <TopBar>
-        <TopBar.Title type="withoutBack" />
-        <TopBar.Right handler={() => console.log('right icon click')} />
-      </TopBar>
-    </div>
-  ),
-};
-
-export const WithoutRight: Story = {
-  args: {},
-  render: () => (
-    <div style={{ width: '360px' }}>
-      <TopBar>
-        <TopBar.Title type="default" />
-      </TopBar>
-    </div>
-  ),
-};
-
-export const Search: Story = {
-  args: {},
-  render: () => (
-    <div style={{ width: '360px' }}>
-      <TopBar>
-        <TopBar.Title type="search" />
-        <TopBar.Right
-          icon={<MagnifyingGlassIcon />}
-          handler={() => console.log('right icon click')}
-        />
-      </TopBar>
-    </div>
-  ),
+  args: { children: '테스트', type: 'page' },
 };

@@ -3,6 +3,7 @@ import React from 'react';
 import { TopBarProps } from './TopBar.types';
 import { base } from './TopBar.styles';
 import { IoIosArrowBack, IoIosClose } from 'react-icons/io';
+import { Icon } from '../Icon';
 
 export const TopBar = ({
   children = '테스트',
@@ -25,7 +26,9 @@ export const TopBar = ({
       {type === 'modal' && (
         <>
           <span style={{ flexGrow: 1, textAlign: 'center' }}>{children}</span>
-          <IoIosClose />
+          <Icon size={2}>
+            <IoIosClose />
+          </Icon>
         </>
       )}
     </div>
