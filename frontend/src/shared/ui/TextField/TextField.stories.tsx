@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { TextField } from '.';
+import { Palette } from '@/shared/model/globalStylesTyes';
 
 const meta = {
-  title: 'UI/Atoms/TextField',
+  title: 'UI/Components/TextField',
   component: TextField,
   parameters: {
     layout: 'fullscreen',
@@ -79,3 +80,45 @@ export const Primary: Story = {
   },
 };
 
+const colorList: Palette[] = [
+  'primary',
+  'secondary',
+  'success',
+  'danger',
+  'indigo',
+  'blue',
+  'dark',
+  'light',
+];
+
+export const Outlined: Story = {
+  args: {
+    ...Primary.args,
+    variant: 'outlined',
+  },
+  render: (args) => (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+      {colorList.map((color) => (
+        <TextField {...args} color={color}>
+          {color}
+        </TextField>
+      ))}
+    </div>
+  ),
+};
+
+export const Standard: Story = {
+  args: {
+    ...Primary.args,
+    variant: 'standard',
+  },
+  render: (args) => (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+      {colorList.map((color) => (
+        <TextField {...args} color={color}>
+          {color}
+        </TextField>
+      ))}
+    </div>
+  ),
+};
