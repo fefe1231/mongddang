@@ -18,7 +18,7 @@ services:
       - "50000:50000"
     volumes:
       - jenkins_home:/var/jenkins_home
-      - jenkins_cert:/certs/client:ro
+      - jenkins_certs:/certs/client:ro
     depends_on:
       - docker
 
@@ -35,7 +35,7 @@ services:
       DOCKER_TLS_CERTDIR: /certs
     volumes:
       - jenkins_home:/var/jenkins_home
-      - jenkins_cert:/certs/client
+      - jenkins_certs:/certs/client
     ports:
       - "2376:2376"
 
