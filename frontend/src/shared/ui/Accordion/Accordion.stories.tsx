@@ -64,7 +64,7 @@ export const Primary: Story = {
     content: '내용',
     onHandler: () => {},
     icon: '/img/말랑1.png',
-    size: 0.5,
+    size: 3,
     titleSize: '1.5',
     titleWeight: 500,
     contentSize: '1.25',
