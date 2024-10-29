@@ -6,8 +6,8 @@ export interface NotificationProps extends React.ComponentProps<'div'> {
   ment: ReactNode;
   type: Tnotification;
   twoBtn?: boolean;
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
   bluehandler: () => void;
   redHandler?: () => void;
   children?: ReactNode[];

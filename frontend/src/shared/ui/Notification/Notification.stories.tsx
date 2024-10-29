@@ -2,7 +2,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Notification } from '.';
-import { Backdrop } from '../Backdrop';
 
 const meta = {
   title: 'UI/Components/Notification',
@@ -33,6 +32,12 @@ const meta = {
     },
     redHandler: {
       description: '2번째 버튼에 대한 핸들러 함수입니다',
+    },
+    width: {
+      description: '공지의 너비를 입력해주세요.',
+    },
+    height: {
+      description: '공지의 높이를 입력해주세요.',
     },
     children: {
       description: '버튼이 2개일 때 버튼 안의 내용입니다. 순서대로 2개를 작성하면 적용이 됩니다.',
@@ -68,11 +73,11 @@ export const Primary: Story = {
   ),
 };
 
-const types = ['confirm', 'alert'];
+// const types = ['confirm','primary','alert'];
 
 export const Types: Story = {
   args: {},
-  render: (args) => (
+  render: () => (
     <div
       style={{
         display: 'flex',
@@ -93,7 +98,7 @@ export const Types: Story = {
           ment="이건 notification 입니다"
           type="confirm"
           twoBtn={false}
-          handler={() => console.log('btn press')}
+          bluehandler={() => console.log('btn press')}
         />
       </div>
       <div
@@ -107,7 +112,7 @@ export const Types: Story = {
           ment="이건 notification 입니다"
           type="alert"
           twoBtn={false}
-          handler={() => console.log('btn press')}
+          bluehandler={() => console.log('btn press')}
         />
       </div>
     </div>

@@ -43,7 +43,7 @@ export const Notification = ({
             </Button>
             <Button
               handler={bluehandler}
-              color={type === 'confirm' || type === 'primary' ? 'primary' : 'danger'}
+              color='primary'
             >
               <Typography color="light" weight={600} size={'0.75'}>
                 {children[1]}
