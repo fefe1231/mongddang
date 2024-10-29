@@ -1,20 +1,19 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
+import { ModalProps } from './Modal.types';
 import { Backdrop } from '../Backdrop';
-import { ModalProps } from './modal.types';
-import { base, modalContent } from './modal.styles';
+import { backdropStyle, base } from './Modal.styles';
 
-export const Modal = ({ children, ...props }: ModalProps) => {
+export const Modal = ({
+  children,
+  height = 60,
+  width = 30,
+  ...props
+}: ModalProps) => {
   return (
-    <Backdrop
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
-      <div css={base} {...props}>
-        <div css={modalContent}>{children}</div>
+    <Backdrop css={backdropStyle}>
+      <div css={base(height, width)} {...props}>
+        {children}
       </div>
     </Backdrop>
   );
