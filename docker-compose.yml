@@ -53,7 +53,9 @@ services:
     container_name: certbot
 
   backend:
-    image: vaaastlake/mongddang_backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     restart: always
     depends_on:
       db:
