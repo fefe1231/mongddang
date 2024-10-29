@@ -8,10 +8,11 @@ import { Icon } from '../Icon';
 export const TopBar = ({
   children = '테스트',
   type = 'modal',
+  iconHandler = () => {},
   ...props
 }: TopBarProps) => {
   return (
-    <div css={base()} {...props}>
+    <div css={base(type)} {...props}>
       {type === 'page' && (
         <>
           <span>{children}</span>
@@ -19,7 +20,12 @@ export const TopBar = ({
       )}
       {type === 'iconpage' && (
         <>
-          <IoIosArrowBack style={{ marginRight: '0.5rem' }} />
+          <Icon size={2}>
+            <IoIosArrowBack
+              onClick={() => iconHandler()}
+              style={{ marginRight: '0.5rem' }}
+            />
+          </Icon>
           <span>{children}</span>
         </>
       )}
@@ -27,7 +33,7 @@ export const TopBar = ({
         <>
           <span style={{ flexGrow: 1, textAlign: 'center' }}>{children}</span>
           <Icon size={2}>
-            <IoIosClose />
+            <IoIosClose onClick={() => iconHandler()} />
           </Icon>
         </>
       )}

@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { TopBar } from '.';
+import { TTopBar } from './TopBar.types';
 
 const meta = {
   title: 'UI/Components/TopBar',
@@ -23,6 +24,9 @@ const meta = {
     type: {
       description: 'TopBar의 타입입니다.',
     },
+    iconHandler: {
+      description: '아이콘 핸들러 함수입니다.'
+    }
   },
 } satisfies Meta<typeof TopBar>;
 
@@ -32,4 +36,21 @@ type Story = StoryObj<typeof TopBar>;
 
 export const Primary: Story = {
   args: { children: '테스트', type: 'page' },
+};
+
+const pages: TTopBar[] = ['page', 'iconpage', 'modal'];
+
+export const typeTopBar: Story = {
+  args: {
+    ...Primary.args,
+  },
+  render: (args) => (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+      {pages.map((page) => (
+        <TopBar {...args} type={page} key={page}>
+          {page}
+        </TopBar>
+      ))}
+    </div>
+  ),
 };

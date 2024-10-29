@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
+import { TTopBar } from './TopBar.types';
 
-export const base = () => css`
+export const base = (type: TTopBar) => css`
   position: sticky;
   top: 0;
   display: flex;
@@ -12,4 +13,9 @@ export const base = () => css`
   background-color: #8FDCFF;
   box-sizing: border-box;
   z-index: 10;
+  color: #fff;
+
+  ${type === 'modal' && css`
+    border-radius: 1.25rem 1.25rem 0 0;
+  `}
 `;
