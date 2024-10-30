@@ -4,7 +4,7 @@ import { Palette } from '@/shared/model/globalStylesTyes';
 import { Typography } from '../Typography';
 
 const meta = {
-  title: 'UI/Molecules/Toast',
+  title: 'UI/Components/Toast',
   component: Toast,
   parameters: {
     layout: 'fullscreen',
