@@ -42,6 +42,19 @@ dependencies {
 
 	// Google Firebase Admin
 	implementation 'com.google.firebase:firebase-admin:9.2.0'
+
+	//security 의존성
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+	// JWT 의존성
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+	// verify Google IdToken 의존성 추가
+	implementation 'com.google.auth:google-auth-library-oauth2-http:1.13.0'
+	implementation 'com.google.api-client:google-api-client:1.32.1'
 }
 
 tasks.named('test') {

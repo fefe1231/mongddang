@@ -35,3 +35,6 @@ out/
 
 ### firebase 시크릿 키 ###
 /src/main/resources/firebase/mongddang-65473-firebase-adminsdk-mvgzn-e811982383.json
+
+### env ###
+.env
