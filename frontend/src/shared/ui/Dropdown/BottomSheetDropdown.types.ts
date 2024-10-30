@@ -2,6 +2,8 @@ export interface BottomSheetDropdownProps {
   options: string[];
   onSelect: (value: string) => void;
   isOpen: boolean;
+  onOpen: () => void;
   onClose: () => void;
+  buttonLabel: string;
   selectedValue?: string;
 }

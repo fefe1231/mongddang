@@ -1,13 +1,13 @@
-import { Meta, Story, Primary, Controls } from '@storybook/addon-docs/blocks';
-import * as Accordion from './Accordion.stories.tsx';
+import { Meta, Story, Canvas, Controls } from '@storybook/blocks';
+import * as Stories from './BottomSheetDropdown.stories.tsx';
 
-<Meta of={Accordion} />
+<Meta title="Shared/UI/BottomSheetDropdown" of={Stories} />
 
-# Accordion
+# BottomSheetDropdown Component
 
-Accordion 입니다.
-
-<Primary />
+<Canvas>
+  <Story of={Stories.Default} />
+</Canvas>
 
 ## Props
 
