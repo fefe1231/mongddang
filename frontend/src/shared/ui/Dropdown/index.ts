@@ -1,2 +1,2 @@
-export { BottomSheetDropdown } from './BottomSheetDropdown';
-export type { BottomSheetDropdownProps } from './BottomSheetDropdown.types';
+export { Dropdown } from './Dropdown';
+export type { DropdownProps } from './Dropdown.types';

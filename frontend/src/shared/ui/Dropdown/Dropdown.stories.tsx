@@ -1,11 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import React, { useState } from 'react';
 import type { Meta } from '@storybook/react';
-import { BottomSheetDropdown } from './BottomSheetDropdown';
+import { Dropdown } from './Dropdown';
 
 const meta = {
-  title: 'Components/BottomSheetDropdown',
-  component: BottomSheetDropdown,
+  title: 'Components/Dropdown',
+  component: Dropdown,
   parameters: {
     layout: 'centered',
     docs: {
@@ -39,7 +39,7 @@ const meta = {
       action: 'closed',
     },
   },
-} satisfies Meta<typeof BottomSheetDropdown>;
+} satisfies Meta<typeof Dropdown>;
 
 export default meta;
 
@@ -49,7 +49,7 @@ export const Default = () => {
 
   return (
     <div style={{ padding: '20px' }}>
-      <BottomSheetDropdown
+      <Dropdown
         options={['김싸피', '박싸피', '이싸피']}
         onSelect={(value) => {
           setSelected(value);

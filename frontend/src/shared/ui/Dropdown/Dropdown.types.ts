@@ -1,4 +1,4 @@
-export interface BottomSheetDropdownProps {
+export interface DropdownProps {
   options: string[];
   onSelect: (value: string) => void;
   isOpen: boolean;
