@@ -1,0 +1,29 @@
+package com.onetwo.mongddang.domain.game.achievement.model;
+
+import com.onetwo.mongddang.domain.user.model.User;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Entity // JPA Entity 로 사용
+@Getter // Getter 자동 생성
+@RequiredArgsConstructor // 필수 생성자
+public class Achievement {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id; // 업적 ID
+
+    @Column(nullable = false)
+    private AchievementCategory category; // 업적 카테고리 (ex. eating/sleeping/exercise/medication)
+
+    @Column(nullable = false)
+    private Integer count; // 획득에 필요한 횟수 (ex. 10)
+
+    @Column(nullable = false)
+    private String description; // 업적 획득 조건 설명 (ex. 제시간에 자기 10번 수행)
+
+    @ManyToOne
+    private User child; // 연결된 유저
+
+}
