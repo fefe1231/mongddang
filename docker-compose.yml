@@ -68,6 +68,7 @@ services:
       MYSQL_DB: ${MYSQL_DB}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
       # CORS_URL: https://mongddang.store
     expose:
       - "8080"
