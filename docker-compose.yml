@@ -78,6 +78,8 @@ services:
       FIREBASE_CREDENTIALS_PATH: ${FIREBASE_CREDENTIALS_PATH}
     expose:
       - "8080"
+    volumes:
+      - ../firebase:/app/firebase
     networks:
       - mongddang_net
     container_name: mongddang_backend
