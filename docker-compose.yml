@@ -54,7 +54,7 @@ services:
 
   backend:
     build:
-      context: ./backend
+      context: ./backend/mongddang
       dockerfile: Dockerfile
     restart: always
     depends_on:
@@ -63,14 +63,23 @@ services:
     env_file:
       - .env
     environment:
+      # MySql
       MYSQL_HOST: ${MYSQL_HOST}
       MYSQL_PORT: ${MYSQL_PORT}
       MYSQL_DB: ${MYSQL_DB}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      # CORS_URL: https://mongddang.store
+      DDL_AUTO: ${DDL_AUTO}
+      # JWT
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION: ${JWT_EXPIRATION}
+      CLIENT_ID: ${CLIENT_ID}
+      # Firebase
+      FIREBASE_CREDENTIALS_PATH: ${FIREBASE_CREDENTIALS_PATH}
     expose:
       - "8080"
+    volumes:
+      - ../firebase:/app/firebase
     networks:
       - mongddang_net
     container_name: mongddang_backend
