@@ -18,7 +18,8 @@ export const Accordion = ({
   title = '식단',
   content = '식단내용',
   icon,
-  size = 3,
+  imgiconsize = 3,
+  togglesize = 1,
   titleSize,
   titleWeight,
   contentSize,
@@ -50,12 +51,12 @@ export const Accordion = ({
           size={titleSize}
           weight={titleWeight}
         >
-          <Icon size={size}>
+          <Icon size={imgiconsize}>
             <img alt="icon-0" src={icon} />
           </Icon>
           {title}
         </Typography>
-        <Icon css={[arrowIcon, iconRotation(isOpen)]} size={size}>
+        <Icon css={[arrowIcon, iconRotation(isOpen)]} size={togglesize}>
           <SlArrowRight />
         </Icon>
       </div>
