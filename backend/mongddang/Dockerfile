@@ -12,4 +12,4 @@ ARG PROFILE
 COPY --from=builder /build/build/libs/*.jar app.jar
 ENV TZ=Asia/Seoul
 ENV SPRING_PROFILES_ACTIVE=${PROFILE}
-ENTRYPOINT ["java", "-jar","/app/app.jar"]                                 
+ENTRYPOINT ["java", "-jar","/app/app.jar"]
