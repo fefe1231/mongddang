@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 
 @Entity
 @Getter // Getter 자동 생성
-@RequiredArgsConstructor
 public class Mongddang {
 
     @Id
@@ -17,7 +16,7 @@ public class Mongddang {
     private String name; // 캐릭터 이름 (ex. 말랑)
 
     @Column(nullable = false)
-    private Integer price; // 가격 (ex. 1000)
+    private int price; // 가격 (ex. 1000)
 
     @Column(nullable = false)
     private String story; // 캐릭터 서사 (ex. 말랑은 무지개를 좋아해요)

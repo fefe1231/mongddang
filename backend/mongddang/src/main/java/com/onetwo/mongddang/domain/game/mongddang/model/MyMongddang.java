@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter // Getter 자동 생성
-@RequiredArgsConstructor // 필수 생성자
 public class MyMongddang {
 
     @Id

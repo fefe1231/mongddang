@@ -10,7 +10,6 @@ import lombok.Setter;
 @Entity // JPA Entity 로 사용
 @Getter // Getter 자동 생성
 @Builder // 빌더 패턴
-@AllArgsConstructor
 public class CoinLog {
 
     @Id
@@ -22,10 +21,14 @@ public class CoinLog {
     private User child; // 연결된 어린이 유저
 
     @Column(nullable = false)
-    private Integer coin; // 재화 획득량 (ex. 100)
+    private int coin; // 재화 획득량 (ex. 100)
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private CoinCategory category; // 획득 경로 (ex. mission/mongddang/achievement)
+
+    public enum CoinCategory {
+        mission, mongddang, achievement;
+    }
 
 }
