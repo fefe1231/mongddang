@@ -3,11 +3,13 @@ package com.onetwo.mongddang.domain.user.model;
 import com.nimbusds.openid.connect.sdk.claims.Gender;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
 import org.checkerframework.checker.units.qual.N;
 
 import java.time.LocalDate;
 
 @Entity
+@Getter
 public class User {
 
     @Id
