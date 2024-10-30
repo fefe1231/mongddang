@@ -17,9 +17,8 @@ public class CoinLogService {
     private final CoinLogRepository coinLogRepository;
     private final UserRepository userRepository;
 
-    // 보유 코인 조회
     /**
-        * 유저의 보유 코인을 조회한다.
+        * 유저의 보유 코인을 조회합니다.
         * @param id 코인을 조회할 유저의 id
         * @return 보유 코인량
      */
@@ -31,9 +30,8 @@ public class CoinLogService {
         return coinLog.getCoin();
     }
 
-    // 코인 지급
     /**
-        * 코인을 지급하고 지급된 코인 로그를 반환한다.
+        * 코인을 지급합니다.
         * @param id 코인을 지급할 유저의 id
         * @param category 코인 지급 카테고리
         * @param amount 지급할 코인량
@@ -46,7 +44,7 @@ public class CoinLogService {
             throw new IllegalArgumentException("amount should be positive");
         }
 
-        // email 에 해당하는 User 조회
+        // id 에 해당하는 User 조회
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found for id: " + id));
 
         // 새로운 CoinLog 기록 추가
@@ -55,6 +53,39 @@ public class CoinLogService {
                 .child(user) // 유저
                 .coin(remainCoin + amount) // 지급량
                 .category(category) // 카테고리
+                .build();
+
+        // 새로운 CoinLog 저장
+        coinLogRepository.save(newCoinLog);
+
+        return newCoinLog;
+    }
+
+    /**
+        * 코인을 차감합니다.
+        * @param id 유저의 id
+        * @param category 코인 차감 카테고리
+        * @param amount 차감할 코인량
+        * @return 차감된 코인 로그
+        * @throws IllegalArgumentException amount 가 0 이하인 경우
+     */
+    public CoinLog minusCoin(Long id, CoinCategory category, int amount) {
+        // id 에 해당하는 User 조회
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found for id: " + id));
+
+        // userId에 해당하는 CoinLog 조회
+        CoinLog coinLog = coinLogRepository.findTopByChildIdOrderByIdDesc(id).orElseThrow(() -> new RuntimeException("해당 유저에 대한 CoinLog 를 찾을 수 없습니다. id: " + id));
+
+        // 별가루가 부족할 경우 예외 처리
+        if (coinLog.getCoin() - amount < 0) {
+            throw new IllegalArgumentException("별가루가 부족합니다.");
+        }
+
+        // 새로운 CoinLog 기록 추가
+        CoinLog newCoinLog = CoinLog.builder()
+                .child(user) // 유저
+                .coin(coinLog.getCoin() - amount) // 차감량
+                .category(CoinCategory.mongddang) // 카테고리
                 .build();
 
         // 새로운 CoinLog 저장

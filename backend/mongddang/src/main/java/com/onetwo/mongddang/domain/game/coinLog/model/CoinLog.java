@@ -25,10 +25,10 @@ public class CoinLog {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private CoinCategory category; // 획득 경로 (ex. mission/mongddang/achievement)
+    private CoinCategory category; // 획득 경로 (ex. achievement/mission/mongddang/)
 
     public enum CoinCategory {
-        mission, mongddang, achievement;
+        achievement, mission, mongddang;
     }
 
 }
