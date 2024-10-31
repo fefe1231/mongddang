@@ -15,8 +15,8 @@ public interface GameLogRepository extends JpaRepository<GameLog,Long> {
     List<GameLog> findTopByChildId(Long childId);
 
     Optional<GameLog> findById(Long Id);
-    //    @Query("select lg from Gamelog lg where lg.child.id =:childId order by lg.id desc")
+
     Optional<GameLog> findTopByChildIdOrderByIdDesc(@Param("childId") Long childId);
 
-    boolean existsByChild(User user);
+    boolean existsByChild(User child);
 }
