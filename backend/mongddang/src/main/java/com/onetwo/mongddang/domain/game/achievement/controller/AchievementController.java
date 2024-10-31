@@ -1,0 +1,44 @@
+package com.onetwo.mongddang.domain.game.achievement.controller;
+
+import com.onetwo.mongddang.common.ResponseDto;
+import com.onetwo.mongddang.domain.common.annotation.ChildRequired;
+import com.onetwo.mongddang.domain.game.achievement.service.AchievementService;
+import com.onetwo.mongddang.domain.user.jwt.JwtExtratService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@Slf4j
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/game/collection/achievement")
+public class AchievementController {
+
+    final AchievementService achievementService;
+    final JwtExtratService jwtExtratService;
+
+    // 업적 목록 조회 api
+    @GetMapping("/{nickname}")
+    @ChildRequired
+    @Tag(name = "Collection API", description = "도감 api")
+    @Operation(summary = "업적 목록 조회 api", description = "업적 목록을 조회합니다.")
+    public ResponseEntity<ResponseDto> getAchievementList(@PathVariable("nickname") String nickname, HttpServletRequest request) {
+        log.info("GET /api/game/collection/achievement");
+
+        Long id = jwtExtratService.jwtFindId(request);
+        ResponseDto responseDto = achievementService.getAchievementList(id);
+        return ResponseEntity.ok(responseDto);
+    }
+
+    // 업적 보상 수령
+
+    // 대표 칭호 설정
+
+}

@@ -39,7 +39,7 @@ public class MongddangService {
      * @return
      */
     public ResponseDto getMongddangList(Long childId) {
-        log.info("GET /api/game/mongddang");
+        log.info("getMongddangList childId: {}", childId);
 
         List<Mongddang> mongddangList = mongddangRepository.findAll();
         List<RequestMongddangListDto> mongddangListDto = mongddangList.stream()

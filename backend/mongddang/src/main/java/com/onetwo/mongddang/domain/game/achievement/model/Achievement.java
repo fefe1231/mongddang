@@ -3,7 +3,6 @@ package com.onetwo.mongddang.domain.game.achievement.model;
 import com.onetwo.mongddang.domain.user.model.User;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Entity // JPA Entity 로 사용
 @Getter // Getter 자동 생성
@@ -14,6 +13,7 @@ public class Achievement {
     private Long id; // 업적 ID
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private AchievementCategory category; // 업적 카테고리 (ex. eating/sleeping/exercise/medication)
 
     @Column(nullable = false)
