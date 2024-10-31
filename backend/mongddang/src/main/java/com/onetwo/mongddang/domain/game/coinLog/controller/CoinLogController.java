@@ -1,8 +1,7 @@
 package com.onetwo.mongddang.domain.game.coinLog.controller;
 
-import com.onetwo.mongddang.domain.game.coinLog.dto.RequestRewardCoinDto;
+import com.onetwo.mongddang.domain.common.annotation.ChildRequired;
 import com.onetwo.mongddang.domain.game.coinLog.dto.ResponseCoin;
-import com.onetwo.mongddang.domain.game.coinLog.model.CoinLog;
 import com.onetwo.mongddang.domain.game.coinLog.service.CoinLogService;
 import com.onetwo.mongddang.domain.user.jwt.JwtExtratService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,11 +21,13 @@ public class CoinLogController {
 
     /**
      * 보유 코인을 반환
+     *
      * @return ResponseCoin
      */
     @GetMapping("/coin")
+    @ChildRequired
     public ResponseEntity<ResponseCoin> getRemainCoin(HttpServletRequest request) {
-        log.info("GET /api/game/coin/");
+        log.info("GET /api/game/coin");
 
         // 유저의 id를 jwt 에서 추출
         Long userId = jwtExtratService.jwtFindId(request);
