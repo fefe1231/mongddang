@@ -43,10 +43,24 @@ public class AchievementService {
                     // 유저의 게임 로그 조회
                     GameLog gameLog = gameLogRepository.findTopByChildId(childId);
 
-                    // 업적 달성 여부
                     MyTitle myTitle = myTitleRepository.findByTitleId(title.getId());
-                    boolean isAchieved = myTitle != null;
 
+                    // 업적 달성 여부
+                    boolean isAchieved;
+                    switch (achievement.getCategory()) {
+                        case meal:
+                            isAchieved = gameLog.getMealCount() >= achievement.getCount();
+                            break;
+                        case sleep:
+                            isAchieved = gameLog.getSleepCount() >= achievement.getCount();
+                            break;
+                        case exercise:
+                            isAchieved = gameLog.getExerciseCount() >= achievement.getCount();
+                            break;
+                        default:
+                            isAchieved = gameLog.getMedicationCount() >= achievement.getCount();
+                            break;
+                    }
                     return RequestAchievementListDto.builder()
                             .titleId(title.getId())
                             .titleName(title.getName())
