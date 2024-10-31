@@ -1,23 +1,44 @@
 /** @jsxImportSource @emotion/react */
+import React, { useState } from 'react';
 import { Button } from '@/shared/ui/Button';
 import { TextField } from '@/shared/ui/TextField';
-import { TopBar } from '@/shared/ui/TopBar';
 import { Typography } from '@/shared/ui/Typography';
-import React, { useState } from 'react';
 import { textFieldCss } from './styles';
+import { handleDateChange } from '@/Utils/birthUtils';
+import { validateNickname } from '@/Utils/validationUtils';
 
 export const DataForm = () => {
   const [gender, setGender] = useState<'M' | 'F' | undefined>(undefined);
+  const [birthYear, setBirthYear] = useState<string>('');
+  const [birthMonth, setBirthMonth] = useState<string>('');
+  const [birthDay, setBirthDay] = useState<string>('');
+  const [nickname, setNickname] = useState<string>('');
+  const [nicknameError, setNicknameError] = useState<string>('');
+  const handleYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    handleDateChange(value, 'year', setBirthYear);
+  };
+
+  const handleMonthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    handleDateChange(value, 'month', setBirthMonth);
+  };
+
+  const handleDayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    handleDateChange(value, 'day', setBirthDay);
+  };
+  
+  // 닉네임 유효성 검사
+  const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNickname(e.target.value);
+    if (nickname.length > 10) {
+      setNickname(nickname.slice(0, 10));
+    }
+    setNicknameError(validateNickname(e.target.value));
+  };
   return (
     <div>
-      <TopBar
-        type="iconpage"
-        iconHandler={() => {
-          console.log('뒤로가기 버튼');
-        }}
-      >
-        회원가입
-      </TopBar>
       <div style={{ margin: '2rem' }}>
         <Typography color="dark" size="1.25" weight={600}>
           회원가입을 위해
@@ -33,6 +54,8 @@ export const DataForm = () => {
               placeholder=""
               type="text"
               variant="outlined"
+              value={nickname}
+              onChange={handleNicknameChange}
               style={{ flexGrow: 1 }}
             />
             <Button
@@ -50,24 +73,30 @@ export const DataForm = () => {
               defaultValue=""
               label="YYYY"
               placeholder=""
-              type="number"
+              type="text"
               variant="outlined"
+              value={birthYear}
+              onChange={handleYearChange}
             />
             <TextField
               color="primary"
               defaultValue=""
               label="MM"
               placeholder=""
-              type="number"
+              type="text"
               variant="outlined"
+              value={birthMonth}
+              onChange={handleMonthChange}
             />
             <TextField
               color="primary"
               defaultValue=""
               label="DD"
               placeholder=""
-              type="number"
+              type="text"
               variant="outlined"
+              value={birthDay}
+              onChange={handleDayChange}
             />
           </div>
           <div style={{ margin: '1rem 0' }}>
@@ -80,7 +109,9 @@ export const DataForm = () => {
               variant="outlined"
             />
           </div>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
+          <div
+            style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}
+          >
             <Button
               color={'light'}
               fontSize="1"

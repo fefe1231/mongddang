@@ -1,21 +1,15 @@
 /** @jsxImportSource @emotion/react */
-import React, { useState } from 'react';
 import { TopBar } from '@/shared/ui/TopBar';
-import { Typography } from '@/shared/ui/Typography';
-import { Button } from '@/shared/ui/Button';
-import {
-  containerCss,
-  nextbtnCss,
-  buttonGroupCss,
-  mainContentCss,
-} from './styles';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Transition } from './Transition';
+import { RoleSelector } from './RoleSelector';
+import { DataForm } from './DataForm';
 
-export const Signup = () => {
-  const [role, setRole] = useState<'S' | 'P' | undefined>(undefined);
-  const nav = useNavigate()
+export const SignUp = () => {
+  const [step, setStep] = useState<number>(0);
+  
   return (
-    <div css={mainContentCss}>
+    <div>
       <TopBar
         type="iconpage"
         iconHandler={() => {
@@ -24,40 +18,17 @@ export const Signup = () => {
       >
         회원가입
       </TopBar>
-      <div css={containerCss}>
-        <Typography color="dark" size="1.25" weight={700}>
-          사용하는 사람의 역할은 무엇인가요?
-        </Typography>
-        <div css={buttonGroupCss}>
-          <Button
-            color={'light'}
-            fontSize="1"
-            variant={role === 'S' ? 'contained' : 'outlined'}
-            handler={() => setRole('S')}
-          >
-            어린이
-          </Button>
-          <Button
-            color={'light'}
-            fontSize="1"
-            variant={role === 'P' ? 'contained' : 'outlined'}
-            handler={() => setRole('P')}
-          >
-            보호자
-          </Button>
-        </div>
-      </div>
-      <div css={nextbtnCss}>
-        <Button
-          disabled={role ? false : true}
-          color={'light'}
-          fontSize="1"
-          variant={'contained'}
-          handler={()=>nav('/signup2')}
-        >
-          다음으로
-        </Button>
-      </div>
+      <Transition
+        data-key={step.toString()}
+        // wrapperCss={{ padding: '20px' }}
+      >
+        <RoleSelector key={0} onSubmit={() => setStep(1)} />
+        <DataForm
+          key={1}
+          // before={() => setStep(0)}
+          // onSubmit={() => setStep(2)}
+        />
+      </Transition>
     </div>
   );
 };
