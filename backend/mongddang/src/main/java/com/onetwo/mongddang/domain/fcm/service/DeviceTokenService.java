@@ -1,5 +1,6 @@
 package com.onetwo.mongddang.domain.fcm.service;
 
+import com.onetwo.mongddang.common.ResponseDto;
 import com.onetwo.mongddang.domain.fcm.model.FcmToken;
 import com.onetwo.mongddang.domain.fcm.repository.FcmTokenRepository;
 import com.onetwo.mongddang.domain.user.model.User;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -20,7 +22,7 @@ public class DeviceTokenService {
     private final UserRepository userRepository;
 
     // 일단 user 한 명은 1개의 디바이스만 소유할 수 있다.
-    public void saveOrUpdateToken(String token, Long userId) {
+    public ResponseDto saveOrUpdateToken(String token, Long userId) {
         Optional<FcmToken> existingToken = fcmTokenRepository.findByUserId(userId);
 
         User user = userRepository.findById(userId)
@@ -44,6 +46,10 @@ public class DeviceTokenService {
             log.info("fcm token 저장 완료");
 
         }
-    }
+        ResponseDto responseDto = ResponseDto.builder()
+                .message("fcm token 등록에 성공하였습니다.")
+                .build();
 
+        return responseDto;
+    }
 }
