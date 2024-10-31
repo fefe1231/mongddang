@@ -64,4 +64,15 @@ public class MongddangController {
     }
 
     // 몽땅 메인 설정
+    @PutMapping("/main")
+    @ChildRequired
+    @Tag(name = "Collection API", description = "도감 api")
+    @Operation(summary = "몽땅 메인 설정", description = "몽땅을 메인으로 설정합니다.")
+    public ResponseEntity<ResponseDto> setMainMongddang(@RequestBody RequestMongddangIdDto requestDto, HttpServletRequest request) {
+        log.info("PUT /api/game/mongddang/main");
+
+        Long userId = jwtExtratService.jwtFindId(request);
+        ResponseDto responseDto = mongddangService.setMainMongddang(requestDto.getMongddangId(), userId);
+        return ResponseEntity.ok(responseDto);
+    }
 }

@@ -131,9 +131,43 @@ public class MongddangService {
         return ResponseDto.builder().message("새로운 몽땅 표시를 제거했습니다.").build();
     }
 
-    // 메인 몽땅 설정
-    public ResponseDto setMainMongddang() {
+    /**
+     * 몽땅 메인 설정
+     *
+     * @param mongddangId
+     * @return
+     */
+    @Transactional
+    public ResponseDto setMainMongddang(Long mongddangId, Long userId) {
+        log.info("setMainMongddang mongddangId: {}", mongddangId);
 
-        return null;
+        MyMongddang beforeMainMongddang = myMongddangRepository.findByChildIdAndIsMainTrue(userId);
+        MyMongddang myMongddang = myMongddangRepository.findByMongddangId(mongddangId);
+
+        // 기존 몽땅이 존재하지 않는 경우 - 회원가입 시 초기화를 통해 일어나지 않을 에러
+        if (beforeMainMongddang == null) {
+            throw new IllegalArgumentException("메인 몽땅이 존재하지 않습니다.");
+        }
+
+        // 해당 몽땅이 존재하지 않는 경우
+        if (myMongddang == null) {
+            throw new IllegalArgumentException("해당 몽땅이 존재하지 않습니다.");
+        }
+
+        // 해당 몽땅이 존재하는 경우 isMain 을 true 로 변경
+        if (myMongddang.getIsMain()) {
+            throw new IllegalArgumentException("이미 메인 몽땅으로 설정되어 있습니다.");
+        }
+
+        // 새로운 메인 몽땅을 true 로 변경
+        myMongddang.setIsMain(true);
+        myMongddangRepository.save(myMongddang);
+
+        // 기존 메인 몽땅의 isMain 을 false 로 변경
+        beforeMainMongddang.setIsMain(false);
+        myMongddangRepository.save(beforeMainMongddang);
+
+        return ResponseDto.builder().message("메인 몽땅으로 설정했습니다.").build();
     }
+
 }
