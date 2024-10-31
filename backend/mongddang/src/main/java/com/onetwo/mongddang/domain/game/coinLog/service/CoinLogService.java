@@ -5,12 +5,13 @@ import com.onetwo.mongddang.domain.game.coinLog.dto.ResponseCoin;
 import com.onetwo.mongddang.domain.game.coinLog.repository.CoinLogRepository;
 import com.onetwo.mongddang.domain.user.repository.UserRepository;
 import lombok.Builder;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-@Builder
+@RequiredArgsConstructor
 public class CoinLogService {
 
     private final CoinLogRepository coinLogRepository;
