@@ -1,5 +1,6 @@
 package com.onetwo.mongddang.domain.game.coinLog.service;
 
+import com.onetwo.mongddang.common.ResponseDto;
 import com.onetwo.mongddang.domain.game.coinLog.application.CoinLogUtils;
 import com.onetwo.mongddang.domain.game.coinLog.dto.ResponseCoin;
 import com.onetwo.mongddang.domain.game.coinLog.repository.CoinLogRepository;
@@ -7,6 +8,8 @@ import com.onetwo.mongddang.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -23,11 +26,16 @@ public class CoinLogService {
      * @param id 코인을 조회할 유저의 id
      * @return ResponseCoin
      */
-    public ResponseCoin responseGetCoinCount(Long id) {
+    public ResponseDto responseGetCoinCount(Long id) {
         log.info("responseGetCoinCount id: {}", id);
 
-        ResponseCoin response = ResponseCoin.builder()
+        ResponseCoin data = ResponseCoin.builder()
                 .coin(coinLogUtils.getCoinCount(id))
+                .build();
+
+        ResponseDto response = ResponseDto.builder()
+                .message("코인 지급에 성공했습니다.")
+                .data(data)
                 .build();
 
         // 현재 coin 값 반환
