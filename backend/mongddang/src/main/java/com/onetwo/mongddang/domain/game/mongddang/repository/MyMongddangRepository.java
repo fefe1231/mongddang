@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MyMongddangRepository extends JpaRepository<MyMongddang,Long> {
+    MyMongddang findByMongddangId(Long id);
 }

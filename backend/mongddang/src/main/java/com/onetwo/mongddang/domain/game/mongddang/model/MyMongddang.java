@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter // Getter 자동 생성
+@RequiredArgsConstructor // final 필드를 파라미터로 받는 생성자 생성
 public class MyMongddang {
 
     @Id
