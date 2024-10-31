@@ -6,6 +6,7 @@ import { base, variants } from './Toast.styles';
 import { HiOutlineCheckCircle, HiOutlineExclamation } from 'react-icons/hi';
 import { Palette } from '@/shared/model/globalStylesTyes';
 import { Icon } from '../Icon';
+import { Typography } from '../Typography';
 
 const colorToIcon: Record<Palette, ReactNode> = {
   primary: <HiOutlineCheckCircle />,
@@ -15,7 +16,7 @@ const colorToIcon: Record<Palette, ReactNode> = {
   blue: <HiOutlineExclamation />,
   dark: <HiOutlineCheckCircle />,
   light: <HiOutlineCheckCircle />,
-  secondary: <HiOutlineCheckCircle />
+  secondary: <HiOutlineCheckCircle />,
 };
 
 export const Toast = ({
@@ -31,7 +32,9 @@ export const Toast = ({
       <Icon color={variant === 'filled' ? 'light' : 'dark'}>
         {colorToIcon[color]}
       </Icon>
-      {children}
+      <Typography size={'1'} weight={500} color="dark">
+        {children}
+      </Typography>
     </div>
   );
 };
