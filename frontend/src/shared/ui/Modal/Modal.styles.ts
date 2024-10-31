@@ -9,7 +9,9 @@ export const base = (height: number, width: number) => css`
   background-color: #fff;
   display: flex;
   justify-content: center;
+  z-index: 10; // 모달의 z-index가 백드롭보다 높도록 설정
 `;
+
 export const backdropStyle = css`
   display: flex;
   justify-content: center;
