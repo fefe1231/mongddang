@@ -30,8 +30,11 @@ const meta = {
     icon: {
       description: '제목 관련 아이콘 자리입니다.',
     },
-    size: {
-      description: '아이콘 크기입니다. rem기준입니다.',
+    imgiconsize: {
+      description: '`이미지`아이콘 크기입니다. rem기준입니다.',
+    },
+    togglesize: {
+      description: '`>`아이콘 크기입니다. rem기준입니다.',
     },
     titleSize: {
       description: 'title 폰트 사이즈입니다.',
@@ -64,7 +67,8 @@ export const Primary: Story = {
     content: '내용',
     onHandler: () => {},
     icon: '/img/말랑1.png',
-    size: 3,
+    imgiconsize: 3,
+    togglesize: 1,
     titleSize: '1.5',
     titleWeight: 500,
     contentSize: '1.25',

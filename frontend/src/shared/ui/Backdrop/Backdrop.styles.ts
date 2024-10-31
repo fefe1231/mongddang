@@ -1,6 +1,8 @@
 import { css } from '@emotion/react';
+import ColorStyle from '../styles/colorStyles';
+import { Palette } from '@/shared/model/globalStylesTyes';
 
-export const base = (opacity: number, blur: number) => css`
+export const base = (opacity: number, blur: number, color: Palette) => css`
   position: fixed;
   top: 0;
   left: 0;
@@ -10,6 +12,7 @@ export const base = (opacity: number, blur: number) => css`
   width: 100%;
   height: 100vh;
   z-index: 50;
-  background-color: rgba(0, 0, 0, ${opacity / 100});
+  background-color: ${ColorStyle[color].main};
+  opacity: ${opacity / 100};
   backdrop-filter: blur(${blur / 10}px);
 `;

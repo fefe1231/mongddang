@@ -1,9 +1,10 @@
-import { Colors } from "./globalStyles";
+import { Colors } from './globalStyles';
 
 // 디자인 스타일 (hover, actice, disabled 등..)
 
 const ColorStyle = {
   primary: {
+    button: Colors.primary['A200'],
     main: Colors.primary['A200'],
     contrastText: '#fff',
     hover: Colors.primary['A400'],
@@ -11,6 +12,7 @@ const ColorStyle = {
     disabled: Colors.primary['100'],
   },
   secondary: {
+    button: Colors.secondary['200'],
     main: Colors.secondary['200'],
     contrastText: '#fff',
     hover: Colors.secondary['500'],
@@ -18,6 +20,7 @@ const ColorStyle = {
     disabled: Colors.secondary['100'],
   },
   danger: {
+    button: Colors.danger['500'],
     main: Colors.danger['500'],
     contrastText: '#fff',
     hover: Colors.danger['A200'],
@@ -25,6 +28,7 @@ const ColorStyle = {
     disabled: Colors.danger['200'],
   },
   indigo: {
+    button: Colors.indigo['500'],
     main: Colors.indigo['500'],
     contrastText: '#fff',
     hover: Colors.indigo['A200'],
@@ -32,6 +36,7 @@ const ColorStyle = {
     disabled: Colors.indigo['300'],
   },
   blue: {
+    button: Colors.blue['500'],
     main: Colors.blue['500'],
     contrastText: '#fff',
     hover: Colors.blue['A200'],
@@ -39,6 +44,7 @@ const ColorStyle = {
     disabled: Colors.blue['300'],
   },
   success: {
+    button: Colors.success['500'],
     main: Colors.success['500'],
     contrastText: '#fff',
     hover: Colors.success['A200'],
@@ -46,6 +52,7 @@ const ColorStyle = {
     disabled: Colors.success['300'],
   },
   dark: {
+    button: '#000',
     main: '#000',
     contrastText: '#fff',
     hover: Colors.dark['700'],
@@ -53,6 +60,7 @@ const ColorStyle = {
     disabled: Colors.dark['300'],
   },
   light: {
+    button: Colors.primary['A200'],
     main: '#fff',
     contrastText: '#000',
     hover: '#f2f2f2',
@@ -62,19 +70,19 @@ const ColorStyle = {
   text: {
     primary: Colors.primary['A200'],
     secondary: Colors.secondary['400'],
-    danger:Colors.danger['A200'],
-    grey:Colors.dark['600'],
-    dark:Colors.light['900'],
-    light:Colors.dark['900'],
+    danger: Colors.danger['A200'],
+    grey: Colors.dark['600'],
+    dark: Colors.light['900'],
+    light: Colors.dark['900'],
     disabled: Colors.dark.A100,
   },
   background: {
     primary: Colors.primary['50'],
     secondary: Colors.secondary['50'],
-    danger:Colors.danger['50'],
-    dark:Colors.dark['900'],
-    light:Colors.light['900'],
+    danger: Colors.danger['50'],
+    dark: Colors.dark['900'],
+    light: Colors.light['900'],
   },
-}
+};
 
 export default ColorStyle;
