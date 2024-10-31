@@ -10,11 +10,11 @@ export const base = (multiLine: boolean, isFocused: boolean, color: Palette, var
 
   ${variant === 'outlined' ? 
     css`
-      border: calc(0.0625rem * 1.5) ${isFocused ? ColorStyle[color].main : '#D5D5D5'} solid;
+      border: calc(0.0625rem * 1.5) ${isFocused ? ColorStyle[color].main : '#4C4848'} solid;
       border-radius: 0.3125rem;
     ` : 
     css`
-      border-bottom: calc(0.0625rem * 1.5) ${isFocused ? ColorStyle[color].main : '#D5D5D5'} solid;
+      border-bottom: calc(0.0625rem * 1.5) ${isFocused ? ColorStyle[color].main : '#4C4848'} solid;
       border: none;
     `
   }
@@ -40,7 +40,7 @@ export const labelField = (
   padding: 0 0.3125rem;
 
   
-  color: ${isFocused ? ColorStyle[palette].main : '#B4B4B4'};
+  color: ${isFocused ? ColorStyle[palette].main : '#4C4848'};
   font-size: ${inputValue || defaultValue || placeholder || isFocused
     ? '0.625rem'
     : '1rem'};
@@ -103,7 +103,6 @@ export const labelVariants: Record<
       : ''};
   `,
   standard: (
-    palette,
     placeholder,
     defaultValue,
     inputValue,

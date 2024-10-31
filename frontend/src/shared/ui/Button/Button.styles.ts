@@ -8,7 +8,6 @@ import ColorStyle from '../styles/colorStyles';
 export const base = (
   color: Palette,
   fullwidth: boolean,
-  scale?: ColorScale,
   isShadow?: boolean,
   fontSize?: string
 ) => css`
