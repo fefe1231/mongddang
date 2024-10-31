@@ -5,6 +5,7 @@ import space from '../../assets/img/space.png';
 import { Owncharacter } from './characterList/owncharacter';
 import { Notowncharacter } from './characterList/notown-character';
 import { Newcharacter } from './characterList/new-character';
+import { Description } from './description';
 
 export const Encyclopedia = () => {
   return (
@@ -19,6 +20,9 @@ export const Encyclopedia = () => {
       {' '}
       {/* 전체 화면을 꽉 채우도록 설정 */}
       <TopBar type="iconpage">캐릭터 도감</TopBar>
+      <div style={{ position: 'relative', zIndex: 1 }}>
+        <Description />
+      </div>
       <img
         style={{
           width: '100%',
@@ -32,7 +36,7 @@ export const Encyclopedia = () => {
         src={space}
         alt="배경 이미지"
       />
-      <div style={{ display:'flex', gap:'0.4rem', margin: '0 0.35rem'}}>
+      <div style={{ display: 'flex', gap: '0.4rem', margin: '0 0.35rem' }}>
         <div style={{ position: 'relative', zIndex: 1 }}>
           <Owncharacter />
         </div>
