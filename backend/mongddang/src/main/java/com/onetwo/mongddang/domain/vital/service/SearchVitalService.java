@@ -1,6 +1,7 @@
 package com.onetwo.mongddang.domain.vital.service;
 
 import com.onetwo.mongddang.common.ResponseDto;
+import com.onetwo.mongddang.domain.common.annotation.ChildRequired;
 import com.onetwo.mongddang.domain.vital.dto.ResponseSolidGlucoseDto;
 import com.onetwo.mongddang.domain.vital.model.Vital;
 import com.onetwo.mongddang.domain.vital.repository.VitalRepository;
