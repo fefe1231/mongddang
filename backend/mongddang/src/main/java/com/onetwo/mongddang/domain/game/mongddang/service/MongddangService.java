@@ -33,7 +33,7 @@ public class MongddangService {
 
 
     /**
-     * 몽땅 목록 조회 api
+     * 몽땅 목록 조회
      *
      * @param childId
      * @return
@@ -71,7 +71,7 @@ public class MongddangService {
 
 
     /**
-     * 몽땅 모집 api
+     * 몽땅 모집
      *
      * @param userId
      * @param mongddangId
@@ -79,53 +79,56 @@ public class MongddangService {
      */
     @Transactional
     public ResponseDto recruitmentMongddang(Long userId, Long mongddangId) {
-        log.info("POST /api/game/mongddang/recruitment");
+        log.info("recruitmentMongddang userId: {}, mongddangId: {}", userId, mongddangId);
 
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
         Mongddang mongddang = mongddangRepository.findById(mongddangId).orElseThrow(() -> new IllegalArgumentException("해당 몽땅이 존재하지 않습니다."));
 
         MyMongddang myMongddang = myMongddangRepository.findByMongddangId(mongddangId);
         if (myMongddang != null) {
-            throw new IllegalArgumentException("이미 소유한 몽땅입니다.");
+            throw new IllegalArgumentException("이미 모집된 몽땅입니다.");
         }
 
         // 코인 차감
         int remainCoin = coinLogUtils.getCoinCount(userId);
-        if (remainCoin < mongddang.getPrice()) {
-            throw new IllegalArgumentException("코인이 부족합니다.");
-        }
         coinLogUtils.minusCoin(userId, CoinCategory.mongddang, mongddang.getPrice());
 
-        // 몽땅 획득
-        MyMongddang newMyMongddang = MyMongddang.builder()
-                .child(user)
-                .mongddang(mongddang)
-                .isNew(true)
-                .isMain(false)
-                .createdAt(LocalDateTime.now())
-                .build();
+        // 마이 몽땅 생성, 코인 로그 생성
+        MyMongddang newMyMongddang = MyMongddang.builder().child(user).mongddang(mongddang).isNew(true).isMain(false).createdAt(LocalDateTime.now()).build();
+        CoinLog newCoinLog = CoinLog.builder().child(user).coin(remainCoin - mongddang.getPrice()).category(CoinCategory.mongddang).build();
 
-        // 코인 로그 추가
-        CoinLog newCoinLog = CoinLog.builder()
-                .child(user)
-                .coin(remainCoin - mongddang.getPrice())
-                .category(CoinCategory.mongddang)
-                .build();
-
-        // 저장
         myMongddangRepository.save(newMyMongddang);
         coinLogRepository.save(newCoinLog);
 
-        return ResponseDto.builder()
-                .message("몽땅 모집에 성공했습니다.")
-                .build();
+        return ResponseDto.builder().message("몽땅 모집에 성공했습니다.").build();
     }
 
 
-    // 새로 획득한 표시 제거
-    public ResponseDto checkNewMongddang() {
+    /**
+     * 새로운 몽땅 표시 제거
+     *
+     * @param mongddangId
+     * @return
+     */
+    public ResponseDto checkNewMongddang(Long mongddangId) {
+        log.info("checkNewMongddang mongddangId: {}", mongddangId);
 
-        return null;
+        MyMongddang myMongddang = myMongddangRepository.findByMongddangId(mongddangId);
+
+        // 해당 몽땅이 존재하지 않는 경우
+        if (myMongddang == null) {
+            throw new IllegalArgumentException("해당 몽땅이 존재하지 않습니다.");
+        }
+
+        // 해당 몽땅이 존재하는 경우 isNew 를 false 로 변경
+        if (!myMongddang.getIsNew()) {
+            throw new IllegalArgumentException("이미 새로운 몽땅 표시가 제거되었습니다.");
+        }
+
+        myMongddang.setIsNew(false);
+        myMongddangRepository.save(myMongddang);
+
+        return ResponseDto.builder().message("새로운 몽땅 표시를 제거했습니다.").build();
     }
 
     // 메인 몽땅 설정

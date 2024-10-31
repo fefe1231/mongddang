@@ -27,7 +27,7 @@ public class CoinLogUtils {
         log.info("getCoinCount id: {}", id);
 
         // userId에 해당하는 CoinLog 조회
-        CoinLog coinLog = coinLogRepository.findTopByChildIdOrderByIdDesc(id).orElseThrow(() -> new RuntimeException("Coin log not found for userId: " + id));
+        CoinLog coinLog = coinLogRepository.findTopByChildIdOrderByIdDesc(id).orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다. userId: " + id));
 
         // 현재 coin 값 반환
         return coinLog.getCoin();
@@ -83,9 +83,9 @@ public class CoinLogUtils {
         // userId에 해당하는 CoinLog 조회
         CoinLog coinLog = coinLogRepository.findTopByChildIdOrderByIdDesc(id).orElseThrow(() -> new RuntimeException("해당 유저에 대한 CoinLog 를 찾을 수 없습니다. id: " + id));
 
-        // 가 부족할 경우 예외 처리
+        // 코인이 부족할 경우 예외 처리
         if (coinLog.getCoin() - amount < 0) {
-            throw new IllegalArgumentException("가 부족합니다.");
+            throw new IllegalArgumentException("코인이 부족합니다. 현재 코인량: " + coinLog.getCoin() + ", 차감량: " + amount);
         }
 
         // 새로운 CoinLog 기록 추가
