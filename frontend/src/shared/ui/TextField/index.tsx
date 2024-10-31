@@ -57,6 +57,7 @@ export const TextField = forwardRef<HTMLInputElement | HTMLTextAreaElement, Text
             placeholder={placeholder}
             readOnly={readOnly}
             defaultValue={defaultValue}
+            value={props.value} // 중요
             onFocus={() => !readOnly && setIsFocused(true)}
             onBlur={() => !readOnly && setIsFocused(false)}
             onChange={(e) => setInputValue(e.target.value)}
