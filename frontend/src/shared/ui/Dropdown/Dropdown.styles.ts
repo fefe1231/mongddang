@@ -4,27 +4,29 @@ import { Colors } from '../styles/globalStyles';
 export const styles = {
   dropdownContainer: css({
     position: 'relative',
+    width: '12.5rem',
+    height: '2.5rem',
   }),
   button: css({
     backgroundColor: Colors['primary']['200'],
-    width: '12.5rem',
+    width: '100%',
     padding: '0.625rem',
     cursor: 'pointer',
     color: '#000',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    border: 'none', // 기본 테두리 제거
-    outline: 'none', // 클릭 시 outline 제거
+    border: 'none',
+    outline: 'none',
+    position: 'relative',
+    zIndex: 1,
   }),
-  dropdown: css({
-    position: 'absolute',
-    top: '100%',
-    left: 0,
+  dropdownPortal: css({
+    position: 'fixed', // fixed로 변경
     backgroundColor: Colors['primary']['200'],
     borderRadius: '0.625rem',
     boxShadow: '0 0.25rem 0.625rem rgba(0, 0, 0, 0.1)',
-    zIndex: 2,
+    zIndex: 1000, // 높은 z-index 값
     width: '12.5rem',
     padding: '0.5rem 0',
   }),

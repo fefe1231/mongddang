@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Toast } from './Toast';
+import { Toast } from '.';
 import { Palette } from '@/shared/model/globalStylesTyes';
 import { Typography } from '../Typography';
 
@@ -65,7 +65,7 @@ export const Contained: Story = {
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
       {colorList.map((color) => (
         <Toast {...args} color={color}>
-          <Typography size={'1'} color="dark">
+          <Typography size={'1'} weight={500}  color="dark">
             이건 토스트입니다
           </Typography>
         </Toast>
@@ -86,7 +86,7 @@ export const Filled: Story = {
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
       {colorList.map((color) => (
         <Toast {...args} color={color}>
-          <Typography size={'1'} color="light">
+          <Typography size={'1'} weight={500} color="light">
             이건 토스트입니다
           </Typography>
         </Toast>
@@ -107,7 +107,7 @@ export const Outlined: Story = {
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
       {colorList.map((color) => (
         <Toast {...args} color={color}>
-          <Typography size={'1'} color="dark">
+          <Typography size={'1'} weight={500} color="dark">
             이건 토스트입니다
           </Typography>
         </Toast>

@@ -4,7 +4,8 @@ import { FontWeight } from '@/shared/model/globalStylesTyes';
 
 export interface AccordionProps {
   icon: string;
-  size: number;
+  imgiconsize: number;
+  togglesize: number;
   title: string;
   content: ReactNode;
   titleSize: Tsize;
