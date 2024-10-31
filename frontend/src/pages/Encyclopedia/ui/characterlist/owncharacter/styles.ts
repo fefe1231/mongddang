@@ -2,8 +2,8 @@ import { css } from '@emotion/react';
 
 export const containerCss = css`
   display: flex;
-  width: 90px;
-  height: 130px;
+  width: 80px;
+  height: 120px;
   padding: 10px 11px;
   flex-direction: column;
   justify-content: center;

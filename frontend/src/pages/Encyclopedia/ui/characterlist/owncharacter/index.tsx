@@ -8,9 +8,9 @@ export const Owncharacter = () => {
     <>
       <div css={containerCss}>
         <IconTypo
-          fontSize="1.25"
+          fontSize="1"
           icon="/img/%EB%A7%90%EB%9E%911.png"
-          menu="메뉴"
+          menu="몽땅"
           size={5}
         />
       </div>

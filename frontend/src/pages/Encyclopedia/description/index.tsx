@@ -11,7 +11,7 @@ export const Description = () => {
         <img alt="icon-1" src="/img/%EB%A7%90%EB%9E%912.png" />
       </Icon>
       <div css={containerCss}>
-        <Typography color="dark" size="1" weight={500}>
+        <Typography color="dark" size="0.75" weight={600}>
           그동안 모은 별가루로 
           <br />
           내 친구들을 찾을 수 있어!
