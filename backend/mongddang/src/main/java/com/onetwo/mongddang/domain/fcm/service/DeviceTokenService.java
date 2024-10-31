@@ -19,6 +19,7 @@ public class DeviceTokenService {
     private final FcmTokenRepository fcmTokenRepository;
     private final UserRepository userRepository;
 
+    // 일단 user 한 명은 1개의 디바이스만 소유할 수 있다.
     public void saveOrUpdateToken(String token, Long userId) {
         Optional<FcmToken> existingToken = fcmTokenRepository.findByUserId(userId);
 
@@ -28,13 +29,8 @@ public class DeviceTokenService {
         if (existingToken.isPresent()) {
             log.info("fcm token 있음");
             FcmToken tokenRecord = existingToken.get();
-            tokenRecord = tokenRecord.builder()
-                    .user(tokenRecord.getUser())
-                    .createdAt(tokenRecord.getCreatedAt())
-                    .token(token) // 토큰 업데이트
-                    .updatedAt(LocalDateTime.now()) // 업데이트 시간 설정
-                    .build();
-            fcmTokenRepository.save(tokenRecord);
+            tokenRecord.updateToken(token); // 토큰 업데이트
+            fcmTokenRepository.save(tokenRecord);  // 변경된 엔티티 저장
             log.info("fcm token 업데이트 완료");
         } else {
             log.info("fcm token 없음");

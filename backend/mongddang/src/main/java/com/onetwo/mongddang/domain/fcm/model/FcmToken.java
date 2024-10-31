@@ -32,4 +32,9 @@ public class FcmToken {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    public void updateToken(String token) {
+        this.token = token;
+        this.updatedAt = LocalDateTime.now();
+    }
 }
