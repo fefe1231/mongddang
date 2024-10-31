@@ -1,6 +1,6 @@
 package com.onetwo.mongddang.domain.vital.controller;
 
-import com.onetwo.mongddang.domain.vital.dto.ResponseDateGlucoseDto;
+import com.onetwo.mongddang.common.ResponseDto;
 import com.onetwo.mongddang.domain.vital.model.Vital;
 import com.onetwo.mongddang.domain.vital.service.SearchVitalService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,9 +26,9 @@ public class VitalController {
     private final SearchVitalService searchVitalService;
     @Operation(summary = "일일 혈당조회 api", description = "해당 날짜의 하루치 혈당기록을 조회할 수 있습니다.")
     @GetMapping("/{date}")
-    public ResponseEntity<ResponseDateGlucoseDto> getThisdateGlucose(@PathVariable("date") String date, HttpServletRequest request){
+    public ResponseEntity<ResponseDto> getThisdateGlucose(@PathVariable("date") String date, HttpServletRequest request){
         Long userId = 1L;
-        ResponseDateGlucoseDto response = searchVitalService.SearchThisDayVitalService(userId, date);
+        ResponseDto response = searchVitalService.SearchThisDayVital(userId, date);
         return ResponseEntity.ok(response);
     }
 }
