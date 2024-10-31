@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import React, { useState } from 'react';
 import type { Meta } from '@storybook/react';
-import { Dropdown } from './Dropdown';
+import { Dropdown } from '.';
 
 const meta = {
   title: 'UI/Components/Dropdown',

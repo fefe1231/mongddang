@@ -8,7 +8,6 @@ import ColorStyle from '../styles/colorStyles';
 export const base = (
   color: Palette,
   fullwidth: boolean,
-  scale?: ColorScale,
   isShadow?: boolean,
   fontSize?: string
 ) => css`
@@ -18,12 +17,6 @@ export const base = (
   user-select: none;
   padding: 0.55rem 1rem;
   border-radius: 0.625rem;
-  border: 0.125rem solid
-    ${color === 'light'
-      ? '#d9d9d9'
-      : !scale
-        ? ColorStyle[color].main
-        : Colors[color][scale]};
   font-family: 'Paperlogy';
   ${isShadow &&
   css`
@@ -61,13 +54,22 @@ export const variantCss = (
     case 'contained':
       return css`
         background-color: ${!scale
-          ? ColorStyle[color].main
+          ? ColorStyle[color].button
           : Colors[color][scale]};
         color: ${ColorStyle[color].contrastText};
+        border: 0.125rem solid
+          ${!scale ? ColorStyle[color].button : Colors[color][scale]};
       `;
 
     case 'outlined':
       return css`
+        border: 0.125rem solid
+          ${color === 'light'
+            ? '#d9d9d9'
+            : !scale
+              ? ColorStyle[color].button
+              : Colors[color][scale]};
+        font-family: 'Paperlogy';
         background-color: transparent;
         color: ${color === 'light'
           ? '#000'

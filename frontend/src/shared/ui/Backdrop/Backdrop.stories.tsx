@@ -39,6 +39,20 @@ const meta = {
         step: 1,
       },
     },
+    color: {
+      description: '적용할 컬러입니다.\n기본 색상은 primary 입니다.',
+      options: [
+        'primary',
+        'secondary',
+        'success',
+        'danger',
+        'indigo',
+        'blue',
+        'dark',
+        'light',
+      ],
+      control: 'select',
+    },
   },
 } satisfies Meta<typeof Backdrop>;
 

@@ -19,13 +19,17 @@ public class FcmConfig {
 
     @Bean
     public FirebaseApp initializeFirebaseApp() throws IOException {
-        // 파일 경로를 properties에 설정
-        FileInputStream serviceAccount = new FileInputStream(firebaseCredentialsPath);
+        // 이미 초기화된 FirebaseApp이 있는지 확인
+        if (FirebaseApp.getApps().isEmpty()) {
+            try (FileInputStream serviceAccount = new FileInputStream(firebaseCredentialsPath)) {
+                FirebaseOptions options = FirebaseOptions.builder()
+                        .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                        .build();
 
-        FirebaseOptions options = FirebaseOptions.builder()
-                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                .build();
-
-        return FirebaseApp.initializeApp(options);
+                return FirebaseApp.initializeApp(options); // 새로운 인스턴스 생성
+            }
+        } else {
+            return FirebaseApp.getInstance(); // 이미 존재하는 인스턴스 반환
+        }
     }
 }
