@@ -121,7 +121,7 @@ pipeline {
                                 sshTransfer(
                                   execCommand: """
                                     cd S11P31D207
-                                    docker compose up backend
+                                    docker compose up -d backend
                                     docker compose ps -a
                                     docker ps -a
                                   """),
