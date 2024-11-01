@@ -1,6 +1,6 @@
 // 닉네임 유효성 검사
 export const validateNickname = (nickname:string) => {
-  const nicknameRegex = /^[a-zA-Z가-힣ㄱ-ㅎㅏ-ㅣ0-9\s]{,10}$/;
+  const nicknameRegex = /^[a-zA-Z가-힣ㄱ-ㅎㅏ-ㅣ0-9\s]{1,10}$/;
 
   
   if (!nickname) {
