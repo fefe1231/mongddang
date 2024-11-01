@@ -11,3 +11,10 @@ export const kidsMainBase = css`
   background-size: cover;
   background-position: bottom;
 `;
+
+export const topContainer = css`
+  display: flex;
+  width: 100%;
+  height: fit-content;
+  padding: 3%;
+`;
