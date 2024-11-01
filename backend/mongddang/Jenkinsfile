@@ -96,7 +96,8 @@ pipeline {
                                 sshTransfer(
                                   execCommand: """
                                     cd S11P31D207
-                                    docker compose down --rmi all backend
+                                    docker compose down backend
+                                    docker image prune -af
                                     docker compose ps -a
                                     docker ps -a
                                   """),
