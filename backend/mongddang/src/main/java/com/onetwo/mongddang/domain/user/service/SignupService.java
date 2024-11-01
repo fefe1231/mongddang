@@ -45,12 +45,39 @@ public class SignupService {
             throw new RestApiException(CustomUserErrorCode.USER_IS_EXISTS);
         }
 
+        // 회원 가입
+        User newUser = signup(signupRequestDto, email);
+
+        if ("child".equals(newUser.getRole().toString())) {
+            log.info(newUser.getId().toString());
+            // 게임 로그 초기화
+            initializeGameLog(newUser.getId());
+            // 초기 재화 지급
+            coinGrant(newUser);
+        }
+
+        // jwt token 생성
+        String jwtToken = jwtTokenProvider.generateToken(newUser.getEmail(), newUser.getRole().toString(), newUser.getId());
+        // response
+        Map<Object, Object> data = new HashMap<>();
+        data.put("accessToken", jwtToken);
+
+        ResponseDto response = ResponseDto.builder()
+                .message("회원가입을 성공했습니다.")
+                .data(data)
+                .build();
+
+        return response;
+    }
+
+    // 회원가입
+    @Transactional
+    public User signup(SignupRequestDto signupRequestDto,String email){
+        User.Role role = signupRequestDto.getRole();
         String invitedCode = null; // 어른은 초대코드 null
 
-        // role이 child일 때
-        User.Role role = signupRequestDto.getRole();
-        if (role.toString() == "child") {
-            // 초대코드 생성
+        if ("child".equals(role.toString())) {
+            // 어린이일 때 초대코드 생성
             invitedCode =  makeRandomCodeService.makeCodeAndCheckUnique();
         }
         // 저장
@@ -63,35 +90,24 @@ public class SignupService {
                 .role(role)
                 .invitationCode(invitedCode)
                 .build();
-        User newUser = userRepository.save(user);
 
-        if (newUser.getRole().toString() == "child") {
-            log.info(newUser.getId().toString());
-            // 게임 로그 초기화
-            gameLogUtils.initGameLog(newUser.getId());
+        return userRepository.save(user);
+    }
 
-            CoinLog newCoinLog = CoinLog.builder()
-                    .coin(500)
-                    .child(newUser)
-                    .category(CoinLog.CoinCategory.achievement)
-                    .build();
-            coinLogRepository.save(newCoinLog);
+    // 게임 로그 초기화
+    @Transactional
+    public void initializeGameLog(Long userId) {
+        gameLogUtils.initGameLog(userId);
+    }
 
-            // 초기 재화 지급
-            coinLogUtils.rewardCoin(newUser.getId(), CoinLog.CoinCategory.valueOf("achievement"),500);
-        }
-
-        // jwt token 생성
-        String jwtToken = jwtTokenProvider.generateToken(user.getEmail(), user.getRole().toString(), user.getId());
-        // response
-        Map<Object, Object> data = new HashMap<>();
-        data.put("accessToken", jwtToken);
-
-        ResponseDto response = ResponseDto.builder()
-                .message("회원가입을 성공했습니다.")
-                .data(data)
+    // 초기 코인 지급
+    @Transactional
+    public void coinGrant(User user) {
+        CoinLog newCoinLog = CoinLog.builder()
+                .coin(500)
+                .child(user)
+                .category(CoinLog.CoinCategory.achievement)
                 .build();
-
-        return response;
+        coinLogRepository.save(newCoinLog);
     }
 }
