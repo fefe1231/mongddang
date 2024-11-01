@@ -2,15 +2,18 @@ package com.onetwo.mongddang.domain.game.achievement.service;
 
 import com.onetwo.mongddang.common.ResponseDto;
 import com.onetwo.mongddang.domain.game.achievement.dto.RequestAchievementListDto;
+import com.onetwo.mongddang.domain.game.achievement.errors.CustomAchievementErrorCode;
 import com.onetwo.mongddang.domain.game.achievement.model.Achievement;
 import com.onetwo.mongddang.domain.game.achievement.repository.AchievementRepository;
 import com.onetwo.mongddang.domain.game.gameLog.application.GameLogUtils;
+import com.onetwo.mongddang.domain.game.gameLog.errors.CustomGameLogErrorCode;
 import com.onetwo.mongddang.domain.game.gameLog.model.GameLog;
 import com.onetwo.mongddang.domain.game.gameLog.repository.GameLogRepository;
 import com.onetwo.mongddang.domain.game.title.model.MyTitle;
 import com.onetwo.mongddang.domain.game.title.model.Title;
 import com.onetwo.mongddang.domain.game.title.repository.MyTitleRepository;
 import com.onetwo.mongddang.domain.game.title.repository.TitleRepository;
+import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
 import com.onetwo.mongddang.domain.user.model.User;
 import com.onetwo.mongddang.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -46,13 +49,11 @@ public class AchievementService {
 
                     // 유저의 게임 로그 조회
                     GameLog gameLog = gameLogRepository.findTopByChildIdOrderByIdDesc(childId)
-                            .orElseThrow(() -> new RuntimeException("게임 로그를 찾을 수 없습니다. userId: " + childId));
+                            .orElseThrow(() -> new RuntimeException(CustomGameLogErrorCode.GAME_LOG_NOT_FOUND.getCode()));
                     MyTitle myTitle = myTitleRepository.findByTitleId(title.getId());
 
                     // 업적 달성 횟수
                     int executionCount = gameLogUtils.getGameLogCountByCategory(childId, achievement.getCategory());
-
-                    log.info("executionCount: {}", executionCount);
 
                     // 업적 달성 여부 -1: 달성하지 않음
                     boolean isAchieved = executionCount != -1;
@@ -83,21 +84,21 @@ public class AchievementService {
     public ResponseDto claimAchievementReward(Long userId, Long achievementId) {
         log.info("claimAchievementReward userId: {}, achievementId: {}", userId, achievementId);
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
-        Achievement achievement = achievementRepository.findById(achievementId).orElseThrow(() -> new IllegalArgumentException("해당 업적이 존재하지 않습니다."));
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException(CustomUserErrorCode.USER_NOT_FOUND.getCode()));
+        Achievement achievement = achievementRepository.findById(achievementId).orElseThrow(() -> new IllegalArgumentException(CustomAchievementErrorCode.INVALID_ACHIEVEMENT_ID.getCode()));
         // 업적과 일치하는 칭호 조회해야함...........
         Title title = titleRepository.findByAchievementId(achievement
-                .getId()).orElseThrow(() -> new IllegalArgumentException("해당 칭호가 존재하지 않습니다."));
+                .getId()).orElseThrow(() -> new IllegalArgumentException(CustomAchievementErrorCode.INVALID_ACHIEVEMENT_ID.getCode()));
         MyTitle myTitle = myTitleRepository.findByTitleId(title.getId());
         if (myTitle != null) {
-            throw new IllegalArgumentException("이미 소유한 칭호입니다.");
+            throw new IllegalArgumentException(CustomAchievementErrorCode.ACHIEVEMENT_ALREADY_REWARDED.getCode());
         }
 
         // 업적 달성 횟수
         int executionCount = gameLogUtils.getGameLogCountByCategory(userId, achievement.getCategory());
 
         if (executionCount < achievement.getCount()) {
-            throw new IllegalArgumentException("조건이 달성되지 않은 업적입니다.");
+            throw new IllegalArgumentException(CustomAchievementErrorCode.ACHIEVEMENT_NOT_UNLOCKED.getCode());
         }
 
         MyTitle newMyTitle = MyTitle.builder()

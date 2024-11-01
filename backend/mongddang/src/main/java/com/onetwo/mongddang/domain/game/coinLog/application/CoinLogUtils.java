@@ -1,8 +1,10 @@
 package com.onetwo.mongddang.domain.game.coinLog.application;
 
+import com.onetwo.mongddang.domain.game.coinLog.errors.CustomCoinLogErrorCode;
 import com.onetwo.mongddang.domain.game.coinLog.model.CoinLog;
 import com.onetwo.mongddang.domain.game.coinLog.model.CoinLog.CoinCategory;
 import com.onetwo.mongddang.domain.game.coinLog.repository.CoinLogRepository;
+import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
 import com.onetwo.mongddang.domain.user.model.User;
 import com.onetwo.mongddang.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +30,7 @@ public class CoinLogUtils {
         log.info("getCoinCount id: {}", id);
 
         // userId에 해당하는 CoinLog 조회
-        CoinLog coinLog = coinLogRepository.findTopByChildIdOrderByIdDesc(id).orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다. userId: " + id));
+        CoinLog coinLog = coinLogRepository.findTopByChildIdOrderByIdDesc(id).orElseThrow(() -> new RuntimeException(CustomUserErrorCode.USER_NOT_FOUND.getCode()));
 
         // 현재 coin 값 반환
         return coinLog.getCoin();
@@ -52,7 +54,7 @@ public class CoinLogUtils {
         }
 
         // id 에 해당하는 User 조회
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found for id: " + id));
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException(CustomUserErrorCode.USER_NOT_FOUND.getCode()));
 
         // 새로운 CoinLog 기록 추가
         int remainCoin = getCoinCount(id); // 보유 코인
@@ -81,14 +83,14 @@ public class CoinLogUtils {
     @Transactional
     public CoinLog deductCoin(Long id, CoinCategory category, int amount) {
         // id 에 해당하는 User 조회
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("해당 유저를 찾을 수 없습니다. id: " + id));
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException(CustomUserErrorCode.USER_NOT_FOUND.getCode()));
 
         // userId에 해당하는 CoinLog 조회
-        CoinLog coinLog = coinLogRepository.findTopByChildIdOrderByIdDesc(id).orElseThrow(() -> new RuntimeException("해당 유저에 대한 CoinLog 를 찾을 수 없습니다. id: " + id));
+        CoinLog coinLog = coinLogRepository.findTopByChildIdOrderByIdDesc(id).orElseThrow(() -> new RuntimeException(CustomCoinLogErrorCode.NOT_FOUND_COIN_LOG.getCode()));
 
         // 코인이 부족할 경우 예외 처리
         if (coinLog.getCoin() - amount < 0) {
-            throw new IllegalArgumentException("코인이 부족합니다. 현재 코인량: " + coinLog.getCoin() + ", 차감량: " + amount);
+            throw new IllegalArgumentException(CustomCoinLogErrorCode.INSUFFICIENT_COIN.getCode());
         }
 
         // 새로운 CoinLog 기록 추가

@@ -1,9 +1,11 @@
 package com.onetwo.mongddang.domain.game.gameLog.application;
 
 import com.onetwo.mongddang.domain.game.achievement.model.Achievement.AchievementCategory;
+import com.onetwo.mongddang.domain.game.gameLog.errors.CustomGameLogErrorCode;
 import com.onetwo.mongddang.domain.game.gameLog.model.GameLog;
 import com.onetwo.mongddang.domain.game.gameLog.model.GameLog.GameLogCategory;
 import com.onetwo.mongddang.domain.game.gameLog.repository.GameLogRepository;
+import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
 import com.onetwo.mongddang.domain.user.model.User;
 import com.onetwo.mongddang.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,12 +33,11 @@ public class GameLogUtils {
         log.info("initGameLog - userId: {}", id);
 
         // id 에 해당하는 User 조회
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found for id: " + id));
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException(CustomUserErrorCode.USER_NOT_FOUND.getCode()));
 
         // 사용자에 대한 기존 게임 로그가 존재하는지 확인
         if (gameLogRepository.existsByChild(user)) {
-            log.warn("사용자 (이메일:{})에 대한 게임 로그가 이미 존재합니다.", user.getEmail());
-            return;
+            throw new RuntimeException(CustomGameLogErrorCode.GAME_LOG_ALREADY_INITIALIZED.getCode());
         }
 
         // 초기화용 게임 로그 생성
@@ -65,12 +66,12 @@ public class GameLogUtils {
 
         // id 에 해당하는 User 조회
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("해당 유저를 찾을 수 없습니다. id: " + id));
+                .orElseThrow(() -> new RuntimeException(CustomUserErrorCode.USER_NOT_FOUND.getCode()));
 
 
         // userId에 해당하는 GameLog 조회
         GameLog foundGameLog = gameLogRepository.findTopByChildIdOrderByIdDesc(id)
-                .orElseThrow(() -> new RuntimeException("게임 로그를 찾을 수 없습니다. userId: " + id));
+                .orElseThrow(() -> new RuntimeException(CustomGameLogErrorCode.GAME_LOG_NOT_FOUND.getCode()));
 
         // 게임 로그 생성
         GameLog newGameLog = GameLog.builder()
@@ -95,7 +96,7 @@ public class GameLogUtils {
 
         // userId에 해당하는 GameLog 조회
         GameLog gameLog = gameLogRepository.findTopByChildIdOrderByIdDesc(userId)
-                .orElseThrow(() -> new RuntimeException("게임 로그를 찾을 수 없습니다. userId: " + userId));
+                .orElseThrow(() -> new RuntimeException(CustomGameLogErrorCode.GAME_LOG_NOT_FOUND.getCode()));
 
         int count = -1;
         switch (category) {
