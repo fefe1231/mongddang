@@ -1,6 +1,6 @@
 package com.onetwo.mongddang.domain.fcm.service;
 
-import com.onetwo.mongddang.common.reponseDto.ResponseDto;
+import com.onetwo.mongddang.common.responseDto.ResponseDto;
 import com.onetwo.mongddang.domain.fcm.model.FcmToken;
 import com.onetwo.mongddang.domain.fcm.repository.FcmTokenRepository;
 import com.onetwo.mongddang.domain.user.model.User;

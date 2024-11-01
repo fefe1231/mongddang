@@ -1,6 +1,6 @@
 package com.onetwo.mongddang.domain.game.coinLog.service;
 
-import com.onetwo.mongddang.common.reponseDto.ResponseDto;
+import com.onetwo.mongddang.common.responseDto.ResponseDto;
 import com.onetwo.mongddang.domain.game.coinLog.application.CoinLogUtils;
 import com.onetwo.mongddang.domain.game.coinLog.dto.ResponseCoin;
 import com.onetwo.mongddang.domain.game.coinLog.repository.CoinLogRepository;

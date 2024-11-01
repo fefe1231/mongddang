@@ -1,6 +1,6 @@
 package com.onetwo.mongddang.domain.user.service;
 
-import com.onetwo.mongddang.common.reponseDto.ResponseDto;
+import com.onetwo.mongddang.common.responseDto.ResponseDto;
 import com.onetwo.mongddang.domain.user.dto.SignupRequestDto;
 import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
 import com.onetwo.mongddang.domain.user.jwt.JwtTokenProvider;

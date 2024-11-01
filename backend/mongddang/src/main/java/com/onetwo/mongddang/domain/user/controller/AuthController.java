@@ -1,6 +1,6 @@
 package com.onetwo.mongddang.domain.user.controller;
 
-import com.onetwo.mongddang.common.reponseDto.ResponseDto;
+import com.onetwo.mongddang.common.responseDto.ResponseDto;
 import com.onetwo.mongddang.domain.user.dto.SignupRequestDto;
 import com.onetwo.mongddang.domain.user.service.SignupService;
 import io.swagger.v3.oas.annotations.Operation;

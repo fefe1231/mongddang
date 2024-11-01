@@ -1,7 +1,7 @@
 package com.onetwo.mongddang.domain.game.achievement.controller;
 
-import com.onetwo.mongddang.common.ResponseDto;
-import com.onetwo.mongddang.domain.common.annotation.ChildRequired;
+import com.onetwo.mongddang.common.responseDto.ResponseDto;
+import com.onetwo.mongddang.common.annotation.ChildRequired;
 import com.onetwo.mongddang.domain.game.achievement.dto.RequestClaimAchievementDto;
 import com.onetwo.mongddang.domain.game.achievement.service.AchievementService;
 import com.onetwo.mongddang.domain.user.jwt.JwtExtratService;

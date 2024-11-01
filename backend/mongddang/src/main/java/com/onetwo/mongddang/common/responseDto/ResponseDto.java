@@ -1,4 +1,4 @@
-package com.onetwo.mongddang.common.reponseDto;
+package com.onetwo.mongddang.common.responseDto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
