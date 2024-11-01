@@ -50,7 +50,7 @@ pipeline {
                 if (targetBranch) {
                     echo "Merge Target Branch: ${targetBranch}"
                 } else {
-                    echo "Not a pull request build"
+                    echo "Not a merge request build"
                 }
 
                 echo 'mongddang server 입니다.'
