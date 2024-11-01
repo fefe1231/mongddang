@@ -107,6 +107,7 @@ pipeline {
                               transfer: [
                                 sshTransfer(execCommand: """
                                   docker compose up backend
+                                  docker compose ps -a
                                 """),
                               ]
                             )
