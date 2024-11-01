@@ -16,6 +16,7 @@ import com.onetwo.mongddang.domain.game.title.repository.TitleRepository;
 import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
 import com.onetwo.mongddang.domain.user.model.User;
 import com.onetwo.mongddang.domain.user.repository.UserRepository;
+import com.onetwo.mongddang.errors.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -49,7 +50,7 @@ public class AchievementService {
 
                     // 유저의 게임 로그 조회
                     GameLog gameLog = gameLogRepository.findTopByChildIdOrderByIdDesc(childId)
-                            .orElseThrow(() -> new RuntimeException(CustomGameLogErrorCode.GAME_LOG_NOT_FOUND.getCode()));
+                            .orElseThrow(() -> new RestApiException(CustomGameLogErrorCode.GAME_LOG_NOT_FOUND));
                     MyTitle myTitle = myTitleRepository.findByTitleId(title.getId());
 
                     // 업적 달성 횟수
@@ -84,21 +85,20 @@ public class AchievementService {
     public ResponseDto claimAchievementReward(Long userId, Long achievementId) {
         log.info("claimAchievementReward userId: {}, achievementId: {}", userId, achievementId);
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException(CustomUserErrorCode.USER_NOT_FOUND.getCode()));
-        Achievement achievement = achievementRepository.findById(achievementId).orElseThrow(() -> new IllegalArgumentException(CustomAchievementErrorCode.INVALID_ACHIEVEMENT_ID.getCode()));
-        // 업적과 일치하는 칭호 조회해야함...........
+        User user = userRepository.findById(userId).orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+        Achievement achievement = achievementRepository.findById(achievementId).orElseThrow(() -> new RestApiException(CustomAchievementErrorCode.INVALID_ACHIEVEMENT_ID));
         Title title = titleRepository.findByAchievementId(achievement
-                .getId()).orElseThrow(() -> new IllegalArgumentException(CustomAchievementErrorCode.INVALID_ACHIEVEMENT_ID.getCode()));
+                .getId()).orElseThrow(() -> new RestApiException(CustomAchievementErrorCode.INVALID_ACHIEVEMENT_ID));
         MyTitle myTitle = myTitleRepository.findByTitleId(title.getId());
         if (myTitle != null) {
-            throw new IllegalArgumentException(CustomAchievementErrorCode.ACHIEVEMENT_ALREADY_REWARDED.getCode());
+            throw new RestApiException(CustomAchievementErrorCode.ACHIEVEMENT_ALREADY_REWARDED);
         }
 
         // 업적 달성 횟수
         int executionCount = gameLogUtils.getGameLogCountByCategory(userId, achievement.getCategory());
 
         if (executionCount < achievement.getCount()) {
-            throw new IllegalArgumentException(CustomAchievementErrorCode.ACHIEVEMENT_NOT_UNLOCKED.getCode());
+            throw new RestApiException(CustomAchievementErrorCode.ACHIEVEMENT_NOT_UNLOCKED);
         }
 
         MyTitle newMyTitle = MyTitle.builder()

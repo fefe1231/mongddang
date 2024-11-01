@@ -6,12 +6,15 @@ import com.onetwo.mongddang.domain.game.coinLog.model.CoinLog;
 import com.onetwo.mongddang.domain.game.coinLog.model.CoinLog.CoinCategory;
 import com.onetwo.mongddang.domain.game.coinLog.repository.CoinLogRepository;
 import com.onetwo.mongddang.domain.game.mongddang.dto.RequestMongddangListDto;
+import com.onetwo.mongddang.domain.game.mongddang.errors.CustomMongddangErrorCode;
 import com.onetwo.mongddang.domain.game.mongddang.model.Mongddang;
 import com.onetwo.mongddang.domain.game.mongddang.model.MyMongddang;
 import com.onetwo.mongddang.domain.game.mongddang.repository.MongddangRepository;
 import com.onetwo.mongddang.domain.game.mongddang.repository.MyMongddangRepository;
+import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
 import com.onetwo.mongddang.domain.user.model.User;
 import com.onetwo.mongddang.domain.user.repository.UserRepository;
+import com.onetwo.mongddang.errors.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -81,12 +84,12 @@ public class MongddangService {
     public ResponseDto recruitmentMongddang(Long userId, Long mongddangId) {
         log.info("recruitmentMongddang userId: {}, mongddangId: {}", userId, mongddangId);
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
-        Mongddang mongddang = mongddangRepository.findById(mongddangId).orElseThrow(() -> new IllegalArgumentException("해당 몽땅이 존재하지 않습니다."));
+        User user = userRepository.findById(userId).orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+        Mongddang mongddang = mongddangRepository.findById(mongddangId).orElseThrow(() -> new RestApiException(CustomMongddangErrorCode.INVALID_COLLECTION_ID));
 
         MyMongddang myMongddang = myMongddangRepository.findByMongddangId(mongddangId);
         if (myMongddang != null) {
-            throw new IllegalArgumentException("이미 모집된 몽땅입니다.");
+            throw new RestApiException(CustomMongddangErrorCode.CHARACTER_ALREADY_OWNED);
         }
 
         // 코인 차감
@@ -117,12 +120,12 @@ public class MongddangService {
 
         // 해당 몽땅이 존재하지 않는 경우
         if (myMongddang == null) {
-            throw new IllegalArgumentException("해당 몽땅이 존재하지 않습니다.");
+            throw new RestApiException(CustomMongddangErrorCode.INVALID_COLLECTION_ID);
         }
 
         // 해당 몽땅이 존재하는 경우 isNew 를 false 로 변경
         if (!myMongddang.getIsNew()) {
-            throw new IllegalArgumentException("이미 새로운 몽땅 표시가 제거되었습니다.");
+            throw new RestApiException(CustomMongddangErrorCode.LABEL_ALREADY_REMOVED);
         }
 
         myMongddang.setIsNew(false);
@@ -146,17 +149,17 @@ public class MongddangService {
 
         // 기존 몽땅이 존재하지 않는 경우 - 회원가입 시 초기화를 통해 일어나지 않을 에러
         if (beforeMainMongddang == null) {
-            throw new IllegalArgumentException("메인 몽땅이 존재하지 않습니다.");
+            throw new RestApiException(CustomMongddangErrorCode.INVALID_COLLECTION_ID);
         }
 
         // 해당 몽땅이 존재하지 않는 경우
         if (myMongddang == null) {
-            throw new IllegalArgumentException("해당 몽땅이 존재하지 않습니다.");
+            throw new RestApiException(CustomMongddangErrorCode.INVALID_COLLECTION_ID);
         }
 
         // 해당 몽땅이 존재하는 경우 isMain 을 true 로 변경
         if (myMongddang.getIsMain()) {
-            throw new IllegalArgumentException("이미 메인 몽땅으로 설정되어 있습니다.");
+            throw new RestApiException(CustomMongddangErrorCode.ALREADY_RECRUITED);
         }
 
         // 새로운 메인 몽땅을 true 로 변경

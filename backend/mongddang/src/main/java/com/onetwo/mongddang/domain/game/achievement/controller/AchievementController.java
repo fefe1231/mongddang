@@ -24,12 +24,12 @@ public class AchievementController {
     final JwtExtratService jwtExtratService;
 
     // 업적 목록 조회 api
-    @GetMapping("/{nickname}")
+    @GetMapping("/")
     @ChildRequired
     @Transactional
     @Tag(name = "Collection API", description = "도감 api")
     @Operation(summary = "업적 목록 조회 api", description = "업적 목록을 조회합니다.")
-    public ResponseEntity<ResponseDto> getAchievementList(@PathVariable("nickname") String nickname, HttpServletRequest request) {
+    public ResponseEntity<ResponseDto> getAchievementList(HttpServletRequest request) {
         log.info("GET /api/game/collection/achievement");
 
         Long id = jwtExtratService.jwtFindId(request);

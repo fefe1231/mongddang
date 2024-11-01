@@ -7,6 +7,7 @@ import com.onetwo.mongddang.domain.game.coinLog.repository.CoinLogRepository;
 import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
 import com.onetwo.mongddang.domain.user.model.User;
 import com.onetwo.mongddang.domain.user.repository.UserRepository;
+import com.onetwo.mongddang.errors.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class CoinLogUtils {
         log.info("getCoinCount id: {}", id);
 
         // userId에 해당하는 CoinLog 조회
-        CoinLog coinLog = coinLogRepository.findTopByChildIdOrderByIdDesc(id).orElseThrow(() -> new RuntimeException(CustomUserErrorCode.USER_NOT_FOUND.getCode()));
+        CoinLog coinLog = coinLogRepository.findTopByChildIdOrderByIdDesc(id).orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
 
         // 현재 coin 값 반환
         return coinLog.getCoin();
@@ -43,18 +44,13 @@ public class CoinLogUtils {
      * @param category 코인 지급 카테고리
      * @param amount   지급할 코인량
      * @return 지급된 코인 로그
-     * @throws IllegalArgumentException amount 가 0 이하인 경우
+     * @throws RestApiException amount 가 0 이하인 경우
      */
     @Transactional
     public CoinLog rewardCoin(Long id, CoinCategory category, int amount) {
 
-        // amount 가 0 이하인 경우 예외 처리
-        if (amount <= 0) {
-            throw new IllegalArgumentException("amount 는 0 이상의 정수여야 합니다.");
-        }
-
         // id 에 해당하는 User 조회
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException(CustomUserErrorCode.USER_NOT_FOUND.getCode()));
+        User user = userRepository.findById(id).orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
 
         // 새로운 CoinLog 기록 추가
         int remainCoin = getCoinCount(id); // 보유 코인
@@ -78,19 +74,19 @@ public class CoinLogUtils {
      * @param category 코인 차감 카테고리
      * @param amount   차감할 코인량
      * @return 차감된 코인 로그
-     * @throws IllegalArgumentException amount 가 0 이하인 경우
+     * @throws RestApiException amount 가 0 이하인 경우
      */
     @Transactional
     public CoinLog deductCoin(Long id, CoinCategory category, int amount) {
         // id 에 해당하는 User 조회
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException(CustomUserErrorCode.USER_NOT_FOUND.getCode()));
+        User user = userRepository.findById(id).orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
 
         // userId에 해당하는 CoinLog 조회
-        CoinLog coinLog = coinLogRepository.findTopByChildIdOrderByIdDesc(id).orElseThrow(() -> new RuntimeException(CustomCoinLogErrorCode.NOT_FOUND_COIN_LOG.getCode()));
+        CoinLog coinLog = coinLogRepository.findTopByChildIdOrderByIdDesc(id).orElseThrow(() -> new RestApiException(CustomCoinLogErrorCode.NOT_FOUND_COIN_LOG));
 
         // 코인이 부족할 경우 예외 처리
         if (coinLog.getCoin() - amount < 0) {
-            throw new IllegalArgumentException(CustomCoinLogErrorCode.INSUFFICIENT_COIN.getCode());
+            throw new RestApiException(CustomCoinLogErrorCode.INSUFFICIENT_COIN);
         }
 
         // 새로운 CoinLog 기록 추가

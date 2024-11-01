@@ -8,6 +8,7 @@ import com.onetwo.mongddang.domain.game.gameLog.repository.GameLogRepository;
 import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
 import com.onetwo.mongddang.domain.user.model.User;
 import com.onetwo.mongddang.domain.user.repository.UserRepository;
+import com.onetwo.mongddang.errors.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,11 +34,11 @@ public class GameLogUtils {
         log.info("initGameLog - userId: {}", id);
 
         // id 에 해당하는 User 조회
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException(CustomUserErrorCode.USER_NOT_FOUND.getCode()));
+        User user = userRepository.findById(id).orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
 
         // 사용자에 대한 기존 게임 로그가 존재하는지 확인
         if (gameLogRepository.existsByChild(user)) {
-            throw new RuntimeException(CustomGameLogErrorCode.GAME_LOG_ALREADY_INITIALIZED.getCode());
+            throw new RestApiException(CustomGameLogErrorCode.GAME_LOG_ALREADY_INITIALIZED);
         }
 
         // 초기화용 게임 로그 생성
@@ -66,12 +67,12 @@ public class GameLogUtils {
 
         // id 에 해당하는 User 조회
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(CustomUserErrorCode.USER_NOT_FOUND.getCode()));
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
 
 
         // userId에 해당하는 GameLog 조회
         GameLog foundGameLog = gameLogRepository.findTopByChildIdOrderByIdDesc(id)
-                .orElseThrow(() -> new RuntimeException(CustomGameLogErrorCode.GAME_LOG_NOT_FOUND.getCode()));
+                .orElseThrow(() -> new RestApiException(CustomGameLogErrorCode.GAME_LOG_NOT_FOUND));
 
         // 게임 로그 생성
         GameLog newGameLog = GameLog.builder()
@@ -96,7 +97,7 @@ public class GameLogUtils {
 
         // userId에 해당하는 GameLog 조회
         GameLog gameLog = gameLogRepository.findTopByChildIdOrderByIdDesc(userId)
-                .orElseThrow(() -> new RuntimeException(CustomGameLogErrorCode.GAME_LOG_NOT_FOUND.getCode()));
+                .orElseThrow(() -> new RestApiException(CustomGameLogErrorCode.GAME_LOG_NOT_FOUND));
 
         int count = -1;
         switch (category) {
