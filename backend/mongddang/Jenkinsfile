@@ -95,8 +95,9 @@ pipeline {
                               transfers: [
                                 sshTransfer(execCommand: """
                                   pwa
-                                  docker compose down -rmi all backend
+                                  docker compose down --rmi all backend
                                   docker compose ps -a
+                                  docker ps -a
                                 """),
                               ]
                             )
@@ -119,6 +120,7 @@ pipeline {
                                   pwa
                                   docker compose up backend
                                   docker compose ps -a
+                                  docker ps -a
                                 """),
                               ]
                             )
