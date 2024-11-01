@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,7 @@ public class AchievementController {
     // 업적 목록 조회 api
     @GetMapping("/{nickname}")
     @ChildRequired
+    @Transactional
     @Tag(name = "Collection API", description = "도감 api")
     @Operation(summary = "업적 목록 조회 api", description = "업적 목록을 조회합니다.")
     public ResponseEntity<ResponseDto> getAchievementList(@PathVariable("nickname") String nickname, HttpServletRequest request) {

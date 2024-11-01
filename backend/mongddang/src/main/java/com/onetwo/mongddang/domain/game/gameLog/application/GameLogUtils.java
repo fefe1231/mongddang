@@ -7,6 +7,7 @@ import com.onetwo.mongddang.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -23,6 +24,7 @@ public class GameLogUtils {
      *
      * @param id 사용자 id
      */
+    @Transactional
     public void initGameLog(Long id) {
         log.info("initGameLog - userId: {}", id);
 
@@ -55,6 +57,7 @@ public class GameLogUtils {
      * @param category 게임 로그 카테고리
      * @return 추가된 게임 로그
      */
+    @Transactional
     public GameLog addGameLog(Long id, GameLog.GameLogCategory category) {
         log.info("addGameLog - userId: {}, category: {}", id, category);
 

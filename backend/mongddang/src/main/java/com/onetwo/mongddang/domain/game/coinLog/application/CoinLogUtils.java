@@ -8,6 +8,7 @@ import com.onetwo.mongddang.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -42,6 +43,7 @@ public class CoinLogUtils {
      * @return 지급된 코인 로그
      * @throws IllegalArgumentException amount 가 0 이하인 경우
      */
+    @Transactional
     public CoinLog rewardCoin(Long id, CoinCategory category, int amount) {
 
         // amount 가 0 이하인 경우 예외 처리
@@ -76,7 +78,8 @@ public class CoinLogUtils {
      * @return 차감된 코인 로그
      * @throws IllegalArgumentException amount 가 0 이하인 경우
      */
-    public CoinLog minusCoin(Long id, CoinCategory category, int amount) {
+    @Transactional
+    public CoinLog deductCoin(Long id, CoinCategory category, int amount) {
         // id 에 해당하는 User 조회
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("해당 유저를 찾을 수 없습니다. id: " + id));
 
@@ -110,7 +113,7 @@ public class CoinLogUtils {
      */
     public void classificationCategoryType(Long id, CoinCategory coinCategory, int amount) {
         if (coinCategory.equals(CoinCategory.mongddang)) {
-            minusCoin(id, coinCategory, amount); //  차감
+            deductCoin(id, coinCategory, amount); //  차감
         } else {
             rewardCoin(id, coinCategory, amount); //  지급
         }

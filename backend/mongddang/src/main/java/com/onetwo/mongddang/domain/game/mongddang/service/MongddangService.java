@@ -91,7 +91,7 @@ public class MongddangService {
 
         // 코인 차감
         int remainCoin = coinLogUtils.getCoinCount(userId);
-        coinLogUtils.minusCoin(userId, CoinCategory.mongddang, mongddang.getPrice());
+        coinLogUtils.deductCoin(userId, CoinCategory.mongddang, mongddang.getPrice());
 
         // 마이 몽땅 생성, 코인 로그 생성
         MyMongddang newMyMongddang = MyMongddang.builder().child(user).mongddang(mongddang).isNew(true).isMain(false).createdAt(LocalDateTime.now()).build();

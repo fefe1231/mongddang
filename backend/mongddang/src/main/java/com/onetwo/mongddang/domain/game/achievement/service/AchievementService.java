@@ -42,30 +42,34 @@ public class AchievementService {
 
                     // 유저의 게임 로그 조회
                     GameLog gameLog = gameLogRepository.findTopByChildId(childId);
-
                     MyTitle myTitle = myTitleRepository.findByTitleId(title.getId());
 
                     // 업적 달성 여부
                     boolean isAchieved;
+                    int executionCount;
                     switch (achievement.getCategory()) {
                         case meal:
                             isAchieved = gameLog.getMealCount() >= achievement.getCount();
+                            executionCount = gameLog.getMealCount();
                             break;
                         case sleep:
                             isAchieved = gameLog.getSleepCount() >= achievement.getCount();
+                            executionCount = gameLog.getSleepCount();
                             break;
                         case exercise:
                             isAchieved = gameLog.getExerciseCount() >= achievement.getCount();
+                            executionCount = gameLog.getExerciseCount();
                             break;
                         default:
                             isAchieved = gameLog.getMedicationCount() >= achievement.getCount();
+                            executionCount = gameLog.getMedicationCount();
                             break;
                     }
                     return RequestAchievementListDto.builder()
                             .titleId(title.getId())
                             .titleName(title.getName())
                             .description(achievement.getDescription())
-                            .executionCount(1)
+                            .executionCount(executionCount)
                             .count(achievement.getCount())
                             .category(achievement.getCategory())
                             .isOwned(isAchieved)

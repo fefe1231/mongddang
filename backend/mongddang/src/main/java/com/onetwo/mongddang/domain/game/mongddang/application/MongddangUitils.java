@@ -5,6 +5,7 @@ import com.onetwo.mongddang.domain.game.mongddang.repository.MongddangRepository
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -14,6 +15,7 @@ public class MongddangUitils {
     private final MongddangRepository mongddangRepository;
 
     // 몽땅 추가
+    @Transactional
     public void addMongddang(String name, int price, String story) {
         log.info("addMongddang");
 
