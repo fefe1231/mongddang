@@ -6,4 +6,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MyTitleRepository extends JpaRepository<MyTitle, Long> {
+
+    MyTitle findByTitleId(Long id);
+
+    MyTitle findByChildId(Long titleId);
 }

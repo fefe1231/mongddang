@@ -6,9 +6,9 @@ import { Modal } from '@/shared/ui/Modal';
 import { Typography } from '@/shared/ui/Typography';
 import { HiOutlineX } from 'react-icons/hi';
 import { Chip } from '@/shared/ui/Chip';
-import { base, modalCss, xiconCss } from './styles';
 import { BuyModal } from '../buy-modal';
 import { FindModal } from '../find-modal';
+import { base, modalCss, xiconCss } from './styles';
 
 interface OwnModalProps {
   setstate: (value: boolean) => void;

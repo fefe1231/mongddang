@@ -1,12 +1,18 @@
 package com.onetwo.mongddang.domain.game.gameLog.application;
 
+import com.onetwo.mongddang.domain.game.achievement.model.Achievement.AchievementCategory;
+import com.onetwo.mongddang.domain.game.gameLog.errors.CustomGameLogErrorCode;
 import com.onetwo.mongddang.domain.game.gameLog.model.GameLog;
+import com.onetwo.mongddang.domain.game.gameLog.model.GameLog.GameLogCategory;
 import com.onetwo.mongddang.domain.game.gameLog.repository.GameLogRepository;
+import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
 import com.onetwo.mongddang.domain.user.model.User;
 import com.onetwo.mongddang.domain.user.repository.UserRepository;
+import com.onetwo.mongddang.errors.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -23,16 +29,16 @@ public class GameLogUtils {
      *
      * @param id 사용자 id
      */
+    @Transactional
     public void initGameLog(Long id) {
         log.info("initGameLog - userId: {}", id);
 
         // id 에 해당하는 User 조회
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found for id: " + id));
+        User user = userRepository.findById(id).orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
 
         // 사용자에 대한 기존 게임 로그가 존재하는지 확인
         if (gameLogRepository.existsByChild(user)) {
-            log.warn("사용자 (이메일:{})에 대한 게임 로그가 이미 존재합니다.", user.getEmail());
-            return;
+            throw new RestApiException(CustomGameLogErrorCode.GAME_LOG_ALREADY_INITIALIZED);
         }
 
         // 초기화용 게임 로그 생성
@@ -55,25 +61,26 @@ public class GameLogUtils {
      * @param category 게임 로그 카테고리
      * @return 추가된 게임 로그
      */
-    public GameLog addGameLog(Long id, GameLog.GameLogCategory category) {
+    @Transactional
+    public GameLog addGameLog(Long id, GameLogCategory category) {
         log.info("addGameLog - userId: {}, category: {}", id, category);
 
         // id 에 해당하는 User 조회
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("해당 유저를 찾을 수 없습니다. id: " + id));
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
 
 
         // userId에 해당하는 GameLog 조회
         GameLog foundGameLog = gameLogRepository.findTopByChildIdOrderByIdDesc(id)
-                .orElseThrow(() -> new RuntimeException("게임 로그를 찾을 수 없습니다. userId: " + id));
+                .orElseThrow(() -> new RestApiException(CustomGameLogErrorCode.GAME_LOG_NOT_FOUND));
 
         // 게임 로그 생성
         GameLog newGameLog = GameLog.builder()
                 .child(user)
-                .mealCount(category.equals(GameLog.GameLogCategory.meal_count) ? foundGameLog.getMealCount() + 1 : foundGameLog.getMealCount())
-                .exerciseCount(category.equals(GameLog.GameLogCategory.exercise_count) ? foundGameLog.getExerciseCount() + 1 : foundGameLog.getExerciseCount())
-                .sleepCount(category.equals(GameLog.GameLogCategory.sleep_count) ? foundGameLog.getSleepCount() + 1 : foundGameLog.getSleepCount())
-                .medicationCount(category.equals(GameLog.GameLogCategory.medication_count) ? foundGameLog.getMedicationCount() + 1 : foundGameLog.getMedicationCount())
+                .mealCount(category.equals(GameLogCategory.meal_count) ? foundGameLog.getMealCount() + 1 : foundGameLog.getMealCount())
+                .exerciseCount(category.equals(GameLogCategory.exercise_count) ? foundGameLog.getExerciseCount() + 1 : foundGameLog.getExerciseCount())
+                .sleepCount(category.equals(GameLogCategory.sleep_count) ? foundGameLog.getSleepCount() + 1 : foundGameLog.getSleepCount())
+                .medicationCount(category.equals(GameLogCategory.medication_count) ? foundGameLog.getMedicationCount() + 1 : foundGameLog.getMedicationCount())
                 .build();
 
         // 게임 로그 저장
@@ -82,4 +89,33 @@ public class GameLogUtils {
 
         return savedGameLog;
     }
+
+
+    // 게임 로그 횟수 조회
+    public int getGameLogCountByCategory(Long userId, AchievementCategory category) {
+        log.info("getGameLogCountByCategory - userId: {}, category: {}", userId, category);
+
+        // userId에 해당하는 GameLog 조회
+        GameLog gameLog = gameLogRepository.findTopByChildIdOrderByIdDesc(userId)
+                .orElseThrow(() -> new RestApiException(CustomGameLogErrorCode.GAME_LOG_NOT_FOUND));
+
+        int count = -1;
+        switch (category) {
+            case meal:
+                count = gameLog.getMealCount() >= count ? gameLog.getMealCount() : -1;
+                break;
+            case exercise:
+                count = gameLog.getExerciseCount() >= count ? gameLog.getExerciseCount() : -1;
+                break;
+            case sleep:
+                count = gameLog.getSleepCount() >= count ? gameLog.getSleepCount() : -1;
+                break;
+            case medication:
+                count = gameLog.getMedicationCount() >= count ? gameLog.getMedicationCount() : -1;
+                break;
+        }
+
+        return count;
+    }
+
 }

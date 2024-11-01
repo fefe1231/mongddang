@@ -1,11 +1,13 @@
 package com.onetwo.mongddang.domain.game.mongddang.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Entity
+@Builder
 @Getter // Getter 자동 생성
+@AllArgsConstructor // 생성자 자동 생성
+@NoArgsConstructor
 public class Mongddang {
 
     @Id
@@ -20,8 +22,5 @@ public class Mongddang {
 
     @Column(nullable = false)
     private String story; // 캐릭터 서사 (ex. 말랑은 무지개를 좋아해요)
-
-    @Column(nullable = false)
-    private String imageUrl; // 이미지 URL (ex. https://www.mongddang.com/character/malang)
 
 }
