@@ -15,16 +15,16 @@ import java.time.LocalDateTime;
 public class Vital {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    @ManyToOne // 여러 CoinLog가 하나의 ChildUser에 연결
-    @JoinColumn(nullable = false) // 외래키 설정
+    @ManyToOne
+    @JoinColumn(nullable = false)
     @NotNull
-    private User child; // 연결된 어린이 유저
+    private User child;
 
     @Column(nullable = false, name = "blood_sugar_level")
     @NotNull
-    private int bloodSugarLevel;
+    private Integer bloodSugarLevel;
 
     @Column(nullable = false, name = "measurement_time")
     @NotNull
@@ -39,6 +39,11 @@ public class Vital {
 
     @Column(nullable = false, name = "is_notification")
     @NotNull
-    private boolean isNotification;
+    private Boolean isNotification;
+
+    public enum GlucoseStatusType {
+        low, normal, high
+    }
+
 
 }
