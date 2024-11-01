@@ -93,12 +93,14 @@ pipeline {
                               configName: "mongddang-ssh",
                               verbose: true,
                               transfers: [
-                                sshTransfer(execCommand: """
-                                  pwd
-                                  docker compose down --rmi all backend
-                                  docker compose ps -a
-                                  docker ps -a
-                                """),
+                                sshTransfer(
+                                  remoteDirectory: "S11P31D207",
+                                  execCommand: """
+                                    pwd
+                                    docker compose down --rmi all backend
+                                    docker compose ps -a
+                                    docker ps -a
+                                  """),
                               ]
                             )
                           ]
@@ -116,12 +118,14 @@ pipeline {
                               configName: "mongddang-ssh",
                               verbose: true,
                               transfers: [
-                                sshTransfer(execCommand: """
-                                  pwd
-                                  docker compose up backend
-                                  docker compose ps -a
-                                  docker ps -a
-                                """),
+                                sshTransfer(
+                                  remoteDirectory: "S11P31D207",
+                                  execCommand: """
+                                    pwd
+                                    docker compose up backend
+                                    docker compose ps -a
+                                    docker ps -a
+                                  """),
                               ]
                             )
                           ]
