@@ -8,7 +8,7 @@ interface OwnModalProps {
   redhandler: () => void;
 }
 
-export const UpdateCharacter = ({bluehandler, redhandler}:OwnModalProps) => {
+export const BuyModal = ({bluehandler, redhandler}:OwnModalProps) => {
   return (
     <div>
       <Notification
@@ -17,10 +17,10 @@ export const UpdateCharacter = ({bluehandler, redhandler}:OwnModalProps) => {
         ment={
           <div>
             <Typography color="dark" size="1" weight={600}>
-              하트 몽땅을 대장으로 설정할거야?
+              정말 몰라요 몽땅을 찾을 거야?
             </Typography>
             <Typography color="dark" size="0.75" weight={500}>
-              *대장으로 설정하면 메인에서 볼 수 있어
+              400
             </Typography>
           </div>
         }

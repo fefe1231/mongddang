@@ -10,7 +10,7 @@ import { base, cardContainerCss, containerCss, imgCss } from './styles';
 import { OwnModal } from './ui/modal/own-modal';
 import { MainModal } from './ui/modal/main-modal';
 import { UpdateCharacter } from './ui/modal/update-character';
-import { Notmodal } from './ui/modal/Not-modal';
+import { Notmodal } from './ui/modal/not-modal';
 
 export const Encyclopedia = () => {
   const [isOwnModal, setIsOwnModal] = useState(false)
