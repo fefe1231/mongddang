@@ -24,7 +24,7 @@ public class JwtExtratService {
                 // 2. JWT 토큰에서 이메일 추출
                 email = jwtTokenProvider.getEmailFromToken(token);
                 User user = userRepository.findByEmail(email).orElseThrow(() -> {
-                    throw new RuntimeException(CustomUserErrorCode.OWNER_NOT_FOUND.getMessage());
+                    throw new RuntimeException(CustomUserErrorCode.USER_NOT_FOUND.getMessage());
                 });
                 return user.getId();
             } catch (JwtException e) {
