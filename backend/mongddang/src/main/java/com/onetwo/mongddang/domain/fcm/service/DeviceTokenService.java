@@ -1,6 +1,6 @@
 package com.onetwo.mongddang.domain.fcm.service;
 
-import com.onetwo.mongddang.common.ResponseDto;
+import com.onetwo.mongddang.common.reponseDto.ResponseDto;
 import com.onetwo.mongddang.domain.fcm.model.FcmToken;
 import com.onetwo.mongddang.domain.fcm.repository.FcmTokenRepository;
 import com.onetwo.mongddang.domain.user.model.User;
@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 import java.util.Optional;
 
 @Service

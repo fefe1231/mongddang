@@ -1,6 +1,6 @@
 package com.onetwo.mongddang.domain.game.coinLog.service;
 
-import com.onetwo.mongddang.common.ResponseDto;
+import com.onetwo.mongddang.common.reponseDto.ResponseDto;
 import com.onetwo.mongddang.domain.game.coinLog.application.CoinLogUtils;
 import com.onetwo.mongddang.domain.game.coinLog.dto.ResponseCoin;
 import com.onetwo.mongddang.domain.game.coinLog.repository.CoinLogRepository;
@@ -8,8 +8,6 @@ import com.onetwo.mongddang.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
 
 @Slf4j
 @Service

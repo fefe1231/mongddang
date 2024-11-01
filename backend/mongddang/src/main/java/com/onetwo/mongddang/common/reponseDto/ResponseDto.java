@@ -1,10 +1,8 @@
-package com.onetwo.mongddang.common;
+package com.onetwo.mongddang.common.reponseDto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Data;
-
-import java.util.Map;
 
 // 모두가 공통으로 쓰는 가장 바깥 포장지입니다.
 // null 값인 항목은 응답에 포함되지 않습니다.
