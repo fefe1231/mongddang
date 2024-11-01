@@ -6,4 +6,5 @@ export interface IconTypoProps {
   selected?: boolean;
   size?: number;
   fontSize?: Tsize;
+  disabled?: boolean;
 }

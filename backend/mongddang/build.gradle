@@ -55,6 +55,9 @@ dependencies {
 	// verify Google IdToken 의존성 추가
 	implementation 'com.google.auth:google-auth-library-oauth2-http:1.13.0'
 	implementation 'com.google.api-client:google-api-client:1.32.1'
+
+	// jackson 의존성 추가
+	implementation 'com.fasterxml.jackson.core:jackson-core:2.16.1'
 }
 
 tasks.named('test') {

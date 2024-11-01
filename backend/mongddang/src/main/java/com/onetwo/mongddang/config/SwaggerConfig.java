@@ -6,11 +6,15 @@ import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.context.annotation.Configuration;
+import io.swagger.v3.oas.annotations.servers.Server;
 
 @Configuration
-@OpenAPIDefinition(info = @Info(title = "몽땅 REST API ",
-        version = "v1"),
-        security = @SecurityRequirement(name = "bearerAuth")
+@OpenAPIDefinition(info = @Info(title = "몽땅 REST API",
+                description = "몽땅 API 문서",
+                version = "v1"
+        ),
+        security = @SecurityRequirement(name = "bearerAuth"),
+        servers = {@Server(url = "/", description = "도메인 설명")}
 )
 @SecurityScheme(
         name= "bearerAuth",
@@ -21,4 +25,3 @@ import org.springframework.context.annotation.Configuration;
 public class SwaggerConfig {
 
 }
-

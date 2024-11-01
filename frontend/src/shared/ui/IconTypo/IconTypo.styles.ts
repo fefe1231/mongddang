@@ -6,10 +6,14 @@ export const containerCss = css`
   align-items: center;
 `;
 
-export const iconCss = (size:number) => css`
+export const iconCss = (size: number, disabled: boolean) => css`
   width: ${size}rem;
   height: ${size}rem;
-  margin-bottom: 0.5rem; // 이미지와 텍스트 사이 간격
+  margin-bottom: 0.5rem; 
+
+  ${disabled && `
+    filter: grayscale(100%) brightness(0%);
+  `}
 `;
 
 export const menuCss = (selected: boolean) => css`

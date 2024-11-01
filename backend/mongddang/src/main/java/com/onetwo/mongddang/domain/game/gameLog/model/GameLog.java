@@ -2,13 +2,11 @@ package com.onetwo.mongddang.domain.game.gameLog.model;
 
 import com.onetwo.mongddang.domain.user.model.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Entity // JPA Entity 로 사용
 @Getter // Getter 자동 생성
+@Setter // Setter 자동 생성
 @Builder // 빌더 패턴
 public class GameLog {
 

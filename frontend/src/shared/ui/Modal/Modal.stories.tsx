@@ -36,7 +36,7 @@ export default meta;
 type Story = StoryObj<typeof Modal>;
 
 export const Primary: Story = {
-  args: {},
+  args: {height:60, width:30},
   render: (args) => (
     <div
       style={{
