@@ -1,5 +1,4 @@
-import { ReactNode } from 'react';
-import { ColorScale, Palette, Size } from '../../types/globalStyleTypes';
+import { Palette, Size } from "@/shared/model/globalStylesTyes";
 
 export type ProgressVariant = 'rounded' | 'rectangle';
 
