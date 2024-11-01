@@ -1,0 +1,158 @@
+pipeline {
+    agent any
+
+    tools {
+        gradle 'gradle-8.10.2'
+    }
+
+    environment {
+        REPOSITRY =  'vaaastlake/mongddang_backend'
+        BACKEND_DIR = './backend/mongddang'
+        BACKEND_IMG = 'mongddang_backend'
+        PROJECT_DIR = './S11P31D207'
+    }
+
+    triggers {
+        pollSCM 'H 12,5,23 * * 1-5'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo 'Checkout processing...'
+                script {
+                    // analyze 디렉토리에서 변화가 있을 때만 빌드
+                    def changes = sh(script: "git diff --name-only HEAD HEAD~1", returnStdout: true).trim()
+                    if (changes.contains("${BACKEND_DIR}")) {
+                        echo "Changes in ${BACKEND_DIR} directory, proceeding with build."
+                    } else {
+                        echo "No changes in ${BACKEND_DIR} directory, skipping build."
+                        currentBuild.result = 'NOT_BUILT'
+                        error("No changes in ${BACKEND_DIR} directory. Halting pipeline.")
+                    }
+
+                    // 코드 체크아웃
+                    checkout scm
+                }
+                echo 'Checkout done'
+            }
+        }
+        stage('Builds Backend .JAR') {
+          steps {
+            dir("${BACKEND_DIR}") {
+              script {
+                def currentBranch = env.BRANCH_NAME
+                echo "Merge Target Branch : \${CHANGE_TARGET}"
+                echo "Current Branch: \${currentBranch}"
+
+                echo 'mongddang server 입니다.'
+                sh 'pwd'
+                sh 'ls -al'
+
+                sh 'chmod +x ./gradlew'
+                sh './gradlew clean build -x test'
+              }
+            }
+          }
+        }
+        stage('Test') {
+            steps {
+                echo 'No test here.'
+            }
+        }
+        stage('Build Backend docker image and push') {
+          steps {
+            dir("${BACKEND_DIR}") {
+              script {
+                docker.withRegistry('', 'docker-cred')
+                  def dockerImage = docker.build("${REPOSITRY}:${BUILD_NUMBER}", "--target prod -f ./Dockerfile ./")
+                  dockerImage.push()
+                  dockerImage.push('latest')
+              }
+            }
+          }
+        }
+        stage('Deploy to EC2') {
+            stages {
+                stage('Garbage Collect') {
+                    steps {
+                        echo 'Garbage Collecting....'
+                        sshPublisher(
+                          continueOnError: true, failOnError: false,
+                          publisher: [
+                            sshPublisherDesc(
+                              configName: "mongddang-ssh",
+                              verbose: true,
+                              transfer: [
+                                sshTransfer(execCommand: """
+                                  docker compose down -rmi all backend
+                                  docker compoas ps -a
+                                """),
+                              ]
+                            )
+                          ]
+                        )
+                        echo 'Garbage Collecting is done.'
+                    }
+                }
+                stage('Deploy') {
+                    steps {
+                        echo 'Start deploying....'
+                        sshPublisher(
+                          continueOnError: true, failOnError: false,
+                          publisher: [
+                            sshPublisherDesc(
+                              configName: "mongddang-ssh",
+                              verbose: true,
+                              transfer: [
+                                sshTransfer(execCommand: """
+                                  docker compose up backend
+                                """),
+                              ]
+                            )
+                          ]
+                        )
+                        echo 'Deploying is done.'
+                    }
+                }
+            }
+        }
+    }
+    post {
+        success {
+            echo 'Build Success.'
+            dir("${PROJECT_DIR}") {
+                script {
+                    def Author_ID = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
+                    def Author_Name = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()
+                    mattermostSend(color: 'good',
+                        message: "Build Success: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name})\n(<${env.BUILD_URL}|Details>)",
+                        endpoint: 'https://meeting.ssafy.com/hooks/43tjcd33mfybfeu8isx8uatxmr',
+                        channel: 'Jenkins-build-notification',
+                        failOnError: true
+                    )
+                }
+            }
+            cleanWs()
+        }
+        failure {
+            echo 'Build Fail.'
+            dir("${PROJECT_DIR}") {
+                script {
+                    def Author_ID = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
+                    def Author_Name = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()
+                    mattermostSend(color: 'danger',
+                        message: "빌드 실패: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name})\n(<${env.BUILD_URL}|Details>)",
+                        endpoint: 'https://meeting.ssafy.com/hooks/43tjcd33mfybfeu8isx8uatxmr',
+                        channel: 'Jenkins-build-notification',
+                        failOnError: true
+                    )
+                }
+            }
+            cleanWs()
+        }
+        always {
+            echo 'everything is done'
+        }
+    }
+}
