@@ -94,10 +94,8 @@ pipeline {
                               verbose: true,
                               transfers: [
                                 sshTransfer(
-                                  sourceFiles: "",
-                                  remoteDirectory: "S11P31D207",
                                   execCommand: """
-                                    pwd
+                                    cd S11P31D207
                                     docker compose down --rmi all backend
                                     docker compose ps -a
                                     docker ps -a
@@ -120,10 +118,8 @@ pipeline {
                               verbose: true,
                               transfers: [
                                 sshTransfer(
-                                  sourceFiles: "",
-                                  remoteDirectory: "S11P31D207",
                                   execCommand: """
-                                    pwd
+                                    cd S11P31D207
                                     docker compose up backend
                                     docker compose ps -a
                                     docker ps -a
