@@ -9,12 +9,13 @@ export const IconTypo = ({
   selected = false,
   size = 3,
   fontSize = '1',
+  disabled=false,
   ...props
 }: IconTypoProps) => {
   return (
     <div css={containerCss} {...props}>
       <img 
-        css={iconCss(size)} 
+        css={iconCss(size, disabled)} 
         src={icon} 
         alt={menu}
       />
