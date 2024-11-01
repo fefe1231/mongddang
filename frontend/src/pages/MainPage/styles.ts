@@ -18,3 +18,19 @@ export const topContainer = css`
   height: fit-content;
   padding: 3%;
 `;
+
+export const iconGroupCss = css`
+  display: flex;
+  padding: 3%;
+  gap: 1rem;
+`;
+
+export const iconHorizontalCss = css`
+  display: flex;
+`;
+
+export const iconVerticalCss = css`
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+`;
