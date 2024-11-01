@@ -3,7 +3,10 @@ package com.onetwo.mongddang.domain.game.coinLog.model;
 import com.onetwo.mongddang.domain.user.model.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity // JPA Entity로 사용
 @Getter // Getter 자동 생성

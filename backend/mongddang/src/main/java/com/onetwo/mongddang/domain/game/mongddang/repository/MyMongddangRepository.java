@@ -5,5 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MyMongddangRepository extends JpaRepository<MyMongddang,Long> {
+public interface MyMongddangRepository extends JpaRepository<MyMongddang, Long> {
+    MyMongddang findByMongddangId(Long id);
+
+    MyMongddang findByChildId(Long userId);
+
+    MyMongddang findByChildIdAndIsMainTrue(Long mongddangId);
 }
