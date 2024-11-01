@@ -45,7 +45,7 @@ const ColorStyle = {
   },
   success: {
     button: Colors.success['500'],
-    main: Colors.success['500'],
+    main: Colors.success['A400'],
     contrastText: '#fff',
     hover: Colors.success['A200'],
     active: Colors.success['300'],

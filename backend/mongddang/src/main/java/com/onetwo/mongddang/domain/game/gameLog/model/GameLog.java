@@ -8,6 +8,8 @@ import lombok.*;
 @Getter // Getter 자동 생성
 @Setter // Setter 자동 생성
 @Builder // 빌더 패턴
+@AllArgsConstructor
+@NoArgsConstructor
 public class GameLog {
 
     @Id
