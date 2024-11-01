@@ -94,6 +94,7 @@ pipeline {
                               verbose: true,
                               transfers: [
                                 sshTransfer(
+                                  sourceFiles: "",
                                   remoteDirectory: "S11P31D207",
                                   execCommand: """
                                     pwd
@@ -119,6 +120,7 @@ pipeline {
                               verbose: true,
                               transfers: [
                                 sshTransfer(
+                                  sourceFiles: "",
                                   remoteDirectory: "S11P31D207",
                                   execCommand: """
                                     pwd
@@ -146,7 +148,7 @@ pipeline {
                     mattermostSend(color: 'good',
                         message: "Build Success: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name})\n(<${env.BUILD_URL}|Details>)",
                         endpoint: 'https://meeting.ssafy.com/hooks/ekk4hmxtsjn9irbhug1qhjqz8w',
-                        channel: '빌드 알림 채널',
+                        // channel: '빌드 알림 채널',
                         failOnError: true
                     )
                 }
@@ -162,7 +164,7 @@ pipeline {
                     mattermostSend(color: 'danger',
                         message: "빌드 실패: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name})\n(<${env.BUILD_URL}|Details>)",
                         endpoint: 'https://meeting.ssafy.com/hooks/ekk4hmxtsjn9irbhug1qhjqz8w',
-                        channel: '빌드 알림 채널',
+                        // channel: '빌드 알림 채널',
                         failOnError: true
                     )
                 }
