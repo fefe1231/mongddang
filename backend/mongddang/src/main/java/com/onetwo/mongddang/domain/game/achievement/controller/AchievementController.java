@@ -2,6 +2,7 @@ package com.onetwo.mongddang.domain.game.achievement.controller;
 
 import com.onetwo.mongddang.common.ResponseDto;
 import com.onetwo.mongddang.domain.common.annotation.ChildRequired;
+import com.onetwo.mongddang.domain.game.achievement.dto.RequestClaimAchievementDto;
 import com.onetwo.mongddang.domain.game.achievement.service.AchievementService;
 import com.onetwo.mongddang.domain.user.jwt.JwtExtratService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,10 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -40,6 +38,18 @@ public class AchievementController {
     }
 
     // 업적 보상 수령
+    @PostMapping("/claim")
+    @ChildRequired
+    @Transactional
+    @Tag(name = "Collection API", description = "도감 api")
+    @Operation(summary = "업적 보상 수령", description = "업적 보상을 수령합니다.")
+    public ResponseEntity<ResponseDto> claimAchievement(@RequestBody RequestClaimAchievementDto requestDto, HttpServletRequest request) {
+        log.info("GET /api/game/collection/achievement/claim");
+
+        Long id = jwtExtratService.jwtFindId(request);
+        ResponseDto responseDto = achievementService.claimAchievementReward(id, requestDto.getAchievementId());
+        return ResponseEntity.ok(responseDto);
+    }
 
     // 대표 칭호 설정
 

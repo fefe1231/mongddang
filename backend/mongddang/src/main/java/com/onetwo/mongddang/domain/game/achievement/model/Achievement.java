@@ -1,6 +1,5 @@
 package com.onetwo.mongddang.domain.game.achievement.model;
 
-import com.onetwo.mongddang.domain.user.model.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -21,9 +20,6 @@ public class Achievement {
 
     @Column(nullable = false)
     private String description; // 업적 획득 조건 설명 (ex. 제시간에 자기 10번 수행)
-
-    @ManyToOne
-    private User child; // 연결된 유저
 
     public enum AchievementCategory {
         meal, sleep, exercise, medication;

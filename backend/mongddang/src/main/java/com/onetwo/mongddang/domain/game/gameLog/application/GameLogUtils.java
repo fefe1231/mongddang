@@ -1,6 +1,8 @@
 package com.onetwo.mongddang.domain.game.gameLog.application;
 
+import com.onetwo.mongddang.domain.game.achievement.model.Achievement.AchievementCategory;
 import com.onetwo.mongddang.domain.game.gameLog.model.GameLog;
+import com.onetwo.mongddang.domain.game.gameLog.model.GameLog.GameLogCategory;
 import com.onetwo.mongddang.domain.game.gameLog.repository.GameLogRepository;
 import com.onetwo.mongddang.domain.user.model.User;
 import com.onetwo.mongddang.domain.user.repository.UserRepository;
@@ -58,7 +60,7 @@ public class GameLogUtils {
      * @return 추가된 게임 로그
      */
     @Transactional
-    public GameLog addGameLog(Long id, GameLog.GameLogCategory category) {
+    public GameLog addGameLog(Long id, GameLogCategory category) {
         log.info("addGameLog - userId: {}, category: {}", id, category);
 
         // id 에 해당하는 User 조회
@@ -73,10 +75,10 @@ public class GameLogUtils {
         // 게임 로그 생성
         GameLog newGameLog = GameLog.builder()
                 .child(user)
-                .mealCount(category.equals(GameLog.GameLogCategory.meal_count) ? foundGameLog.getMealCount() + 1 : foundGameLog.getMealCount())
-                .exerciseCount(category.equals(GameLog.GameLogCategory.exercise_count) ? foundGameLog.getExerciseCount() + 1 : foundGameLog.getExerciseCount())
-                .sleepCount(category.equals(GameLog.GameLogCategory.sleep_count) ? foundGameLog.getSleepCount() + 1 : foundGameLog.getSleepCount())
-                .medicationCount(category.equals(GameLog.GameLogCategory.medication_count) ? foundGameLog.getMedicationCount() + 1 : foundGameLog.getMedicationCount())
+                .mealCount(category.equals(GameLogCategory.meal_count) ? foundGameLog.getMealCount() + 1 : foundGameLog.getMealCount())
+                .exerciseCount(category.equals(GameLogCategory.exercise_count) ? foundGameLog.getExerciseCount() + 1 : foundGameLog.getExerciseCount())
+                .sleepCount(category.equals(GameLogCategory.sleep_count) ? foundGameLog.getSleepCount() + 1 : foundGameLog.getSleepCount())
+                .medicationCount(category.equals(GameLogCategory.medication_count) ? foundGameLog.getMedicationCount() + 1 : foundGameLog.getMedicationCount())
                 .build();
 
         // 게임 로그 저장
@@ -85,4 +87,33 @@ public class GameLogUtils {
 
         return savedGameLog;
     }
+
+
+    // 게임 로그 횟수 조회
+    public int getGameLogCountByCategory(Long userId, AchievementCategory category) {
+        log.info("getGameLogCountByCategory - userId: {}, category: {}", userId, category);
+
+        // userId에 해당하는 GameLog 조회
+        GameLog gameLog = gameLogRepository.findTopByChildIdOrderByIdDesc(userId)
+                .orElseThrow(() -> new RuntimeException("게임 로그를 찾을 수 없습니다. userId: " + userId));
+
+        int count = -1;
+        switch (category) {
+            case meal:
+                count = gameLog.getMealCount() >= count ? gameLog.getMealCount() : -1;
+                break;
+            case exercise:
+                count = gameLog.getExerciseCount() >= count ? gameLog.getExerciseCount() : -1;
+                break;
+            case sleep:
+                count = gameLog.getSleepCount() >= count ? gameLog.getSleepCount() : -1;
+                break;
+            case medication:
+                count = gameLog.getMedicationCount() >= count ? gameLog.getMedicationCount() : -1;
+                break;
+        }
+
+        return count;
+    }
+
 }
