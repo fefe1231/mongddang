@@ -137,7 +137,7 @@ pipeline {
                     def Author_Name = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()
                     mattermostSend(color: 'good',
                         message: "Build Success: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name})\n(<${env.BUILD_URL}|Details>)",
-                        endpoint: 'https://meeting.ssafy.com/hooks/43tjcd33mfybfeu8isx8uatxmr',
+                        endpoint: 'https://meeting.ssafy.com/hooks/ekk4hmxtsjn9irbhug1qhjqz8w',
                         channel: 'Jenkins-build-notification',
                         failOnError: true
                     )
@@ -153,7 +153,7 @@ pipeline {
                     def Author_Name = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()
                     mattermostSend(color: 'danger',
                         message: "빌드 실패: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name})\n(<${env.BUILD_URL}|Details>)",
-                        endpoint: 'https://meeting.ssafy.com/hooks/43tjcd33mfybfeu8isx8uatxmr',
+                        endpoint: 'https://meeting.ssafy.com/hooks/ekk4hmxtsjn9irbhug1qhjqz8w',
                         channel: 'Jenkins-build-notification',
                         failOnError: true
                     )
