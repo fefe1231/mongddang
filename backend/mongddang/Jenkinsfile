@@ -57,9 +57,6 @@ pipeline {
                 sh 'pwd'
                 sh 'ls -al'
 
-                // sh 'echo $JAVA_HOME'
-                // sh 'java -version'
-
                 sh 'chmod +x ./gradlew'
                 sh './gradlew clean build -x test'
               }
