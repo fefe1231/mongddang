@@ -77,7 +77,7 @@ public class SignupService {
                     .build();
             coinLogRepository.save(newCoinLog);
 
-            // 재화 로그 초기화
+            // 초기 재화 지급
             coinLogUtils.rewardCoin(newUser.getId(), CoinLog.CoinCategory.valueOf("achievement"),500);
         }
 
