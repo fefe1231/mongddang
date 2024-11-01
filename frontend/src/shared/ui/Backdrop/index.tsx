@@ -7,11 +7,10 @@ export const Backdrop = ({
   children, 
   opacity = 40, 
   blur = 20, 
-  color = 'dark', 
   ...props 
 }: BackdropProps) => { 
   return ( 
-    <div css={base(opacity, blur, color)} {...props}> 
+    <div css={base(opacity, blur)} {...props}> 
       {children} 
     </div> 
   ); 

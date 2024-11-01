@@ -2,14 +2,16 @@ import { css } from '@emotion/react';
 
 export const base = (height: number, width: number) => css`
   position: relative;
-  width: ${height}%;
-  min-height: ${width}%;
+  width: ${width}%;
+  min-height: ${height}%;
   padding: 1.5rem;
   border-radius: 0.5rem;
   background-color: #fff;
   display: flex;
   justify-content: center;
+  z-index: 10; // 모달의 z-index가 백드롭보다 높도록 설정
 `;
+
 export const backdropStyle = css`
   display: flex;
   justify-content: center;
