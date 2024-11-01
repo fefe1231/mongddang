@@ -1,6 +1,10 @@
 package com.onetwo.mongddang.domain.user.service;
 
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
+import com.onetwo.mongddang.domain.game.coinLog.application.CoinLogUtils;
+import com.onetwo.mongddang.domain.game.coinLog.model.CoinLog;
+import com.onetwo.mongddang.domain.game.coinLog.repository.CoinLogRepository;
+import com.onetwo.mongddang.domain.game.gameLog.application.GameLogUtils;
 import com.onetwo.mongddang.domain.user.dto.SignupRequestDto;
 import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
 import com.onetwo.mongddang.domain.user.jwt.JwtTokenProvider;
@@ -8,12 +12,15 @@ import com.onetwo.mongddang.domain.user.model.User;
 import com.onetwo.mongddang.domain.user.oauth.GoogleTokenService;
 import com.onetwo.mongddang.domain.user.repository.UserRepository;
 import com.onetwo.mongddang.errors.exception.RestApiException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SignupService {
@@ -22,7 +29,11 @@ public class SignupService {
     private final GoogleTokenService googleTokenService;
     private final MakeRandomCodeService makeRandomCodeService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final GameLogUtils gameLogUtils;
+    private final CoinLogUtils coinLogUtils;
+    private final CoinLogRepository coinLogRepository;
 
+    @Transactional
     public ResponseDto signup(SignupRequestDto signupRequestDto){
 
         // idtoken에서 회원 정보 뽑기(email)
@@ -41,9 +52,6 @@ public class SignupService {
         if (role.toString() == "child") {
             // 초대코드 생성
             invitedCode =  makeRandomCodeService.makeCodeAndCheckUnique();
-
-            // 재화로그, 게임 로그 초기화
-            // 코드 들어오면 하자...!
         }
         // 저장
         User user = User.builder()
@@ -55,7 +63,23 @@ public class SignupService {
                 .role(role)
                 .invitationCode(invitedCode)
                 .build();
-        userRepository.save(user);
+        User newUser = userRepository.save(user);
+
+        if (newUser.getRole().toString() == "child") {
+            log.info(newUser.getId().toString());
+            // 게임 로그 초기화
+            gameLogUtils.initGameLog(newUser.getId());
+
+            CoinLog newCoinLog = CoinLog.builder()
+                    .coin(500)
+                    .child(newUser)
+                    .category(CoinLog.CoinCategory.achievement)
+                    .build();
+            coinLogRepository.save(newCoinLog);
+
+            // 재화 로그 초기화
+            coinLogUtils.rewardCoin(newUser.getId(), CoinLog.CoinCategory.valueOf("achievement"),500);
+        }
 
         // jwt token 생성
         String jwtToken = jwtTokenProvider.generateToken(user.getEmail(), user.getRole().toString(), user.getId());
