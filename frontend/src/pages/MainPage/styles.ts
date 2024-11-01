@@ -11,5 +11,3 @@ export const kidsMainBase = css`
   background-size: cover;
   background-position: bottom;
 `;
-
-export const bottomBarCss = css;

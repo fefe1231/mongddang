@@ -12,7 +12,7 @@ const KidsMainPage = () => {
           '/img/%EB%A7%90%EB%9E%912.png',
           '/img/%EB%A7%90%EB%9E%913.png',
         ]}
-        menus={['도감', '메뉴', '기록']}
+        menus={['몽땅 도감', '메뉴', '일일 기록']}
         onHandleChange={() => {}}
       />
     </div>
