@@ -2,8 +2,8 @@ import { css } from '@emotion/react';
 
 export const base = (height: number, width: number) => css`
   position: relative;
-  width: ${height}%;
-  min-height: ${width}%;
+  width: ${width}%;
+  min-height: ${height}%;
   padding: 1.5rem;
   border-radius: 0.5rem;
   background-color: #fff;

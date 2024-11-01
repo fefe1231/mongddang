@@ -9,7 +9,7 @@ export const Notowncharacter = () => {
       <div css={containerCss}>
         <IconTypo
           fontSize="1"
-          icon="/img/%EB%A7%90%EB%9E%911.png"
+          icon="/img/말랑3.png"
           menu="몰라요 몽땅"
           size={5}
           disabled
