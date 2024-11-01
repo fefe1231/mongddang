@@ -3,11 +3,12 @@ pipeline {
 
     tools {
         gradle 'gradle-8.10.2'
+        jdk 'jdk21'
     }
 
     environment {
         REPOSITRY =  'vaaastlake/mongddang_backend'
-        BACKEND_DIR = './backend/mongddang'
+        BACKEND_DIR = 'backend/mongddang'
         BACKEND_IMG = 'mongddang_backend'
         PROJECT_DIR = './S11P31D207'
     }
@@ -21,7 +22,7 @@ pipeline {
             steps {
                 echo 'Checkout processing...'
                 script {
-                    // analyze 디렉토리에서 변화가 있을 때만 빌드
+                    // mongddang 디렉토리에서 변화가 있을 때만 빌드
                     def changes = sh(script: "git diff --name-only HEAD HEAD~1", returnStdout: true).trim()
                     if (changes.contains("${BACKEND_DIR}")) {
                         echo "Changes in ${BACKEND_DIR} directory, proceeding with build."
@@ -37,17 +38,27 @@ pipeline {
                 echo 'Checkout done'
             }
         }
+
         stage('Builds Backend .JAR') {
           steps {
             dir("${BACKEND_DIR}") {
               script {
-                def currentBranch = env.BRANCH_NAME
-                echo "Merge Target Branch : \${CHANGE_TARGET}"
-                echo "Current Branch: \${currentBranch}"
+                def currentBranch = env.BRANCH_NAME ?: 'unknown'
+                def targetBranch = env.CHANGE_TARGET ?: 'N/A'
+
+                echo "Current Branch: ${currentBranch}"
+                if (targetBranch) {
+                    echo "Merge Target Branch: ${targetBranch}"
+                } else {
+                    echo "Not a pull request build"
+                }
 
                 echo 'mongddang server 입니다.'
                 sh 'pwd'
                 sh 'ls -al'
+
+                // sh 'echo $JAVA_HOME'
+                // sh 'java -version'
 
                 sh 'chmod +x ./gradlew'
                 sh './gradlew clean build -x test'
@@ -64,10 +75,11 @@ pipeline {
           steps {
             dir("${BACKEND_DIR}") {
               script {
-                docker.withRegistry('', 'docker-cred')
+                docker.withRegistry('', 'docker-cred') {
                   def dockerImage = docker.build("${REPOSITRY}:${BUILD_NUMBER}", "--target prod -f ./Dockerfile ./")
                   dockerImage.push()
                   dockerImage.push('latest')
+                }
               }
             }
           }
@@ -79,11 +91,11 @@ pipeline {
                         echo 'Garbage Collecting....'
                         sshPublisher(
                           continueOnError: true, failOnError: false,
-                          publisher: [
+                          publishers: [
                             sshPublisherDesc(
                               configName: "mongddang-ssh",
                               verbose: true,
-                              transfer: [
+                              transfers: [
                                 sshTransfer(execCommand: """
                                   docker compose down -rmi all backend
                                   docker compoas ps -a
@@ -100,11 +112,11 @@ pipeline {
                         echo 'Start deploying....'
                         sshPublisher(
                           continueOnError: true, failOnError: false,
-                          publisher: [
+                          publishers: [
                             sshPublisherDesc(
                               configName: "mongddang-ssh",
                               verbose: true,
-                              transfer: [
+                              transfers: [
                                 sshTransfer(execCommand: """
                                   docker compose up backend
                                   docker compose ps -a
