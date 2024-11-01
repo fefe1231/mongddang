@@ -18,5 +18,5 @@ public class ResponseDto {
 
     private String message;
 
-    private Map<String, Object> data;
+    private Object data;
 }
