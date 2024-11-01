@@ -94,8 +94,9 @@ pipeline {
                               verbose: true,
                               transfers: [
                                 sshTransfer(execCommand: """
+                                  pwa
                                   docker compose down -rmi all backend
-                                  docker compoas ps -a
+                                  docker compose ps -a
                                 """),
                               ]
                             )
@@ -115,6 +116,7 @@ pipeline {
                               verbose: true,
                               transfers: [
                                 sshTransfer(execCommand: """
+                                  pwa
                                   docker compose up backend
                                   docker compose ps -a
                                 """),
