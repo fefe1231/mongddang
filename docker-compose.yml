@@ -21,10 +21,8 @@ services:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 20s
       retries: 10
-    expose:
-      - "3306"
-    # ports:
-    #   - "3306:3306"
+    ports:
+      - "3306:3306"
     networks:
       - mongddang_net
     container_name: mongddang_db
