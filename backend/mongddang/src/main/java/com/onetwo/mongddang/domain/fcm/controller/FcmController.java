@@ -1,6 +1,6 @@
 package com.onetwo.mongddang.domain.fcm.controller;
 
-import com.onetwo.mongddang.common.ResponseDto;
+import com.onetwo.mongddang.common.responseDto.ResponseDto;
 import com.onetwo.mongddang.domain.fcm.dto.DeviceTokenRegisterDto;
 import com.onetwo.mongddang.domain.fcm.service.DeviceTokenService;
 import com.onetwo.mongddang.domain.user.jwt.JwtExtratService;

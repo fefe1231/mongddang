@@ -1,7 +1,7 @@
 package com.onetwo.mongddang.domain.game.mongddang.controller;
 
-import com.onetwo.mongddang.common.ResponseDto;
-import com.onetwo.mongddang.domain.common.annotation.ChildRequired;
+import com.onetwo.mongddang.common.responseDto.ResponseDto;
+import com.onetwo.mongddang.common.annotation.ChildRequired;
 import com.onetwo.mongddang.domain.game.mongddang.application.MongddangUitils;
 import com.onetwo.mongddang.domain.game.mongddang.dto.RequestMongddangIdDto;
 import com.onetwo.mongddang.domain.game.mongddang.service.MongddangService;
