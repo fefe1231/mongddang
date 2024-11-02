@@ -154,11 +154,18 @@ pipeline {
                     // 변경 로그 수집 - 최근 5개의 커밋
                     def changeLog = ""
                     try {
-                        def changes = sh(script: "git log --max-count=5 --pretty=format:'%h - %s [%an]'", returnStdout: true).trim()
+                        // 현재 브랜치의 마지막 머지 커밋 해시 찾기
+                        def lastMergeCommit = sh(script: "git log --merges -n 1 --pretty=format:'%H'", returnStdout: true).trim()
+                        
+                        // 마지막 머지 이후의 커밋들 가져오기
+                        def changes = sh(script: """
+                            git log ${lastMergeCommit}..HEAD --pretty=format:'%h - %s [%an]'
+                        """, returnStdout: true).trim()
+                        
                         if (changes) {
                             changeLog = changes.split('\n').collect { "- ${it}" }.join('\n')
                         } else {
-                            changeLog = "No changes found"
+                            changeLog = "No changes found since last merge"
                         }
                     } catch (Exception e) {
                         changeLog = "Unable to retrieve change log"
@@ -166,29 +173,24 @@ pipeline {
                     }
                     
                     mattermostSend(color: 'good',
-                    message: """Build Success :white_check_mark:
-
-
-*Job*: ${env.JOB_NAME} #${env.BUILD_NUMBER}
-
-
-*Branch Info*:
+                    message: """## Build Success :white_check_mark:
+---
+#### Job: ${env.JOB_NAME} #${env.BUILD_NUMBER}
+---
+#### Branch Info:
 - Current Branch: ${Current_Branch}
 - Target Branch: ${Target_Branch}
-
-
-*Build Info*:
+---
+#### Build Info:
 - Author: ${Author_ID}(${Author_Name})
 - Commit: ${Commit_Hash}
 - Message: ${Commit_Message}
 - Duration: ${Build_Duration}
-
-
-*Changes*:
+---
+#### Changes:
 ${changeLog}
-
-
-*Build URL*: ${env.BUILD_URL}
+---
+#### Build URL: ${env.BUILD_URL}
 """,
                     endpoint: 'https://meeting.ssafy.com/hooks/ekk4hmxtsjn9irbhug1qhjqz8w',
                     failOnError: true
@@ -217,29 +219,24 @@ ${changeLog}
                     def truncatedError = (errorLog.length() > 500) ? errorLog.substring(0, 500) + "..." : errorLog
                     
                     mattermostSend(color: 'danger',
-                        message: """Build Failed :x:
-
-
-*Job*: ${env.JOB_NAME} #${env.BUILD_NUMBER}
-
-
-*Branch Info*:
+                        message: """## Build Failed :x:
+---
+#### Job: ${env.JOB_NAME} #${env.BUILD_NUMBER}
+---
+#### Branch Info:
 - Current Branch: ${Current_Branch}
 - Target Branch: ${Target_Branch}
-
-
-*Build Info*:
+---
+#### Build Info:
 - Author: ${Author_ID}(${Author_Name})
 - Commit: ${Commit_Hash}
 - Message: ${Commit_Message}
 - Duration: ${Build_Duration}
-
-
-*Error Log*:
+---
+#### Error Log:
 ${truncatedError}
-
-
-*Build URL*: ${env.BUILD_URL}
+---
+#### Build URL: ${env.BUILD_URL}
 """,
                         endpoint: 'https://meeting.ssafy.com/hooks/ekk4hmxtsjn9irbhug1qhjqz8w',
                         failOnError: true
