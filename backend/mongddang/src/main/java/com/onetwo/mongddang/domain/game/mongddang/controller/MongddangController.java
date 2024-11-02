@@ -2,7 +2,6 @@ package com.onetwo.mongddang.domain.game.mongddang.controller;
 
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
 import com.onetwo.mongddang.common.annotation.ChildRequired;
-import com.onetwo.mongddang.domain.game.mongddang.application.MongddangUitils;
 import com.onetwo.mongddang.domain.game.mongddang.dto.RequestMongddangIdDto;
 import com.onetwo.mongddang.domain.game.mongddang.service.MongddangService;
 import com.onetwo.mongddang.domain.user.jwt.JwtExtratService;
@@ -18,9 +17,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/game/collection/mongddang")
+@Tag(name = "Collection API", description = "도감 api")
 public class MongddangController {
 
-    private final MongddangUitils mongddangUitils;
     private final MongddangService mongddangService;
     private final JwtExtratService jwtExtratService;
 

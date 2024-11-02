@@ -8,7 +8,7 @@ import lombok.Getter;
 @Builder
 @Getter
 @AllArgsConstructor
-public class RequestAchievementListDto {
+public class ResponseAchievementListDto {
 
     private Long titleId;
     private String titleName;

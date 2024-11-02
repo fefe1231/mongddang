@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/game")
+@Tag(name = "Coin API", description = "코인 api")
 public class CoinLogController {
 
     private final CoinLogService coinLogService;

@@ -11,8 +11,6 @@ import java.util.Optional;
 @Repository
 public interface GameLogRepository extends JpaRepository<GameLog, Long> {
 
-    GameLog findTopByChildId(Long childId);
-
     Optional<GameLog> findById(Long Id);
 
     Optional<GameLog> findTopByChildIdOrderByIdDesc(@Param("childId") Long childId);

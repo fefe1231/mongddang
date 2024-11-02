@@ -47,7 +47,8 @@ public class MongddangService {
         List<Mongddang> mongddangList = mongddangRepository.findAll();
         List<RequestMongddangListDto> mongddangListDto = mongddangList.stream()
                 .map(mongddang -> {
-                    MyMongddang myMongddang = myMongddangRepository.findByMongddangId(childId);
+                    MyMongddang myMongddang = myMongddangRepository.findByMongddangId(childId)
+                            .orElseThrow(() -> new RestApiException(CustomMongddangErrorCode.INVALID_COLLECTION_ID));
 
                     // 몽땅 소유 여부
                     boolean isOwned = myMongddang != null;
@@ -84,21 +85,36 @@ public class MongddangService {
     public ResponseDto recruitmentMongddang(Long userId, Long mongddangId) {
         log.info("recruitmentMongddang userId: {}, mongddangId: {}", userId, mongddangId);
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
-        Mongddang mongddang = mongddangRepository.findById(mongddangId).orElseThrow(() -> new RestApiException(CustomMongddangErrorCode.INVALID_COLLECTION_ID));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
 
-        MyMongddang myMongddang = myMongddangRepository.findByMongddangId(mongddangId);
-        if (myMongddang != null) {
-            throw new RestApiException(CustomMongddangErrorCode.CHARACTER_ALREADY_OWNED);
-        }
+        // 몽땅이 존재하지 않는 경우
+        Mongddang mongddang = mongddangRepository.findById(mongddangId)
+                .orElseThrow(() -> new RestApiException(CustomMongddangErrorCode.INVALID_COLLECTION_ID));
+
+        // 이미 소유한 몽땅인 경우
+        myMongddangRepository.findByMongddangId(mongddangId)
+                .orElseThrow(() -> new RestApiException(CustomMongddangErrorCode.CHARACTER_ALREADY_OWNED));
 
         // 코인 차감
         int remainCoin = coinLogUtils.getCoinCount(userId);
         coinLogUtils.deductCoin(userId, CoinCategory.mongddang, mongddang.getPrice());
 
-        // 마이 몽땅 생성, 코인 로그 생성
-        MyMongddang newMyMongddang = MyMongddang.builder().child(user).mongddang(mongddang).isNew(true).isMain(false).createdAt(LocalDateTime.now()).build();
-        CoinLog newCoinLog = CoinLog.builder().child(user).coin(remainCoin - mongddang.getPrice()).category(CoinCategory.mongddang).build();
+        // 마이 몽땅 생성
+        MyMongddang newMyMongddang = MyMongddang.builder()
+                .child(user)
+                .mongddang(mongddang)
+                .isNew(true)
+                .isMain(false)
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        // 코인 로그 생성
+        CoinLog newCoinLog = CoinLog.builder()
+                .child(user)
+                .coin(remainCoin - mongddang.getPrice())
+                .category(CoinCategory.mongddang)
+                .build();
 
         myMongddangRepository.save(newMyMongddang);
         coinLogRepository.save(newCoinLog);
@@ -116,14 +132,10 @@ public class MongddangService {
     public ResponseDto checkNewMongddang(Long mongddangId) {
         log.info("checkNewMongddang mongddangId: {}", mongddangId);
 
-        MyMongddang myMongddang = myMongddangRepository.findByMongddangId(mongddangId);
+        MyMongddang myMongddang = myMongddangRepository.findByMongddangId(mongddangId)
+                .orElseThrow(() -> new RestApiException(CustomMongddangErrorCode.INVALID_COLLECTION_ID));
 
-        // 해당 몽땅이 존재하지 않는 경우
-        if (myMongddang == null) {
-            throw new RestApiException(CustomMongddangErrorCode.INVALID_COLLECTION_ID);
-        }
-
-        // 해당 몽땅이 존재하는 경우 isNew 를 false 로 변경
+        // 해당 몽땅의 새로 획득한 표시를 를 이미 제거한 경우
         if (!myMongddang.getIsNew()) {
             throw new RestApiException(CustomMongddangErrorCode.LABEL_ALREADY_REMOVED);
         }
@@ -144,20 +156,19 @@ public class MongddangService {
     public ResponseDto setMainMongddang(Long mongddangId, Long userId) {
         log.info("setMainMongddang mongddangId: {}", mongddangId);
 
-        MyMongddang beforeMainMongddang = myMongddangRepository.findByChildIdAndIsMainTrue(userId);
-        MyMongddang myMongddang = myMongddangRepository.findByMongddangId(mongddangId);
-
         // 기존 몽땅이 존재하지 않는 경우 - 회원가입 시 초기화를 통해 일어나지 않을 에러
-        if (beforeMainMongddang == null) {
-            throw new RestApiException(CustomMongddangErrorCode.INVALID_COLLECTION_ID);
-        }
+        MyMongddang beforeMainMongddang = myMongddangRepository.findByChildIdAndIsMainTrue(userId)
+                .orElseThrow(
+                        () -> new RestApiException(CustomMongddangErrorCode.INVALID_COLLECTION_ID)
+                );
 
         // 해당 몽땅이 존재하지 않는 경우
-        if (myMongddang == null) {
-            throw new RestApiException(CustomMongddangErrorCode.INVALID_COLLECTION_ID);
-        }
+        MyMongddang myMongddang = myMongddangRepository.findByMongddangId(mongddangId)
+                .orElseThrow(
+                        () -> new RestApiException(CustomMongddangErrorCode.INVALID_COLLECTION_ID)
+                );
 
-        // 해당 몽땅이 존재하는 경우 isMain 을 true 로 변경
+        // 해당 몽땅이 이미 메인으로 설정된 경우
         if (myMongddang.getIsMain()) {
             throw new RestApiException(CustomMongddangErrorCode.ALREADY_RECRUITED);
         }

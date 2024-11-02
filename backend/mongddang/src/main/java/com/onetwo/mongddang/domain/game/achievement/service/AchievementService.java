@@ -1,14 +1,13 @@
 package com.onetwo.mongddang.domain.game.achievement.service;
 
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
-import com.onetwo.mongddang.domain.game.achievement.dto.RequestAchievementListDto;
+import com.onetwo.mongddang.domain.game.achievement.dto.ResponseAchievementListDto;
 import com.onetwo.mongddang.domain.game.achievement.errors.CustomAchievementErrorCode;
 import com.onetwo.mongddang.domain.game.achievement.model.Achievement;
 import com.onetwo.mongddang.domain.game.achievement.repository.AchievementRepository;
 import com.onetwo.mongddang.domain.game.gameLog.application.GameLogUtils;
-import com.onetwo.mongddang.domain.game.gameLog.errors.CustomGameLogErrorCode;
-import com.onetwo.mongddang.domain.game.gameLog.model.GameLog;
 import com.onetwo.mongddang.domain.game.gameLog.repository.GameLogRepository;
+import com.onetwo.mongddang.domain.game.title.errors.CustomTitleErrorCode;
 import com.onetwo.mongddang.domain.game.title.model.MyTitle;
 import com.onetwo.mongddang.domain.game.title.model.Title;
 import com.onetwo.mongddang.domain.game.title.repository.MyTitleRepository;
@@ -43,22 +42,22 @@ public class AchievementService {
         log.info("getAchievementList childId: {}", childId);
 
         List<Achievement> achievementList = achievementRepository.findAll();
-        List<RequestAchievementListDto> achievementListDto = achievementList.stream()
+        List<ResponseAchievementListDto> achievementListDto = achievementList.stream()
                 .map(achievement -> {
                     // 업적에 해당하는 칭호 조회
-                    Title title = titleRepository.findById(achievement.getId()).orElse(null);
+                    Title title = titleRepository.findById(achievement.getId())
+                            .orElseThrow(() -> new RestApiException(CustomTitleErrorCode.INVALID_TITLE_ID));
 
-                    // 유저의 게임 로그 조회
-                    GameLog gameLog = gameLogRepository.findTopByChildIdOrderByIdDesc(childId)
-                            .orElseThrow(() -> new RestApiException(CustomGameLogErrorCode.GAME_LOG_NOT_FOUND));
-                    MyTitle myTitle = myTitleRepository.findByTitleId(title.getId());
+                    // 번호에 해당하는 칭호 조회
+                    MyTitle myTitle = myTitleRepository.findByTitleId(title.getId())
+                            .orElseThrow(() -> new RestApiException(CustomTitleErrorCode.INVALID_TITLE_ID));
 
                     // 업적 달성 횟수
                     int executionCount = gameLogUtils.getGameLogCountByCategory(childId, achievement.getCategory());
 
                     // 업적 달성 여부 -1: 달성하지 않음
                     boolean isAchieved = executionCount != -1;
-                    return RequestAchievementListDto.builder()
+                    return ResponseAchievementListDto.builder()
                             .titleId(title.getId())
                             .titleName(title.getName())
                             .description(achievement.getDescription())
@@ -86,10 +85,14 @@ public class AchievementService {
         log.info("claimAchievementReward userId: {}, achievementId: {}", userId, achievementId);
 
         User user = userRepository.findById(userId).orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
-        Achievement achievement = achievementRepository.findById(achievementId).orElseThrow(() -> new RestApiException(CustomAchievementErrorCode.INVALID_ACHIEVEMENT_ID));
-        Title title = titleRepository.findByAchievementId(achievement
-                .getId()).orElseThrow(() -> new RestApiException(CustomAchievementErrorCode.INVALID_ACHIEVEMENT_ID));
-        MyTitle myTitle = myTitleRepository.findByTitleId(title.getId());
+        Achievement achievement = achievementRepository.findById(achievementId)
+                .orElseThrow(() -> new RestApiException(CustomAchievementErrorCode.INVALID_ACHIEVEMENT_ID));
+        Title title = titleRepository.findByAchievementId(achievement.getId())
+                .orElseThrow(() -> new RestApiException(CustomAchievementErrorCode.INVALID_ACHIEVEMENT_ID));
+        MyTitle myTitle = myTitleRepository.findByTitleId(title.getId())
+                .orElseThrow(() -> new RestApiException(CustomTitleErrorCode.INVALID_TITLE_ID));
+
+        // 이미 보상을 수령한 경우
         if (myTitle != null) {
             throw new RestApiException(CustomAchievementErrorCode.ACHIEVEMENT_ALREADY_REWARDED);
         }
@@ -97,6 +100,7 @@ public class AchievementService {
         // 업적 달성 횟수
         int executionCount = gameLogUtils.getGameLogCountByCategory(userId, achievement.getCategory());
 
+        // 업적 달성 횟수가 부족한 경우
         if (executionCount < achievement.getCount()) {
             throw new RestApiException(CustomAchievementErrorCode.ACHIEVEMENT_NOT_UNLOCKED);
         }
