@@ -3,11 +3,13 @@
 import { BottomBar } from '@/shared/ui/BottomBar';
 import {
   bottomContainer,
+  CharacterContainer,
   iconGroupCss,
   iconHorizontalCss,
   iconVerticalCss,
   kidsMainBase,
   kidsMainContent,
+  mainCharacterCss,
   routineGroupCss,
   topContainer,
 } from './styles';
@@ -15,6 +17,8 @@ import ProfileStatus from './ui/ProfileStatus/ProfileStatus';
 import { IconTypo } from '@/shared/ui/IconTypo';
 import { Icon } from '@/shared/ui/Icon';
 import CurrentBloodSugar from './ui/CurrentBloodSugar/CurrentBloodSugar';
+import MainCharacter from '@/assets/img/말랑1.png';
+import ChatBubble from './ui/ChatBubble/ChatBubble';
 
 const KidsMainPage = () => {
   return (
@@ -61,6 +65,11 @@ const KidsMainPage = () => {
         </div>
 
         <div css={bottomContainer}>
+          {/* 메인캐릭터 + 말풍선 */}
+          <div css={CharacterContainer}>
+            <ChatBubble />
+            <img src={MainCharacter} alt="" css={mainCharacterCss} />
+          </div>
           {/* 일상생활 버튼 4종 */}
           <div css={routineGroupCss}>
             <Icon size={2.5}>

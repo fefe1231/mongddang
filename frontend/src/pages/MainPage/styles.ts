@@ -29,10 +29,26 @@ export const topContainer = css`
 
 export const bottomContainer = css`
   display: flex;
+  position: relative;
   flex-direction: column;
   align-items: center;
   width: 100%;
   gap: 1rem;
+`;
+
+export const CharacterContainer = css`
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  transform: translateY(-100%);
+  align-items: center;
+  z-index: 10;
+`;
+
+export const mainCharacterCss = css`
+  height: 12rem;
+  object-fit: contain;
 `;
 
 export const iconGroupCss = css`

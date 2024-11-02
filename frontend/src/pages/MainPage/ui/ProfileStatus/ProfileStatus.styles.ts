@@ -4,13 +4,14 @@ export const container = css`
   display: flex;
   flex-direction: column;
   width: 9rem;
-  padding: 3%;
+  padding: 2%;
   gap: 0.25rem;
   height: fit-content;
   align-items: center;
   background-color: #fff;
   border: 5px solid #8fdcff;
   border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 `;
 
 export const nicknameCss = css`
