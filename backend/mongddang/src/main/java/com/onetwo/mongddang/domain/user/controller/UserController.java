@@ -11,10 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/user")
@@ -30,6 +27,14 @@ public class UserController {
     public ResponseEntity<ResponseDto> modifyUser(@Valid @RequestBody CheckNicknameRequestDto checkNicknameRequestDto, HttpServletRequest request){
         Long userId = jwtExtratService.jwtFindId(request);
         ResponseDto response = modifyUserService.modifyUser(checkNicknameRequestDto,userId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/info")
+    @Operation(summary = "유저 정보 조회 API", description = "유저 정보를 조회합니다.")
+    public ResponseEntity<ResponseDto> getUserInfo(HttpServletRequest request){
+        Long userId = jwtExtratService.jwtFindId(request);
+        ResponseDto response = null;
         return ResponseEntity.ok(response);
     }
 }
