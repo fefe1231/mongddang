@@ -1,7 +1,7 @@
 package com.onetwo.mongddang.domain.game.achievement.service;
 
 import com.onetwo.mongddang.common.ResponseDto;
-import com.onetwo.mongddang.domain.game.achievement.dto.RequestAchievementListDto;
+import com.onetwo.mongddang.domain.game.achievement.dto.ResponseAchievementListDto;
 import com.onetwo.mongddang.domain.game.achievement.errors.CustomAchievementErrorCode;
 import com.onetwo.mongddang.domain.game.achievement.model.Achievement;
 import com.onetwo.mongddang.domain.game.achievement.repository.AchievementRepository;
@@ -43,7 +43,7 @@ public class AchievementService {
         log.info("getAchievementList childId: {}", childId);
 
         List<Achievement> achievementList = achievementRepository.findAll();
-        List<RequestAchievementListDto> achievementListDto = achievementList.stream()
+        List<ResponseAchievementListDto> achievementListDto = achievementList.stream()
                 .map(achievement -> {
                     // 업적에 해당하는 칭호 조회
                     Title title = titleRepository.findById(achievement.getId()).orElse(null);
@@ -58,7 +58,7 @@ public class AchievementService {
 
                     // 업적 달성 여부 -1: 달성하지 않음
                     boolean isAchieved = executionCount != -1;
-                    return RequestAchievementListDto.builder()
+                    return ResponseAchievementListDto.builder()
                             .titleId(title.getId())
                             .titleName(title.getName())
                             .description(achievement.getDescription())

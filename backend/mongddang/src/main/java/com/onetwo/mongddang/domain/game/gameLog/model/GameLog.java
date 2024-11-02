@@ -2,6 +2,7 @@ package com.onetwo.mongddang.domain.game.gameLog.model;
 
 import com.onetwo.mongddang.domain.user.model.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Entity // JPA Entity 로 사용
@@ -32,6 +33,7 @@ public class GameLog {
     @Column(nullable = false)
     private int medicationCount; // 복약 횟수 (ex. 5)
 
+    @NotNull
     public enum GameLogCategory {
         meal_count, sleep_count, exercise_count, medication_count;
     }

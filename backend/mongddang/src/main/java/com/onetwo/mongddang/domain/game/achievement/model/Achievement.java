@@ -1,6 +1,7 @@
 package com.onetwo.mongddang.domain.game.achievement.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Entity // JPA Entity 로 사용
@@ -13,6 +14,7 @@ public class Achievement {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @NotNull
     private AchievementCategory category; // 업적 카테고리 (ex. eating/sleeping/exercise/medication)
 
     @Column(nullable = false)
