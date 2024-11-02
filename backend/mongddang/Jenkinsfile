@@ -190,22 +190,32 @@ pipeline {
                     
                     mattermostSend(color: 'good',
                     message: """Build Success :white_check_mark:
+
 ---
+
 Job: ${env.JOB_NAME} #${env.BUILD_NUMBER}
+
 ---
+
 Branch Info:
 - Source Branch: ${sourceBranch}
 - Target Branch: ${targetBranch}
+
 ---
+
 Build Info:
 - Author: ${Author_ID}(${Author_Name})
 - Commit: ${Commit_Hash}
 - Message: ${Commit_Message}
 - Duration: ${Build_Duration}
+
 ---
+
 Changes:
 ${changeLog}
+
 ---
+
 Build URL: ${env.BUILD_URL}
 """,
                     endpoint: 'https://meeting.ssafy.com/hooks/ekk4hmxtsjn9irbhug1qhjqz8w',
@@ -236,22 +246,32 @@ Build URL: ${env.BUILD_URL}
                     
                     mattermostSend(color: 'danger',
                         message: """Build Failed :x:
+                        
 ---
+
 Job: ${env.JOB_NAME} #${env.BUILD_NUMBER}
+
 ---
+
 Branch Info:
 - Current Branch: ${Current_Branch}
 - Target Branch: ${Target_Branch}
+
 ---
+
 Build Info:
 - Author: ${Author_ID}(${Author_Name})
 - Commit: ${Commit_Hash}
 - Message: ${Commit_Message}
 - Duration: ${Build_Duration}
+
 ---
+
 Error Log:
 ${truncatedError}
+
 ---
+
 Build URL: ${env.BUILD_URL}
 """,
                         endpoint: 'https://meeting.ssafy.com/hooks/ekk4hmxtsjn9irbhug1qhjqz8w',
