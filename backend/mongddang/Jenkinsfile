@@ -146,26 +146,50 @@ pipeline {
                     def Commit_Message = sh(script: "git show -s --pretty=%B", returnStdout: true).trim()
                     def Build_Duration = currentBuild.durationString
                     
-                    // 현재 브랜치 정보
-                    def Current_Branch = env.BRANCH_NAME ?: env.GIT_BRANCH
-                    // PR 타겟 브랜치 (PR이 아닌 경우 null)
-                    def Target_Branch = env.CHANGE_TARGET ?: 'N/A'
+                    // 가장 최근 머지 커밋 정보 가져오기
+                    def mergeInfo = sh(
+                        script: """
+                            # 가장 최근 머지 커밋의 해시 가져오기
+                            MERGE_COMMIT=\$(git log --merges -n 1 --pretty=format:'%H')
+                            
+                            # 머지된 브랜치 이름 추출 (소스 브랜치)
+                            SRC_BRANCH=\$(git log -1 --merges --pretty=format:'%s' | grep -o "'.*'" | sed "s/'//g")
+                            
+                            # 타겟 브랜치 (현재 브랜치) 가져오기
+                            TARGET_BRANCH=\$(git branch --show-current)
+                            
+                            echo "\$MERGE_COMMIT|\$SRC_BRANCH|\$TARGET_BRANCH"
+                        """,
+                        returnStdout: true
+                    ).trim().split('\\|')
                     
-                    // 변경 로그 수집 - 최근 5개의 커밋
+                    def mergeCommit = mergeInfo[0]
+                    def sourceBranch = mergeInfo[1]
+                    def targetBranch = mergeInfo[2]
+                    
+                    // 변경 로그 수집
                     def changeLog = ""
                     try {
-                        // 현재 브랜치의 마지막 머지 커밋 해시 찾기
-                        def lastMergeCommit = sh(script: "git log --merges -n 1 --pretty=format:'%H'", returnStdout: true).trim()
+                        // 머지 직전 커밋 찾기
+                        def priorMergeCommit = sh(
+                            script: """
+                                git log --merges -n 2 --pretty=format:'%H' | tail -n 1
+                            """,
+                            returnStdout: true
+                        ).trim()
                         
-                        // 마지막 머지 이후의 커밋들 가져오기
-                        def changes = sh(script: """
-                            git log ${lastMergeCommit}..HEAD --pretty=format:'%h - %s [%an]'
-                        """, returnStdout: true).trim()
+                        // 이전 머지 커밋부터 현재 머지 커밋까지의 변경사항 가져오기
+                        def changes = sh(
+                            script: """
+                                git log ${priorMergeCommit}..${mergeCommit} --pretty=format:'%h - %s [%an]' --no-merges
+                            """,
+                            returnStdout: true
+                        ).trim()
                         
                         if (changes) {
                             changeLog = changes.split('\n').collect { "- ${it}" }.join('\n')
                         } else {
-                            changeLog = "No changes found since last merge"
+                            changeLog = "No changes in this merge"
                         }
                     } catch (Exception e) {
                         changeLog = "Unable to retrieve change log"
@@ -173,24 +197,24 @@ pipeline {
                     }
                     
                     mattermostSend(color: 'good',
-                    message: """## Build Success :white_check_mark:
+                    message: """Build Success :white_check_mark:
 ---
-#### Job: ${env.JOB_NAME} #${env.BUILD_NUMBER}
+Job: ${env.JOB_NAME} #${env.BUILD_NUMBER}
 ---
-#### Branch Info:
-- Current Branch: ${Current_Branch}
-- Target Branch: ${Target_Branch}
+Branch Info:
+- Source Branch: ${sourceBranch}
+- Target Branch: ${targetBranch}
 ---
-#### Build Info:
+Build Info:
 - Author: ${Author_ID}(${Author_Name})
 - Commit: ${Commit_Hash}
 - Message: ${Commit_Message}
 - Duration: ${Build_Duration}
 ---
-#### Changes:
+Changes:
 ${changeLog}
 ---
-#### Build URL: ${env.BUILD_URL}
+Build URL: ${env.BUILD_URL}
 """,
                     endpoint: 'https://meeting.ssafy.com/hooks/ekk4hmxtsjn9irbhug1qhjqz8w',
                     failOnError: true
@@ -219,24 +243,24 @@ ${changeLog}
                     def truncatedError = (errorLog.length() > 500) ? errorLog.substring(0, 500) + "..." : errorLog
                     
                     mattermostSend(color: 'danger',
-                        message: """## Build Failed :x:
+                        message: """Build Failed :x:
 ---
-#### Job: ${env.JOB_NAME} #${env.BUILD_NUMBER}
+Job: ${env.JOB_NAME} #${env.BUILD_NUMBER}
 ---
-#### Branch Info:
+Branch Info:
 - Current Branch: ${Current_Branch}
 - Target Branch: ${Target_Branch}
 ---
-#### Build Info:
+Build Info:
 - Author: ${Author_ID}(${Author_Name})
 - Commit: ${Commit_Hash}
 - Message: ${Commit_Message}
 - Duration: ${Build_Duration}
 ---
-#### Error Log:
+Error Log:
 ${truncatedError}
 ---
-#### Build URL: ${env.BUILD_URL}
+Build URL: ${env.BUILD_URL}
 """,
                         endpoint: 'https://meeting.ssafy.com/hooks/ekk4hmxtsjn9irbhug1qhjqz8w',
                         failOnError: true
