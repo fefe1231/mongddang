@@ -2,15 +2,13 @@ package com.onetwo.mongddang.domain.game.title.model;
 
 import com.onetwo.mongddang.domain.user.model.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity // JPA Entity 로 사용
 @Getter // Getter 자동 생성
+@Setter
 @Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
@@ -33,7 +31,7 @@ public class MyTitle {
     private LocalDateTime createdAt; // 획득 시간 (ex. 2024-10-01 12:00:00)
 
     @Column(nullable = false)
-    private Boolean isNew = true; // 신규 여부 (ex. true), 생성 시 기본 값은 true
+    private Boolean isNew; // 신규 여부 (ex. true)
 
     @Column(nullable = false)
     private Boolean isMain; // 메인 여부 (ex. true)
