@@ -2,11 +2,16 @@
 import { Button } from '@/shared/ui/Button';
 import { TextField } from '@/shared/ui/TextField';
 import { TopBar } from '@/shared/ui/TopBar';
-import React from 'react';
+import React, { useState } from 'react';
 import { containerCss, editCss } from './styles';
 import { css } from '@emotion/react';
 import { Typography } from '@/shared/ui/Typography';
 export const NicknameEdit = () => {
+  const [nickname, setNickname] = useState<string>('');
+
+  const nicknameChange = (e: React.ChangeEvent<HTMLInputElement>) =>{
+    setNickname(e.target.value)
+  }
   return (
     <div>
       <TopBar type="iconpage">닉네임 수정</TopBar>
@@ -21,6 +26,8 @@ export const NicknameEdit = () => {
             label="닉네임"
             type="text"
             variant="outlined"
+            value={nickname}
+            onChange={nicknameChange}
           />
           <Button
             handler={() => {}}
