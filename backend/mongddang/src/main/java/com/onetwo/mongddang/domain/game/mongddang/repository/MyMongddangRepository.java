@@ -14,4 +14,6 @@ public interface MyMongddangRepository extends JpaRepository<MyMongddang, Long> 
     Optional<MyMongddang> findByChildId(Long userId);
 
     Optional<MyMongddang> findByChildIdAndIsMainTrue(Long ChildId);
+
+    MyMongddang findByMongddangIdAndChildId(Long mongddangId, Long childId);
 }
