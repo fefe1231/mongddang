@@ -57,7 +57,7 @@ public class ConnectCtoPService {
         log.info("Real child!");
 
         // 이미 연결된 관계는 아닌지 판단
-        if (ctoPRepository.findByChildAndProtector(user.get(), child.get())!=null) {
+        if (!ctoPRepository.findByChildAndProtector(user.get(), child.get()).isEmpty()) {
             throw new RestApiException(CustomCtoPErrorCode.ALREADY_LINKED);
         }
         log.info(ctoPRepository.findByChildAndProtector(child.get(),user.get()).toString());
