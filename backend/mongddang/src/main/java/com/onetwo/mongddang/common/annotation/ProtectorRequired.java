@@ -1,4 +1,4 @@
-package com.onetwo.mongddang.domain.common.annotation;
+package com.onetwo.mongddang.common.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
