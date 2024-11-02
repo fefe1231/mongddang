@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/game/collection/achievement")
+@Tag(name = "Achievement API", description = "업적 API")
 public class AchievementController {
 
     final AchievementService achievementService;

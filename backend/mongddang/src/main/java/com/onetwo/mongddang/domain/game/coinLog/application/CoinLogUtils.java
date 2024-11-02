@@ -79,10 +79,12 @@ public class CoinLogUtils {
     @Transactional
     public CoinLog deductCoin(Long id, CoinCategory category, int amount) {
         // id 에 해당하는 User 조회
-        User user = userRepository.findById(id).orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
 
         // userId에 해당하는 CoinLog 조회
-        CoinLog coinLog = coinLogRepository.findTopByChildIdOrderByIdDesc(id).orElseThrow(() -> new RestApiException(CustomCoinLogErrorCode.NOT_FOUND_COIN_LOG));
+        CoinLog coinLog = coinLogRepository.findTopByChildIdOrderByIdDesc(id)
+                .orElseThrow(() -> new RestApiException(CustomCoinLogErrorCode.NOT_FOUND_COIN_LOG));
 
         // 코인이 부족할 경우 예외 처리
         if (coinLog.getCoin() - amount < 0) {

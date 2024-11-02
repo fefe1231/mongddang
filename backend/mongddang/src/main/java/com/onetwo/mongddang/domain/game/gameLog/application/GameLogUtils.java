@@ -34,7 +34,8 @@ public class GameLogUtils {
         log.info("initGameLog - userId: {}", id);
 
         // id 에 해당하는 User 조회
-        User user = userRepository.findById(id).orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
 
         // 사용자에 대한 기존 게임 로그가 존재하는지 확인
         if (gameLogRepository.existsByChild(user)) {
