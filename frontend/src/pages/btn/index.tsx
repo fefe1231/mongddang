@@ -16,6 +16,9 @@ export const Btn = () => {
       <Button handler={()=>nav('/nickname/title')} color="primary" fontSize="1" variant="contained">
         칭호
       </Button>
+      <Button handler={()=>nav('/nickname/edit')} color="primary" fontSize="1" variant="contained">
+        닉네임 수정
+      </Button>
     </div>
   );
 };

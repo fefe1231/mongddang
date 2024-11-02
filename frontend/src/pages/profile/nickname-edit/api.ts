@@ -1,10 +1,20 @@
+import axios from 'axios';
+
+export const api = axios.create({
+  baseURL: import.meta.env.API_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  withCredentials: true,
+});
+
 // 회원정보 닉네임 수정
-export const updateHashtag = (hashtagList: number[]) => {
+export const updateNickname = (nickname: string) => {
   return api({
-    url: '/api/auth/member/hashtag',
-    method: 'patch',
+    url: '/api/user/nickname',
+    method: 'post',
     data: {
-      hashtagList: hashtagList,
+      nickname: nickname,
     },
   });
 };

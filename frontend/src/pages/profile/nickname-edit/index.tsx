@@ -4,14 +4,30 @@ import { TextField } from '@/shared/ui/TextField';
 import { TopBar } from '@/shared/ui/TopBar';
 import React, { useState } from 'react';
 import { containerCss, editCss } from './styles';
-import { css } from '@emotion/react';
 import { Typography } from '@/shared/ui/Typography';
+import { updateNickname } from './api';
+import { useNavigate } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
+
 export const NicknameEdit = () => {
   const [nickname, setNickname] = useState<string>('');
+  const nav = useNavigate();
 
-  const nicknameChange = (e: React.ChangeEvent<HTMLInputElement>) =>{
-    setNickname(e.target.value)
-  }
+  const nicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNickname(e.target.value);
+  };
+
+  const { mutate } = useMutation({
+    mutationFn: async (nickname: string) => await updateNickname(nickname),
+    onSuccess: () => {
+      console.log('조회 성공');
+      nav('/');
+    },
+    onError: () => {
+      alert('오류가 발생하였습니다.');
+      console.log(Error);
+    },
+  });
   return (
     <div>
       <TopBar type="iconpage">닉네임 수정</TopBar>
@@ -30,7 +46,7 @@ export const NicknameEdit = () => {
             onChange={nicknameChange}
           />
           <Button
-            handler={() => {}}
+            handler={() => mutate(nickname)}
             color="primary"
             fontSize="1"
             variant="contained"
@@ -50,6 +66,15 @@ export const NicknameEdit = () => {
         <Typography color="primary" size="1" weight={500}>
           사용가능한 닉네임입니다.
         </Typography>
+        <Button
+          handler={() => {}}
+          color="primary"
+          fontSize="1"
+          fullwidth
+          variant="contained"
+        >
+          변경하기
+        </Button>
       </div>
     </div>
   );
