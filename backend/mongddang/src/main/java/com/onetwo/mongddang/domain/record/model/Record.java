@@ -55,7 +55,7 @@ public class Record {
 
     @NotNull
     public enum RecordCategoryType {
-        meal, sleep,exercise,medication
+        meal, sleeping,exercise,medication
     }
 
     @NotNull

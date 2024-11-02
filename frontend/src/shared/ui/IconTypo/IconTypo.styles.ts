@@ -4,14 +4,16 @@ export const containerCss = css`
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
 `;
 
 export const iconCss = (size: number, disabled: boolean) => css`
   width: ${size}rem;
   height: ${size}rem;
-  margin-bottom: 0.5rem; 
+  margin-bottom: 0.5rem;
 
-  ${disabled && `
+  ${disabled &&
+  `
     filter: grayscale(100%) brightness(0%);
   `}
 `;

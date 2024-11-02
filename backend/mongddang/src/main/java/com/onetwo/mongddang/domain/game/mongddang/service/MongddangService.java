@@ -156,32 +156,30 @@ public class MongddangService {
     public ResponseDto setMainMongddang(Long mongddangId, Long userId) {
         log.info("setMainMongddang mongddangId: {}", mongddangId);
 
-        // 기존 몽땅이 존재하지 않는 경우 - 회원가입 시 초기화를 통해 일어나지 않을 에러
-        MyMongddang beforeMainMongddang = myMongddangRepository.findByChildIdAndIsMainTrue(userId)
-                .orElseThrow(
-                        () -> new RestApiException(CustomMongddangErrorCode.INVALID_COLLECTION_ID)
-                );
+        // 현재 메인 몽땅
+        MyMongddang currentMainMongddang = myMongddangRepository.findByChildIdAndIsMainTrue(userId)
+                .orElseThrow(() -> new RestApiException(CustomMongddangErrorCode.INVALID_COLLECTION_ID));
 
-        // 해당 몽땅이 존재하지 않는 경우
-        MyMongddang myMongddang = myMongddangRepository.findByMongddangId(mongddangId)
-                .orElseThrow(
-                        () -> new RestApiException(CustomMongddangErrorCode.INVALID_COLLECTION_ID)
-                );
+        // 새롭게 설정할 메인 몽땅
+        MyMongddang newMainMongddang = myMongddangRepository.findByMongddangId(mongddangId)
+                .orElseThrow(() -> new RestApiException(CustomMongddangErrorCode.CHARACTER_NOT_OWNED));
 
         // 해당 몽땅이 이미 메인으로 설정된 경우
-        if (myMongddang.getIsMain()) {
+        if (newMainMongddang.getIsMain()) {
             throw new RestApiException(CustomMongddangErrorCode.ALREADY_RECRUITED);
         }
 
-        // 새로운 메인 몽땅을 true 로 변경
-        myMongddang.setIsMain(true);
-        myMongddangRepository.save(myMongddang);
+        // 새로운 메인 몽땅 설정
+        newMainMongddang.setIsMain(true);
+        // 기존 메인 몽땅 해제
+        currentMainMongddang.setIsMain(false);
 
-        // 기존 메인 몽땅의 isMain 을 false 로 변경
-        beforeMainMongddang.setIsMain(false);
-        myMongddangRepository.save(beforeMainMongddang);
+        myMongddangRepository.save(newMainMongddang);
+        myMongddangRepository.save(currentMainMongddang);
 
-        return ResponseDto.builder().message("메인 몽땅으로 설정했습니다.").build();
+        return ResponseDto.builder()
+                .message("메인 몽땅으로 설정했습니다.")
+                .build();
     }
 
 }
