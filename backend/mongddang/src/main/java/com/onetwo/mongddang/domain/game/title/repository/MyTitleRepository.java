@@ -15,4 +15,7 @@ public interface MyTitleRepository extends JpaRepository<MyTitle, Long> {
     List<MyTitle> findByChildId(Long childId);
 
     Optional<MyTitle> findByChildIdAndIsMainTrue(Long childId);
+
+    MyTitle findByTitleIdAndChildId(Long titleId, Long childId);
+
 }
