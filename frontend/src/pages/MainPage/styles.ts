@@ -17,11 +17,12 @@ export const topContainer = css`
   width: 100%;
   height: fit-content;
   padding: 3%;
+  justify-content: space-between;
 `;
 
 export const iconGroupCss = css`
   display: flex;
-  padding: 3%;
+  padding: 3% 0;
   gap: 1rem;
 `;
 
