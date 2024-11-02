@@ -4,6 +4,7 @@ import { SignUp } from './pages/Signup';
 import { Encyclopedia } from './pages/Encyclopedia';
 import { NicknameTitle } from './pages/nickname-title';
 import { Btn } from './pages/btn';
+import { NicknameEdit } from './pages/profile/nickname-edit';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/encyclopedia" element={<Encyclopedia />} />
           <Route path="/nickname/title" element={<NicknameTitle />} />
+          <Route path="/nickname/edit" element={<NicknameEdit />} />
         </Routes>
       </Router>
     </>
