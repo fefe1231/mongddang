@@ -189,21 +189,23 @@ pipeline {
                     }
                     
                     mattermostSend(color: 'good',
-                    message: """Build Success :white_check_mark:
+                    message: """# Build Success :white_check_mark:
 
 ---
 
-Job: ${env.JOB_NAME} #${env.BUILD_NUMBER}
+# Job: 
+- Job Name: ${env.JOB_NAME} 
+- Build Number: #${env.BUILD_NUMBER}
 
 ---
 
-Branch Info:
+# Branch Info:
 - Source Branch: ${sourceBranch}
 - Target Branch: ${targetBranch}
 
 ---
 
-Build Info:
+# Build Info:
 - Author: ${Author_ID}(${Author_Name})
 - Commit: ${Commit_Hash}
 - Message: ${Commit_Message}
@@ -211,12 +213,12 @@ Build Info:
 
 ---
 
-Changes:
+# Changes:
 ${changeLog}
 
 ---
 
-Build URL: ${env.BUILD_URL}
+# Build URL: ${env.BUILD_URL}
 """,
                     endpoint: 'https://meeting.ssafy.com/hooks/ekk4hmxtsjn9irbhug1qhjqz8w',
                     failOnError: true
@@ -245,21 +247,23 @@ Build URL: ${env.BUILD_URL}
                     def truncatedError = (errorLog.length() > 500) ? errorLog.substring(0, 500) + "..." : errorLog
                     
                     mattermostSend(color: 'danger',
-                        message: """Build Failed :x:
-                        
----
-
-Job: ${env.JOB_NAME} #${env.BUILD_NUMBER}
+                        message: """# Build Failed :x:
 
 ---
 
-Branch Info:
+# Job:
+- Job name: ${env.JOB_NAME} 
+- Build number: #${env.BUILD_NUMBER}
+
+---
+
+# Branch Info:
 - Current Branch: ${Current_Branch}
 - Target Branch: ${Target_Branch}
 
 ---
 
-Build Info:
+# Build Info:
 - Author: ${Author_ID}(${Author_Name})
 - Commit: ${Commit_Hash}
 - Message: ${Commit_Message}
@@ -267,12 +271,12 @@ Build Info:
 
 ---
 
-Error Log:
+# Error Log:
 ${truncatedError}
 
 ---
 
-Build URL: ${env.BUILD_URL}
+# Build URL: ${env.BUILD_URL}
 """,
                         endpoint: 'https://meeting.ssafy.com/hooks/ekk4hmxtsjn9irbhug1qhjqz8w',
                         failOnError: true
