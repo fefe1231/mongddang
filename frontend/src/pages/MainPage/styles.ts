@@ -12,12 +12,27 @@ export const kidsMainBase = css`
   background-position: bottom;
 `;
 
+export const kidsMainContent = css`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 3%;
+  justify-content: space-between;
+`;
+
 export const topContainer = css`
   display: flex;
   width: 100%;
   height: fit-content;
-  padding: 3%;
   justify-content: space-between;
+`;
+
+export const bottomContainer = css`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 1rem;
 `;
 
 export const iconGroupCss = css`
@@ -34,4 +49,15 @@ export const iconVerticalCss = css`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+`;
+
+export const routineGroupCss = css`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 15rem;
+  height: 3.5rem;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 10px;
+  padding: 0.25rem;
 `;

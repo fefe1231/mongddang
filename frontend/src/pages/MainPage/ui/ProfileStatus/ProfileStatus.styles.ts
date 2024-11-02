@@ -5,9 +5,9 @@ export const container = css`
   flex-direction: column;
   width: 9rem;
   padding: 3%;
-  gap: 3%;
+  gap: 0.25rem;
+  height: fit-content;
   align-items: center;
-  height: 12.5%;
   background-color: #fff;
   border: 5px solid #8fdcff;
   border-radius: 10px;
