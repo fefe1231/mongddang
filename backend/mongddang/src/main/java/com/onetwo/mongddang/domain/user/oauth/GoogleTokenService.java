@@ -4,6 +4,8 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
+import com.onetwo.mongddang.errors.exception.RestApiException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -28,18 +30,19 @@ public class GoogleTokenService {
 
             return payload;
         } else {
-            throw new IllegalArgumentException("Invalid ID token.");
+            throw new RestApiException(CustomUserErrorCode.INVALID_ID_TOKEN);
         }
     }
 
-    public String getProfilePictureFromIdToken(String idTokenString) throws GeneralSecurityException, IOException {
-        GoogleIdToken.Payload payload = getPayloadFromIdToken(idTokenString);
-
-        return (String) payload.get("picture");
-    }
-
-    public String getEmailFromIdToken(String idTokenString) throws GeneralSecurityException, IOException {
-        GoogleIdToken.Payload payload = getPayloadFromIdToken(idTokenString);
+    public String getEmailFromIdToken(String idTokenString) {
+        GoogleIdToken.Payload payload = null;
+        try {
+            payload = getPayloadFromIdToken(idTokenString);
+        } catch (GeneralSecurityException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RestApiException(CustomUserErrorCode.INVALID_ID_TOKEN);
+        }
 
         return (String) payload.get("email");
     }

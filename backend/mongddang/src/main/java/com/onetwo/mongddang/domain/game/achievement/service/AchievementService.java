@@ -1,7 +1,7 @@
 package com.onetwo.mongddang.domain.game.achievement.service;
 
-import com.onetwo.mongddang.common.ResponseDto;
 import com.onetwo.mongddang.domain.game.achievement.dto.ResponseAchievementListDto;
+import com.onetwo.mongddang.common.responseDto.ResponseDto;
 import com.onetwo.mongddang.domain.game.achievement.errors.CustomAchievementErrorCode;
 import com.onetwo.mongddang.domain.game.achievement.model.Achievement;
 import com.onetwo.mongddang.domain.game.achievement.repository.AchievementRepository;
