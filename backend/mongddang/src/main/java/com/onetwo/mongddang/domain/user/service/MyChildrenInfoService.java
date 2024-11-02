@@ -64,7 +64,7 @@ public class MyChildrenInfoService {
 
         //response
         ResponseDto response = ResponseDto.builder()
-                .message("사용 가능한 닉네임입니다.")
+                .message("연결 어린이 조회에 성공했습니다.")
                 .data(data)
                 .build();
         return response;
