@@ -151,10 +151,10 @@ pipeline {
                     // PR 타겟 브랜치 (PR이 아닌 경우 null)
                     def Target_Branch = env.CHANGE_TARGET ?: 'N/A'
                     
-                    // 변경 로그 수집 - 최근 10개의 커밋
+                    // 변경 로그 수집 - 최근 5개의 커밋
                     def changeLog = ""
                     try {
-                        def changes = sh(script: "git log --max-count=10 --pretty=format:'%h - %s [%an]%n'", returnStdout: true).trim()
+                        def changes = sh(script: "git log --max-count=5 --pretty=format:'%h - %s [%an]%n'", returnStdout: true).trim()
                         if (changes) {
                             changeLog = changes.split('\n').collect { "- ${it}" }.join('\n')
                         } else {
@@ -166,25 +166,25 @@ pipeline {
                     }
                     
                     mattermostSend(color: 'good',
-                        message: """Build Success :white_check_mark:
-                        *Job*: ${env.JOB_NAME} #${env.BUILD_NUMBER}
-                        *Branch Info*:
-                        - Current Branch: ${Current_Branch}
-                        - Target Branch: ${Target_Branch}
-                        
-                        *Build Info*:
-                        - Author: ${Author_ID}(${Author_Name})
-                        - Commit: ${Commit_Hash}
-                        - Message: ${Commit_Message}
-                        - Duration: ${Build_Duration}
-                        
-                        *Changes*:
-                        ${changeLog}
-                        
-                        *Build URL*: ${env.BUILD_URL}
-                        """.stripIndent(),
-                        endpoint: 'https://meeting.ssafy.com/hooks/ekk4hmxtsjn9irbhug1qhjqz8w',
-                        failOnError: true
+                    message: """Build Success :white_check_mark:
+*Job*: ${env.JOB_NAME} #${env.BUILD_NUMBER}
+*Branch Info*:
+- Current Branch: ${Current_Branch}
+- Target Branch: ${Target_Branch}
+
+*Build Info*:
+- Author: ${Author_ID}(${Author_Name})
+- Commit: ${Commit_Hash}
+- Message: ${Commit_Message}
+- Duration: ${Build_Duration}
+
+*Changes*:
+${changeLog}
+
+*Build URL*: ${env.BUILD_URL}
+""",
+                    endpoint: 'https://meeting.ssafy.com/hooks/ekk4hmxtsjn9irbhug1qhjqz8w',
+                    failOnError: true
                     )
                 }
             }
@@ -211,24 +211,24 @@ pipeline {
                     
                     mattermostSend(color: 'danger',
                         message: """Build Failed :x:
-                        *Job*: ${env.JOB_NAME} #${env.BUILD_NUMBER}
-                        *Branch Info*:
-                        - Current Branch: ${Current_Branch}
-                        - Target Branch: ${Target_Branch}
-                        
-                        *Build Info*:
-                        - Author: ${Author_ID}(${Author_Name})
-                        - Commit: ${Commit_Hash}
-                        - Message: ${Commit_Message}
-                        - Duration: ${Build_Duration}
-                        
-                        *Error Log*:
-                        ```
-                        ${truncatedError}
-                        ```
-                        
-                        *Build URL*: ${env.BUILD_URL}
-                        """.stripIndent(),
+*Job*: ${env.JOB_NAME} #${env.BUILD_NUMBER}
+*Branch Info*:
+- Current Branch: ${Current_Branch}
+- Target Branch: ${Target_Branch}
+
+*Build Info*:
+- Author: ${Author_ID}(${Author_Name})
+- Commit: ${Commit_Hash}
+- Message: ${Commit_Message}
+- Duration: ${Build_Duration}
+
+*Error Log*:
+```
+${truncatedError}
+```
+
+*Build URL*: ${env.BUILD_URL}
+""",
                         endpoint: 'https://meeting.ssafy.com/hooks/ekk4hmxtsjn9irbhug1qhjqz8w',
                         failOnError: true
                     )
