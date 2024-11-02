@@ -4,7 +4,7 @@ import { SignUp } from './pages/Signup';
 import { Encyclopedia } from './pages/Encyclopedia';
 import { NicknameTitle } from './pages/nickname-title';
 import { Btn } from './pages/btn';
-import { Login } from './pages/login';
+import Login from './pages/login';
 
 function App() {
   return (
