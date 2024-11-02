@@ -142,11 +142,104 @@ pipeline {
                 script {
                     def Author_ID = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
                     def Author_Name = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()
+                    def Commit_Hash = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
+                    def Commit_Message = sh(script: "git show -s --pretty=%B", returnStdout: true).trim()
+                    def Build_Duration = currentBuild.durationString
+                    
+                    def sourceBranch = 'N/A'
+                    def targetBranch = env.BRANCH_NAME
+                    def changeLog = ""
+
+                    // dev 브랜치의 머지 상황일 때만 머지 정보 수집
+                    if (env.BRANCH_NAME == 'dev' && Commit_Message.contains('Merge')) {
+                        try {
+                            // 머지된 브랜치 이름 추출 (소스 브랜치)
+                            sourceBranch = sh(
+                                script: """
+                                    git log -1 --merges --pretty=format:'%s' | grep -o "from .* into" | sed 's/from //' | sed 's/ into//'
+                                """,
+                                returnStdout: true
+                            ).trim()
+                            
+                            // 이전 머지 커밋부터 현재까지의 변경사항 가져오기
+                            def priorMergeCommit = sh(
+                                script: "git log --merges -n 2 --pretty=format:'%H' | tail -n 1",
+                                returnStdout: true
+                            ).trim()
+                            
+                            def changes = sh(
+                                script: """
+                                    git log ${priorMergeCommit}..HEAD --pretty=format:'%h - %s [%an]' --no-merges
+                                """,
+                                returnStdout: true
+                            ).trim()
+                            
+                            if (changes) {
+                                changeLog = changes.split('\n').collect { "- ${it}" }.join('\n')
+                            } else {
+                                changeLog = "No changes in this merge"
+                            }
+                        } catch (Exception e) {
+                            echo "Failed to get merge info: ${e.getMessage()}"
+                            changeLog = "Unable to retrieve change log"
+                        }
+                    } else {
+                        // 일반 푸시의 경우 마지막 머지 이후 커밋 정보만 가져오기
+                        try {
+                            // 현재 브랜치의 마지막 머지 커밋 해시 찾기
+                            def lastMergeCommit = sh(script: "git log --merges -n 1 --pretty=format:'%H'", returnStdout: true).trim()
+                            
+                            // 마지막 머지 이후의 커밋들 가져오기
+                            def changes = sh(script: """
+                                git log ${lastMergeCommit}..HEAD --pretty=format:'%h - %s [%an]'
+                            """, returnStdout: true).trim()
+                            
+                            if (changes) {
+                                changeLog = changes.split('\n').collect { "- ${it}" }.join('\n')
+                            } else {
+                                changeLog = "No changes found since last merge"
+                            }
+                        } catch (Exception e) {
+                            changeLog = "Unable to retrieve change log"
+                            echo "Failed to get change log: ${e.getMessage()}"
+                        }
+
+                    }
+                    
                     mattermostSend(color: 'good',
-                        message: "Build Success: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name})\n(<${env.BUILD_URL}|Details>)",
-                        endpoint: 'https://meeting.ssafy.com/hooks/ekk4hmxtsjn9irbhug1qhjqz8w',
-                        // channel: '빌드 알림 채널',
-                        failOnError: true
+                    message: """# Build Success :white_check_mark:
+
+---
+
+# Job: 
+- Job Name: ${env.JOB_NAME} 
+- Build Number: #${env.BUILD_NUMBER}
+
+---
+
+# Branch Info:
+- Source Branch: ${sourceBranch}
+- Target Branch: ${targetBranch}
+
+---
+
+# Build Info:
+- Author: ${Author_ID}(${Author_Name})
+- Commit: ${Commit_Hash}
+- Message: ${Commit_Message}
+- Duration: ${Build_Duration}
+
+---
+
+# Changes:
+${changeLog}
+
+---
+
+# Build URL: ${env.BUILD_URL}
+""",
+                    endpoint: 'https://meeting.ssafy.com/hooks/ekk4hmxtsjn9irbhug1qhjqz8w',
+                    failOnError: true
                     )
                 }
             }
@@ -158,10 +251,52 @@ pipeline {
                 script {
                     def Author_ID = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
                     def Author_Name = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()
+                    def Commit_Hash = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
+                    def Commit_Message = sh(script: "git show -s --pretty=%B", returnStdout: true).trim()
+                    def Build_Duration = currentBuild.durationString
+                    
+                    // 현재 브랜치 정보
+                    def Current_Branch = env.BRANCH_NAME ?: env.GIT_BRANCH
+                    // PR 타겟 브랜치
+                    def Target_Branch = env.CHANGE_TARGET ?: 'N/A'
+                    
+                    // 에러 로그 수집
+                    def errorLog = manager.build.getLog(1000).join('\n')
+                    def truncatedError = (errorLog.length() > 500) ? errorLog.substring(0, 500) + "..." : errorLog
+                    
                     mattermostSend(color: 'danger',
-                        message: "빌드 실패: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name})\n(<${env.BUILD_URL}|Details>)",
+                        message: """# Build Failed :x:
+
+---
+
+# Job:
+- Job name: ${env.JOB_NAME} 
+- Build number: #${env.BUILD_NUMBER}
+
+---
+
+# Branch Info:
+- Current Branch: ${Current_Branch}
+- Target Branch: ${Target_Branch}
+
+---
+
+# Build Info:
+- Author: ${Author_ID}(${Author_Name})
+- Commit: ${Commit_Hash}
+- Message: ${Commit_Message}
+- Duration: ${Build_Duration}
+
+---
+
+# Error Log:
+${truncatedError}
+
+---
+
+# Build URL: ${env.BUILD_URL}
+""",
                         endpoint: 'https://meeting.ssafy.com/hooks/ekk4hmxtsjn9irbhug1qhjqz8w',
-                        // channel: '빌드 알림 채널',
                         failOnError: true
                     )
                 }

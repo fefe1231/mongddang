@@ -49,6 +49,7 @@ public class MedicationManagement {
     @Column(name="repeat_end_time")
     private LocalDateTime repeatEndTime;
 
+    @NotNull
     public enum RouteType {
         mouth, injection
     }
