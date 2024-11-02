@@ -32,4 +32,12 @@ public class CtoPController {
         ResponseDto response = connectCtoPService.connectCtoP(connectCtoPDto, userId);
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/children")
+    @Operation(summary = "연결 어린이 조회 API", description = "보호자와 연결된 어린이 정보를 조회합니다.")
+    public ResponseEntity<ResponseDto> connectCtoP(HttpServletRequest request) {
+        Long userId = jwtExtratService.jwtFindId(request);
+        ResponseDto response = null;
+        return ResponseEntity.ok(response);
+    }
 }

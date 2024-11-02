@@ -9,4 +9,6 @@ import java.util.Optional;
 
 public interface CtoPRepository extends JpaRepository<CtoP, Long> {
     List<CtoP> findByChildAndProtector(User child, User protector);
+
+    List<CtoP> findChildByProtector(User protector);
 }
