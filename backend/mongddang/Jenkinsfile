@@ -146,54 +146,46 @@ pipeline {
                     def Commit_Message = sh(script: "git show -s --pretty=%B", returnStdout: true).trim()
                     def Build_Duration = currentBuild.durationString
                     
-                    // 가장 최근 머지 커밋 정보 가져오기
-                    def mergeInfo = sh(
-                        script: """
-                            # 가장 최근 머지 커밋의 해시 가져오기
-                            MERGE_COMMIT=\$(git log --merges -n 1 --pretty=format:'%H')
-                            
-                            # 머지된 브랜치 이름 추출 (소스 브랜치)
-                            SRC_BRANCH=\$(git log -1 --merges --pretty=format:'%s' | grep -o "'.*'" | sed "s/'//g")
-                            
-                            # 타겟 브랜치 (현재 브랜치) 가져오기
-                            TARGET_BRANCH=\$(git branch --show-current)
-                            
-                            echo "\$MERGE_COMMIT|\$SRC_BRANCH|\$TARGET_BRANCH"
-                        """,
-                        returnStdout: true
-                    ).trim().split('\\|')
-                    
-                    def mergeCommit = mergeInfo[0]
-                    def sourceBranch = mergeInfo[1]
-                    def targetBranch = mergeInfo[2]
-                    
-                    // 변경 로그 수집
+                    def sourceBranch = 'N/A'
+                    def targetBranch = env.BRANCH_NAME
                     def changeLog = ""
-                    try {
-                        // 머지 직전 커밋 찾기
-                        def priorMergeCommit = sh(
-                            script: """
-                                git log --merges -n 2 --pretty=format:'%H' | tail -n 1
-                            """,
-                            returnStdout: true
-                        ).trim()
-                        
-                        // 이전 머지 커밋부터 현재 머지 커밋까지의 변경사항 가져오기
-                        def changes = sh(
-                            script: """
-                                git log ${priorMergeCommit}..${mergeCommit} --pretty=format:'%h - %s [%an]' --no-merges
-                            """,
-                            returnStdout: true
-                        ).trim()
-                        
-                        if (changes) {
-                            changeLog = changes.split('\n').collect { "- ${it}" }.join('\n')
-                        } else {
-                            changeLog = "No changes in this merge"
+
+                    // dev 브랜치의 머지 상황일 때만 머지 정보 수집
+                    if (env.BRANCH_NAME == 'dev' && Commit_Message.contains('Merge')) {
+                        try {
+                            // 머지된 브랜치 이름 추출 (소스 브랜치)
+                            sourceBranch = sh(
+                                script: """
+                                    git log -1 --merges --pretty=format:'%s' | grep -o "from .* into" | sed 's/from //' | sed 's/ into//'
+                                """,
+                                returnStdout: true
+                            ).trim()
+                            
+                            // 이전 머지 커밋부터 현재까지의 변경사항 가져오기
+                            def priorMergeCommit = sh(
+                                script: "git log --merges -n 2 --pretty=format:'%H' | tail -n 1",
+                                returnStdout: true
+                            ).trim()
+                            
+                            def changes = sh(
+                                script: """
+                                    git log ${priorMergeCommit}..HEAD --pretty=format:'%h - %s [%an]' --no-merges
+                                """,
+                                returnStdout: true
+                            ).trim()
+                            
+                            if (changes) {
+                                changeLog = changes.split('\n').collect { "- ${it}" }.join('\n')
+                            } else {
+                                changeLog = "No changes in this merge"
+                            }
+                        } catch (Exception e) {
+                            echo "Failed to get merge info: ${e.getMessage()}"
+                            changeLog = "Unable to retrieve change log"
                         }
-                    } catch (Exception e) {
-                        changeLog = "Unable to retrieve change log"
-                        echo "Failed to get change log: ${e.getMessage()}"
+                    } else {
+                        // 일반 푸시의 경우 최근 커밋 정보만 표시
+                        changeLog = "- ${Commit_Hash} - ${Commit_Message} [${Author_ID}]"
                     }
                     
                     mattermostSend(color: 'good',
