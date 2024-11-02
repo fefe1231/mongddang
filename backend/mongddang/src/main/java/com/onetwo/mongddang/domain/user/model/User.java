@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor // JPA가 필요한 기본 생성자
 @AllArgsConstructor // 모든 필드를 초기화하는 생성자
-@Builder // 클래스 레벨에 Builder 적용
+@Builder(toBuilder = true)
 public class User {
 
     @Id
