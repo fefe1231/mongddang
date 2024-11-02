@@ -184,8 +184,26 @@ pipeline {
                             changeLog = "Unable to retrieve change log"
                         }
                     } else {
-                        // 일반 푸시의 경우 최근 커밋 정보만 표시
-                        changeLog = "- ${Commit_Hash} - ${Commit_Message} [${Author_ID}]"
+                        // 일반 푸시의 경우 마지막 머지 이후 커밋 정보만 가져오기
+                        try {
+                            // 현재 브랜치의 마지막 머지 커밋 해시 찾기
+                            def lastMergeCommit = sh(script: "git log --merges -n 1 --pretty=format:'%H'", returnStdout: true).trim()
+                            
+                            // 마지막 머지 이후의 커밋들 가져오기
+                            def changes = sh(script: """
+                                git log ${lastMergeCommit}..HEAD --pretty=format:'%h - %s [%an]'
+                            """, returnStdout: true).trim()
+                            
+                            if (changes) {
+                                changeLog = changes.split('\n').collect { "- ${it}" }.join('\n')
+                            } else {
+                                changeLog = "No changes found since last merge"
+                            }
+                        } catch (Exception e) {
+                            changeLog = "Unable to retrieve change log"
+                            echo "Failed to get change log: ${e.getMessage()}"
+                        }
+
                     }
                     
                     mattermostSend(color: 'good',
