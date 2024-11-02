@@ -154,9 +154,9 @@ pipeline {
                     // 변경 로그 수집 - 최근 5개의 커밋
                     def changeLog = ""
                     try {
-                        def changes = sh(script: "git log --max-count=5 --pretty=format:'%h - %s [%an]%n'", returnStdout: true).trim()
+                        def changes = sh(script: "git log --max-count=5 --pretty=format:'%h - %s [%an]'", returnStdout: true).trim()
                         if (changes) {
-                            changeLog = changes.split('\n').collect { "- ${it}" }.join('')
+                            changeLog = changes.split('\n').collect { "- ${it}" }.join('\n')
                         } else {
                             changeLog = "No changes found"
                         }
@@ -167,22 +167,27 @@ pipeline {
                     
                     mattermostSend(color: 'good',
                     message: """Build Success :white_check_mark:
-\n
+
+
 *Job*: ${env.JOB_NAME} #${env.BUILD_NUMBER}
-\n
+
+
 *Branch Info*:
 - Current Branch: ${Current_Branch}
 - Target Branch: ${Target_Branch}
-\n
+
+
 *Build Info*:
 - Author: ${Author_ID}(${Author_Name})
 - Commit: ${Commit_Hash}
 - Message: ${Commit_Message}
 - Duration: ${Build_Duration}
-\n
+
+
 *Changes*:
 ${changeLog}
-\n
+
+
 *Build URL*: ${env.BUILD_URL}
 """,
                     endpoint: 'https://meeting.ssafy.com/hooks/ekk4hmxtsjn9irbhug1qhjqz8w',
@@ -213,22 +218,27 @@ ${changeLog}
                     
                     mattermostSend(color: 'danger',
                         message: """Build Failed :x:
-\n
+
+
 *Job*: ${env.JOB_NAME} #${env.BUILD_NUMBER}
-\n
+
+
 *Branch Info*:
 - Current Branch: ${Current_Branch}
 - Target Branch: ${Target_Branch}
-\n
+
+
 *Build Info*:
 - Author: ${Author_ID}(${Author_Name})
 - Commit: ${Commit_Hash}
 - Message: ${Commit_Message}
 - Duration: ${Build_Duration}
-\n
+
+
 *Error Log*:
 ${truncatedError}
-\n
+
+
 *Build URL*: ${env.BUILD_URL}
 """,
                         endpoint: 'https://meeting.ssafy.com/hooks/ekk4hmxtsjn9irbhug1qhjqz8w',
