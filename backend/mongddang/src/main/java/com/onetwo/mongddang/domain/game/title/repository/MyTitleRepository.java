@@ -11,4 +11,6 @@ public interface MyTitleRepository extends JpaRepository<MyTitle, Long> {
 
     Optional<MyTitle> findByTitleId(Long id);
 
+    Optional<MyTitle> findByChildIdAndIsMainTrue(Long ChildId);
+
 }

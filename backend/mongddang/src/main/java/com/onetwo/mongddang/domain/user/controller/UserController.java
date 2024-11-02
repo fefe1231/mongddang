@@ -4,6 +4,7 @@ import com.onetwo.mongddang.common.responseDto.ResponseDto;
 import com.onetwo.mongddang.domain.user.dto.CheckNicknameRequestDto;
 import com.onetwo.mongddang.domain.user.jwt.JwtExtratService;
 import com.onetwo.mongddang.domain.user.repository.UserRepository;
+import com.onetwo.mongddang.domain.user.service.GetUserInfoService;
 import com.onetwo.mongddang.domain.user.service.ModifyUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,6 +22,7 @@ public class UserController {
 
     private final JwtExtratService jwtExtratService;
     private final ModifyUserService modifyUserService;
+    private final GetUserInfoService getUserInfoService;
 
     @PostMapping("/modify")
     @Operation(summary = "유저 정보 수정 API", description = "유저 정보를 수정합니다. 현재 닉네임만 수정됩니다.")
@@ -34,7 +36,7 @@ public class UserController {
     @Operation(summary = "유저 정보 조회 API", description = "유저 정보를 조회합니다.")
     public ResponseEntity<ResponseDto> getUserInfo(HttpServletRequest request){
         Long userId = jwtExtratService.jwtFindId(request);
-        ResponseDto response = null;
+        ResponseDto response = getUserInfoService.getUserInfo(userId);
         return ResponseEntity.ok(response);
     }
 }
