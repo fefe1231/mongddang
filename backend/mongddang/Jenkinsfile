@@ -142,10 +142,45 @@ pipeline {
                 script {
                     def Author_ID = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
                     def Author_Name = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()
+                    def Commit_Hash = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
+                    def Commit_Message = sh(script: "git show -s --pretty=%B", returnStdout: true).trim()
+                    def Build_Duration = currentBuild.durationString
+                    
+                    // 현재 브랜치 정보
+                    def Current_Branch = env.BRANCH_NAME ?: env.GIT_BRANCH
+                    // PR 타겟 브랜치 (PR이 아닌 경우 null)
+                    def Target_Branch = env.CHANGE_TARGET ?: 'N/A'
+                    
+                    // 변경된 파일 목록
+                    def changeLogSets = currentBuild.changeSets
+                    def changeLog = ""
+                    for (int i = 0; i < changeLogSets.size(); i++) {
+                          def entries = changeLogSets[i].items
+                      for (int j = 0; j < entries.length; j++) {
+                          def entry = entries[j]
+                          changeLog += "- ${entry.msg} [${entry.author}]\n"
+                      }
+                    }
+                    
                     mattermostSend(color: 'good',
-                        message: "Build Success: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name})\n(<${env.BUILD_URL}|Details>)",
+                        message: """Build Success :white_check_mark:
+                        *Job*: ${env.JOB_NAME} #${env.BUILD_NUMBER}
+                        *Branch Info*:
+                        - Current Branch: ${Current_Branch}
+                        - Target Branch: ${Target_Branch}
+                        
+                        *Build Info*:
+                        - Author: ${Author_ID}(${Author_Name})
+                        - Commit: ${Commit_Hash}
+                        - Message: ${Commit_Message}
+                        - Duration: ${Build_Duration}
+                        
+                        *Changes*:
+                        ${changeLog}
+                        
+                        *Build URL*: ${env.BUILD_URL}
+                        """.stripIndent(),
                         endpoint: 'https://meeting.ssafy.com/hooks/ekk4hmxtsjn9irbhug1qhjqz8w',
-                        // channel: '빌드 알림 채널',
                         failOnError: true
                     )
                 }
@@ -158,10 +193,40 @@ pipeline {
                 script {
                     def Author_ID = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
                     def Author_Name = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()
+                    def Commit_Hash = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
+                    def Commit_Message = sh(script: "git show -s --pretty=%B", returnStdout: true).trim()
+                    def Build_Duration = currentBuild.durationString
+                    
+                    // 현재 브랜치 정보
+                    def Current_Branch = env.BRANCH_NAME ?: env.GIT_BRANCH
+                    // PR 타겟 브랜치
+                    def Target_Branch = env.CHANGE_TARGET ?: 'N/A'
+                    
+                    // 에러 로그 수집
+                    def errorLog = manager.build.getLog(1000).join('\n')
+                    def truncatedError = (errorLog.length() > 500) ? errorLog.substring(0, 500) + "..." : errorLog
+                    
                     mattermostSend(color: 'danger',
-                        message: "빌드 실패: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name})\n(<${env.BUILD_URL}|Details>)",
+                        message: """Build Failed :x:
+                        *Job*: ${env.JOB_NAME} #${env.BUILD_NUMBER}
+                        *Branch Info*:
+                        - Current Branch: ${Current_Branch}
+                        - Target Branch: ${Target_Branch}
+                        
+                        *Build Info*:
+                        - Author: ${Author_ID}(${Author_Name})
+                        - Commit: ${Commit_Hash}
+                        - Message: ${Commit_Message}
+                        - Duration: ${Build_Duration}
+                        
+                        *Error Log*:
+                        \`\`\`
+                        ${truncatedError}
+                        \`\`\`
+                        
+                        *Build URL*: ${env.BUILD_URL}
+                        """.stripIndent(),
                         endpoint: 'https://meeting.ssafy.com/hooks/ekk4hmxtsjn9irbhug1qhjqz8w',
-                        // channel: '빌드 알림 채널',
                         failOnError: true
                     )
                 }
