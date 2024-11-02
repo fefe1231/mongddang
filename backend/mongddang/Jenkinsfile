@@ -151,15 +151,18 @@ pipeline {
                     // PR 타겟 브랜치 (PR이 아닌 경우 null)
                     def Target_Branch = env.CHANGE_TARGET ?: 'N/A'
                     
-                    // 변경된 파일 목록
-                    def changeLogSets = currentBuild.changeSets
+                    // 변경 로그 수집 - 최근 10개의 커밋
                     def changeLog = ""
-                    for (int i = 0; i < changeLogSets.size(); i++) {
-                          def entries = changeLogSets[i].items
-                      for (int j = 0; j < entries.length; j++) {
-                          def entry = entries[j]
-                          changeLog += "- ${entry.msg} [${entry.author}]\n"
-                      }
+                    try {
+                        def changes = sh(script: "git log --max-count=10 --pretty=format:'%h - %s [%an]%n'", returnStdout: true).trim()
+                        if (changes) {
+                            changeLog = changes.split('\n').collect { "- ${it}" }.join('\n')
+                        } else {
+                            changeLog = "No changes found"
+                        }
+                    } catch (Exception e) {
+                        changeLog = "Unable to retrieve change log"
+                        echo "Failed to get change log: ${e.getMessage()}"
                     }
                     
                     mattermostSend(color: 'good',
