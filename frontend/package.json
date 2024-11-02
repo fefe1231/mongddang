@@ -20,7 +20,6 @@
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^1.9.0",
-    "@emotion/babel-plugin": "^11.12.0",
     "@eslint/js": "^9.13.0",
     "@storybook/addon-essentials": "^8.3.6",
     "@storybook/addon-interactions": "^8.3.6",
@@ -49,11 +48,6 @@
   "eslintConfig": {
     "extends": [
       "plugin:storybook/recommended"
-    ]
-  },
-  "babel": {
-    "plugins": [
-      "@emotion/babel-plugin"
     ]
   }
 }

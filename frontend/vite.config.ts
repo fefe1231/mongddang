@@ -4,13 +4,7 @@ import path from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    react({
-      babel: {
-        plugins: ['@emotion/babel-plugin'],
-      },
-    }),
-  ],
+  plugins: [react()],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'), // @를 src 폴더로 매핑
