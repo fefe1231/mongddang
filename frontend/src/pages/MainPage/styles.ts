@@ -53,7 +53,7 @@ export const mainCharacterCss = css`
 
 export const iconGroupCss = css`
   display: flex;
-  padding: 3% 0;
+  padding: 2% 0;
   gap: 1rem;
 `;
 
@@ -64,7 +64,7 @@ export const iconHorizontalCss = css`
 export const iconVerticalCss = css`
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
 `;
 
 export const routineGroupCss = css`

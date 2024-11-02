@@ -9,8 +9,8 @@ export const container = css`
 
 export const bloodSugarCss = css`
   display: flex;
-  width: 3.5rem;
-  height: 3.5rem;
+  width: 3rem;
+  height: 3rem;
   background-color: #fff;
   border-radius: 50%;
   border: 0.3rem solid #17b68e;
