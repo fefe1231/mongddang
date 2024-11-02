@@ -2,8 +2,14 @@ package com.onetwo.mongddang.domain.user.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CtoP {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
