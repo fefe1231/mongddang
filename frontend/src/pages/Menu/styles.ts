@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 
 export const menuBase = css`
   display: flex;
+  position: relative;
   min-width: 360px;
   min-height: 640px;
   justify-content: center;
