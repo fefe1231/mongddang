@@ -19,8 +19,16 @@ import { Icon } from '@/shared/ui/Icon';
 import CurrentBloodSugar from './ui/CurrentBloodSugar/CurrentBloodSugar';
 import MainCharacter from '@/assets/img/말랑1.png';
 import ChatBubble from './ui/ChatBubble/ChatBubble';
+import { useState } from 'react';
+import DietModal from './ui/DietModal/DietModal';
 
 const KidsMainPage = () => {
+
+  const [openDietModal, setOpenDietModal] = useState(false)
+  const closeDietModal = () => {
+    setOpenDietModal(false)
+  }
+
   return (
     <div css={kidsMainBase}>
       <div css={kidsMainContent}>
@@ -72,7 +80,7 @@ const KidsMainPage = () => {
           </div>
           {/* 일상생활 버튼 4종 */}
           <div css={routineGroupCss}>
-            <Icon size={2.5}>
+            <Icon size={2.5} onClick={()=>{setOpenDietModal(true)}}>
               <img alt="icon-0" src="/img/%EB%A7%90%EB%9E%911.png" />
             </Icon>
             <Icon size={2.5}>
@@ -95,6 +103,11 @@ const KidsMainPage = () => {
           />
         </div>
       </div>
+      
+      {/* 식단 등록 모달 */}
+      {
+        openDietModal && <DietModal closeDietModal={closeDietModal}/>
+      }
     </div>
   );
 };
