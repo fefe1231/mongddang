@@ -1,9 +1,13 @@
 import { FontWeight, Palette } from '@/shared/model/globalStylesTyes';
 import { css } from '@emotion/react';
-import ColorStyle from '../styles/colorStyles';
+import ColorStyle from '../styles/ColorStyles';
 
-
-export const base = (color:Palette, border:number, fontSize:number, fontWeight:FontWeight) => css`
+export const base = (
+  color: Palette,
+  border: number,
+  fontSize: number,
+  fontWeight: FontWeight
+) => css`
   border-radius: ${border}rem;
   background-color: ${ColorStyle.background[color]};
   color: ${ColorStyle.text[color]};

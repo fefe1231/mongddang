@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
 import { NotificationProps } from './Notification.types';
 import { Backdrop } from '../Backdrop';
 import { base, btnContainerCss, btnCss } from './Notification.styles';

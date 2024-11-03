@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */ 
-import React from 'react'; 
 import { BackdropProps } from './Backdrop.types'; 
 import { base } from './Backdrop.styles'; 
 

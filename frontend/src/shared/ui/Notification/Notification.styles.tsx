@@ -1,9 +1,8 @@
 import { css } from '@emotion/react';
 import { Tnotification } from './Notification.types';
-import ColorStyle from '../styles/colorStyles';
+import ColorStyle from '../styles/ColorStyles';
 
-
-export const base = (type:Tnotification, width:number, height:number) => css`
+export const base = (type: Tnotification, width: number, height: number) => css`
   position: relative;
   width: ${width}rem;
   height: ${height}rem;
@@ -11,8 +10,14 @@ export const base = (type:Tnotification, width:number, height:number) => css`
   border-radius: 1.25rem;
   background-color: #fff;
 
-  ${type === 'alert' && css`border: 5px solid ${ColorStyle['danger'].main};`}
-  ${type === 'primary' && css`border: 5px solid ${ColorStyle['primary'].main};`}
+  ${type === 'alert' &&
+  css`
+    border: 5px solid ${ColorStyle['danger'].main};
+  `}
+  ${type === 'primary' &&
+  css`
+    border: 5px solid ${ColorStyle['primary'].main};
+  `}
 `;
 
 export const btnCss = css`
@@ -27,7 +32,7 @@ export const btnCss = css`
 export const btnContainerCss = css`
   display: flex;
   justify-content: center;
-  position: absolute; 
+  position: absolute;
   margin: 0 1.5rem;
   gap: 1rem;
   bottom: 1.5rem;

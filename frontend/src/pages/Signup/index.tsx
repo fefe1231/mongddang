@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { TopBar } from '@/shared/ui/TopBar';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Transition } from './Transition';
 import { RoleSelector } from './RoleSelector';
 import { DataForm } from './DataForm';

@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
 import { ModalProps } from './Modal.types';
 import { Backdrop } from '../Backdrop';
 import { backdropStyle, base } from './Modal.styles';

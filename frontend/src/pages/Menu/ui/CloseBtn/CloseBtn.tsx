@@ -4,9 +4,7 @@ import { Typography } from '@/shared/ui/Typography';
 import { closeBtnContainer, closeBtnCss } from './CloseBtn.styles';
 import { useNavigate } from 'react-router-dom';
 
-type Props = {};
-
-const CloseBtn = (props: Props) => {
+const CloseBtn = () => {
   const navigate = useNavigate();
   return (
     <div css={closeBtnContainer}>

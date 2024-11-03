@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { TopBar } from '@/shared/ui/TopBar';
-import React from 'react';
 import space from '../../assets/img/space.png';
 import { containerCss, imgCss } from '../Encyclopedia/styles';
 import { Description } from '../Encyclopedia/description';

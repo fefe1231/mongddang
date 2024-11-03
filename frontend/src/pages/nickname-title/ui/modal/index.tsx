@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { Notification } from '@/shared/ui/Notification';
 import { Typography } from '@/shared/ui/Typography';
-import React from 'react';
 import { css } from '@emotion/react';
 
 interface ModalProps {

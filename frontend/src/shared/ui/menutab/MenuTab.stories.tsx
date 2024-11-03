@@ -1,4 +1,3 @@
-import React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 import { MenuTab } from '.';
 import { MenuTabProps } from './MenuTab.types';

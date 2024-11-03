@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Modal } from '.';
 import { Typography } from '../Typography';
@@ -37,7 +36,7 @@ type Story = StoryObj<typeof Modal>;
 
 export const Primary: Story = {
   args: {height:60, width:30},
-  render: (args) => (
+  render: () => (
     <div
       style={{
         display: 'flex',

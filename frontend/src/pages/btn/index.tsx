@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { Button } from '@/shared/ui/Button';
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export const Btn = () => {

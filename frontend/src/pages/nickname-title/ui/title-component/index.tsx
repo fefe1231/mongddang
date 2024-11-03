@@ -2,7 +2,7 @@
 import { Button } from '@/shared/ui/Button';
 import { Progress } from '@/shared/ui/Progress';
 import { Typography } from '@/shared/ui/Typography';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { base, containerCss, progressCss } from './styles';
 import { UpdateCharacter } from '../modal';
 
