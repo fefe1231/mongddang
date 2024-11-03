@@ -2,9 +2,11 @@ package com.onetwo.mongddang.domain.record.service;
 
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
 import com.onetwo.mongddang.common.utils.DateTimeUtils;
+import com.onetwo.mongddang.domain.medication.dto.MedicationDto;
+import com.onetwo.mongddang.domain.record.dto.RecordDetailsDto;
+import com.onetwo.mongddang.domain.record.dto.ResponseRecordDto;
 import com.onetwo.mongddang.domain.record.errors.CustomRecordErrorCode;
 import com.onetwo.mongddang.domain.record.model.Record;
-import com.onetwo.mongddang.domain.record.model.Record.RecordCategoryType;
 import com.onetwo.mongddang.domain.record.repository.RecordRepository;
 import com.onetwo.mongddang.domain.user.application.CtoPUtils;
 import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
@@ -18,9 +20,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+
+import static com.onetwo.mongddang.domain.record.model.Record.RecordCategoryType.*;
 
 @Slf4j
 @Service
@@ -62,7 +64,7 @@ public class RecordService {
             throw new RestApiException(CustomRecordErrorCode.PROTECTOR_ACCESS_DENIED);
         }
 
-        // 시작일과 종료일을 LocalDateTime으로 변환
+        // 시작일과 종료일을 LocalDateTime 으로 변환
         LocalDateTime[] dateTimes = dateTimeUtils.convertToDateTimes(startDate, endDate);
         LocalDateTime startDateTime = dateTimes[0];
         LocalDateTime endDateTime = dateTimes[1];
@@ -70,10 +72,56 @@ public class RecordService {
 
         // 활동 기록을 조회할 때, 시작일과 종료일을 받아 해당 기간의 활동 기록을 조회
         List<Record> recordList = recordRepository.findByChildAndStartTimeBetween(child, startDateTime, endDateTime);
-        
+        // 날짜별로 기록을 그룹화
+        Map<String, RecordDetailsDto> recordsByDate = new HashMap<>();
+
+        for (Record record : recordList) {
+            String recordDate = record.getStartTime().toLocalDate().toString(); // 날짜 추출
+
+            recordsByDate.putIfAbsent(recordDate, new RecordDetailsDto(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
+
+            RecordDetailsDto details = recordsByDate.get(recordDate);
+
+            // 각 기록의 종류에 따라 분류
+            if (record.getCategory().equals(meal) || record.getCategory().equals(exercise) || record.getCategory().equals(sleeping)) {
+                details.getMeal().add(Record.builder()
+                        .id(record.getId())
+                        .child(child)
+                        .category(record.getCategory())
+                        .startTime(record.getStartTime())
+                        .endTime(record.getEndTime())
+                        .content(record.getContent())
+                        .imageUrl(record.getImageUrl())
+                        .isDone(record.getIsDone())
+                        .mealTime(record.getMealTime())
+                        .build());
+            } else if (record.getCategory().equals(medication)) {
+                details.getMedication().add(MedicationDto.builder()
+                        .id(record.getId())
+                        .name(record.getContent().get("name").asText())
+                        .imageUrl(record.getImageUrl())
+                        .volume(record.getContent().get("volume").asLong())
+                        .route(MedicationDto.RouteType.valueOf(record.getContent().get("route").asText()))
+                        .isRepeated(record.getContent().get("isRepeated").asBoolean())
+                        .repeatDays(record.getContent().get("repeatDays").asText())
+                        .repeatStartTime(LocalDateTime.parse(record.getContent().get("repeatStartTime").asText()))
+                        .repeatEndTime(LocalDateTime.parse(record.getContent().get("repeatEndTime").asText()))
+                        .isDone(record.getIsDone())
+                        .startTime(record.getStartTime())
+                        .endTime(record.getEndTime())
+                        .build());
+            }
+        }
+
+        // 최종 결과를 DTO로 변환
+        List<ResponseRecordDto> dateRecords = recordsByDate.entrySet().stream()
+                .map(entry -> new ResponseRecordDto(entry.getKey(), entry.getValue()))
+                .toList();
+
         return ResponseDto.builder()
-                .message("활동 기록을 조회합니다.")
-                .data(recordList)
+                .code(200)
+                .message("기록 목록 조회에 성공했습니다.")
+                .data(Collections.singletonMap("dates", dateRecords))
                 .build();
     }
 
@@ -87,7 +135,7 @@ public class RecordService {
         log.info("child: {}", child.getEmail());
 
         // 가장 최근에 시작된 운동 기록
-        Optional<Record> lastedExerciseRecord = recordRepository.findTopByChildAndCategoryAndEndTimeIsNullOrderByIdDesc(child, RecordCategoryType.exercise);
+        Optional<Record> lastedExerciseRecord = recordRepository.findTopByChildAndCategoryAndEndTimeIsNullOrderByIdDesc(child, exercise);
 
         // 이미 시작된 운동이 있는지 확인
         if (lastedExerciseRecord.isPresent()) {
@@ -97,7 +145,7 @@ public class RecordService {
         // 운동 시작 시간 기록
         Record exerciseRecord = Record.builder()
                 .child(child)
-                .category(RecordCategoryType.exercise)
+                .category(exercise)
                 .startTime(LocalDateTime.now())
                 .endTime(null)
                 .content(null)
