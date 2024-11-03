@@ -24,7 +24,7 @@ public class UserController {
     private final ModifyUserService modifyUserService;
     private final GetUserInfoService getUserInfoService;
 
-    @PostMapping("/modify")
+    @PatchMapping("/modify")
     @Operation(summary = "유저 정보 수정 API", description = "유저 정보를 수정합니다. 현재 닉네임만 수정됩니다.")
     public ResponseEntity<ResponseDto> modifyUser(@Valid @RequestBody CheckNicknameRequestDto checkNicknameRequestDto, HttpServletRequest request){
         Long userId = jwtExtratService.jwtFindId(request);
