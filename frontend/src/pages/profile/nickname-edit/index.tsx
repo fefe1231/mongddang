@@ -6,12 +6,13 @@ import React, { useState } from 'react';
 import { containerCss, editCss } from './styles';
 import { Typography } from '@/shared/ui/Typography';
 import { updateNickname } from './api';
-import { useNavigate } from 'react-router-dom';
+import { Palette } from '@/shared/model/globalStylesTyes';
 import { useMutation } from '@tanstack/react-query';
 
 export const NicknameEdit = () => {
   const [nickname, setNickname] = useState<string>('');
-  const nav = useNavigate();
+  const [color, setColor] = useState<Palette>('primary');
+  const [msg, setMsg] = useState<string>('');
 
   const nicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNickname(e.target.value);
@@ -21,11 +22,18 @@ export const NicknameEdit = () => {
     mutationFn: async (nickname: string) => await updateNickname(nickname),
     onSuccess: () => {
       console.log('조회 성공');
-      nav('/');
+      setMsg('사용 가능한 닉네임입니다.');
+      setColor('primary');
     },
     onError: () => {
-      alert('오류가 발생하였습니다.');
-      console.log(Error);
+      console.log('로그인 실패');
+      if (nickname.length === 0) {
+        setMsg('닉네임을 작성해주세요.');
+        setColor('danger');
+      } else {
+        setMsg('이미 사용 중인 닉네임입니다.');
+        setColor('danger');
+      }
     },
   });
   return (
@@ -38,7 +46,7 @@ export const NicknameEdit = () => {
         <div css={editCss}>
           <TextField
             style={{ flex: '1' }}
-            color="primary"
+            color={color}
             label="닉네임"
             type="text"
             variant="outlined"
@@ -54,19 +62,15 @@ export const NicknameEdit = () => {
             확인
           </Button>
         </div>
-        <Typography color="danger" size="1" weight={500}>
-          닉네임 작성해주세요.
-        </Typography>
-        <Typography color="danger" size="1" weight={500}>
-          이미 사용 중인 닉네임입니다.
-        </Typography>
-        <Typography color="danger" size="1" weight={500}>
-          기존이랑 같은 닉네임입니다.
-        </Typography>
-        <Typography color="primary" size="1" weight={500}>
-          사용가능한 닉네임입니다.
-        </Typography>
+
+        {msg && (
+          <Typography color={color} size="1" weight={500}>
+            {msg}
+          </Typography>
+        )}
+
         <Button
+          style={{ margin: '1rem 0' }}
           handler={() => {}}
           color="primary"
           fontSize="1"
