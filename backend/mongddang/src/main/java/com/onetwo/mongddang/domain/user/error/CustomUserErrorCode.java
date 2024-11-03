@@ -14,7 +14,8 @@ public enum CustomUserErrorCode implements ErrorCode {
     NOT_PROTECTOR(HttpStatus.FORBIDDEN,"U003", "보호자가 아닙니다."),
     UNCHANGED_NICKNAME(HttpStatus.BAD_REQUEST,"U004", "이전과 동일한 nickname입니다."),
     INVALID_ID_TOKEN(HttpStatus.BAD_REQUEST,"U005","잘못된 id토큰입니다."),
-    AUTHENTICATED_FAILED(HttpStatus.UNAUTHORIZED,"U006","jwt 토큰이 유효하지 않습니다.")
+    AUTHENTICATED_FAILED(HttpStatus.UNAUTHORIZED,"U006","jwt 토큰이 유효하지 않습니다."),
+    USER_IS_EXISTS(HttpStatus.CONFLICT,"U007","이미 존재하는 사용자입니다."),
     ;
 
     private final HttpStatus httpStatus;

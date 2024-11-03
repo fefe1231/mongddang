@@ -50,12 +50,15 @@ public class Record {
 
     @Column(name="meal_time")
     @Enumerated(EnumType.STRING)
+    @NotNull
     private MealTimeType mealTime;
 
+    @NotNull
     public enum RecordCategoryType {
-        meal, sleep,exercise,medication
+        meal, sleeping,exercise,medication
     }
 
+    @NotNull
     public enum MealTimeType {
         breakfast, lunch,dinner,snack
     }

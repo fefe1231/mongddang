@@ -34,7 +34,8 @@ public class GameLogUtils {
         log.info("initGameLog - userId: {}", id);
 
         // id 에 해당하는 User 조회
-        User user = userRepository.findById(id).orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
 
         // 사용자에 대한 기존 게임 로그가 존재하는지 확인
         if (gameLogRepository.existsByChild(user)) {
@@ -46,7 +47,7 @@ public class GameLogUtils {
                 .child(user)
                 .mealCount(0)
                 .exerciseCount(0)
-                .sleepCount(0)
+                .sleepingCount(0)
                 .medicationCount(0)
                 .build();
 
@@ -79,7 +80,7 @@ public class GameLogUtils {
                 .child(user)
                 .mealCount(category.equals(GameLogCategory.meal_count) ? foundGameLog.getMealCount() + 1 : foundGameLog.getMealCount())
                 .exerciseCount(category.equals(GameLogCategory.exercise_count) ? foundGameLog.getExerciseCount() + 1 : foundGameLog.getExerciseCount())
-                .sleepCount(category.equals(GameLogCategory.sleep_count) ? foundGameLog.getSleepCount() + 1 : foundGameLog.getSleepCount())
+                .sleepingCount(category.equals(GameLogCategory.sleeping_count) ? foundGameLog.getSleepingCount() + 1 : foundGameLog.getSleepingCount())
                 .medicationCount(category.equals(GameLogCategory.medication_count) ? foundGameLog.getMedicationCount() + 1 : foundGameLog.getMedicationCount())
                 .build();
 
@@ -107,8 +108,8 @@ public class GameLogUtils {
             case exercise:
                 count = gameLog.getExerciseCount() >= count ? gameLog.getExerciseCount() : -1;
                 break;
-            case sleep:
-                count = gameLog.getSleepCount() >= count ? gameLog.getSleepCount() : -1;
+            case sleeping:
+                count = gameLog.getSleepingCount() >= count ? gameLog.getSleepingCount() : -1;
                 break;
             case medication:
                 count = gameLog.getMedicationCount() >= count ? gameLog.getMedicationCount() : -1;

@@ -1,7 +1,7 @@
 package com.onetwo.mongddang.domain.game.achievement.controller;
 
-import com.onetwo.mongddang.common.ResponseDto;
-import com.onetwo.mongddang.domain.common.annotation.ChildRequired;
+import com.onetwo.mongddang.common.responseDto.ResponseDto;
+import com.onetwo.mongddang.common.annotation.ChildRequired;
 import com.onetwo.mongddang.domain.game.achievement.dto.RequestClaimAchievementDto;
 import com.onetwo.mongddang.domain.game.achievement.service.AchievementService;
 import com.onetwo.mongddang.domain.user.jwt.JwtExtratService;
@@ -18,13 +18,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/game/collection/achievement")
+@Tag(name = "Achievement API", description = "업적 API")
 public class AchievementController {
 
     final AchievementService achievementService;
     final JwtExtratService jwtExtratService;
 
     // 업적 목록 조회 api
-    @GetMapping("/")
+    @GetMapping("")
     @ChildRequired
     @Transactional
     @Tag(name = "Collection API", description = "도감 api")

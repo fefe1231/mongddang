@@ -1,7 +1,7 @@
 package com.onetwo.mongddang.domain.game.coinLog.controller;
 
-import com.onetwo.mongddang.common.ResponseDto;
-import com.onetwo.mongddang.domain.common.annotation.ChildRequired;
+import com.onetwo.mongddang.common.responseDto.ResponseDto;
+import com.onetwo.mongddang.common.annotation.ChildRequired;
 import com.onetwo.mongddang.domain.game.coinLog.service.CoinLogService;
 import com.onetwo.mongddang.domain.user.jwt.JwtExtratService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/game")
+@Tag(name = "Coin API", description = "코인 api")
 public class CoinLogController {
 
     private final CoinLogService coinLogService;

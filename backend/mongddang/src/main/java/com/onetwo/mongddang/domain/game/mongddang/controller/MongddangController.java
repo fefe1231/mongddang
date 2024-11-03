@@ -1,8 +1,7 @@
 package com.onetwo.mongddang.domain.game.mongddang.controller;
 
-import com.onetwo.mongddang.common.ResponseDto;
-import com.onetwo.mongddang.domain.common.annotation.ChildRequired;
-import com.onetwo.mongddang.domain.game.mongddang.application.MongddangUitils;
+import com.onetwo.mongddang.common.annotation.ChildRequired;
+import com.onetwo.mongddang.common.responseDto.ResponseDto;
 import com.onetwo.mongddang.domain.game.mongddang.dto.RequestMongddangIdDto;
 import com.onetwo.mongddang.domain.game.mongddang.service.MongddangService;
 import com.onetwo.mongddang.domain.user.jwt.JwtExtratService;
@@ -18,19 +17,19 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/game/collection/mongddang")
+@Tag(name = "Collection API", description = "도감 api")
 public class MongddangController {
 
-    private final MongddangUitils mongddangUitils;
     private final MongddangService mongddangService;
     private final JwtExtratService jwtExtratService;
 
     // 몽땅 목록 조회 api
-    @GetMapping("/")
+    @GetMapping("")
     @ChildRequired
     @Tag(name = "Collection API", description = "도감 api")
     @Operation(summary = "몽땅 목록 조회 api", description = "몽땅 목록을 조회합니다.")
     public ResponseEntity<ResponseDto> getMongddangList(HttpServletRequest request) {
-        log.info("GET /api/game/mongddang");
+        log.info("GET /api/game/collection/mongddang");
 
         Long id = jwtExtratService.jwtFindId(request);
         ResponseDto responseDto = mongddangService.getMongddangList(id);
@@ -43,7 +42,7 @@ public class MongddangController {
     @Tag(name = "Collection API", description = "도감 api")
     @Operation(summary = "몽땅 모집 api", description = "코인을 지불하여 몽땅을 모집합니다.")
     public ResponseEntity<ResponseDto> recruitMongddang(@RequestBody RequestMongddangIdDto requestDto, HttpServletRequest request) {
-        log.info("POST /api/game/mongddang/recruitment");
+        log.info("POST /api/game/collection/mongddang/recruitment");
 
         Long userId = jwtExtratService.jwtFindId(request);
         ResponseDto responseDto = mongddangService.recruitmentMongddang(userId, requestDto.getMongddangId());
@@ -57,7 +56,7 @@ public class MongddangController {
     @Tag(name = "Collection API", description = "도감 api")
     @Operation(summary = "새로운 몽땅 표시 제거", description = "새로운 몽땅 표시를 제거합니다.")
     public ResponseEntity<ResponseDto> checkNewMongddang(@RequestBody RequestMongddangIdDto requestDto, HttpServletRequest request) {
-        log.info("PUT /api/game/mongddang/check");
+        log.info("PUT /api/game/collection/mongddang/check");
 
         ResponseDto responseDto = mongddangService.checkNewMongddang(requestDto.getMongddangId());
         return ResponseEntity.ok(responseDto);
@@ -69,7 +68,7 @@ public class MongddangController {
     @Tag(name = "Collection API", description = "도감 api")
     @Operation(summary = "몽땅 메인 설정", description = "몽땅을 메인으로 설정합니다.")
     public ResponseEntity<ResponseDto> setMainMongddang(@RequestBody RequestMongddangIdDto requestDto, HttpServletRequest request) {
-        log.info("PUT /api/game/mongddang/main");
+        log.info("PUT /api/game/collection/mongddang/main");
 
         Long userId = jwtExtratService.jwtFindId(request);
         ResponseDto responseDto = mongddangService.setMainMongddang(requestDto.getMongddangId(), userId);
