@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -48,12 +49,10 @@ public class AchievementService {
                     // 업적에 해당하는 칭호 조회
                     Title title = titleRepository.findById(achievement.getId())
                             .orElseThrow(() -> new RestApiException(CustomTitleErrorCode.INVALID_TITLE_ID));
-                    log.info("title: {}", title);
+                    log.info("title: {}", title.getName());
 
                     // 번호에 해당하는 칭호 조회
-                    MyTitle myTitle = myTitleRepository.findByTitleIdAndChildId(title.getId(), childId);
-//                            .orElseThrow(() -> new RestApiException(CustomTitleErrorCode.INVALID_TITLE_ID));
-//                    log.info("myTitle: {}", myTitle);
+                    Optional<MyTitle> myTitle = myTitleRepository.findByTitleIdAndChildId(title.getId(), childId);
 
                     // 업적 달성 횟수
                     int executionCount = gameLogUtils.getGameLogCountByCategory(childId, achievement.getCategory());
@@ -70,9 +69,9 @@ public class AchievementService {
                             .executionCount(executionCount)
                             .count(achievement.getCount())
                             .category(achievement.getCategory())
-                            .isOwned(myTitle != null && isAchieved)
-                            .isNew((isAchieved && myTitle != null) ? myTitle.getIsNew() : false)
-                            .isMain((isAchieved && myTitle != null) ? myTitle.getIsMain() : false)
+                            .isOwned(myTitle.isPresent() && isAchieved)
+                            .isNew((isAchieved && myTitle.isPresent()) ? myTitle.get().getIsNew() : false)
+                            .isMain((isAchieved && myTitle.isPresent()) ? myTitle.get().getIsMain() : false)
                             .build();
                 })
                 .toList();
@@ -87,24 +86,31 @@ public class AchievementService {
 
     // 업적 보상 수령
     @Transactional
-    public ResponseDto claimAchievementReward(Long userId, Long achievementId) {
-        log.info("claimAchievementReward userId: {}, achievementId: {}", userId, achievementId);
+    public ResponseDto claimAchievementReward(Long childId, Long achievementId) {
+        log.info("claimAchievementReward childId: {}, achievementId: {}", childId, achievementId);
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+        User user = userRepository.findById(childId).orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+        log.info("user: {}", user.getEmail());
+
         Achievement achievement = achievementRepository.findById(achievementId)
                 .orElseThrow(() -> new RestApiException(CustomAchievementErrorCode.INVALID_ACHIEVEMENT_ID));
+        log.info("achievement: {}", achievement.getDescription());
+
         Title title = titleRepository.findByAchievementId(achievement.getId())
                 .orElseThrow(() -> new RestApiException(CustomAchievementErrorCode.INVALID_ACHIEVEMENT_ID));
-        MyTitle myTitle = myTitleRepository.findByTitleId(title.getId())
-                .orElseThrow(() -> new RestApiException(CustomTitleErrorCode.INVALID_TITLE_ID));
+        log.info("title: {}", title.getName());
+
+        MyTitle myTitleOptional = myTitleRepository.findByTitleIdAndChildId(title.getId(), childId)
+                .orElseThrow(() -> new RestApiException(CustomAchievementErrorCode.ACHIEVEMENT_NOT_UNLOCKED));
+        log.info("myTitleOptional");
 
         // 이미 보상을 수령한 경우
-        if (myTitle != null) {
+        if (myTitleOptional != null) {
             throw new RestApiException(CustomAchievementErrorCode.ACHIEVEMENT_ALREADY_REWARDED);
         }
 
         // 업적 달성 횟수
-        int executionCount = gameLogUtils.getGameLogCountByCategory(userId, achievement.getCategory());
+        int executionCount = gameLogUtils.getGameLogCountByCategory(childId, achievement.getCategory());
 
         // 업적 달성 횟수가 부족한 경우
         if (executionCount < achievement.getCount()) {

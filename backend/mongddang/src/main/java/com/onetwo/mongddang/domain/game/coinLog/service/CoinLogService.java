@@ -32,7 +32,7 @@ public class CoinLogService {
                 .build();
 
         ResponseDto response = ResponseDto.builder()
-                .message("코인 지급에 성공했습니다.")
+                .message("코인 조회에 성공했습니다.")
                 .data(data)
                 .build();
 
