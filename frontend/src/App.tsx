@@ -6,6 +6,7 @@ import { Encyclopedia } from './pages/Encyclopedia';
 import { NicknameTitle } from './pages/nickname-title';
 import { Btn } from './pages/btn';
 import Menu from './pages/Menu/Menu';
+import Login from './pages/login';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Routes>
           <Route path="/" element={<KidsMainPage />} />
           <Route path="/btn" element={<Btn />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/encyclopedia" element={<Encyclopedia />} />
           <Route path="/nickname/title" element={<NicknameTitle />} />
