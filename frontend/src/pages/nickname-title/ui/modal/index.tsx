@@ -41,7 +41,7 @@ export const UpdateCharacter = ({bluehandler, redhandler}:ModalProps) => {
         }
         width={18}
         twoBtn
-        children={['아니', '응']}
+        children={['아니', '좋아']}
         type="confirm"
       />
     </div>
