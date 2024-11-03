@@ -23,7 +23,7 @@ public class Record {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="child_id", nullable = false)
+    @JoinColumn(name = "child_id", nullable = false)
     private User child;
 
     @NotNull
@@ -31,36 +31,34 @@ public class Record {
     private RecordCategoryType category;
 
     @NotNull
-    @Column(nullable = false, name="start_time")
+    @Column(nullable = false, name = "start_time")
     private LocalDateTime startTime;
 
-    @Column(name="end_time")
+    @Column(name = "end_time")
     private LocalDateTime endTime;
 
     @Lob
     @Convert(converter = JsonConverter.class)
     private JsonNode content;
 
-    @Column(name="image_url")
+    @Column(name = "image_url")
     private String imageUrl;
 
     @NotNull
-    @Column(name="is_done")
+    @Column(name = "is_done")
     private Boolean isDone;
 
-    @Column(name="meal_time")
+    @Column(name = "meal_time")
     @Enumerated(EnumType.STRING)
-    @NotNull
     private MealTimeType mealTime;
 
     @NotNull
     public enum RecordCategoryType {
-        meal, sleeping,exercise,medication
+        meal, sleeping, exercise, medication
     }
 
-    @NotNull
     public enum MealTimeType {
-        breakfast, lunch,dinner,snack
+        breakfast, lunch, dinner, snack
     }
 
 
