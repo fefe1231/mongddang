@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -47,11 +48,10 @@ public class MongddangService {
         List<Mongddang> mongddangList = mongddangRepository.findAll();
         List<RequestMongddangListDto> mongddangListDto = mongddangList.stream()
                 .map(mongddang -> {
-                    MyMongddang myMongddang = myMongddangRepository.findByMongddangIdAndChildId(mongddang.getId(), childId)
-                            .orElseThrow(() -> new RestApiException(CustomMongddangErrorCode.CHARACTER_NOT_OWNED));
+                    Optional<MyMongddang> myMongddang = myMongddangRepository.findByMongddangIdAndChildId(mongddang.getId(), childId);
 
                     // 몽땅 소유 여부
-                    boolean isOwned = myMongddang != null;
+                    boolean isOwned = myMongddang.isPresent();
 
                     return RequestMongddangListDto.builder()
                             .id(mongddang.getId())
@@ -59,8 +59,8 @@ public class MongddangService {
                             .story(mongddang.getStory())
                             .price(mongddang.getPrice())
                             .isOwned(isOwned)
-                            .isNew(isOwned ? myMongddang.getIsNew() : false)
-                            .isMain(isOwned ? myMongddang.getIsMain() : false)
+                            .isNew(isOwned ? myMongddang.get().getIsNew() : false)
+                            .isMain(isOwned ? myMongddang.get().getIsMain() : false)
                             .build();
                 })
                 .toList();
