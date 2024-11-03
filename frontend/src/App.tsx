@@ -7,6 +7,7 @@ import { NicknameTitle } from './pages/nickname-title';
 import { Btn } from './pages/btn';
 import Menu from './pages/Menu/Menu';
 import Login from './pages/login';
+import { NicknameEdit } from './pages/profile/nickname-edit';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/encyclopedia" element={<Encyclopedia />} />
           <Route path="/nickname/title" element={<NicknameTitle />} />
           <Route path="/menu" element={<Menu />} />
+          <Route path="/nickname/edit" element={<NicknameEdit />} />
         </Routes>
       </Router>
     </>
