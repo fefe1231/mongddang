@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
 import { ButtonProps } from './Button.types';
 import { base, variantCss } from './Button.styles';
 export const Button = ({
@@ -17,7 +16,7 @@ export const Button = ({
   return (
     <button
       css={[
-        base(color, fullwidth, scale, isShadow,fontSize),  // isShadow 전달
+        base(color, fullwidth, isShadow,fontSize),  // isShadow 전달
         variantCss(variant, color, scale),
       ]}
       disabled={disabled}

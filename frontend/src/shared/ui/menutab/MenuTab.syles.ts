@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
-import { FontWeight, Palette } from '@/shared/model/globalstyle/globalStyleTypes';
-import ColorStyle from '../styles/colorStyles';
+import ColorStyle from '../styles/ColorStyles';
+import { FontWeight, Palette } from '@/shared/model/globalStylesTyes';
 
 export const containerCss = () => css`
   display: flex;
@@ -24,11 +24,11 @@ export const activeCss = (activeIndex: number, tabCount: number) => css`
 `;
 
 export const variantCss = (color: Palette, tabCount: number) => css`
-    background-color: transparent;
-    border-bottom: 0.14375rem solid ${ColorStyle[color].main};
-    margin-left: -0.2625rem;
-    padding-bottom: 0.3125rem;
-    width: ${100 / tabCount}%;
+  background-color: transparent;
+  border-bottom: 0.14375rem solid ${ColorStyle[color].main};
+  margin-left: -0.2625rem;
+  padding-bottom: 0.3125rem;
+  width: ${100 / tabCount}%;
 `;
 
 // 선택 안 된 버튼 스타일
@@ -37,7 +37,7 @@ export const inactiveCss = (
   color: Palette,
   isActive: boolean,
   fontSize: number,
-  fontWeight: FontWeight,
+  fontWeight: FontWeight
 ) => css`
   width: ${100 / tabCount}%;
   background: none;
@@ -46,9 +46,7 @@ export const inactiveCss = (
   z-index: 2;
   font-size: ${fontSize}rem;
   font-weight: ${fontWeight};
-  color: ${isActive
-      ? ColorStyle[color].main
-      : '#eee'};
+  color: ${isActive ? ColorStyle[color].main : '#eee'};
 
   :enabled {
     :active {

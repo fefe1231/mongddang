@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Typography } from '@/shared/ui/Typography';
 import { Button } from '@/shared/ui/Button';
 import {

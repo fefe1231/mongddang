@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
 import { Button } from '@/shared/ui/Button';
 import { Icon } from '@/shared/ui/Icon';
 import { Modal } from '@/shared/ui/Modal';

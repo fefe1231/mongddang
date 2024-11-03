@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { toggle } from './Toggle.styles';
 import { ToggleProps } from './Toggle.types';
 

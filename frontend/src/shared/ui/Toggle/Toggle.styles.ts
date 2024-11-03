@@ -1,13 +1,13 @@
 import { ColorScale, Palette } from '@/shared/model/globalStylesTyes';
 import { css } from '@emotion/react';
 import { Colors } from '../styles/globalStyles';
-import ColorStyle from '../styles/colorStyles';
+import ColorStyle from '../styles/ColorStyles';
 
 export const toggle = (
   isOn: boolean,
   color: Palette = 'primary',
   scale?: ColorScale,
-  size: number = 2.5,
+  size: number = 2.5
 ) => css`
   position: relative;
   width: ${size * 0.8}rem;

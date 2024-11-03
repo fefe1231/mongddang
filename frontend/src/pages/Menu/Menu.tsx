@@ -9,9 +9,7 @@ import {
 import CloseBtn from './ui/CloseBtn/CloseBtn';
 import MenuBtnGroup from './ui/MenuBtnGroup/MenuBtnGroup';
 
-type Props = {};
-
-const Menu = (props: Props) => {
+const Menu = () => {
   return (
     <div css={menuBase}>
       <div css={menuContent}>

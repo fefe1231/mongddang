@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Backdrop } from '.';
 

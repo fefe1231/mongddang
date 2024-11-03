@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-import React from "react";
 import { TypographyProps } from "./Typography.types";
 import { base } from "./Typography.styles";
 

@@ -13,7 +13,7 @@ export const DataForm = () => {
   const [birthMonth, setBirthMonth] = useState<string>('');
   const [birthDay, setBirthDay] = useState<string>('');
   const [nickname, setNickname] = useState<string>('');
-  const [nicknameError, setNicknameError] = useState<string>('');
+  const [, setNicknameError] = useState<string>('');
   const handleYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     handleDateChange(value, 'year', setBirthYear);

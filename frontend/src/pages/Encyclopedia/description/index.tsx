@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { Icon } from '@/shared/ui/Icon';
-import React from 'react';
 import { base, containerCss } from './styles';
 import { Typography } from '@/shared/ui/Typography';
 

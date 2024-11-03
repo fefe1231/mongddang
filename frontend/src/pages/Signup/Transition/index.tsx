@@ -7,20 +7,20 @@ interface TransitionProps {
   children: ReactElement[];
 }
 
-export const Transition = (props: TransitionProps) => {
+export const Transition = ({ 'data-key': dataKey, children, wrapperCss }: TransitionProps) => {
   const [currentItem, setCurrentItem] = useState<ReactElement | null>(null);
 
   useEffect(() => {
-    const matchedChild = props.children.find(
-      (child) => child.key === props['data-key']
+    const matchedChild = children.find(
+      (child) => child.key === dataKey
     );
     if (matchedChild) {
       setCurrentItem(matchedChild);
     }
-  }, [props['data-key'], props.children]);
+  }, [dataKey, children]);
 
   return (
-    <div style={props.wrapperCss}>
+    <div style={wrapperCss}>
       {currentItem}
     </div>
   );

@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { TopBar } from '@/shared/ui/TopBar';
-import React, { useState } from 'react';
 import space from '../../assets/img/space.png';
 import { Owncharacter } from './ui/characterlist/owncharacter';
 import { Notowncharacter } from './ui/characterlist/notown-character';
@@ -10,6 +9,7 @@ import { base, cardContainerCss, containerCss, imgCss } from './styles';
 import { OwnModal } from './ui/modal/own-modal';
 import { MainModal } from './ui/modal/main-modal';
 import { Notmodal } from './ui/modal/Not-modal';
+import { useState } from 'react';
 
 export const Encyclopedia = () => {
   const [isOwnModal, setIsOwnModal] = useState(false)
