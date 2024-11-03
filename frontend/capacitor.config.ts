@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: 'mongddang',
   webDir: 'dist',
   server: {
-    url: "http://server-ip:port",
+    url: "http://localhost:8100",
     cleartext: true
   }
 };
