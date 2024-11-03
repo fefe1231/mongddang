@@ -14,6 +14,7 @@ public enum CustomTitleErrorCode implements ErrorCode {
     TITLE_ALREADY_OWNED(HttpStatus.BAD_REQUEST, "T003", "이미 소유한 칭호입니다."),
     NEW_LABEL_REMOVAL(HttpStatus.BAD_REQUEST, "T004", "새로운 칭호 표시 제거에 실패했습니다."),
     MAIN_SET_EXCEPTION(HttpStatus.BAD_REQUEST, "T005", "메인 칭호 설정에 실패했습니다."),
+    ALREADY_TITLE_SET_MAIN(HttpStatus.BAD_REQUEST, "T006", "이미 메인 칭호로 설정되어 있습니다."),
     ;
 
     private final HttpStatus httpStatus;

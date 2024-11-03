@@ -25,7 +25,7 @@ public class AchievementController {
     final JwtExtratService jwtExtratService;
 
     // 업적 목록 조회 api
-    @GetMapping("/")
+    @GetMapping("")
     @ChildRequired
     @Transactional
     @Tag(name = "Collection API", description = "도감 api")

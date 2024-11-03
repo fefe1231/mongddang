@@ -42,21 +42,27 @@ public class AchievementService {
         log.info("getAchievementList childId: {}", childId);
 
         List<Achievement> achievementList = achievementRepository.findAll();
+        log.info("achievementList: {}", achievementList);
         List<ResponseAchievementListDto> achievementListDto = achievementList.stream()
                 .map(achievement -> {
                     // 업적에 해당하는 칭호 조회
                     Title title = titleRepository.findById(achievement.getId())
                             .orElseThrow(() -> new RestApiException(CustomTitleErrorCode.INVALID_TITLE_ID));
+                    log.info("title: {}", title);
 
                     // 번호에 해당하는 칭호 조회
-                    MyTitle myTitle = myTitleRepository.findByTitleId(title.getId())
-                            .orElseThrow(() -> new RestApiException(CustomTitleErrorCode.INVALID_TITLE_ID));
+                    MyTitle myTitle = myTitleRepository.findByTitleIdAndChildId(title.getId(), childId);
+//                            .orElseThrow(() -> new RestApiException(CustomTitleErrorCode.INVALID_TITLE_ID));
+//                    log.info("myTitle: {}", myTitle);
 
                     // 업적 달성 횟수
                     int executionCount = gameLogUtils.getGameLogCountByCategory(childId, achievement.getCategory());
+                    log.info("executionCount: {}", executionCount);
 
                     // 업적 달성 여부 -1: 달성하지 않음
                     boolean isAchieved = executionCount != -1;
+
+                    log.info("isAchieved: {}", isAchieved);
                     return ResponseAchievementListDto.builder()
                             .titleId(title.getId())
                             .titleName(title.getName())
@@ -64,9 +70,9 @@ public class AchievementService {
                             .executionCount(executionCount)
                             .count(achievement.getCount())
                             .category(achievement.getCategory())
-                            .isOwned(isAchieved)
-                            .isNew(isAchieved ? myTitle.getIsNew() : false)
-                            .isMain(isAchieved ? myTitle.getIsMain() : false)
+                            .isOwned(myTitle != null && isAchieved)
+                            .isNew((isAchieved && myTitle != null) ? myTitle.getIsNew() : false)
+                            .isMain((isAchieved && myTitle != null) ? myTitle.getIsMain() : false)
                             .build();
                 })
                 .toList();
