@@ -17,7 +17,7 @@ public enum CustomMongddangErrorCode implements ErrorCode {
     CHARACTER_ALREADY_OWNED(HttpStatus.BAD_REQUEST, "CL006", "이미 모집된 몽땅입니다."),
     MAIN_SET_EXCEPTION(HttpStatus.BAD_REQUEST, "CL007", "메인 몽땅 설정에 실패했습니다."),
     RECRUITMENT_EXCEPTION(HttpStatus.BAD_REQUEST, "CL008", "몽땅 모집에 실패했습니다."),
-    ALREADY_RECRUITED(HttpStatus.BAD_REQUEST, "CL009", "이미 메인 몽땅으로 설정되어 있습니다."),
+    ALREADY_SET_MAIN(HttpStatus.BAD_REQUEST, "CL009", "이미 메인 몽땅으로 설정되어 있습니다."),
     ;
 
     private final HttpStatus httpStatus;

@@ -58,7 +58,8 @@ public class MongddangController {
     public ResponseEntity<ResponseDto> checkNewMongddang(@RequestBody RequestMongddangIdDto requestDto, HttpServletRequest request) {
         log.info("PUT /api/game/collection/mongddang/check");
 
-        ResponseDto responseDto = mongddangService.checkNewMongddang(requestDto.getMongddangId());
+        Long userId = jwtExtratService.jwtFindId(request);
+        ResponseDto responseDto = mongddangService.checkNewMongddang(requestDto.getMongddangId(),userId);
         return ResponseEntity.ok(responseDto);
     }
 
