@@ -28,15 +28,17 @@ public class TitleService {
      */
     @Transactional
     public ResponseDto setMainTitle(Long childId, Long titleId) {
-        log.info("setMainTitle");
+        log.info("childId: {}, titleId: {}", childId, titleId);
 
         // 현재 메인 칭호
         MyTitle currentMainTitle = myTitleRepository.findByChildIdAndIsMainTrue(childId)
                 .orElseThrow(() -> new RestApiException(CustomTitleErrorCode.NOT_FOUND_TITLE_LIST));
+        log.info("currentMainTitle: {}", currentMainTitle.getTitle());
 
         // 새롭게 설정할 메인 칭호
-        MyTitle newMainTitle = myTitleRepository.findById(titleId)
-                .orElseThrow(() -> new RestApiException(CustomTitleErrorCode.INVALID_TITLE_ID));
+        MyTitle newMainTitle = myTitleRepository.findByTitleIdAndChildId(titleId, childId)
+                .orElseThrow(() -> new RestApiException(CustomTitleErrorCode.TITLE_NOT_OWNED));
+        log.info("newMainTitle: {}", newMainTitle.getTitle());
 
         // 이미 메인 칭호인 경우
         if (newMainTitle.getIsMain()) {

@@ -51,9 +51,7 @@ public class AchievementService {
                     log.info("title: {}", title);
 
                     // 번호에 해당하는 칭호 조회
-                    MyTitle myTitle = myTitleRepository.findByTitleIdAndChildId(title.getId(), childId);
-//                            .orElseThrow(() -> new RestApiException(CustomTitleErrorCode.INVALID_TITLE_ID));
-//                    log.info("myTitle: {}", myTitle);
+                    MyTitle myTitle = myTitleRepository.findByTitleIdAndChildId(title.getId(), childId).orElseThrow(() -> new RestApiException(CustomTitleErrorCode.TITLE_NOT_OWNED));
 
                     // 업적 달성 횟수
                     int executionCount = gameLogUtils.getGameLogCountByCategory(childId, achievement.getCategory());
