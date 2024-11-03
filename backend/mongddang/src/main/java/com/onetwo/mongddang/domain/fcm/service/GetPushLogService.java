@@ -4,6 +4,10 @@ import com.onetwo.mongddang.common.responseDto.ResponseDto;
 import com.onetwo.mongddang.domain.fcm.dto.PushLogDto;
 import com.onetwo.mongddang.domain.fcm.model.PushLog;
 import com.onetwo.mongddang.domain.fcm.repository.PushLogRepository;
+import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
+import com.onetwo.mongddang.domain.user.model.User;
+import com.onetwo.mongddang.domain.user.repository.UserRepository;
+import com.onetwo.mongddang.errors.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -21,8 +25,14 @@ import java.util.Map;
 @Slf4j
 public class GetPushLogService {
     private final PushLogRepository pushLogRepository;
+    private final UserRepository userRepository;
 
     public ResponseDto GetPushLog(Long userId, int page, int size) {
+
+        //사용자 유무 검사
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+        log.info("Existing User : {}", userId);
 
         // 페이지네이션 설정
         Pageable pageable = PageRequest.of(page, size);
