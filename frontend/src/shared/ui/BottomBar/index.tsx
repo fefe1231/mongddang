@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, {useState } from 'react';
+import {useState } from 'react';
 import { BottomBarProps } from './BottomBar.types';
 import { containerCss } from './BottomBar.styles';
 import { IconTypo } from '../IconTypo';

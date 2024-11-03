@@ -24,7 +24,7 @@ public class MongddangController {
     private final JwtExtratService jwtExtratService;
 
     // 몽땅 목록 조회 api
-    @GetMapping("/")
+    @GetMapping("")
     @ChildRequired
     @Tag(name = "Collection API", description = "도감 api")
     @Operation(summary = "몽땅 목록 조회 api", description = "몽땅 목록을 조회합니다.")
@@ -58,7 +58,8 @@ public class MongddangController {
     public ResponseEntity<ResponseDto> checkNewMongddang(@RequestBody RequestMongddangIdDto requestDto, HttpServletRequest request) {
         log.info("PUT /api/game/collection/mongddang/check");
 
-        ResponseDto responseDto = mongddangService.checkNewMongddang(requestDto.getMongddangId());
+        Long userId = jwtExtratService.jwtFindId(request);
+        ResponseDto responseDto = mongddangService.checkNewMongddang(requestDto.getMongddangId(),userId);
         return ResponseEntity.ok(responseDto);
     }
 

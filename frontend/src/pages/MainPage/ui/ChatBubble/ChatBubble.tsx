@@ -3,9 +3,8 @@
 import { Typography } from '@/shared/ui/Typography';
 import { container } from './ChatBubble.styles';
 
-type Props = {};
 
-const ChatBubble = (props: Props) => {
+const ChatBubble = () => {
   return (
     <div css={container}>
       <Typography color="dark" size="1" weight={600}>

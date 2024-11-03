@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
 import { TopBarProps } from './TopBar.types';
 import { base } from './TopBar.styles';
 import { IoIosArrowBack, IoIosClose } from 'react-icons/io';

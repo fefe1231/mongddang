@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Toggle } from '.';
 import { ColorScale, Palette } from '@/shared/model/globalStylesTyes';

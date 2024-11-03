@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { Button } from '@/shared/ui/Button';
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export const Btn = () => {
@@ -15,6 +14,9 @@ export const Btn = () => {
       </Button>
       <Button handler={()=>nav('/nickname/title')} color="primary" fontSize="1" variant="contained">
         칭호
+      </Button>
+      <Button handler={()=>nav('/nickname/edit')} color="primary" fontSize="1" variant="contained">
+        닉네임 수정
       </Button>
     </div>
   );

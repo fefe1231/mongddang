@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { BottomBar } from '.';
 import img1 from '/img/말랑1.png';

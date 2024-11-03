@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
 import { ProgressProps } from './Progress.types';
 import { base, fillCss, sizeCss, variantCss } from './Progress.styles';
 

@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { Notification } from '@/shared/ui/Notification';
 import { Typography } from '@/shared/ui/Typography';
-import React from 'react';
 import { css } from '@emotion/react';
 
 interface ModalProps {
@@ -41,7 +40,7 @@ export const UpdateCharacter = ({bluehandler, redhandler}:ModalProps) => {
         }
         width={18}
         twoBtn
-        children={['아니', '응']}
+        children={['아니', '좋아']}
         type="confirm"
       />
     </div>

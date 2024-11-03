@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
 import { IconProps } from './Icon.types';
 import { base } from './Icon.styles';
 

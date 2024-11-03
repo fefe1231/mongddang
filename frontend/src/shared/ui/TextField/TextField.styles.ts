@@ -1,25 +1,31 @@
 import { SerializedStyles, css } from '@emotion/react';
 import { TextFieldVariant } from './TextField.types';
 import { Palette } from '@/shared/model/globalStylesTyes';
-import ColorStyle from '../styles/colorStyles';
+import ColorStyle from '../styles/ColorStyles';
 
-export const base = (multiLine: boolean, isFocused: boolean, color: Palette, variant: TextFieldVariant) => css`
+export const base = (
+  multiLine: boolean,
+  isFocused: boolean,
+  color: Palette,
+  variant: TextFieldVariant
+) => css`
   position: relative;
   padding: 0.875rem 0.625rem;
   transition: all 150ms ease-in-out;
 
-  ${variant === 'outlined' ? 
-    css`
-      border: calc(0.0625rem * 1.5) ${isFocused ? ColorStyle[color].main : '#4C4848'} solid;
-      border-radius: 0.3125rem;
-    ` : 
-    css`
-      border-bottom: calc(0.0625rem * 1.5) ${isFocused ? ColorStyle[color].main : '#4C4848'} solid;
-      border: none;
-    `
-  }
+  ${variant === 'outlined'
+    ? css`
+        border: calc(0.0625rem * 1.5)
+          ${isFocused ? ColorStyle[color].main : '#4C4848'} solid;
+        border-radius: 0.3125rem;
+      `
+    : css`
+        border-bottom: calc(0.0625rem * 1.5)
+          ${isFocused ? ColorStyle[color].main : '#4C4848'} solid;
+        border: none;
+      `}
 
-  ${multiLine && 
+  ${multiLine &&
   css`
     overflow-y: scroll;
     -ms-overflow-style: none;
@@ -34,12 +40,12 @@ export const labelField = (
   placeholder: string,
   defaultValue: string,
   inputValue: string,
-  isFocused: boolean) => css`
+  isFocused: boolean
+) => css`
   position: absolute;
   top: calc(50% - 0.5rem);
   padding: 0 0.3125rem;
 
-  
   color: ${isFocused ? ColorStyle[palette].main : '#4C4848'};
   font-size: ${inputValue || defaultValue || placeholder || isFocused
     ? '0.625rem'
@@ -69,8 +75,7 @@ export const inputField = (multiLine: boolean) => css`
 `;
 
 export const inputVariants: Record<TextFieldVariant, () => SerializedStyles> = {
-  outlined: () => css`
-  `,
+  outlined: () => css``,
   standard: () => css`
     border-bottom: 1px solid #d5d5d5;
     border-radius: 0;
@@ -87,31 +92,18 @@ export const labelVariants: Record<
     isFocused: boolean
   ) => SerializedStyles
 > = {
-  outlined: (
-    palette,
-    placeholder,
-    defaultValue,
-    inputValue,
-    isFocused
-  ) => css`
+  outlined: (placeholder, defaultValue, inputValue, isFocused) => css`
     ${inputValue || defaultValue || placeholder || isFocused
       ? css`
           top: -0.375rem;
           background-color: white;
-          
         `
       : ''};
   `,
-  standard: (
-    placeholder,
-    defaultValue,
-    inputValue,
-    isFocused
-  ) => css`
+  standard: (placeholder, defaultValue, inputValue, isFocused) => css`
     ${inputValue || defaultValue || placeholder || isFocused
       ? css`
           top: -0.375rem;
-
         `
       : ''};
   `,

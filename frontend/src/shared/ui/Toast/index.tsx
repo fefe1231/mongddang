@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { ReactNode } from 'react';
-import { useTheme } from '@emotion/react';
+import { ReactNode } from 'react';
 import { ToastProps } from './Toast.types';
 import { base, variants } from './Toast.styles';
 import { HiOutlineCheckCircle, HiOutlineExclamation } from 'react-icons/hi';
@@ -25,10 +24,8 @@ export const Toast = ({
   color = 'primary',
   ...props
 }: ToastProps) => {
-  const theme = useTheme();
-
   return (
-    <div css={[base, variants[variant](theme, color)]} {...props}>
+    <div css={[base, variants[variant](color)]} {...props}>
       <Icon color={variant === 'filled' ? 'light' : 'dark'}>
         {colorToIcon[color]}
       </Icon>
