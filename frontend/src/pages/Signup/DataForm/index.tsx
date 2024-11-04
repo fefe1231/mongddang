@@ -130,6 +130,17 @@ export const DataForm = ({ role }: { role: UserRole }) => {
             {msg}
           </Typography>
         )}
+        <div style={{ margin: '1rem 0' }}>
+          <TextField
+            color="primary"
+            label="이름"
+            variant="outlined"
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+        <Typography color='dark' size="1" weight={500}>
+          생년월일
+        </Typography>
         <div style={{ display: 'flex', gap: '1rem', margin: '1rem 0' }}>
           <TextField
             color="primary"
@@ -153,18 +164,11 @@ export const DataForm = ({ role }: { role: UserRole }) => {
             onChange={handleDateChangeWrapper('day')}
           />
         </div>
-        <div style={{ margin: '1rem 0' }}>
-          <TextField
-            color="primary"
-            label="이름"
-            variant="outlined"
-            onChange={(e) => setName(e.target.value)}
-          />
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop:'1.3rem'}}>
           <Button
             color="light"
             fontSize="1"
+            fullwidth
             variant={gender === 'male' ? 'contained' : 'outlined'}
             handler={() => setGender('male')}
           >
@@ -173,6 +177,7 @@ export const DataForm = ({ role }: { role: UserRole }) => {
           <Button
             color="light"
             fontSize="1"
+            fullwidth
             variant={gender === 'female' ? 'contained' : 'outlined'}
             handler={() => setGender('female')}
           >
@@ -184,7 +189,7 @@ export const DataForm = ({ role }: { role: UserRole }) => {
         style={{
           display: 'flex',
           justifyContent: 'flex-end',
-          marginTop: '1rem',
+          marginTop: '2rem',
         }}
       >
         <Button
@@ -192,6 +197,7 @@ export const DataForm = ({ role }: { role: UserRole }) => {
           fontSize="1"
           variant="contained"
           handler={signupHandler}
+          fullwidth
         >
           가입하기
         </Button>

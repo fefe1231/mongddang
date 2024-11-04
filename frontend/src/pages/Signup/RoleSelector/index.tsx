@@ -34,7 +34,10 @@ export const RoleSelector = ({ onSubmit }: UserDataFormProps) => {
               size={5}
             />
           </div>
-          <div css={btnCss(role, 'protector')} onClick={() => setRole('protector')}>
+          <div
+            css={btnCss(role, 'protector')}
+            onClick={() => setRole('protector')}
+          >
             <IconTypo
               fontSize="1.75"
               icon="/img/%EB%A7%90%EB%9E%911.png"
@@ -43,17 +46,18 @@ export const RoleSelector = ({ onSubmit }: UserDataFormProps) => {
             />
           </div>
         </div>
-      </div>
-      <div css={nextbtnCss}>
-        <Button
-          disabled={role ? false : true}
-          color={'light'}
-          fontSize="1"
-          variant={'contained'}
-          handler={() => onSubmit(role)}
-        >
-          다음으로
-        </Button>
+        <div>
+          <Button
+            css={nextbtnCss} // 버튼 스타일 적용
+            disabled={!role}
+            color={'light'}
+            fontSize="1"
+            variant={'contained'}
+            handler={() => onSubmit(role)}
+          >
+            다음
+          </Button>
+        </div>
       </div>
     </div>
   );
