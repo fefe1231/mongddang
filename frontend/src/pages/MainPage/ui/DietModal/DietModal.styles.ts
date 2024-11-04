@@ -15,7 +15,7 @@ export const modalContent = css`
   flex-direction: column;
   height: 100%;
   padding: 3%;
-  gap: 1rem;
+  gap: 0.5rem;
 `;
 
 export const modalTopBar = css`
