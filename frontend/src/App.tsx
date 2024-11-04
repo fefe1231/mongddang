@@ -8,6 +8,7 @@ import Menu from './pages/Menu/Menu';
 import Login from './pages/login';
 import { NicknameEdit } from './pages/profile/nickname-edit';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { Profile } from './pages/profile';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/encyclopedia" element={<Encyclopedia />} />
           <Route path="/nickname/title" element={<NicknameTitle />} />
           <Route path="/menu" element={<Menu />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/nickname/edit" element={<NicknameEdit />} />
         </Routes>
       </Router>

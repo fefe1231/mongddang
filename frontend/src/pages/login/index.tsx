@@ -14,15 +14,33 @@ interface IcredentialResponse {
 
 const Login = () => {
   const nav = useNavigate();
+
   const handleLoginSuccess = (credentialResponse: IcredentialResponse) => {
     const idToken = credentialResponse.credential;
     console.log('ID Token:', idToken);
 
     // ID Token을 백엔드로 전송
     axios
-      .post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/login`, { idToken })
+      .post(
+        `${import.meta.env.VITE_API_BASE_URL}/api/auth/login`,
+        { idToken },
+        {
+          headers: {
+            "Content-Type": 'application/json',
+            "Authorization": `Bearer ${idToken}`,
+          },
+        }
+      )
       .then((response) => {
-        console.log('토큰 저장 성공:', response.data);
+        const accessToken = response.data.body.accessToken;
+        console.log('토큰 저장 성공:', accessToken);
+
+        // accessToken을 로컬 스토리지에 저장
+        localStorage.setItem('accessToken', accessToken);
+
+        // accessToken을 axios 전역 헤더에 설정
+        axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+
         // 회원 여부에 따른 페이지 이동
         if (response.data.body.isRegistered) {
           nav('/');
@@ -59,10 +77,7 @@ const Login = () => {
           </Typography>
         </div>
         <div css={googleCss}>
-          <GoogleLogin
-            onSuccess={handleLoginSuccess}
-            onError={handleLoginError}
-          />
+          <GoogleLogin onSuccess={handleLoginSuccess} onError={handleLoginError} />
         </div>
       </div>
     </div>
