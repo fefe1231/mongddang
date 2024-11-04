@@ -24,7 +24,7 @@ import DietModal from './ui/DietModal/DietModal';
 
 const KidsMainPage = () => {
 
-  const [openDietModal, setOpenDietModal] = useState(false)
+  const [openDietModal, setOpenDietModal] = useState(true)
   const closeDietModal = () => {
     setOpenDietModal(false)
   }
