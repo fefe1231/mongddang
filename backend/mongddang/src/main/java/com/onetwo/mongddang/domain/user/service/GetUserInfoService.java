@@ -1,11 +1,9 @@
 package com.onetwo.mongddang.domain.user.service;
 
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
-
-import com.onetwo.mongddang.domain.game.mongddang.errors.CustomMongddangErrorCode;
-import com.onetwo.mongddang.domain.game.mongddang.model.Mongddang;
 import com.onetwo.mongddang.domain.game.mongddang.model.MyMongddang;
 import com.onetwo.mongddang.domain.game.mongddang.repository.MyMongddangRepository;
+import com.onetwo.mongddang.domain.game.title.model.MyTitle;
 import com.onetwo.mongddang.domain.game.title.repository.MyTitleRepository;
 import com.onetwo.mongddang.domain.user.dto.ConnectedUserInfoDto;
 import com.onetwo.mongddang.domain.user.dto.UserInfoDto;
@@ -18,7 +16,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -44,10 +44,22 @@ public class GetUserInfoService {
         // 어린이일 때만 메인몽땅, 메인칭호 제공
         // 연결된 보호자 리스트 뽑아냄
         if ("child".equals(user.getRole().toString())) {
-            // 메인 몽땅 id
-            mainMongddang = myMongddangRepository.findByChildIdAndIsMainTrue(userId).get().getId();
+            // 메인 몽땅
+            Optional<MyMongddang> mainMongddangOptional = myMongddangRepository.findByChildIdAndIsMainTrue(userId);
+
+            // 메인 있으면 id 값 반환
+            if (mainMongddangOptional.isPresent()) {
+                mainMongddang = mainMongddangOptional.get().getId();
+            }
+
             // 메인 칭호 id
-            mainTitle = myTitleRepository.findByChildIdAndIsMainTrue(userId).get().getId();
+            Optional<MyTitle> mainTitleOptional = myTitleRepository.findByChildIdAndIsMainTrue(userId);
+
+            // 메인 있으면 id 값 반환
+            if (mainTitleOptional.isPresent()) {
+                mainTitle = mainTitleOptional.get().getId();
+            }
+
             // 연결된 보호자 리스트
             connectedUserList = ctoPRepository.findProtectorByChildId(userId);
         }
