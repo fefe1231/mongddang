@@ -5,15 +5,19 @@ import { Typography } from '@/shared/ui/Typography';
 import { useState } from 'react';
 import { base, containerCss, progressCss } from './styles';
 import { UpdateCharacter } from '../modal';
-
-export const TitleComponent = () => {
+import { ItitleData } from '../../types';
+interface TitleComponentProps {
+  title: ItitleData;
+}
+export const TitleComponent = ({ title }: TitleComponentProps) => {
   const [isModal, setIsModal] = useState(false);
+  console.log(title);
   return (
     <div css={base}>
       <div css={containerCss}>
         <div>
           <Typography color="dark" size="1" weight={700}>
-            수면마스터
+            {title.titleName}
           </Typography>
           <Typography
             style={{ margin: '0.3rem 0 0' }}
@@ -22,7 +26,7 @@ export const TitleComponent = () => {
             size="0.75"
             weight={600}
           >
-            제 시간에 자기 10번 수행
+            {title.description}
           </Typography>
         </div>
         <div>
@@ -32,7 +36,7 @@ export const TitleComponent = () => {
             fontSize="1"
             variant="contained"
             onClick={() => setIsModal(true)}
-            // disabled
+            disabled={title.count !== title.executionCount} // disabled 속성을 boolean으로 설정
           >
             획득
           </Button>
@@ -41,13 +45,13 @@ export const TitleComponent = () => {
       <div css={progressCss}>
         <Progress
           color="success"
-          max={10}
+          max={title.count}
           size="lg"
-          value={10}
+          value={title.executionCount}
           variant="rectangle"
         />
         <Typography color="dark" scale="500" size="0.75" weight={500}>
-          (10/10)
+          {title.executionCount}/{title.count}
         </Typography>
       </div>
       {isModal && (

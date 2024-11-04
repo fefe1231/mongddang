@@ -7,8 +7,21 @@ import { Toggle } from '@/shared/ui/Toggle';
 import { Typography } from '@/shared/ui/Typography';
 import { TitleComponent } from './ui/title-component';
 import { toggleContainerCss } from './styles';
+import { useQuery } from '@tanstack/react-query';
+import { getTitleInfo } from './api';
+import { ItitleData } from './types';
 
 export const NicknameTitle = () => {
+  const TitleQuery = useQuery({
+    queryKey: ['title'],
+    queryFn: async () => {
+      const accessToken = localStorage.getItem('accessToken') || ''; // 로컬 스토리지에서 accessToken 가져오기
+      return await getTitleInfo(accessToken);
+    },
+  });
+
+  console.log(TitleQuery.data?.data);
+
   return (
     <div>
       <TopBar type="iconpage">칭호 도감</TopBar>
@@ -22,7 +35,9 @@ export const NicknameTitle = () => {
         </Typography>
         <Toggle color="primary" size={2.5} />
       </div>
-      <TitleComponent/>
+      {TitleQuery.data?.data?.data.map((data: ItitleData) => (
+      <TitleComponent key={data.titleId} title={data} />
+    ))}
     </div>
   );
 };
