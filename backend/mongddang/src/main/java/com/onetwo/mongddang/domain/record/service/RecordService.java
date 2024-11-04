@@ -181,10 +181,6 @@ public class RecordService {
         recordRepository.save(exerciseRecord);
         log.info("운동 시작 기록 완료. 시작시간 : {}", exerciseRecord.getStartTime());
 
-        // 운동 시작 시간을 기록하고, 운동 중인지 여부를 true로 변경
-        // 운동 중인지 여부를 확인하여 이미 운동 중인 경우 에러 메시지 반환
-        // 운동 중인지 여부를 확인하여 운동 중이 아닌 경우 운동 시작 시간을 기록하고, 운동 중인지 여부를 true로 변경
-
         return ResponseDto.builder()
                 .message("운동을 시작합니다.")
                 .build();
