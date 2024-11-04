@@ -1,5 +1,6 @@
 package com.onetwo.mongddang.domain.record.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
 import com.onetwo.mongddang.common.utils.DateTimeUtils;
 import com.onetwo.mongddang.domain.medication.dto.MedicationDto;
@@ -296,6 +297,50 @@ public class RecordService {
 
         return ResponseDto.builder()
                 .message("수면을 종료합니다.")
+                .build();
+    }
+
+
+    /**
+     * 식사 시작하기
+     * @param childId 식사 시작을 시도하는 아이의 아이디
+     * @param content 식사 내용
+     * @param image 이미지 파일 (파일 경로 또는 URL)
+     * @param mealTime 식사 시간 (enum으로 처리)
+     * @return ResponseDto
+     */
+    public ResponseDto startMeal(Long childId, String content, String image, String mealTime) {
+        log.info("startMeal childId: {}", childId);
+
+        User child = userRepository.findById(childId)
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+        log.info("child: {}", child.getEmail());
+
+        log.info("가장 최근에 시작된 식사 기록 조회");
+        Optional<Record> lastedMealRecord = recordRepository.findTopByChildAndCategoryAndEndTimeIsNullOrderByIdDesc(child, meal);
+
+        log.info("이미 시작된 식사 기록 확인");
+        if (lastedMealRecord.isPresent()) {
+            throw new RestApiException(CustomRecordErrorCode.MEAL_ALREADY_STARTED);
+        }
+
+        // 식사 시작 시간 기록
+        Record mealRecord = Record.builder()
+                .child(child)
+                .category(meal)
+                .startTime(LocalDateTime.now())
+                .endTime(null)
+                .content((JsonNode) Map.of("content", content))
+                .imageUrl(image)
+                .isDone(false)
+                .mealTime(Record.MealTimeType.valueOf(mealTime))
+                .build();
+
+        recordRepository.save(mealRecord);
+        log.info("식사 시작 기록 완료. 시작시간 : {}", mealRecord.getStartTime());
+
+        return ResponseDto.builder()
+                .message("식사를 시작합니다.")
                 .build();
     }
 }

@@ -2,6 +2,7 @@ package com.onetwo.mongddang.domain.record.controller;
 
 import com.onetwo.mongddang.common.annotation.ChildRequired;
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
+import com.onetwo.mongddang.domain.record.dto.RequestMealStartDto;
 import com.onetwo.mongddang.domain.record.service.RecordService;
 import com.onetwo.mongddang.domain.user.jwt.JwtExtratService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -95,6 +96,20 @@ public class RecordController {
 
         Long childId = jwtExtratService.jwtFindId(request);
         ResponseDto responseDto = recordService.endSleep(childId);
+        return ResponseEntity.ok(responseDto);
+    }
+
+
+    // 식사 시작하기 api
+    @PostMapping("/meal/start")
+    @ChildRequired
+    @Tag(name = "Record API", description = "식사 기록 api")
+    @Operation(summary = "식사 시작하기 api", description = "식사를 시작합니다.")
+    public ResponseEntity<ResponseDto> startMeal(RequestMealStartDto requestMealStartDto, HttpServletRequest request) {
+        log.info("POST /api/record/meal/start");
+
+        Long childId = jwtExtratService.jwtFindId(request);
+        ResponseDto responseDto = recordService.startMeal(childId, requestMealStartDto.getContent(), requestMealStartDto.getImage(), requestMealStartDto.getMealTime());
         return ResponseEntity.ok(responseDto);
     }
 
