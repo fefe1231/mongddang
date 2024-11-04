@@ -1,8 +1,8 @@
-package com.onetwo.mongddang.domain.record.model;
+package com.onetwo.mongddang.domain.record.dto;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.onetwo.mongddang.domain.record.converter.JsonConverter;
-import com.onetwo.mongddang.domain.user.model.User;
+import com.onetwo.mongddang.domain.record.model.Record;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -12,23 +12,21 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Entity
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Record {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class RecordWithChildIdDto {
+
+    @NotNull
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "child_id", nullable = false)
-    private User child;
+    @NotNull
+    private Long childId;
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private RecordCategoryType category;
+    private Record.RecordCategoryType category;
 
     @NotNull
     @Column(nullable = false, name = "start_time")
@@ -50,16 +48,6 @@ public class Record {
 
     @Column(name = "meal_time")
     @Enumerated(EnumType.STRING)
-    private MealTimeType mealTime;
-
-    @NotNull
-    public enum RecordCategoryType {
-        meal, sleeping, exercise, medication
-    }
-
-    public enum MealTimeType {
-        breakfast, lunch, dinner, snack
-    }
-
+    private Record.MealTimeType mealTime;
 
 }

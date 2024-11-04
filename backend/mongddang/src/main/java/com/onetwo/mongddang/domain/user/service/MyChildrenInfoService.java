@@ -7,7 +7,6 @@ import com.onetwo.mongddang.domain.user.model.User;
 import com.onetwo.mongddang.domain.user.repository.CtoPRepository;
 import com.onetwo.mongddang.domain.user.repository.UserRepository;
 import com.onetwo.mongddang.errors.exception.RestApiException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -36,7 +35,7 @@ public class MyChildrenInfoService {
         log.info("This User is protector");
 
         // 연결된 어린이 리스트
-        List<User> childrenList= ctoPRepository.findChildByProtectorId(userId);
+        List<User> childrenList = ctoPRepository.findChildByProtectorId(userId);
 
         // Object에 들어갈 어린이 리스트 초기화
         List<ConnectedUserInfoDto> responseChildrenList = null;
@@ -59,8 +58,8 @@ public class MyChildrenInfoService {
         log.info("response Children List : {}", responseChildrenList);
 
         // data에 map형식으로 담기
-        Map<String,Object> data = new HashMap<>();
-        data.put("children",responseChildrenList);
+        Map<String, Object> data = new HashMap<>();
+        data.put("children", responseChildrenList);
 
         //response
         ResponseDto response = ResponseDto.builder()
