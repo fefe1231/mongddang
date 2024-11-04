@@ -1,19 +1,24 @@
 package com.onetwo.mongddang.domain.record.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onetwo.mongddang.common.annotation.ChildRequired;
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
-import com.onetwo.mongddang.domain.record.dto.RequestMealStartDto;
 import com.onetwo.mongddang.domain.record.service.RecordService;
 import com.onetwo.mongddang.domain.user.jwt.JwtExtratService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Slf4j
 @RestController
@@ -105,12 +110,45 @@ public class RecordController {
     @ChildRequired
     @Tag(name = "Record API", description = "식사 기록 api")
     @Operation(summary = "식사 시작하기 api", description = "식사를 시작합니다.")
-    public ResponseEntity<ResponseDto> startMeal(RequestMealStartDto requestMealStartDto, HttpServletRequest request) {
+    public ResponseEntity<ResponseDto> startMeal(
+            @RequestParam("content") String contentJson,  // JSON 문자열로 받기
+            @RequestParam(value = "image", required = false) MultipartFile image,
+            @RequestParam("mealTime") @NotNull(message = "식사 시간은 필수입니다.")
+            @Pattern(regexp = "^(breakfast|lunch|dinner|snack)$", message = "식사 시간은 'breakfast', 'lunch', 'dinner', 'snack' 중 하나여야 합니다.") String mealTime,
+            HttpServletRequest request) {
+
         log.info("POST /api/record/meal/start");
 
         Long childId = jwtExtratService.jwtFindId(request);
-        ResponseDto responseDto = recordService.startMeal(childId, requestMealStartDto.getContent(), requestMealStartDto.getImage(), requestMealStartDto.getMealTime());
+
+        // ObjectMapper로 JSON 문자열을 JsonNode로 변환
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode content;
+        try {
+            content = objectMapper.readTree(contentJson);
+        } catch (IOException e) {
+            // JSON 파싱 실패 시 예외 처리
+            log.error("JSON 파싱 실패: {}", e.getMessage());
+            throw new RuntimeException(e);
+        }
+
+        // 서비스 호출
+        ResponseDto responseDto = recordService.startMeal(childId, content, image, mealTime);
         return ResponseEntity.ok(responseDto);
     }
+
+    // 식사 종료하기 api
+    @PatchMapping("/meal/end")
+    @ChildRequired
+    @Tag(name = "Record API", description = "식사 기록 api")
+    @Operation(summary = "식사 종료하기 api", description = "식사를 종료합니다.")
+    public ResponseEntity<ResponseDto> endMeal(HttpServletRequest request) {
+        log.info("POST /api/record/meal/end");
+
+        Long childId = jwtExtratService.jwtFindId(request);
+        ResponseDto responseDto = recordService.endMeal(childId);
+        return ResponseEntity.ok(responseDto);
+    }
+
 
 }
