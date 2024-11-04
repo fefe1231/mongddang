@@ -51,6 +51,8 @@ export const Primary: Story = {
     children: '이건 토스트입니다.',
     variant: 'contained',
     color: 'primary',
+    fontSize: 0.5,
+    isIcon: false
   },
 };
 
