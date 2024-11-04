@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -24,6 +25,11 @@ public class CtoPUtils {
      */
     public boolean checkProtectorAndChildIsConnected(Long protectorId, Long childId) {
         log.info("checkProtectorAndChildIsConnected protectorId: {}, childId: {}", protectorId, childId);
+
+        // 보호자와 아이가 같은 경우
+        if (Objects.equals(protectorId, childId)) {
+            return true;
+        }
 
         // 보호자의 아이 리스트
         List<User> childrenList = ctoPRepository.findChildByProtectorId(protectorId);

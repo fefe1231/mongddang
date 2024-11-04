@@ -4,6 +4,7 @@ import com.onetwo.mongddang.common.responseDto.ResponseDto;
 import com.onetwo.mongddang.common.utils.DateTimeUtils;
 import com.onetwo.mongddang.domain.medication.dto.MedicationDto;
 import com.onetwo.mongddang.domain.record.dto.RecordDetailsDto;
+import com.onetwo.mongddang.domain.record.dto.RecordWithChildIdDto;
 import com.onetwo.mongddang.domain.record.dto.ResponseRecordDto;
 import com.onetwo.mongddang.domain.record.errors.CustomRecordErrorCode;
 import com.onetwo.mongddang.domain.record.model.Record;
@@ -87,9 +88,9 @@ public class RecordService {
 
             // 각 기록의 종류에 따라 분류
             if (record.getCategory().equals(meal) || record.getCategory().equals(exercise) || record.getCategory().equals(sleeping)) {
-                details.getMeal().add(Record.builder()
+                RecordWithChildIdDto recordWithChildIdDto = RecordWithChildIdDto.builder()
                         .id(record.getId())
-                        .child(child)
+                        .childId(child.getId())
                         .category(record.getCategory())
                         .startTime(record.getStartTime())
                         .endTime(record.getEndTime())
@@ -97,7 +98,16 @@ public class RecordService {
                         .imageUrl(record.getImageUrl())
                         .isDone(record.getIsDone())
                         .mealTime(record.getMealTime())
-                        .build());
+                        .build();
+
+                // 각 기록의 종류에 따라 분류
+                if (record.getCategory().equals(meal)) {
+                    details.getMeal().add(recordWithChildIdDto);
+                } else if (record.getCategory().equals(exercise)) {
+                    details.getExercise().add(recordWithChildIdDto);
+                } else if (record.getCategory().equals(sleeping)) {
+                    details.getSleep().add(recordWithChildIdDto);
+                }
             } else if (record.getCategory().equals(medication)) {
                 details.getMedication().add(MedicationDto.builder()
                         .id(record.getId())
