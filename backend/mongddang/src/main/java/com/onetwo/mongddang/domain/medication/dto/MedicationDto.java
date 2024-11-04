@@ -19,34 +19,27 @@ public class MedicationDto {
 
     private Long id;
 
-    @Column(nullable = false)
     @NotNull
     private String name;
 
     private String imageUrl;
 
-    @Column(nullable = false)
     @NotNull
     private Long volume;
 
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     @NotNull
     private RouteType route;
 
-    @Column(nullable = false)
     @NotNull
     private boolean isRepeated;
 
-    @Column(nullable = false)
     @NotNull
     private String repeatDays;
 
-    @Column(nullable = false)
     @NotNull
     private LocalDateTime repeatStartTime;
 
-    @Column(nullable = false)
     @NotNull
     private LocalDateTime repeatEndTime;
 

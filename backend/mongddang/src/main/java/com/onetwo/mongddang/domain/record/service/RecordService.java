@@ -1,6 +1,9 @@
 package com.onetwo.mongddang.domain.record.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
+import com.onetwo.mongddang.common.s3.S3ImageService;
+import com.onetwo.mongddang.common.s3.errors.CustomS3ErrorCode;
 import com.onetwo.mongddang.common.utils.DateTimeUtils;
 import com.onetwo.mongddang.domain.medication.dto.MedicationDto;
 import com.onetwo.mongddang.domain.record.dto.RecordDetailsDto;
@@ -19,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -35,8 +39,17 @@ public class RecordService {
     private final MyChildrenInfoService myChildrenInfoService;
     private final CtoPUtils ctoPUtils;
     private final DateTimeUtils dateTimeUtils;
+    private final S3ImageService s3ImageService;
 
-    // 환아의 활동 기록 조회
+    /**
+     * 환아의 활동 기록 조회
+     *
+     * @param userId    조회를 시도하는 사용자 아이디
+     * @param nickname  조회 대상의 닉네임
+     * @param startDate 조회 시작 월 (YYYY-MM)
+     * @param endDate   조회 종료일 월 (YYYY-MM)
+     * @return ResponseDto
+     */
     public ResponseDto getRecord(Long userId, String nickname, String startDate, String endDate) {
         log.info("getRecord userId: {}", userId);
 
@@ -138,7 +151,12 @@ public class RecordService {
                 .build();
     }
 
-    // 운동 시작하기
+    /**
+     * 운동 시작하기
+     *
+     * @param childId 운동 시작을 시도하는 아이의 아이디
+     * @return ResponseDto
+     */
     @Transactional
     public ResponseDto startExercise(Long childId) {
         log.info("startExercise childId: {}", childId);
@@ -170,17 +188,222 @@ public class RecordService {
         recordRepository.save(exerciseRecord);
         log.info("운동 시작 기록 완료. 시작시간 : {}", exerciseRecord.getStartTime());
 
-        // 운동 시작 시간을 기록하고, 운동 중인지 여부를 true로 변경
-        // 운동 중인지 여부를 확인하여 이미 운동 중인 경우 에러 메시지 반환
-        // 운동 중인지 여부를 확인하여 운동 중이 아닌 경우 운동 시작 시간을 기록하고, 운동 중인지 여부를 true로 변경
-
         return ResponseDto.builder()
                 .message("운동을 시작합니다.")
                 .build();
 
     }
 
+    /**
+     * 운동 종료하기
+     *
+     * @param childId 운동 종료를 시도하는 아이의 아이디
+     * @return ResponseDto
+     */
+    @Transactional
+    public ResponseDto endExercise(Long childId) {
+        log.info("endExercise childId: {}", childId);
 
-    // 운동 종료하기
+        User child = userRepository.findById(childId)
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+        log.info("child: {}", child.getEmail());
 
+        // 가장 최근에 시작된 운동 기록 조회
+        Optional<Record> lastedExerciseRecord = recordRepository.findTopByChildAndCategoryAndEndTimeIsNullOrderByIdDesc(child, exercise);
+        log.info("가장 최근에 시작된 운동 기록 조회 성공");
+
+        // 운동 중인지 확인
+        log.info("이미 시작된 운동 기록 확인");
+        if (lastedExerciseRecord.isEmpty()) {
+            throw new RestApiException(CustomRecordErrorCode.EXERCISE_NOT_STARTED);
+        }
+
+        // 운동 종료 시간 기록
+        Record exerciseRecord = lastedExerciseRecord.get();
+        exerciseRecord.setEndTime(LocalDateTime.now());
+        exerciseRecord.setIsDone(true);
+
+        recordRepository.save(exerciseRecord);
+        log.info("운동 종료 기록 완료. 종료시간 : {}", exerciseRecord.getEndTime());
+
+        return ResponseDto.builder()
+                .message("운동을 종료합니다.")
+                .build();
+    }
+
+
+    /**
+     * 수면 시작하기
+     *
+     * @param childId 수면 시작을 시도하는 아이의 아이디
+     * @return ResponseDto
+     */
+    @Transactional
+    public ResponseDto startSleep(Long childId) {
+        log.info("startSleep childId: {}", childId);
+
+        User child = userRepository.findById(childId)
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+        log.info("child: {}", child.getEmail());
+
+        log.info("가장 최근에 시작된 수면 기록 조회");
+        Optional<Record> lastedSleepRecord = recordRepository.findTopByChildAndCategoryAndEndTimeIsNullOrderByIdDesc(child, sleeping);
+
+        log.info("이미 시작된 수면 기록 확인");
+        if (lastedSleepRecord.isPresent()) {
+            throw new RestApiException(CustomRecordErrorCode.SLEEP_ALREADY_STARTED);
+        }
+
+        // 수면 시작 시간 기록
+        Record sleepRecord = Record.builder()
+                .child(child)
+                .category(sleeping)
+                .startTime(LocalDateTime.now())
+                .endTime(null)
+                .content(null)
+                .imageUrl(null)
+                .isDone(false)
+                .mealTime(null)
+                .build();
+
+        recordRepository.save(sleepRecord);
+        log.info("수면 시작 기록 완료. 시작시간 : {}", sleepRecord.getStartTime());
+
+        return ResponseDto.builder()
+                .message("수면을 시작합니다.")
+                .build();
+    }
+
+    /**
+     * 수면 종료하기
+     *
+     * @param childId 수면 종료를 시도하는 아이의 아이디
+     * @return ResponseDto
+     */
+    @Transactional
+    public ResponseDto endSleep(Long childId) {
+        log.info("endSleep childId: {}", childId);
+
+        User child = userRepository.findById(childId)
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+        log.info("child: {}", child.getEmail());
+
+        log.info("가장 최근에 시작된 수면 기록 조회");
+        Optional<Record> lastedSleepRecord = recordRepository.findTopByChildAndCategoryAndEndTimeIsNullOrderByIdDesc(child, sleeping);
+
+        log.info("이미 시작된 수면 기록 확인");
+        if (lastedSleepRecord.isEmpty()) {
+            throw new RestApiException(CustomRecordErrorCode.SLEEP_NOT_STARTED);
+        }
+
+        // 수면 종료 시간 기록
+        Record sleepRecord = lastedSleepRecord.get();
+        sleepRecord.setEndTime(LocalDateTime.now());
+        sleepRecord.setIsDone(true);
+
+        recordRepository.save(sleepRecord);
+        log.info("수면 종료 기록 완료. 종료시간 : {}", sleepRecord.getEndTime());
+
+        return ResponseDto.builder()
+                .message("수면을 종료합니다.")
+                .build();
+    }
+
+
+    /**
+     * 식사 시작하기
+     *
+     * @param childId   식사 시작을 시도하는 아이의 아이디
+     * @param content   식사 내용
+     * @param imageFile 이미지 파일 (파일 경로 또는 URL)
+     * @param mealTime  식사 시간 (enum으로 처리)
+     * @return ResponseDto
+     */
+    @Transactional
+    public ResponseDto startMeal(Long childId, JsonNode content, MultipartFile imageFile, String mealTime) {
+        log.info("startMeal childId: {}", childId);
+
+        User child = userRepository.findById(childId)
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+        log.info("child: {}", child.getEmail());
+
+        log.info("가장 최근에 시작된 식사 기록 조회 (in english : Retrieve the most recent meal record)");
+        Optional<Record> lastedMealRecord = recordRepository.findTopByChildAndCategoryAndEndTimeIsNullOrderByIdDesc(child, meal);
+
+        log.info("이미 시작된 식사 기록 확인 (in english : Check if the meal record has already started)");
+        if (lastedMealRecord.isPresent()) {
+            throw new RestApiException(CustomRecordErrorCode.MEAL_ALREADY_STARTED);
+        }
+
+        String imageUrl = null;
+
+        if (imageFile != null) {
+            // 이미지 파일을 S3에 업로드
+            log.info("식사 이미지 파일을 S3에 업로드 시도 (in english : Try to upload meal image file to S3)");
+            try {
+                imageUrl = s3ImageService.upload(imageFile); // MultipartFile을 File로 변환 후 S3에 업로드
+            } catch (Exception e) {
+                throw new RestApiException(CustomS3ErrorCode.IMAGE_UPLOAD_FAILED);
+            }
+            log.info("식사 이미지 파일을 S3에 업로드 완료 (in english : Meal image file uploaded to S3)");
+        }
+
+        log.info("식사 이미지 파일 없음 (in english : No meal image file)");
+
+        log.info(content.toString());
+
+        // 식사 시작 시간 기록
+        Record mealRecord = Record.builder()
+                .child(child)
+                .category(meal)
+                .startTime(LocalDateTime.now())
+                .endTime(null)
+                .content(content)
+                .imageUrl(imageUrl)
+                .isDone(false)
+                .mealTime(Record.MealTimeType.valueOf(mealTime))
+                .build();
+
+        recordRepository.save(mealRecord);
+        log.info("식사 시작 기록 완료. 시작시간 : {}", mealRecord.getStartTime());
+
+        return ResponseDto.builder()
+                .message("식사를 시작합니다.")
+                .build();
+    }
+
+    /**
+     * 식사 종료하기
+     *
+     * @param childId 식사 종료를 시도하는 아이의 아이디
+     * @return ResponseDto
+     */
+    @Transactional
+    public ResponseDto endMeal(Long childId) {
+        log.info("endMeal childId: {}", childId);
+
+        User child = userRepository.findById(childId)
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+        log.info("child: {}", child.getEmail());
+
+        log.info("가장 최근에 시작된 식사 기록 조회");
+        Optional<Record> lastedMealRecord = recordRepository.findTopByChildAndCategoryAndEndTimeIsNullOrderByIdDesc(child, meal);
+
+        log.info("이미 시작된 식사 기록 확인");
+        if (lastedMealRecord.isEmpty()) {
+            throw new RestApiException(CustomRecordErrorCode.MEAL_NOT_STARTED);
+        }
+
+        // 식사 종료 시간 기록
+        Record mealRecord = lastedMealRecord.get();
+        mealRecord.setEndTime(LocalDateTime.now());
+        mealRecord.setIsDone(true);
+
+        recordRepository.save(mealRecord);
+        log.info("식사 종료 기록 완료. 종료시간 : {}", mealRecord.getEndTime());
+
+        return ResponseDto.builder()
+                .message("식사를 종료합니다.")
+                .build();
+    }
 }
