@@ -11,10 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -27,7 +24,7 @@ public class TitleController {
     private final JwtExtratService jwtExtratService;
 
     // 메인 칭호 설정 api
-    @PutMapping("/main")
+    @PatchMapping("/main")
     @ChildRequired
     @Tag(name = "Collection API", description = "도감 api")
     @Operation(summary = "메인 칭호 설정 api", description = "메인 칭호를 설정합니다.")

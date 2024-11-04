@@ -51,7 +51,7 @@ public class MongddangController {
 
 
     // 새로운 몽땅 표시 제거
-    @PutMapping("/check")
+    @PatchMapping("/check")
     @ChildRequired
     @Tag(name = "Collection API", description = "도감 api")
     @Operation(summary = "새로운 몽땅 표시 제거", description = "새로운 몽땅 표시를 제거합니다.")
@@ -64,7 +64,7 @@ public class MongddangController {
     }
 
     // 몽땅 메인 설정
-    @PutMapping("/main")
+    @PatchMapping("/main")
     @ChildRequired
     @Tag(name = "Collection API", description = "도감 api")
     @Operation(summary = "몽땅 메인 설정", description = "몽땅을 메인으로 설정합니다.")
