@@ -1,4 +1,4 @@
-import ColorStyle from "@/shared/ui/styles/colorStyles";
+import ColorStyle from "@/shared/ui/styles/ColorStyles";
 import { Colors } from "@/shared/ui/styles/globalStyles";
 import { css } from "@emotion/react";
 
@@ -25,4 +25,10 @@ export const btnCss = css`
   background-color: #fff;
   color: #000;
   border: 0.3rem solid ${ColorStyle.primary.main};
+`
+
+export const googleCss = css`
+  font-family: 'Paperlogy';
+  border: 0.25rem solid ${Colors['primary'][500]};
+  border-radius: 0.625rem;
 `

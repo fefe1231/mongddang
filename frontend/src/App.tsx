@@ -7,10 +7,11 @@ import { Btn } from './pages/btn';
 import Menu from './pages/Menu/Menu';
 import Login from './pages/login';
 import { NicknameEdit } from './pages/profile/nickname-edit';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 function App() {
   return (
-    <>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_AUTH_CLIENT_ID}>
       <Router>
         <Routes>
           <Route path="/" element={<KidsMainPage />} />
@@ -23,7 +24,7 @@ function App() {
           <Route path="/nickname/edit" element={<NicknameEdit />} />
         </Routes>
       </Router>
-    </>
+    </GoogleOAuthProvider>
   );
 }
 
