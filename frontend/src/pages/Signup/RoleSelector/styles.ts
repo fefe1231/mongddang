@@ -1,4 +1,3 @@
-import ColorStyle from '@/shared/ui/styles/colorStyles';
 import { Colors } from '@/shared/ui/styles/globalStyles';
 import { css } from '@emotion/react';
 
@@ -31,7 +30,7 @@ export const nextbtnCss = css`
 `;
 
 // 수정된 btnCss 함수
-export const btnCss = (role: string | undefined, currentRole: 'S' | 'P') => css`
+export const btnCss = (role: string | undefined, currentRole: 'child' | 'protector') => css`
   border: 2px solid ${role === currentRole ? Colors['primary'][400] : Colors['dark'][400]};
   display: flex;
   flex-direction: column;

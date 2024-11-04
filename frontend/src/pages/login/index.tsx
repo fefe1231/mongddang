@@ -13,7 +13,7 @@ interface IcredentialResponse {
 }
 
 const Login = () => {
-  const navigate = useNavigate();
+  const nav = useNavigate();
   const handleLoginSuccess = (credentialResponse: IcredentialResponse) => {
     const idToken = credentialResponse.credential;
     console.log('ID Token:', idToken);
@@ -23,7 +23,12 @@ const Login = () => {
       .post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/login`, { idToken })
       .then((response) => {
         console.log('토큰 저장 성공:', response.data);
-        navigate('/');
+        // 회원 여부에 따른 페이지 이동
+        if (response.data.body.isRegistered) {
+          nav('/');
+        } else {
+          nav('/signup', { state: { idToken } });
+        }
       })
       .catch((error) => {
         console.error('토큰 저장 실패:', error);

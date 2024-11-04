@@ -5,9 +5,12 @@ import { Transition } from './Transition';
 import { RoleSelector } from './RoleSelector';
 import { DataForm } from './DataForm';
 
+export type UserRole = 'child' | 'protector' | undefined;
+
 export const SignUp = () => {
   const [step, setStep] = useState<number>(0);
-  
+  const [selectedRole, setSelectedRole] = useState<UserRole>(undefined);
+
   return (
     <div>
       <TopBar
@@ -18,16 +21,15 @@ export const SignUp = () => {
       >
         회원가입
       </TopBar>
-      <Transition
-        data-key={step.toString()}
-        // wrapperCss={{ padding: '20px' }}
-      >
-        <RoleSelector key={0} onSubmit={() => setStep(1)} />
-        <DataForm
-          key={1}
-          // before={() => setStep(0)}
-          // onSubmit={() => setStep(2)}
+      <Transition data-key={step.toString()}>
+        <RoleSelector
+          key={0}
+          onSubmit={(role: UserRole) => {
+            setSelectedRole(role);
+            setStep(1);
+          }}
         />
+        <DataForm key={1} role={selectedRole} />
       </Transition>
     </div>
   );

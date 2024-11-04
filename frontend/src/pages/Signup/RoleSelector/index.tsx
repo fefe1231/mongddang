@@ -10,18 +10,14 @@ import {
   btnCss,
 } from './styles';
 import { IconTypo } from '@/shared/ui/IconTypo';
-import { Icon } from '@/shared/ui/Icon';
+import { UserRole } from '..';
 
 interface UserDataFormProps {
-  onSubmit: () => void;
+  onSubmit: (role: UserRole) => void;
 }
 
 export const RoleSelector = ({ onSubmit }: UserDataFormProps) => {
-  const [role, setRole] = useState<'S' | 'P' | undefined>(undefined);
-
-  const ChildrenHander = () => {
-    setRole('S');
-  };
+  const [role, setRole] = useState<UserRole>(undefined);
 
   return (
     <div css={mainContentCss}>
@@ -30,7 +26,7 @@ export const RoleSelector = ({ onSubmit }: UserDataFormProps) => {
           사용자를 선택해주세요!
         </Typography>
         <div css={buttonGroupCss}>
-          <div css={btnCss(role, 'S')} onClick={() => setRole('S')}>
+          <div css={btnCss(role, 'child')} onClick={() => setRole('child')}>
             <IconTypo
               fontSize="1.75"
               icon="/img/%EB%A7%90%EB%9E%911.png"
@@ -38,7 +34,7 @@ export const RoleSelector = ({ onSubmit }: UserDataFormProps) => {
               size={5}
             />
           </div>
-          <div css={btnCss(role, 'P')} onClick={() => setRole('P')}>
+          <div css={btnCss(role, 'protector')} onClick={() => setRole('protector')}>
             <IconTypo
               fontSize="1.75"
               icon="/img/%EB%A7%90%EB%9E%911.png"
@@ -54,7 +50,7 @@ export const RoleSelector = ({ onSubmit }: UserDataFormProps) => {
           color={'light'}
           fontSize="1"
           variant={'contained'}
-          handler={() => onSubmit()}
+          handler={() => onSubmit(role)}
         >
           다음으로
         </Button>
