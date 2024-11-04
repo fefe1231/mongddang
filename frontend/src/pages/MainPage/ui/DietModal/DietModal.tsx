@@ -8,6 +8,7 @@ import {
 } from './DietModal.styles';
 import { TopBar } from '@/shared/ui/TopBar';
 import DietModalBtnGroup from '../DietModalBtnGroup/DietModalBtnGroup';
+import DietImage from '../DietImage/DietImage';
 
 type DietModalProps = {
   closeDietModal: () => void
@@ -22,6 +23,7 @@ const DietModal = (props:DietModalProps) => {
         </TopBar>
         <div css={modalContent}>
           <DietModalBtnGroup/>
+          <DietImage/>
         </div>
       </Modal>
     </div>

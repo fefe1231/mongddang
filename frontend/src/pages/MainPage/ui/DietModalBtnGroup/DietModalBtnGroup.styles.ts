@@ -14,7 +14,6 @@ export const btnGroup = css`
 export const btn = css`
   display: flex;
   flex: 1 1 40%;
-  height: 100%;
 `;
 
 export const btnTextCss = css`
