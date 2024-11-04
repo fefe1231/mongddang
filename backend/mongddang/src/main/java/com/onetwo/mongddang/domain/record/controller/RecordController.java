@@ -57,4 +57,19 @@ public class RecordController {
         return ResponseEntity.ok(responseDto);
     }
 
+
+    // 운동 종료하기 api
+    @PatchMapping("/exercise/end")
+    @ChildRequired
+    @Tag(name = "Record API", description = "운동 기록 api")
+    @Operation(summary = "운동 종료하기 api", description = "운동을 종료합니다.")
+    public ResponseEntity<ResponseDto> endExercise(HttpServletRequest request) {
+        log.info("POST /api/record/exercise/end");
+
+        Long childId = jwtExtratService.jwtFindId(request);
+        ResponseDto responseDto = recordService.endExercise(childId);
+        return ResponseEntity.ok(responseDto);
+    }
+
+
 }

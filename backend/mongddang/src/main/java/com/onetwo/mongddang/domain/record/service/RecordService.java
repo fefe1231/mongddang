@@ -36,7 +36,14 @@ public class RecordService {
     private final CtoPUtils ctoPUtils;
     private final DateTimeUtils dateTimeUtils;
 
-    // 환아의 활동 기록 조회
+    /**
+     * 환아의 활동 기록 조회
+     * @param userId 조회를 시도하는 사용자 아이디
+     * @param nickname 조회 대상의 닉네임
+     * @param startDate 조회 시작 월 (YYYY-MM)
+     * @param endDate 조회 종료일 월 (YYYY-MM)
+     * @return ResponseDto
+     */
     public ResponseDto getRecord(Long userId, String nickname, String startDate, String endDate) {
         log.info("getRecord userId: {}", userId);
 
@@ -138,7 +145,11 @@ public class RecordService {
                 .build();
     }
 
-    // 운동 시작하기
+    /**
+     * 운동 시작하기
+     * @param childId 운동 시작을 시도하는 아이의 아이디
+     * @return ResponseDto
+     */
     @Transactional
     public ResponseDto startExercise(Long childId) {
         log.info("startExercise childId: {}", childId);
@@ -180,7 +191,40 @@ public class RecordService {
 
     }
 
+    /**
+     * 운동 종료하기
+     * @param childId 운동 종료를 시도하는 아이의 아이디
+     * @return ResponseDto
+     */
+    @Transactional
+    public ResponseDto endExercise(Long childId) {
+        log.info("endExercise childId: {}", childId);
 
-    // 운동 종료하기
+        User child = userRepository.findById(childId)
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+        log.info("child: {}", child.getEmail());
+
+        // 가장 최근에 시작된 운동 기록 조회
+        Optional<Record> lastedExerciseRecord = recordRepository.findTopByChildAndCategoryAndEndTimeIsNullOrderByIdDesc(child, exercise);
+        log.info("가장 최근에 시작된 운동 기록 조회 성공");
+
+        // 운동 중인지 확인
+        log.info("이미 시작된 운동 기록 확인");
+        if (lastedExerciseRecord.isEmpty()) {
+            throw new RestApiException(CustomRecordErrorCode.EXERCISE_NOT_STARTED);
+        }
+
+        // 운동 종료 시간 기록
+        Record exerciseRecord = lastedExerciseRecord.get();
+        exerciseRecord.setEndTime(LocalDateTime.now());
+        exerciseRecord.setIsDone(true);
+
+        recordRepository.save(exerciseRecord);
+        log.info("운동 종료 기록 완료. 종료시간 : {}", exerciseRecord.getEndTime());
+
+        return ResponseDto.builder()
+                .message("운동을 종료합니다.")
+                .build();
+    }
 
 }
