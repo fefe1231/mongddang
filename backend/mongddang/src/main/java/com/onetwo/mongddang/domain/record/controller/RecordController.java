@@ -71,5 +71,31 @@ public class RecordController {
         return ResponseEntity.ok(responseDto);
     }
 
+    // 수면 시작하기 api
+    @PostMapping("/sleep/start")
+    @ChildRequired
+    @Tag(name = "Record API", description = "수면 기록 api")
+    @Operation(summary = "수면 시작하기 api", description = "수면을 시작합니다.")
+    public ResponseEntity<ResponseDto> startSleep(HttpServletRequest request) {
+        log.info("POST /api/record/sleep/start");
+
+        Long childId = jwtExtratService.jwtFindId(request);
+        ResponseDto responseDto = recordService.startSleep(childId);
+        return ResponseEntity.ok(responseDto);
+    }
+
+
+    // 수면 종료하기 api
+    @PatchMapping("/sleep/end")
+    @ChildRequired
+    @Tag(name = "Record API", description = "수면 기록 api")
+    @Operation(summary = "수면 종료하기 api", description = "수면을 종료합니다.")
+    public ResponseEntity<ResponseDto> endSleep(HttpServletRequest request) {
+        log.info("POST /api/record/sleep/end");
+
+        Long childId = jwtExtratService.jwtFindId(request);
+        ResponseDto responseDto = recordService.endSleep(childId);
+        return ResponseEntity.ok(responseDto);
+    }
 
 }

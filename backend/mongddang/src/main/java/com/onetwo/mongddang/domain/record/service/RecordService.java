@@ -223,4 +223,79 @@ public class RecordService {
                 .build();
     }
 
+
+    /**
+     * 수면 시작하기
+     * @param childId 수면 시작을 시도하는 아이의 아이디
+     * @return ResponseDto
+     */
+    @Transactional
+    public ResponseDto startSleep(Long childId) {
+        log.info("startSleep childId: {}", childId);
+
+        User child = userRepository.findById(childId)
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+        log.info("child: {}", child.getEmail());
+
+        log.info("가장 최근에 시작된 수면 기록 조회");
+        Optional<Record> lastedSleepRecord = recordRepository.findTopByChildAndCategoryAndEndTimeIsNullOrderByIdDesc(child, sleeping);
+
+        log.info("이미 시작된 수면 기록 확인");
+        if (lastedSleepRecord.isPresent()) {
+            throw new RestApiException(CustomRecordErrorCode.SLEEP_ALREADY_STARTED);
+        }
+
+        // 수면 시작 시간 기록
+        Record sleepRecord = Record.builder()
+                .child(child)
+                .category(sleeping)
+                .startTime(LocalDateTime.now())
+                .endTime(null)
+                .content(null)
+                .imageUrl(null)
+                .isDone(false)
+                .mealTime(null)
+                .build();
+
+        recordRepository.save(sleepRecord);
+        log.info("수면 시작 기록 완료. 시작시간 : {}", sleepRecord.getStartTime());
+
+        return ResponseDto.builder()
+                .message("수면을 시작합니다.")
+                .build();
+    }
+
+    /**
+     * 수면 종료하기
+     * @param childId 수면 종료를 시도하는 아이의 아이디
+     * @return ResponseDto
+     */
+    @Transactional
+    public ResponseDto endSleep(Long childId) {
+        log.info("endSleep childId: {}", childId);
+
+        User child = userRepository.findById(childId)
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+        log.info("child: {}", child.getEmail());
+
+        log.info("가장 최근에 시작된 수면 기록 조회");
+        Optional<Record> lastedSleepRecord = recordRepository.findTopByChildAndCategoryAndEndTimeIsNullOrderByIdDesc(child, sleeping);
+
+        log.info("이미 시작된 수면 기록 확인");
+        if (lastedSleepRecord.isEmpty()) {
+            throw new RestApiException(CustomRecordErrorCode.SLEEP_NOT_STARTED);
+        }
+
+        // 수면 종료 시간 기록
+        Record sleepRecord = lastedSleepRecord.get();
+        sleepRecord.setEndTime(LocalDateTime.now());
+        sleepRecord.setIsDone(true);
+
+        recordRepository.save(sleepRecord);
+        log.info("수면 종료 기록 완료. 종료시간 : {}", sleepRecord.getEndTime());
+
+        return ResponseDto.builder()
+                .message("수면을 종료합니다.")
+                .build();
+    }
 }
