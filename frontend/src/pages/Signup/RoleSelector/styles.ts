@@ -1,4 +1,3 @@
-import ColorStyle from '@/shared/ui/styles/colorStyles';
 import { Colors } from '@/shared/ui/styles/globalStyles';
 import { css } from '@emotion/react';
 
@@ -13,26 +12,29 @@ export const containerCss = css`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 10px;
-  padding: 20px;
+  gap: 0.625rem;
+  padding: 1.25rem;
   margin: 8rem 0 1rem;
 `;
 
 export const buttonGroupCss = css`
   display: flex;
-  gap: 10px;
-  margin-top: 10px;
+  gap: 0.625rem;
+  margin-top: 0.625rem;
 `;
 
 export const nextbtnCss = css`
-  display: flex;
-  justify-content: flex-end;
-  padding-right: 1.25rem;
+  width: 17.1rem;
+  margin-top: 1rem;
 `;
 
-// 수정된 btnCss 함수
-export const btnCss = (role: string | undefined, currentRole: 'S' | 'P') => css`
-  border: 2px solid ${role === currentRole ? Colors['primary'][400] : Colors['dark'][400]};
+
+export const btnCss = (
+  role: string | undefined,
+  currentRole: 'child' | 'protector'
+) => css`
+  border: 2px solid
+    ${role === currentRole ? Colors['primary'][400] : Colors['dark'][400]};
   display: flex;
   flex-direction: column;
   align-items: center;

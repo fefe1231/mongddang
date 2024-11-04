@@ -5,147 +5,202 @@ import { TextField } from '@/shared/ui/TextField';
 import { Typography } from '@/shared/ui/Typography';
 import { textFieldCss } from './styles';
 import { handleDateChange } from '@/Utils/birthUtils';
-import { validateNickname } from '@/Utils/validationUtils';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { UserRole } from '..';
+import { signUp } from '../api';
+import { useMutation } from '@tanstack/react-query';
+import { updateNickname } from '@/pages/profile/nickname-edit/api';
+import { Palette } from '@/shared/model/globalStylesTyes';
 
-export const DataForm = () => {
-  const [gender, setGender] = useState<'M' | 'F' | undefined>(undefined);
+export const DataForm = ({ role }: { role: UserRole }) => {
+  const [gender, setGender] = useState<'male' | 'female' | undefined>(
+    undefined
+  );
   const [birthYear, setBirthYear] = useState<string>('');
   const [birthMonth, setBirthMonth] = useState<string>('');
   const [birthDay, setBirthDay] = useState<string>('');
   const [nickname, setNickname] = useState<string>('');
-  const [, setNicknameError] = useState<string>('');
-  const handleYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    handleDateChange(value, 'year', setBirthYear);
-  };
+  const [name, setName] = useState<string>('');
+  const [color, setColor] = useState<Palette>('primary');
+  const [msg, setMsg] = useState<string>('');
+  const nav = useNavigate();
+  const location = useLocation();
+  const idToken = location.state?.idToken;
 
-  const handleMonthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    handleDateChange(value, 'month', setBirthMonth);
-  };
+  const handleDateChangeWrapper =
+    (type: 'year' | 'month' | 'day') =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      handleDateChange(
+        e.target.value,
+        type,
+        type === 'year'
+          ? setBirthYear
+          : type === 'month'
+            ? setBirthMonth
+            : setBirthDay
+      );
+    };
 
-  const handleDayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    handleDateChange(value, 'day', setBirthDay);
-  };
-  
-  // 닉네임 유효성 검사
+  const getBirthString = () =>
+    `${birthYear}-${birthMonth.padStart(2, '0')}-${birthDay.padStart(2, '0')}`;
+
   const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNickname(e.target.value);
-    if (nickname.length > 10) {
-      setNickname(nickname.slice(0, 10));
-    }
-    setNicknameError(validateNickname(e.target.value));
+    const newNickname = e.target.value.slice(0, 10); // 10자 제한
+    setNickname(newNickname);
   };
+
+  const signupHandler = async () => {
+    if (
+      !nickname ||
+      !birthYear ||
+      !birthMonth ||
+      !birthDay ||
+      !name ||
+      !gender ||
+      !role
+    ) {
+      alert('모든 필드를 입력해주세요.');
+      return;
+    }
+
+    const birth = getBirthString();
+    try {
+      const response = await signUp(
+        idToken,
+        role,
+        birth,
+        name,
+        nickname,
+        gender
+      );
+      if (response) {
+        alert('회원가입이 완료되었습니다.');
+        nav('/login'); // 또는 다음 페이지로 이동
+      }
+    } catch (error) {
+      console.error('회원가입 실패:', error);
+      alert('회원가입에 실패했습니다. 다시 시도해주세요.');
+    }
+  };
+
+  const { mutate } = useMutation({
+    mutationFn: updateNickname,
+    onSuccess: () => {
+      setMsg('사용 가능한 닉네임입니다.');
+      setColor('primary');
+    },
+    onError: () => {
+      setMsg(
+        nickname.length === 0
+          ? '닉네임을 작성해주세요.'
+          : '이미 사용 중인 닉네임입니다.'
+      );
+      setColor('danger');
+    },
+  });
+
   return (
-    <div>
-      <div style={{ margin: '2rem' }}>
-        <Typography color="dark" size="1.25" weight={600}>
-          회원가입을 위해
-          <br />
-          정보를 입력해주세요!
-        </Typography>
-        <div css={textFieldCss}>
-          <div style={{ display: 'flex', gap: '1rem', margin: '1rem 0' }}>
-            <TextField
-              color="primary"
-              defaultValue=""
-              label="닉네임"
-              placeholder=""
-              type="text"
-              variant="outlined"
-              value={nickname}
-              onChange={handleNicknameChange}
-              style={{ flexGrow: 1 }}
-            />
-            <Button
-              color="primary"
-              fontSize="1"
-              variant="contained"
-              handler={() => {}}
-            >
-              확인
-            </Button>
-          </div>
-          <div style={{ display: 'flex', gap: '1rem', margin: '1rem 0' }}>
-            <TextField
-              color="primary"
-              defaultValue=""
-              label="YYYY"
-              placeholder=""
-              type="text"
-              variant="outlined"
-              value={birthYear}
-              onChange={handleYearChange}
-            />
-            <TextField
-              color="primary"
-              defaultValue=""
-              label="MM"
-              placeholder=""
-              type="text"
-              variant="outlined"
-              value={birthMonth}
-              onChange={handleMonthChange}
-            />
-            <TextField
-              color="primary"
-              defaultValue=""
-              label="DD"
-              placeholder=""
-              type="text"
-              variant="outlined"
-              value={birthDay}
-              onChange={handleDayChange}
-            />
-          </div>
-          <div style={{ margin: '1rem 0' }}>
-            <TextField
-              color="primary"
-              defaultValue=""
-              label="이름"
-              placeholder=""
-              type="text"
-              variant="outlined"
-            />
-          </div>
-          <div
-            style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}
-          >
-            <Button
-              color={'light'}
-              fontSize="1"
-              variant={gender === 'M' ? 'contained' : 'outlined'}
-              handler={() => setGender('M')}
-            >
-              남자
-            </Button>
-            <Button
-              color={'light'}
-              fontSize="1"
-              variant={gender === 'F' ? 'contained' : 'outlined'}
-              handler={() => setGender('F')}
-            >
-              여자
-            </Button>
-          </div>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            marginTop: '1rem',
-          }}
-        >
+    <div style={{ margin: '2rem' }}>
+      <Typography color="dark" size="1.25" weight={600}>
+        회원가입을 위해
+        <br />
+        정보를 입력해주세요!
+      </Typography>
+      <div css={textFieldCss}>
+        <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+          <TextField
+            color="primary"
+            label="닉네임"
+            variant="outlined"
+            value={nickname}
+            onChange={handleNicknameChange}
+            style={{ flexGrow: 1 }}
+          />
           <Button
             color="primary"
             fontSize="1"
             variant="contained"
-            handler={() => {}}
+            handler={() => mutate(nickname)}
           >
-            가입하기
+            확인
           </Button>
         </div>
+        {msg && (
+          <Typography color={color} size="1" weight={500}>
+            {msg}
+          </Typography>
+        )}
+        <div style={{ margin: '1rem 0' }}>
+          <TextField
+            color="primary"
+            label="이름"
+            variant="outlined"
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+        <Typography color='dark' size="1" weight={500}>
+          생년월일
+        </Typography>
+        <div style={{ display: 'flex', gap: '1rem', margin: '1rem 0' }}>
+          <TextField
+            color="primary"
+            label="YYYY"
+            variant="outlined"
+            value={birthYear}
+            onChange={handleDateChangeWrapper('year')}
+          />
+          <TextField
+            color="primary"
+            label="MM"
+            variant="outlined"
+            value={birthMonth}
+            onChange={handleDateChangeWrapper('month')}
+          />
+          <TextField
+            color="primary"
+            label="DD"
+            variant="outlined"
+            value={birthDay}
+            onChange={handleDateChangeWrapper('day')}
+          />
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop:'1.3rem'}}>
+          <Button
+            color="light"
+            fontSize="1"
+            fullwidth
+            variant={gender === 'male' ? 'contained' : 'outlined'}
+            handler={() => setGender('male')}
+          >
+            남자
+          </Button>
+          <Button
+            color="light"
+            fontSize="1"
+            fullwidth
+            variant={gender === 'female' ? 'contained' : 'outlined'}
+            handler={() => setGender('female')}
+          >
+            여자
+          </Button>
+        </div>
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          marginTop: '2rem',
+        }}
+      >
+        <Button
+          color="primary"
+          fontSize="1"
+          variant="contained"
+          handler={signupHandler}
+          fullwidth
+        >
+          가입하기
+        </Button>
       </div>
     </div>
   );
