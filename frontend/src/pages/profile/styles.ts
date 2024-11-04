@@ -20,5 +20,5 @@ export const containerCss = css`
   align-items: center;
   justify-content: center;
   text-align: center;
-  gap: 2rem
+  gap: 1rem
 `
