@@ -12,7 +12,8 @@ import DietModalBtnGroup from '../DietModalBtnGroup/DietModalBtnGroup';
 import DietImage from '../DietImage/DietImage';
 import { TextField } from '@/shared/ui/TextField';
 import { Button } from '@/shared/ui/Button';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { debounce } from 'lodash';
 
 type DietModalProps = {
   closeDietModal: () => void;
@@ -23,9 +24,27 @@ const DietModal = (props: DietModalProps) => {
   const [isDisabled, setIsDisabled] = useState(true);
   const [diet, setDiet] = useState('');
 
+  // 식단 텍스트 등록
+  const debounceSaveDiet = useCallback(
+    debounce((value: string) => {
+      setDiet(value);
+    }, 500),
+    []
+  );
+
   const handleInputDiet = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDiet(e.target.value);
+    debounceSaveDiet(e.target.value);
   };
+
+  // 식단 저장 버튼 활성화
+  useEffect(() => {
+    const handleDisabledBtn = () => {
+      if (diet !== '') {
+        setIsDisabled(false);
+      }
+    };
+    return handleDisabledBtn();
+  }, [diet]);
 
   return (
     <div>
