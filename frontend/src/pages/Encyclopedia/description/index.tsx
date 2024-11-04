@@ -2,8 +2,13 @@
 import { Icon } from '@/shared/ui/Icon';
 import { base, containerCss } from './styles';
 import { Typography } from '@/shared/ui/Typography';
+import { ReactNode } from 'react';
 
-export const Description = () => {
+interface DescriptionProps {
+  children: ReactNode;
+}
+
+export const Description = ({ children }: DescriptionProps) => {
   return (
     <div css={base}>
       <Icon size={5}>
@@ -11,9 +16,7 @@ export const Description = () => {
       </Icon>
       <div css={containerCss}>
         <Typography color="dark" size="0.75" weight={600}>
-          그동안 모은 별가루로 
-          <br />
-          내 친구들을 찾을 수 있어!
+          {children}
         </Typography>
       </div>
     </div>
