@@ -45,5 +45,4 @@ export const coinCss = css`
   top: 50%;
   transform: translateY(-50%);
   left: 0%;
-  z-index: 10;
 `;

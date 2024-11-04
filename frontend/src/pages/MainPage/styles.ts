@@ -4,7 +4,7 @@ import MainBackground from '@/assets/img/잔디.png';
 export const kidsMainBase = css`
   display: flex;
   min-width: 360px;
-  min-height: 640px;
+  height: 100vh;
   justify-content: center;
   background-color: #aedbff;
   background-image: url(${MainBackground});
@@ -43,7 +43,6 @@ export const CharacterContainer = css`
   top: 0;
   transform: translateY(-100%);
   align-items: center;
-  z-index: 10;
 `;
 
 export const mainCharacterCss = css`
