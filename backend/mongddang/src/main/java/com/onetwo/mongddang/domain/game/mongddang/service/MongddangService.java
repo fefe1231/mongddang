@@ -47,8 +47,7 @@ public class MongddangService {
         List<Mongddang> mongddangList = mongddangRepository.findAll();
         List<RequestMongddangListDto> mongddangListDto = mongddangList.stream()
                 .map(mongddang -> {
-                    MyMongddang myMongddang = myMongddangRepository.findByMongddangIdAndChildId(mongddang.getId(), childId)
-                            .orElseThrow(() -> new RestApiException(CustomMongddangErrorCode.CHARACTER_NOT_OWNED));
+                    MyMongddang myMongddang = myMongddangRepository.findByMongddangIdAndChildId(mongddang.getId(), childId).orElse(null);
 
                     // 몽땅 소유 여부
                     boolean isOwned = myMongddang != null;

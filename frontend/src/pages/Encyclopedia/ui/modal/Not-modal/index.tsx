@@ -8,27 +8,28 @@ import { HiOutlineX } from 'react-icons/hi';
 import { Chip } from '@/shared/ui/Chip';
 import { BuyModal } from '../buy-modal';
 import { FindModal } from '../find-modal';
-import { base, modalCss, xiconCss } from './styles';
+import { base, modalCss, xiconCss, storyTypographyCss } from './styles';
+import { ICharacterData } from '@/pages/Encyclopedia/types';
 
 interface OwnModalProps {
   setstate: (value: boolean) => void;
+  data: ICharacterData | null;
 }
 
-export const Notmodal = ({ setstate }: OwnModalProps) => {
+export const Notmodal = ({ setstate, data }: OwnModalProps) => {
   const [buyModal, setBuyModal] = useState<boolean>(false);
   const [findModal, setFindModal] = useState<boolean>(false);
 
   const handleBuyModalBlue = () => {
-    setBuyModal(false);  // Close the buy modal
-    setFindModal(true);  // Open the find modal
+    setBuyModal(false);
+    setFindModal(true);
   };
 
   const handlefindModalBlue = () => {
-    setBuyModal(false);  // Close the buy modal
+    setBuyModal(false);
     setFindModal(true);
-    setstate(false)  // Open the find modal
+    setstate(false);
   };
-
 
   return (
     <div>
@@ -38,7 +39,7 @@ export const Notmodal = ({ setstate }: OwnModalProps) => {
         </Icon>
         <div css={base}>
           <Chip border={0.625} color="primary" fontSize={1} fontWeight={700}>
-            몽땅
+            {data?.name}
           </Chip>
           <Icon size={5}>
             <img
@@ -47,10 +48,13 @@ export const Notmodal = ({ setstate }: OwnModalProps) => {
               src="/img/말랑3.png"
             />
           </Icon>
-          <Typography color="dark" size="1" weight={600}>
-            이모션 왕국 최애 몽땅
-            <br />
-            주변에 항상 하트가 떠다닌다.
+          <Typography 
+            color="dark" 
+            size="1" 
+            weight={600} 
+            css={storyTypographyCss}
+          >
+            {data?.story}
           </Typography>
           <Button
             handler={() => setBuyModal(true)}

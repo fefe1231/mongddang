@@ -6,7 +6,6 @@ import lombok.Getter;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 
 @Getter
 @Builder
@@ -19,7 +18,7 @@ public class UserInfoDto {
     private String invitationCode;
     private LocalDate birth;
     private User.Gender gender;
-    private Long mainMongddangId;
-    private Long mainTitleId;
+    private MaingameDto mainMongddang;
+    private MaingameDto mainTitle;
     private List<ConnectedUserInfoDto> connected;
 }

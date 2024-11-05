@@ -2,14 +2,19 @@
 import { IconTypo } from '@/shared/ui/IconTypo';
 import { containerCss, newCss } from './styles';
 import { Typography } from '@/shared/ui/Typography';
+import { ICharacterData } from '@/pages/Encyclopedia/types';
+interface OwnCharacterProps {
+  data: ICharacterData;
+}
+export const Newcharacter = ({data}: OwnCharacterProps
 
-export const Newcharacter = () => {
+) => {
   return (
     <div css={containerCss}>
       <IconTypo
         fontSize="1"
         icon="/img/말랑2.png"
-        menu="반짝몽땅"
+        menu={data.name}
         size={5}
       />
       <Typography
