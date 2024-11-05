@@ -23,16 +23,34 @@ export const getTitleAchievement = (
 ) => {
   const data = {
     achievementId,
-  }
-  
+  };
+
   const options = {
     headers: {
-      Authorization: `Bearer ${accessToken}`, 
+      Authorization: `Bearer ${accessToken}`,
     },
   };
 
   return api.post<IAchievement>(
     '/api/game/collection/achievement/claim',
+    data,
+    options
+  );
+};
+
+export const getTitleMain = (accessToken: string, titleId: number) => {
+  const data = {
+    titleId,
+  };
+
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  };
+
+  return api.patch<IAchievement>(
+    '/api/game/collection/title/main',
     data,
     options
   );

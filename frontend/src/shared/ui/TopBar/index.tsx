@@ -35,6 +35,7 @@ export const TopBar = ({
       )}
       {type === 'modal' && (
         <>
+          <div style={{ width: '2rem' }} /> {/* 왼쪽 공백 */}
           <Typography
             style={{ flexGrow: 1, textAlign: 'center' }}
             color="light"

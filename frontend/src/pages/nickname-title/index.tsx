@@ -10,6 +10,7 @@ import { toggleContainerCss } from './styles';
 import { useQuery } from '@tanstack/react-query';
 import { getTitleInfo } from './api';
 import { ItitleData } from './types';
+import { AchievementToast } from './ui/Toast';
 
 export const NicknameTitle = () => {
   const TitleQuery = useQuery({
@@ -43,6 +44,7 @@ export const NicknameTitle = () => {
       {TitleQuery.data?.data?.data.map((data: ItitleData) => (
         <TitleComponent key={data.titleId} title={data} />
       ))}
+      <AchievementToast css={conta/>
     </div>
   );
 };

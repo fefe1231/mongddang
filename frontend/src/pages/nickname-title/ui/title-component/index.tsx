@@ -7,7 +7,7 @@ import { base, containerCss, progressCss } from './styles';
 import { UpdateCharacter } from '../modal';
 import { ItitleData } from '../../types';
 import { useMutation } from '@tanstack/react-query';
-import { getTitleAchievement } from '../../api';
+import { getTitleAchievement, getTitleMain } from '../../api';
 
 interface TitleComponentProps {
   title: ItitleData;
@@ -15,7 +15,7 @@ interface TitleComponentProps {
 
 export const TitleComponent = ({ title }: TitleComponentProps) => {
   const [isModal, setIsModal] = useState(false);
-  
+
   const { mutate } = useMutation({
     mutationFn: async () => {
       const accessToken = localStorage.getItem('accessToken') || '';
@@ -27,9 +27,30 @@ export const TitleComponent = ({ title }: TitleComponentProps) => {
     },
     onSuccess: () => {
       alert('업적 달성 보상 수령에 성공하였습니다.');
+      setIsModal(false)
+      window.location.reload();
     },
     onError: () => {
       alert('업적 달성에 실패했습니다.');
+    },
+  });
+
+  const { mutate:mainmutate } = useMutation({
+    mutationFn: async () => {
+      const accessToken = localStorage.getItem('accessToken') || '';
+      if (!accessToken) {
+        throw new Error('AccessToken이 필요합니다.');
+      }
+      console.log('토큰', accessToken);
+      return await getTitleMain(accessToken, title.titleId);
+    },
+    onSuccess: () => {
+      alert('대표 설정에 성공하였습니다.');
+      setIsModal(false)
+      window.location.reload();
+    },
+    onError: () => {
+      alert('대표 달성에 실패했습니다.');
     },
   });
 
@@ -51,15 +72,47 @@ export const TitleComponent = ({ title }: TitleComponentProps) => {
           </Typography>
         </div>
         <div>
-          <Button
-            color="primary"
-            fontSize="1"
-            variant="contained"
-            handler={() => setIsModal(true)}
-            disabled={title.count !== title.executionCount}
-          >
-            획득
-          </Button>
+          {title.isOwned && title.isMain ? (
+            <Button
+              color="primary"
+              fontSize="1"
+              variant="contained"
+              handler={() => setIsModal(true)}
+              disabled
+            >
+              대표
+            </Button>
+          ) : title.isOwned ? (
+            <Button
+              color="primary"
+              fontSize="1"
+              variant="contained"
+              handler={() => setIsModal(true)}
+              disabled={title.count !== title.executionCount}
+            >
+              대표설정
+            </Button>
+          ) : title.count !== title.executionCount ? (
+            <Button
+              color="primary"
+              fontSize="1"
+              variant="contained"
+              handler={() => setIsModal(true)}
+              disabled={title.count !== title.executionCount}
+            >
+              획득
+            </Button>
+          ) : (
+            <Button
+              color="primary"
+              fontSize="1"
+              variant="contained"
+              handler={() => setIsModal(true)}
+              disabled={title.count !== title.executionCount}
+            >
+              획득
+            </Button>
+          )}
         </div>
       </div>
       <div css={progressCss}>
@@ -76,7 +129,7 @@ export const TitleComponent = ({ title }: TitleComponentProps) => {
       </div>
       {isModal && (
         <UpdateCharacter
-          bluehandler={mutate}
+          bluehandler={mainmutate}
           redhandler={() => setIsModal(false)}
         />
       )}
