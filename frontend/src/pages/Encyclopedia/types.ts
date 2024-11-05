@@ -12,5 +12,5 @@ export interface ICharacterData {
 export interface ICharacterInfo {
   code: string;
   message: string;
-  data: ICharacterData;
+  data: ICharacterData[];
 }

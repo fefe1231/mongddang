@@ -1,15 +1,18 @@
 /** @jsxImportSource @emotion/react */
 import { IconTypo } from '@/shared/ui/IconTypo';
 import { containerCss } from './styles';
-
-export const Notowncharacter = () => {
+import { ICharacterData } from '@/pages/Encyclopedia/types';
+interface OwnCharacterProps {
+  data: ICharacterData;
+}
+export const Notowncharacter = ({data}: OwnCharacterProps) => {
   return (
     <>
       <div css={containerCss}>
         <IconTypo
           fontSize="1"
           icon="/img/말랑3.png"
-          menu="몰라요 몽땅"
+          menu={data.name}
           size={5}
           disabled
         />
