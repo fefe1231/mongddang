@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { TopBar } from '@/shared/ui/TopBar';
 import space from '../../assets/img/space.png';

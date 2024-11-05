@@ -1,7 +1,7 @@
 import { SerializedStyles, css } from '@emotion/react';
 import { ProgressVariant } from './Progress.types';
 import { Palette, Size } from '@/shared/model/globalStylesTyes';
-import ColorStyle from '../styles/ColorStyles';
+import ColorStyle from '../styles/colorStyles';
 
 export const base = (transparentBackground: boolean) => css`
   overflow: hidden;
