@@ -10,10 +10,23 @@ import { toggleContainerCss } from './styles';
 import { useQuery } from '@tanstack/react-query';
 import { getTitleInfo } from './api';
 import { ItitleData } from './types';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export const NicknameTitle = () => {
   const [isOn, setIsOn] = useState(false);
+
+  useEffect(() => {
+    const savedToggleState = localStorage.getItem('titleToggle');
+    if (savedToggleState) {
+      setIsOn(JSON.parse(savedToggleState));
+    }
+  }, []);
+
+  const handleToggle = () => {
+    const newToggleState = !isOn;
+    setIsOn(newToggleState);
+    localStorage.setItem('titleToggle', JSON.stringify(newToggleState));
+  };
 
   const TitleQuery = useQuery({
     queryKey: ['title'],
@@ -38,10 +51,10 @@ export const NicknameTitle = () => {
         <Typography color="light" size="0.75" weight={700}>
           {isOn ? '모은 것만' : '안 모은 것만'}
         </Typography>
-        <Toggle color="primary" size={2.5} isOn={isOn} onClick={() => setIsOn(!isOn)} />
+        <Toggle color="primary" size={2.5} isOn={isOn} onClick={handleToggle} />
       </div>
       {TitleQuery.data?.data?.data
-        .filter((data: ItitleData) => (isOn ? data.isOwned : !data.isOwned)) // isOn이 true일 때는 isOwned가 true인 항목만, false일 때는 isOwned가 false인 항목만 필터링
+        .filter((data: ItitleData) => (isOn ? data.isOwned : !data.isOwned))
         .map((data: ItitleData) => (
           <TitleComponent key={data.titleId} title={data} />
         ))}
