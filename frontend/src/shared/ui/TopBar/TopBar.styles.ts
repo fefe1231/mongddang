@@ -6,6 +6,7 @@ export const base = (type: TTopBar) => css`
   top: 0;
   display: flex;
   align-items: center;
+  justify-content: ${type === 'modal' ? 'space-between' : 'flex-start'};
   width: 100%;
   height: 3rem;
   min-height: 3rem;
@@ -15,7 +16,8 @@ export const base = (type: TTopBar) => css`
   z-index: 10;
   color: #fff;
 
-  ${type === 'modal' && css`
+  ${type === 'modal' &&
+  css`
     border-radius: 1.25rem 1.25rem 0 0;
   `}
 `;

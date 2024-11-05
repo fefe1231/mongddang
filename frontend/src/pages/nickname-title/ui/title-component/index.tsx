@@ -5,15 +5,69 @@ import { Typography } from '@/shared/ui/Typography';
 import { useState } from 'react';
 import { base, containerCss, progressCss } from './styles';
 import { UpdateCharacter } from '../modal';
+import { ItitleData } from '../../types';
+import { useMutation } from '@tanstack/react-query';
+import { getTitleAchievement, getTitleMain } from '../../api';
+import { AchievementToast } from '../Toast';
 
-export const TitleComponent = () => {
+interface TitleComponentProps {
+  title: ItitleData;
+}
+
+export const TitleComponent = ({ title }: TitleComponentProps) => {
   const [isModal, setIsModal] = useState(false);
+  const [isToast, setIsToast] = useState(false);
+
+  const { mutate } = useMutation({
+    mutationFn: async () => {
+      const accessToken = localStorage.getItem('accessToken') || '';
+      if (!accessToken) {
+        throw new Error('AccessToken이 필요합니다.');
+      }
+      console.log('토큰', accessToken);
+      return await getTitleAchievement(accessToken, title.titleId);
+    },
+    onSuccess: () => {
+      alert('업적 달성 보상 수령에 성공하였습니다.');
+      setIsModal(false);
+      setIsToast(true);
+      window.location.reload();
+    },
+    onError: () => {
+      alert('업적 달성에 실패했습니다.');
+    },
+  });
+
+  const { mutate: mainmutate } = useMutation({
+    mutationFn: async () => {
+      const accessToken = localStorage.getItem('accessToken') || '';
+      if (!accessToken) {
+        throw new Error('AccessToken이 필요합니다.');
+      }
+      console.log('토큰', accessToken);
+      return await getTitleMain(accessToken, title.titleId);
+    },
+    onSuccess: () => {
+      alert('대표 설정에 성공하였습니다.');
+      setIsModal(false);
+      window.location.reload();
+    },
+    onError: () => {
+      alert('대표 달성에 실패했습니다.');
+    },
+  });
+
+  const handler = () => {
+    setIsModal(true);
+    mutate();
+  };
+
   return (
     <div css={base}>
       <div css={containerCss}>
         <div>
           <Typography color="dark" size="1" weight={700}>
-            수면마스터
+            {title.titleName}
           </Typography>
           <Typography
             style={{ margin: '0.3rem 0 0' }}
@@ -22,39 +76,75 @@ export const TitleComponent = () => {
             size="0.75"
             weight={600}
           >
-            제 시간에 자기 10번 수행
+            {title.description}
           </Typography>
         </div>
         <div>
-          <Button
-            handler={() => {}}
-            color="primary"
-            fontSize="1"
-            variant="contained"
-            onClick={() => setIsModal(true)}
-            // disabled
-          >
-            획득
-          </Button>
+          {title.isOwned && title.isMain ? (
+            <Button
+              color="primary"
+              fontSize="1"
+              variant="contained"
+              handler={() => setIsModal(true)}
+              disabled
+            >
+              대표
+            </Button>
+          ) : title.isOwned ? (
+            <Button
+              color="primary"
+              fontSize="1"
+              variant="contained"
+              handler={() => setIsModal(true)}
+              disabled={title.count !== title.executionCount}
+            >
+              대표설정
+            </Button>
+          ) : title.count !== title.executionCount ? (
+            <Button
+              color="primary"
+              fontSize="1"
+              variant="contained"
+              handler={() => setIsModal(true)}
+              disabled={title.count !== title.executionCount}
+            >
+              획득
+            </Button>
+          ) : (
+            <Button
+              color="primary"
+              fontSize="1"
+              variant="contained"
+              handler={handler}
+              disabled={title.count !== title.executionCount}
+            >
+              획득
+            </Button>
+          )}
         </div>
       </div>
       <div css={progressCss}>
         <Progress
           color="success"
-          max={10}
+          max={title.count}
           size="lg"
-          value={10}
+          value={title.executionCount}
           variant="rectangle"
         />
         <Typography color="dark" scale="500" size="0.75" weight={500}>
-          (10/10)
+          {title.executionCount}/{title.count}
         </Typography>
       </div>
       {isModal && (
         <UpdateCharacter
-          bluehandler={() => {}}
+          bluehandler={mainmutate}
           redhandler={() => setIsModal(false)}
         />
+      )}
+      {isToast && (
+        <div css={containerCss}>
+          <AchievementToast />
+        </div>
       )}
     </div>
   );
