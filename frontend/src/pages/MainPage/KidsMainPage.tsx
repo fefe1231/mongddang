@@ -21,13 +21,17 @@ import MainCharacter from '@/assets/img/말랑1.png';
 import ChatBubble from './ui/ChatBubble/ChatBubble';
 import { useState } from 'react';
 import DietModal from './ui/DietModal/DietModal';
+import MailBox from './ui/MailBox/MailBox';
 
 const KidsMainPage = () => {
-
-  const [openDietModal, setOpenDietModal] = useState(true)
+  const [openDietModal, setOpenDietModal] = useState(false);
+  const [openMailBox, setOpenMailBox] = useState(false);
   const closeDietModal = () => {
-    setOpenDietModal(false)
-  }
+    setOpenDietModal(false);
+  };
+  const closeMailBox = () => {
+    setOpenMailBox(false);
+  };
 
   return (
     <div css={kidsMainBase}>
@@ -51,11 +55,17 @@ const KidsMainPage = () => {
               />
             </div>
             <div css={iconVerticalCss}>
-              <IconTypo
-                icon="/img/%EB%A7%90%EB%9E%911.png"
-                fontSize="0.75"
-                menu="알림"
-              />
+              <div
+                onClick={() => {
+                  setOpenMailBox(true);
+                }}
+              >
+                <IconTypo
+                  icon="/img/%EB%A7%90%EB%9E%911.png"
+                  fontSize="0.75"
+                  menu="알림"
+                />
+              </div>
               <IconTypo
                 icon="/img/%EB%A7%90%EB%9E%911.png"
                 fontSize="0.75"
@@ -80,7 +90,12 @@ const KidsMainPage = () => {
           </div>
           {/* 일상생활 버튼 4종 */}
           <div css={routineGroupCss}>
-            <Icon size={2.5} onClick={()=>{setOpenDietModal(true)}}>
+            <Icon
+              size={2.5}
+              onClick={() => {
+                setOpenDietModal(true);
+              }}
+            >
               <img alt="icon-0" src="/img/%EB%A7%90%EB%9E%911.png" />
             </Icon>
             <Icon size={2.5}>
@@ -103,11 +118,12 @@ const KidsMainPage = () => {
           />
         </div>
       </div>
-      
+
       {/* 식단 등록 모달 */}
-      {
-        openDietModal && <DietModal closeDietModal={closeDietModal}/>
-      }
+      {openDietModal && <DietModal closeDietModal={closeDietModal} />}
+
+      {/* 알림창 */}
+      {openMailBox && <MailBox closeMailBox={closeMailBox} />}
     </div>
   );
 };

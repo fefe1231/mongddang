@@ -5,9 +5,9 @@ const config: CapacitorConfig = {
   appName: 'mongddang',
   webDir: 'dist',
   server: {
-    url: "http://192.168.1.5:8100",
-    cleartext: true
-  }
+    url: 'http://192.168.25.44:8100',
+    cleartext: true,
+  },
 };
 
 export default config;

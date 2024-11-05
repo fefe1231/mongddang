@@ -1,7 +1,7 @@
 import { SerializedStyles, css } from '@emotion/react';
 import { ToastVariant } from './Toast.types';
 import { Palette } from '@/shared/model/globalStylesTyes';
-import ColorStyle from '../styles/ColorStyles';
+import ColorStyle from '../styles/colorStyles';
 
 const colors: Record<Palette, string> = {
   primary: '#F3E5F5',
@@ -45,4 +45,3 @@ export const variants: Record<
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   `,
 };
-

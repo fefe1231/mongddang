@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { Tnotification } from './Notification.types';
-import ColorStyle from '../styles/ColorStyles';
+import ColorStyle from '../styles/colorStyles';
 
 export const base = (type: Tnotification, width: number, height: number) => css`
   position: relative;
