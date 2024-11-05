@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { ButtonVariant } from './Button.types';
 import { ColorScale, Palette } from '@/shared/model/globalStylesTyes';
 import { Colors } from '../styles/globalStyles';
-import ColorStyle from '../styles/ColorStyles';
+import ColorStyle from '../styles/colorStyles';
 
 export const base = (
   color: Palette,
