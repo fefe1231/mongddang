@@ -22,13 +22,17 @@ export const Toast = ({
   children,
   variant = 'contained',
   color = 'primary',
+  fontSize = 1,
+  isIcon = false,
   ...props
 }: ToastProps) => {
   return (
-    <div css={[base, variants[variant](color)]} {...props}>
-      <Icon color={variant === 'filled' ? 'light' : 'dark'}>
-        {colorToIcon[color]}
-      </Icon>
+    <div css={[base(fontSize), variants[variant](color, fontSize)]} {...props}>
+      {isIcon ? (
+        <Icon color={variant === 'filled' ? 'light' : 'dark'}>
+          {colorToIcon[color]}
+        </Icon>
+      ) : undefined}
       <Typography size={'1'} weight={500} color="dark">
         {children}
       </Typography>
