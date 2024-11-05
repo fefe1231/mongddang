@@ -8,6 +8,7 @@ import { UpdateCharacter } from '../modal';
 import { ItitleData } from '../../types';
 import { useMutation } from '@tanstack/react-query';
 import { getTitleAchievement, getTitleMain } from '../../api';
+import { AchievementToast } from '../Toast';
 
 interface TitleComponentProps {
   title: ItitleData;
@@ -15,6 +16,7 @@ interface TitleComponentProps {
 
 export const TitleComponent = ({ title }: TitleComponentProps) => {
   const [isModal, setIsModal] = useState(false);
+  const [isToast, setIsToast] = useState(false);
 
   const { mutate } = useMutation({
     mutationFn: async () => {
@@ -27,7 +29,8 @@ export const TitleComponent = ({ title }: TitleComponentProps) => {
     },
     onSuccess: () => {
       alert('업적 달성 보상 수령에 성공하였습니다.');
-      setIsModal(false)
+      setIsModal(false);
+      setIsToast(true);
       window.location.reload();
     },
     onError: () => {
@@ -35,7 +38,7 @@ export const TitleComponent = ({ title }: TitleComponentProps) => {
     },
   });
 
-  const { mutate:mainmutate } = useMutation({
+  const { mutate: mainmutate } = useMutation({
     mutationFn: async () => {
       const accessToken = localStorage.getItem('accessToken') || '';
       if (!accessToken) {
@@ -46,13 +49,18 @@ export const TitleComponent = ({ title }: TitleComponentProps) => {
     },
     onSuccess: () => {
       alert('대표 설정에 성공하였습니다.');
-      setIsModal(false)
+      setIsModal(false);
       window.location.reload();
     },
     onError: () => {
       alert('대표 달성에 실패했습니다.');
     },
   });
+
+  const handler = () => {
+    setIsModal(true);
+    mutate();
+  };
 
   return (
     <div css={base}>
@@ -107,7 +115,7 @@ export const TitleComponent = ({ title }: TitleComponentProps) => {
               color="primary"
               fontSize="1"
               variant="contained"
-              handler={() => setIsModal(true)}
+              handler={handler}
               disabled={title.count !== title.executionCount}
             >
               획득
@@ -132,6 +140,11 @@ export const TitleComponent = ({ title }: TitleComponentProps) => {
           bluehandler={mainmutate}
           redhandler={() => setIsModal(false)}
         />
+      )}
+      {isToast && (
+        <div css={containerCss}>
+          <AchievementToast />
+        </div>
       )}
     </div>
   );
