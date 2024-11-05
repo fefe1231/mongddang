@@ -5,6 +5,7 @@ import com.onetwo.mongddang.common.responseDto.ResponseDto;
 import com.onetwo.mongddang.common.s3.S3ImageService;
 import com.onetwo.mongddang.common.s3.errors.CustomS3ErrorCode;
 import com.onetwo.mongddang.common.utils.DateTimeUtils;
+import com.onetwo.mongddang.common.utils.JsonUtils;
 import com.onetwo.mongddang.domain.medication.dto.MedicationDto;
 import com.onetwo.mongddang.domain.record.dto.RecordDetailsDto;
 import com.onetwo.mongddang.domain.record.dto.RecordWithChildIdDto;
@@ -16,7 +17,6 @@ import com.onetwo.mongddang.domain.user.application.CtoPUtils;
 import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
 import com.onetwo.mongddang.domain.user.model.User;
 import com.onetwo.mongddang.domain.user.repository.UserRepository;
-import com.onetwo.mongddang.domain.user.service.MyChildrenInfoService;
 import com.onetwo.mongddang.errors.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,10 +36,10 @@ public class RecordService {
 
     private final RecordRepository recordRepository;
     private final UserRepository userRepository;
-    private final MyChildrenInfoService myChildrenInfoService;
     private final CtoPUtils ctoPUtils;
     private final DateTimeUtils dateTimeUtils;
     private final S3ImageService s3ImageService;
+    private final JsonUtils jsonUtils;
 
     /**
      * 환아의 활동 기록 조회
@@ -313,15 +313,18 @@ public class RecordService {
     /**
      * 식사 시작하기
      *
-     * @param childId   식사 시작을 시도하는 아이의 아이디
-     * @param content   식사 내용
-     * @param imageFile 이미지 파일 (파일 경로 또는 URL)
-     * @param mealTime  식사 시간 (enum으로 처리)
+     * @param childId     식사 시작을 시도하는 아이의 아이디
+     * @param contentJson 식사 내용
+     * @param imageFile   이미지 파일 (파일 경로 또는 URL)
+     * @param mealTime    식사 시간 (enum으로 처리)
      * @return ResponseDto
      */
     @Transactional
-    public ResponseDto startMeal(Long childId, JsonNode content, MultipartFile imageFile, String mealTime) {
+    public ResponseDto startMeal(Long childId, String contentJson, MultipartFile imageFile, String mealTime) {
         log.info("startMeal childId: {}", childId);
+
+        // SON 문자열을 JsonNode로 변환
+        JsonNode content = jsonUtils.JsonStringToJsonNode(contentJson);
 
         User child = userRepository.findById(childId)
                 .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
@@ -337,7 +340,7 @@ public class RecordService {
 
         String imageUrl = null;
 
-        if (imageFile != null) {
+        if (!imageFile.isEmpty()) {
             // 이미지 파일을 S3에 업로드
             log.info("식사 이미지 파일을 S3에 업로드 시도 (in english : Try to upload meal image file to S3)");
             try {
@@ -406,4 +409,60 @@ public class RecordService {
                 .message("식사를 종료합니다.")
                 .build();
     }
+
+
+    // 식사 수정하기
+    @Transactional
+    public ResponseDto editMeal(Long childId, Long recordId, String contentJson, MultipartFile imageFile, String mealTime) {
+        log.info("updateMeal childId: {}, recordId: {}", childId, recordId);
+
+        // SON 문자열을 JsonNode로 변환
+        JsonNode content = jsonUtils.JsonStringToJsonNode(contentJson);
+
+        // 아이 정보 조회
+        User child = userRepository.findById(childId)
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+        log.info("child: {}", child.getEmail());
+
+        // 식사 기록 조회
+        Record mealRecord = recordRepository.findById(recordId)
+                .orElseThrow(() -> new RestApiException(CustomRecordErrorCode.MEAL_RECORD_NOT_FOUND));
+        log.info("mealRecord: {}", mealRecord.getId());
+
+        // 식사 기록이 아이의 기록인지 확인
+        log.info("식사 기록이 아이의 기록인지 확인 (in english : Check if the meal record is the child's record)");
+        if (!Objects.equals(mealRecord.getChild().getId(), childId)) {
+            throw new RestApiException(CustomRecordErrorCode.CHILD_ACCESS_DENIED);
+        }
+
+        String imageUrl = null;
+
+        log.info("식사 이미지 파일이 있는지 확인 (in english : Check if there is a meal image file)");
+        // 이미지 파일이 있다면 s3 등록 진행
+        if (!imageFile.isEmpty()) {
+            // 이미지 파일을 S3에 업로드
+            log.info("식사 이미지 파일을 S3에 업로드 시도 (in english : Try to upload meal image file to S3)");
+            try {
+                imageUrl = s3ImageService.upload(imageFile); // MultipartFile 을 File 로 변환 후 S3에 업로드
+            } catch (Exception e) {
+                throw new RestApiException(CustomS3ErrorCode.IMAGE_UPLOAD_FAILED);
+            }
+            log.info("식사 이미지 파일을 S3에 업로드 완료 (in english : Meal image file uploaded to S3)");
+        }
+
+        log.info("식사 이미지 파일 없음 (in english : No meal image file)");
+
+        // 식사 내용 수정
+        mealRecord.setContent(content);
+        mealRecord.setImageUrl(imageUrl);
+        mealRecord.setMealTime(Record.MealTimeType.valueOf(mealTime));
+
+        recordRepository.save(mealRecord);
+        log.info("식사 수정 완료 (in english : Meal modification completed)");
+
+        return ResponseDto.builder()
+                .message("식사를 수정합니다.")
+                .build();
+    }
+
 }

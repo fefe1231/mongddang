@@ -17,6 +17,8 @@ public enum CustomRecordErrorCode implements ErrorCode {
     SLEEP_NOT_STARTED(HttpStatus.BAD_REQUEST, "RE006", "수면 기록이 시작되지 않았습니다."),
     MEAL_ALREADY_STARTED(HttpStatus.BAD_REQUEST, "RE007", "이미 식사 기록이 시작되었습니다."),
     MEAL_NOT_STARTED(HttpStatus.BAD_REQUEST, "RE008", "식사 기록이 시작되지 않았습니다."),
+    MEAL_RECORD_NOT_FOUND(HttpStatus.NOT_FOUND, "RE009", "식사 기록을 찾을 수 없습니다."),
+    MEAL_ALREADY_ENDED(HttpStatus.BAD_REQUEST, "RE010", "이미 식사 기록이 종료되었습니다."),
     ;
 
     private final HttpStatus httpStatus;
