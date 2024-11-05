@@ -16,3 +16,7 @@ export interface ItitleInfo {
   message: string;
   data: ItitleData[];
 }
+
+export interface IAchievement {
+  achievementId: number
+}

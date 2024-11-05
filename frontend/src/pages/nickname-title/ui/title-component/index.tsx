@@ -6,12 +6,33 @@ import { useState } from 'react';
 import { base, containerCss, progressCss } from './styles';
 import { UpdateCharacter } from '../modal';
 import { ItitleData } from '../../types';
+import { useMutation } from '@tanstack/react-query';
+import { getTitleAchievement } from '../../api';
+
 interface TitleComponentProps {
   title: ItitleData;
 }
+
 export const TitleComponent = ({ title }: TitleComponentProps) => {
   const [isModal, setIsModal] = useState(false);
-  console.log(title);
+  
+  const { mutate } = useMutation({
+    mutationFn: async () => {
+      const accessToken = localStorage.getItem('accessToken') || '';
+      if (!accessToken) {
+        throw new Error('AccessToken이 필요합니다.');
+      }
+      console.log('토큰', accessToken);
+      return await getTitleAchievement(accessToken, title.titleId);
+    },
+    onSuccess: () => {
+      alert('업적 달성 보상 수령에 성공하였습니다.');
+    },
+    onError: () => {
+      alert('업적 달성에 실패했습니다.');
+    },
+  });
+
   return (
     <div css={base}>
       <div css={containerCss}>
@@ -31,12 +52,11 @@ export const TitleComponent = ({ title }: TitleComponentProps) => {
         </div>
         <div>
           <Button
-            handler={() => {}}
             color="primary"
             fontSize="1"
             variant="contained"
-            onClick={() => setIsModal(true)}
-            disabled={title.count !== title.executionCount} // disabled 속성을 boolean으로 설정
+            handler={() => setIsModal(true)}
+            disabled={title.count !== title.executionCount}
           >
             획득
           </Button>
@@ -56,7 +76,7 @@ export const TitleComponent = ({ title }: TitleComponentProps) => {
       </div>
       {isModal && (
         <UpdateCharacter
-          bluehandler={() => {}}
+          bluehandler={mutate}
           redhandler={() => setIsModal(false)}
         />
       )}

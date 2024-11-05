@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {  ItitleInfo } from './types';
+import { IAchievement, ItitleInfo } from './types';
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -9,7 +9,6 @@ export const api = axios.create({
   withCredentials: true,
 });
 
-
 export const getTitleInfo = (accessToken: string) => {
   return api.get<ItitleInfo>('/api/game/collection/achievement', {
     headers: {
@@ -18,16 +17,23 @@ export const getTitleInfo = (accessToken: string) => {
   });
 };
 
-// export const getTitleInfo = async (accessToken: string): Promise<{ data: ItitleData[] }> => {
-//   try {
-//     const response = await axios.get<{ data: ItitleData[] }>('/api/game/collection/achievement', {
-//       headers: {
-//         Authorization: `Bearer ${accessToken}`,
-//       },
-//     });
-//     return response.data;
-//   } catch (error) {
-//     console.error('Error fetching title info:', error);
-//     throw error;
-//   }
-// };
+export const getTitleAchievement = (
+  accessToken: string,
+  achievementId: number
+) => {
+  const data = {
+    achievementId,
+  }
+  
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`, 
+    },
+  };
+
+  return api.post<IAchievement>(
+    '/api/game/collection/achievement/claim',
+    data,
+    options
+  );
+};

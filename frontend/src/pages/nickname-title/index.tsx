@@ -16,6 +16,7 @@ export const NicknameTitle = () => {
     queryKey: ['title'],
     queryFn: async () => {
       const accessToken = localStorage.getItem('accessToken') || ''; // 로컬 스토리지에서 accessToken 가져오기
+      console.log(accessToken);
       return await getTitleInfo(accessToken);
     },
   });
@@ -27,7 +28,11 @@ export const NicknameTitle = () => {
       <TopBar type="iconpage">칭호 도감</TopBar>
       <img css={imgCss} src={space} alt="배경 이미지" />
       <div css={containerCss}>
-        <Description />
+        <Description>
+          <div>
+            업적을 달성하면 <br /> 칭호를 얻을 수 있어!
+          </div>
+        </Description>
       </div>
       <div css={toggleContainerCss}>
         <Typography color="light" size="0.75" weight={700}>
@@ -36,8 +41,8 @@ export const NicknameTitle = () => {
         <Toggle color="primary" size={2.5} />
       </div>
       {TitleQuery.data?.data?.data.map((data: ItitleData) => (
-      <TitleComponent key={data.titleId} title={data} />
-    ))}
+        <TitleComponent key={data.titleId} title={data} />
+      ))}
     </div>
   );
 };
