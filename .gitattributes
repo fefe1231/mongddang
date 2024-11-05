@@ -51,3 +51,20 @@ gradlew           text eol=lf
 .gitattributes    text
 .gitconfig        text
 .gitignore        text
+
+# Git specific
+.gitignore        text eol=lf
+.gitattributes    text eol=lf
+
+# TypeScript
+*.ts              text eol=lf
+*.tsx             text eol=lf
+
+# Java
+*.java            text eol=lf
+ExampleInstrumentedTest.java    text eol=lf
+ExampleUnitTest.java            text eol=lf
+MainActivity.java               text eol=lf
+
+# Capacitor
+capacitor.config.ts            text eol=lf
