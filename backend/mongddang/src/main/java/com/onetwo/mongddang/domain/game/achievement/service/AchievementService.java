@@ -101,7 +101,7 @@ public class AchievementService {
         log.info("title: {}", title.getName());
 
         MyTitle myTitleOptional = myTitleRepository.findByTitleIdAndChildId(title.getId(), childId)
-                .orElseThrow(() -> new RestApiException(CustomAchievementErrorCode.ACHIEVEMENT_NOT_UNLOCKED));
+                .orElse(null);
         log.info("myTitleOptional");
 
         // 이미 보상을 수령한 경우
