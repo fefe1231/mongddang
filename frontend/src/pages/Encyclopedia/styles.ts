@@ -5,6 +5,7 @@ export const base = css`
   height: 100vh;
   position: relative;
   overflow-y: auto;
+  
 `;
 
 export const containerCss = css`
@@ -23,7 +24,7 @@ export const imgCss = css`
   z-index: -1;
 `;
 
-// 카드들을 감싸는 새로운 컨테이너 스타일
+// 카드들을 감싸는 컨테이너 스타일
 export const cardsWrapperCss = css`
   display: flex;
   flex-direction: row;
@@ -33,10 +34,15 @@ export const cardsWrapperCss = css`
   justify-content: flex-start;
   align-items: flex-start;
   width: 100%;
+  word-break: keep-all; /* 단어 단위 줄바꿈 */
+  overflow-wrap: break-word; /* 긴 단어도 줄바꿈 */
 `;
 
-// 개별 카드 컨테이너 스타일 수정
+// 개별 카드 컨테이너 스타일
 export const cardContainerCss = css`
   flex: 0 0 auto;
   margin: 0.3rem 0;
+  word-break: keep-all; /* 단어 단위 줄바꿈 */
+  overflow-wrap: break-word; /* 긴 단어도 줄바꿈 */
+  white-space: normal; /* 자동 줄바꿈 허용 */
 `;

@@ -5,12 +5,12 @@ import { TopBar } from '@/shared/ui/TopBar';
 import space from '../../assets/img/space.png';
 import { Owncharacter } from './ui/characterlist/owncharacter';
 import { Description } from './description';
-import {
-  base,
-  cardContainerCss,
-  containerCss,
-  cardsWrapperCss,
-  imgCss,
+import { 
+  base, 
+  cardContainerCss, 
+  containerCss, 
+  cardsWrapperCss, 
+  imgCss 
 } from './styles';
 import { OwnModal } from './ui/modal/own-modal';
 import { MainModal } from './ui/modal/main-modal';
@@ -24,6 +24,7 @@ export const Encyclopedia = () => {
   const [isOwnModal, setIsOwnModal] = useState(false);
   const [isMainModal, setIsMainModal] = useState(false);
   const [isNotModal, setIsNotModal] = useState(false);
+  const [selectedCharacter, setSelectedCharacter] = useState<ICharacterData | null>(null); // 선택된 캐릭터 데이터 상태
 
   const CharacterQuery = useQuery({
     queryKey: ['character'],
@@ -48,17 +49,31 @@ export const Encyclopedia = () => {
     return <div>데이터가 없습니다.</div>;
   }
 
+  // 모달 열기 함수 (선택된 캐릭터 데이터를 설정하고 모달을 열음)
+  const openModal = (character: ICharacterData, modalType: 'own' | 'main' | 'not') => {
+    setSelectedCharacter(character); // 선택한 캐릭터 설정
+
+    if (modalType === 'own') {
+      setIsOwnModal(true);
+    } else if (modalType === 'main') {
+      setIsMainModal(true);
+    } else if (modalType === 'not') {
+      setIsNotModal(true);
+    }
+  };
+
   return (
     <div css={base}>
-      {isOwnModal && <OwnModal setstate={setIsOwnModal} />}
-      {isMainModal && <MainModal setstate={setIsMainModal} />}
-      {isNotModal && <Notmodal setstate={setIsNotModal} />}
+      {/* 각 모달에 선택된 캐릭터 데이터를 전달 */}
+      {isOwnModal && <OwnModal data={selectedCharacter} setstate={setIsOwnModal} />}
+      {isMainModal && <MainModal data={selectedCharacter} setstate={setIsMainModal} />}
+      {isNotModal && <Notmodal data={selectedCharacter} setstate={setIsNotModal} />}
 
       <TopBar type="iconpage">캐릭터 도감</TopBar>
       <div css={containerCss}>
         <Description>
           <div>
-            지금까지 모은 별가루로 <br /> 캐릭터를 모을 수 있어
+            지금까지 모은 별가루로 <br /> 내 친구들을 찾을 수 있어!
           </div>
         </Description>
 
@@ -67,15 +82,15 @@ export const Encyclopedia = () => {
           {CharacterQuery.data.data.data.map((data: ICharacterData) => (
             <div key={data.id} css={cardContainerCss}>
               {!data.isOwned ? (
-                <div onClick={() => setIsNotModal(true)}>
+                <div onClick={() => openModal(data, 'not')} >
                   <Notowncharacter data={data} />
                 </div>
               ) : data.isOwned && data.isNew ? (
-                <div onClick={() => setIsMainModal(true)}>
+                <div onClick={() => openModal(data, 'main')}>
                   <Newcharacter data={data} />
                 </div>
               ) : (
-                <div onClick={() => setIsOwnModal(true)}>
+                <div onClick={() => openModal(data, 'own')}>
                   <Owncharacter data={data} />
                 </div>
               )}

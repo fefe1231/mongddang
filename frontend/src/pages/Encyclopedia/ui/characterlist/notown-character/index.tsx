@@ -8,7 +8,7 @@ interface OwnCharacterProps {
 export const Notowncharacter = ({data}: OwnCharacterProps) => {
   return (
     <>
-      <div css={containerCss}>
+      <div css={containerCss} >
         <IconTypo
           fontSize="1"
           icon="/img/말랑3.png"
