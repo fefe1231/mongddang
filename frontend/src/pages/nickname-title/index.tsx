@@ -2,7 +2,7 @@
 import { TopBar } from '@/shared/ui/TopBar';
 import space from '../../assets/img/space.png';
 import { containerCss, imgCss } from '../Encyclopedia/styles';
-// import { Description } from '../Encyclopedia/description';
+import { Description } from '../Encyclopedia/description';
 import { Toggle } from '@/shared/ui/Toggle';
 import { Typography } from '@/shared/ui/Typography';
 import { TitleComponent } from './ui/title-component';
