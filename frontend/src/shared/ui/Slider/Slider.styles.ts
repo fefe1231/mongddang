@@ -3,7 +3,7 @@ import { css } from "@emotion/react";
 export const sliderContainerCss = css`
   position: relative;
   width: 100%;
-  height: 10px;
+  height: 8px;
   margin: 10px 0;
 `;
 

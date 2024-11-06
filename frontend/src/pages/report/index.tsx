@@ -1,11 +1,19 @@
 /** @jsxImportSource @emotion/react */
 
 import { TopBar } from "@/shared/ui/TopBar";
+import { Item } from "./component/item";
+import { SliderItem } from "./component/slider-item";
+import { GptContent } from "./component/gpt-content";
 
 export const Report = () => {
   return (
     <div>
-      <TopBar type="iconpage">주간 레포트</TopBar>
+      <TopBar type="iconpage">주간 리포트</TopBar>
+      <Item title='혈당관리지표(GMI)' ment='내용' unit="%"/>
+      <SliderItem title='이번주 평균 혈당' ment='내용' unit="%"/>
+      <SliderItem title='혈당 변동성' ment='내용' unit="mg/dl"/>
+      <SliderItem title='목표 범위 내 비율' ment='내용' unit="%"/>
+      <GptContent/>
     </div>
   );
 };
