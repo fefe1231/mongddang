@@ -6,7 +6,7 @@ import com.onetwo.mongddang.common.s3.S3ImageService;
 import com.onetwo.mongddang.common.s3.errors.CustomS3ErrorCode;
 import com.onetwo.mongddang.common.utils.DateTimeUtils;
 import com.onetwo.mongddang.common.utils.JsonUtils;
-import com.onetwo.mongddang.domain.medication.dto.MedicationDto;
+import com.onetwo.mongddang.domain.medication.dto.MedicationRecordDto;
 import com.onetwo.mongddang.domain.record.dto.RecordDetailsDto;
 import com.onetwo.mongddang.domain.record.dto.RecordWithChildIdDto;
 import com.onetwo.mongddang.domain.record.dto.ResponseRecordDto;
@@ -122,14 +122,24 @@ public class RecordService {
                     details.getSleep().add(recordWithChildIdDto);
                 }
             } else if (record.getCategory().equals(medication)) {
-                details.getMedication().add(MedicationDto.builder()
+                // medication이 Record의 카테고리인 경우
+                List<String> repeatDays = new ArrayList<>();
+                JsonNode repeatDaysNode = record.getContent().get("repeatDays");
+
+                if (repeatDaysNode != null && repeatDaysNode.isArray()) {
+                    for (JsonNode dayNode : repeatDaysNode) {
+                        repeatDays.add(dayNode.asText());
+                    }
+                }
+
+                details.getMedication().add(MedicationRecordDto.builder()
                         .id(record.getId())
                         .name(record.getContent().get("name").asText())
                         .imageUrl(record.getImageUrl())
                         .volume(record.getContent().get("volume").asLong())
-                        .route(MedicationDto.RouteType.valueOf(record.getContent().get("route").asText()))
+                        .route(MedicationRecordDto.RouteType.valueOf(record.getContent().get("route").asText()))
                         .isRepeated(record.getContent().get("isRepeated").asBoolean())
-                        .repeatDays(record.getContent().get("repeatDays").asText())
+                        .repeatDays(String.join(", ", repeatDays)) // List<String>을 String으로 변환
                         .repeatStartTime(LocalDateTime.parse(record.getContent().get("repeatStartTime").asText()))
                         .repeatEndTime(LocalDateTime.parse(record.getContent().get("repeatEndTime").asText()))
                         .isDone(record.getIsDone())
@@ -137,6 +147,7 @@ public class RecordService {
                         .endTime(record.getEndTime())
                         .build());
             }
+
         }
 
         // 최종 결과를 DTO로 변환
@@ -350,7 +361,6 @@ public class RecordService {
             }
             log.info("식사 이미지 파일을 S3에 업로드 완료 (in english : Meal image file uploaded to S3)");
         }
-
         log.info("식사 이미지 파일 없음 (in english : No meal image file)");
 
         log.info(content.toString());
