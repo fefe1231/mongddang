@@ -8,8 +8,8 @@ export const api = axios.create({
   withCredentials: true,
 });
 
-// 회원정보 닉네임 수정
-export const updateNickname = (nickname: string) => {
+// 닉네임 중복 조회
+export const checkNickname = (nickname: string) => {
   return api({
     url: '/api/auth/check-nickname',
     method: 'post',
@@ -17,4 +17,30 @@ export const updateNickname = (nickname: string) => {
       nickname: nickname,
     },
   });
+};
+
+// 닉네임 수정
+export interface INickname {
+  nickname: string
+}
+
+export const updateNickname = (
+  accessToken: string,
+  nickname: string
+) => {
+  const data = {
+    nickname,
+  };
+
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  };
+
+  return api.patch<INickname>(
+    '/api/user/modify',
+    data,
+    options
+  );
 };
