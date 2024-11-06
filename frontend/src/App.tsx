@@ -9,6 +9,7 @@ import Login from './pages/login';
 import { NicknameEdit } from './pages/profile/nickname-edit';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Profile } from './pages/profile';
+import { Report } from './pages/report';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/menu" element={<Menu />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/nickname/edit" element={<NicknameEdit />} />
+          <Route path="/report" element={<Report />} />
         </Routes>
       </Router>
     </GoogleOAuthProvider>
