@@ -18,7 +18,7 @@ public class UserInfoDto {
     private String invitationCode;
     private LocalDate birth;
     private User.Gender gender;
-    private MaingameDto mainMongddang;
+    private Long mainMongddangId;
     private MaingameDto mainTitle;
     private List<ConnectedUserInfoDto> connected;
 }
