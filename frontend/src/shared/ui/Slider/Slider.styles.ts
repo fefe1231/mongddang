@@ -4,13 +4,12 @@ export const sliderContainerCss = css`
   position: relative;
   width: 100%;
   height: 10px;
-  
-  overflow: visible;
   margin: 10px 0;
 `;
 
 export const fillCss = (standard: number, max: number) => css`
-  border-radius: 10px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
   position: absolute;
   left: 0;
   top: 0;
@@ -26,7 +25,8 @@ export const remainingFillCss = (standard: number, max: number) => css`
   top: 0;
   height: 100%;
   background-color: #ff4444;
-  border-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
   width: ${standard < 0 ? 100 : Math.max(0, 100 - Math.round((standard / max) * 100))}%;
   transition: all 200ms ease;
 `;
