@@ -8,9 +8,9 @@ import { handleDateChange } from '@/Utils/birthUtils';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { UserRole } from '..';
 import { signUp } from '../api';
-import { useMutation } from '@tanstack/react-query';
-import { updateNickname } from '@/pages/profile/nickname-edit/api';
-import { Palette } from '@/shared/model/globalStylesTyes';
+// import { useMutation } from '@tanstack/react-query';
+// import { updateNickname } from '@/pages/profile/nickname-edit/api';
+// import { Palette } from '@/shared/model/globalStylesTyes';
 
 export const DataForm = ({ role }: { role: UserRole }) => {
   const [gender, setGender] = useState<'male' | 'female' | undefined>(
@@ -21,8 +21,8 @@ export const DataForm = ({ role }: { role: UserRole }) => {
   const [birthDay, setBirthDay] = useState<string>('');
   const [nickname, setNickname] = useState<string>('');
   const [name, setName] = useState<string>('');
-  const [color, setColor] = useState<Palette>('primary');
-  const [msg, setMsg] = useState<string>('');
+  // const [color, setColor] = useState<Palette>('primary');
+  // const [msg, setMsg] = useState<string>('');
   const nav = useNavigate();
   const location = useLocation();
   const idToken = location.state?.idToken;
@@ -83,21 +83,21 @@ export const DataForm = ({ role }: { role: UserRole }) => {
     }
   };
 
-  const { mutate } = useMutation({
-    mutationFn: updateNickname,
-    onSuccess: () => {
-      setMsg('사용 가능한 닉네임입니다.');
-      setColor('primary');
-    },
-    onError: () => {
-      setMsg(
-        nickname.length === 0
-          ? '닉네임을 작성해주세요.'
-          : '이미 사용 중인 닉네임입니다.'
-      );
-      setColor('danger');
-    },
-  });
+  // const { mutate } = useMutation({
+  //   mutationFn: updateNickname,
+  //   onSuccess: () => {
+  //     setMsg('사용 가능한 닉네임입니다.');
+  //     setColor('primary');
+  //   },
+  //   onError: () => {
+  //     setMsg(
+  //       nickname.length === 0
+  //         ? '닉네임을 작성해주세요.'
+  //         : '이미 사용 중인 닉네임입니다.'
+  //     );
+  //     setColor('danger');
+  //   },
+  // });
 
   return (
     <div style={{ margin: '2rem' }}>
@@ -120,16 +120,16 @@ export const DataForm = ({ role }: { role: UserRole }) => {
             color="primary"
             fontSize="1"
             variant="contained"
-            handler={() => mutate(nickname)}
+            handler={() => {}}
           >
             확인
           </Button>
         </div>
-        {msg && (
+        {/* {msg && (
           <Typography color={color} size="1" weight={500}>
             {msg}
           </Typography>
-        )}
+        )} */}
         <div style={{ margin: '1rem 0' }}>
           <TextField
             color="primary"
