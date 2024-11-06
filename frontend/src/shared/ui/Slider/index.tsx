@@ -1,12 +1,15 @@
 /** @jsxImportSource @emotion/react */
 
-import { fillCss } from './Slider.styles';
+import { fillCss, remainingFillCss, sliderContainerCss, thumbCss } from './Slider.styles';
 import { SliderProps } from './Sllider.types';
 
-export const Slider = ({ max, standard, ...props }: SliderProps) => {
+
+export const Slider = ({ max = 50, standard = 30, value = 30, ...props }: SliderProps) => {
   return (
-    <div css={fillCss(standard, max)} {...props}>
-      슬라이더 입니다.
+    <div css={sliderContainerCss} {...props}>
+      <div css={fillCss(standard, max)} />
+      <div css={remainingFillCss(standard, max)} />
+      <div css={thumbCss(value, standard, max)} />
     </div>
   );
 };
