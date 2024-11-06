@@ -44,7 +44,7 @@ public class GetUserInfoService {
         log.info("Existing User : {}", userId);
 
         // 메인 몽땅, 메인칭호, 연결 유저 리스트 초기화
-        MaingameDto mainMongddang = null;
+        Long mainMongddangId = null;
         MaingameDto mainTitle = null;
         List<User> connectedUserList = List.of();
 
@@ -62,10 +62,7 @@ public class GetUserInfoService {
                 // 그 몽땅이 있는 캐릭터라면 정보 뽑아 넣기
                 if (mongddang.isPresent()) {
                     log.info("that mongddang is present");
-                    mainMongddang = MaingameDto.builder()
-                            .id(mongddang.get().getId())
-                            .name(mongddang.get().getName())
-                            .build();
+                    mainMongddangId = mongddang.get().getId();
                 }
             }
 
@@ -122,7 +119,7 @@ public class GetUserInfoService {
                 .invitationCode(user.getInvitationCode())
                 .birth(user.getBirth())
                 .gender(user.getGender())
-                .mainMongddang(mainMongddang)
+                .mainMongddangId(mainMongddangId)
                 .mainTitle(mainTitle)
                 .connected(responseConnectedUserList)
                 .build();
