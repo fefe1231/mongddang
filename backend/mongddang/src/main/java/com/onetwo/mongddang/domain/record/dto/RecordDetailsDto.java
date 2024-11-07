@@ -1,6 +1,5 @@
 package com.onetwo.mongddang.domain.record.dto;
 
-import com.onetwo.mongddang.domain.medication.dto.MedicationRecordDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,5 +13,5 @@ public class RecordDetailsDto {
     private List<RecordWithChildIdDto> meal;
     private List<RecordWithChildIdDto> exercise;
     private List<RecordWithChildIdDto> sleep;
-    private List<MedicationRecordDto> medication;
+    private List<RecordWithChildIdDto> medication;
 }

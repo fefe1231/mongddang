@@ -22,8 +22,7 @@ public class MedicationTime {
     @JoinColumn(nullable = false, name = "medication_management_id")
     private MedicationManagement medicationManagement;
 
-    @NotNull
-    @Column(name = "medication_time", nullable = false)
+    @Column(name = "medication_time")
     private String medicationTime;
 
     @NotNull

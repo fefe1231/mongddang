@@ -6,7 +6,6 @@ import com.onetwo.mongddang.common.s3.S3ImageService;
 import com.onetwo.mongddang.common.s3.errors.CustomS3ErrorCode;
 import com.onetwo.mongddang.common.utils.DateTimeUtils;
 import com.onetwo.mongddang.common.utils.JsonUtils;
-import com.onetwo.mongddang.domain.medication.dto.MedicationRecordDto;
 import com.onetwo.mongddang.domain.record.dto.RecordDetailsDto;
 import com.onetwo.mongddang.domain.record.dto.RecordWithChildIdDto;
 import com.onetwo.mongddang.domain.record.dto.ResponseRecordDto;
@@ -99,55 +98,28 @@ public class RecordService {
 
             RecordDetailsDto details = recordsByDate.get(recordDate);
 
+            RecordWithChildIdDto recordWithChildIdDto = RecordWithChildIdDto.builder()
+                    .id(record.getId())
+                    .childId(child.getId())
+                    .category(record.getCategory())
+                    .startTime(record.getStartTime())
+                    .endTime(record.getEndTime())
+                    .content(record.getContent())
+                    .imageUrl(record.getImageUrl())
+                    .isDone(record.getIsDone())
+                    .mealTime(record.getMealTime())
+                    .build();
+
             // 각 기록의 종류에 따라 분류
-            if (record.getCategory().equals(meal) || record.getCategory().equals(exercise) || record.getCategory().equals(sleeping)) {
-                RecordWithChildIdDto recordWithChildIdDto = RecordWithChildIdDto.builder()
-                        .id(record.getId())
-                        .childId(child.getId())
-                        .category(record.getCategory())
-                        .startTime(record.getStartTime())
-                        .endTime(record.getEndTime())
-                        .content(record.getContent())
-                        .imageUrl(record.getImageUrl())
-                        .isDone(record.getIsDone())
-                        .mealTime(record.getMealTime())
-                        .build();
-
-                // 각 기록의 종류에 따라 분류
-                if (record.getCategory().equals(meal)) {
-                    details.getMeal().add(recordWithChildIdDto);
-                } else if (record.getCategory().equals(exercise)) {
-                    details.getExercise().add(recordWithChildIdDto);
-                } else if (record.getCategory().equals(sleeping)) {
-                    details.getSleep().add(recordWithChildIdDto);
-                }
+            if (record.getCategory().equals(meal)) {
+                details.getMeal().add(recordWithChildIdDto);
+            } else if (record.getCategory().equals(exercise)) {
+                details.getExercise().add(recordWithChildIdDto);
+            } else if (record.getCategory().equals(sleeping)) {
+                details.getSleep().add(recordWithChildIdDto);
             } else if (record.getCategory().equals(medication)) {
-                // medication이 Record의 카테고리인 경우
-                List<String> repeatDays = new ArrayList<>();
-                JsonNode repeatDaysNode = record.getContent().get("repeatDays");
-
-                if (repeatDaysNode != null && repeatDaysNode.isArray()) {
-                    for (JsonNode dayNode : repeatDaysNode) {
-                        repeatDays.add(dayNode.asText());
-                    }
-                }
-
-                details.getMedication().add(MedicationRecordDto.builder()
-                        .id(record.getId())
-                        .name(record.getContent().get("name").asText())
-                        .imageUrl(record.getImageUrl())
-                        .volume(record.getContent().get("volume").asLong())
-                        .route(MedicationRecordDto.RouteType.valueOf(record.getContent().get("route").asText()))
-                        .isRepeated(record.getContent().get("isRepeated").asBoolean())
-                        .repeatDays(String.join(", ", repeatDays)) // List<String>을 String으로 변환
-                        .repeatStartTime(LocalDateTime.parse(record.getContent().get("repeatStartTime").asText()))
-                        .repeatEndTime(LocalDateTime.parse(record.getContent().get("repeatEndTime").asText()))
-                        .isDone(record.getIsDone())
-                        .startTime(record.getStartTime())
-                        .endTime(record.getEndTime())
-                        .build());
+                details.getMedication().add(recordWithChildIdDto);
             }
-
         }
 
         // 최종 결과를 DTO로 변환

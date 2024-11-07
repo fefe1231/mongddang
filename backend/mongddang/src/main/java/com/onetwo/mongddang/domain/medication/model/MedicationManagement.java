@@ -30,15 +30,12 @@ public class MedicationManagement {
     @NotNull
     private String name;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     private RouteType route;
 
-    @NotNull
     @Column(name = "is_repeated")
     private Boolean isRepeated;
 
-    @NotNull
     @Column(name = "repeat_days")
     private List<String> repeatDays;
 
