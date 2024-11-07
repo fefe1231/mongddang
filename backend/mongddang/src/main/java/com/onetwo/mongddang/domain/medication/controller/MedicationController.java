@@ -10,10 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
@@ -44,7 +41,7 @@ public class MedicationController {
 
 
     // 등록한 약품 조회하기
-    @PostMapping("/{nickname}")
+    @GetMapping("")
     @Tag(name = "Medication API", description = "약 api")
     @Operation(summary = "등록한 약품 조회하기", description = "등록한 약품을 조회합니다.")
     public ResponseEntity<ResponseDto> getMedication(@RequestParam String nickname, HttpServletRequest request) {

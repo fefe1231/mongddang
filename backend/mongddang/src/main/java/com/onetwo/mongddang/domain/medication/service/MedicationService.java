@@ -5,11 +5,16 @@ import com.onetwo.mongddang.common.s3.S3ImageService;
 import com.onetwo.mongddang.common.s3.errors.CustomS3ErrorCode;
 import com.onetwo.mongddang.domain.medication.application.MedicationUtils;
 import com.onetwo.mongddang.domain.medication.dto.MedicationStandardDto;
+import com.onetwo.mongddang.domain.medication.dto.RegisteredMedicationDto;
 import com.onetwo.mongddang.domain.medication.dto.RequestRegisterMedicationDto;
+import com.onetwo.mongddang.domain.medication.dto.ResponseMedicationDto;
 import com.onetwo.mongddang.domain.medication.model.MedicationManagement;
 import com.onetwo.mongddang.domain.medication.model.MedicationTime;
 import com.onetwo.mongddang.domain.medication.repository.MedicationManagementRepository;
 import com.onetwo.mongddang.domain.medication.repository.MedicationTimeRepository;
+import com.onetwo.mongddang.domain.user.application.CtoPUtils;
+import com.onetwo.mongddang.domain.user.error.CustomCtoPErrorCode;
+import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
 import com.onetwo.mongddang.domain.user.model.User;
 import com.onetwo.mongddang.domain.user.repository.UserRepository;
 import com.onetwo.mongddang.errors.exception.RestApiException;
@@ -32,6 +37,7 @@ public class MedicationService {
     private final MedicationManagementRepository medicationManagementRepository;
     private final MedicationTimeRepository medicationTimeRepository;
     private final MedicationUtils medicationUtils;
+    private final CtoPUtils ctoPUtils;
 
     @Transactional
     public ResponseDto registerMedication(Long childId, String requestRegisterMedicationDtoJson, MultipartFile imageFile) {
@@ -94,6 +100,58 @@ public class MedicationService {
 
     // 약품 조회
     public ResponseDto getMedication(Long userId, String nickname) {
-        return null;
+        log.info("약품 조회 (In English : Medication Inquiry)");
+
+        User user = userRepository.findById(userId).orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+        User child = userRepository.findByNickname(nickname).orElseThrow(() -> new RestApiException(CustomUserErrorCode.THIS_NICKNAME_USER_NOT_FOUND));
+
+        // 보호자와 아이가 연결되어 있는지 확인
+        if (!ctoPUtils.checkProtectorAndChildIsConnected(userId, child.getId())) {
+            throw new RestApiException(CustomCtoPErrorCode.CHILD_NOT_LINKED);
+        }
+
+        // 복약 관리 테이블에서 아이에 해당하는 복약 시간 데이터 조회
+        List<MedicationManagement> medicationManagementList = medicationManagementRepository.findByChild(child);
+        List<RegisteredMedicationDto> registeredMedicationDtoList = new ArrayList<>();
+
+        // 복약 관리 테이블에서 외래키로 참조한 복약 시간 데이터를 registeredMedicationDtoList 에 데이터 저장
+        for (MedicationManagement medicationManagement : medicationManagementList) {
+            // 복약 시간 데이터 조회
+            List<MedicationTime> medicationTimeList = medicationTimeRepository.findByMedicationManagement(medicationManagement);
+            List<MedicationStandardDto> medicationStandardDtoList = new ArrayList<>();
+
+            for (MedicationTime medicationTime : medicationTimeList) {
+                MedicationStandardDto medicationStandardDto = MedicationStandardDto.builder()
+                        .minGlucose(medicationTime.getMinGlucose())
+                        .maxGlucose(medicationTime.getMaxGlucose())
+                        .volume(medicationTime.getVolume())
+                        .build();
+
+                medicationStandardDtoList.add(medicationStandardDto);
+            }
+
+            RegisteredMedicationDto registeredMedicationDto = RegisteredMedicationDto.builder()
+                    .id(medicationManagement.getId())
+                    .name(medicationManagement.getName())
+                    .imageUrl(medicationManagement.getImageUrl())
+                    .repeatStartTime(medicationManagement.getRepeatStartTime())
+                    .repeatEndTime(medicationManagement.getRepeatEndTime())
+                    .isFast(medicationTimeList.get(0).getIsFast())
+                    .repeatTimes(medicationTimeList.stream().map(MedicationTime::getMedicationTime).toList())
+                    .standards(medicationStandardDtoList)
+                    .build();
+
+            registeredMedicationDtoList.add(registeredMedicationDto);
+        }
+
+        // ResponseMedicationDto 객체 생성
+        ResponseMedicationDto responseMedicationDto = ResponseMedicationDto.builder()
+                .medications(registeredMedicationDtoList)
+                .build();
+
+        return ResponseDto.builder()
+                .message("약품 조회를 성공하였습니다.")
+                .data(responseMedicationDto)
+                .build();
     }
 }
