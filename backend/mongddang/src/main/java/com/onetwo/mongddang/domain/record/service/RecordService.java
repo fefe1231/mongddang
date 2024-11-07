@@ -62,23 +62,8 @@ public class RecordService {
                 .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
         log.info("child: {}", child.getEmail());
 
-        // 아이는 본인의 기록만 조회할 수 있음
-        log.info("아이가 다른 유저의 기록 조회 시도");
-        if (user.getRole() == User.Role.child && !Objects.equals(user.getNickname(), nickname)) {
-            throw new RestApiException(CustomRecordErrorCode.CHILD_ACCESS_DENIED);
-        }
-
-        // 보호자의 기록은 조회할 수 없음 (로직상 아이만 존재함)
-        log.info("보호자의 기록 조회 시도");
-        if (child.getRole() == User.Role.protector) {
-            throw new RestApiException(CustomRecordErrorCode.PROTECTOR_ACCESS_DENIED);
-        }
-
-        // 연결된 보호자인지 확인 - 보호자는 연결된 아이의 기록만 조회할 수 있음
-        log.info("연결된 보호자인지 확인");
-        if (!ctoPUtils.checkProtectorAndChildIsConnected(userId, child.getId())) {
-            throw new RestApiException(CustomRecordErrorCode.PROTECTOR_ACCESS_DENIED);
-        }
+        // 보호자가 아이의 데이터에 쓰기 권한이 있는지 확인
+        ctoPUtils.validateProtectorAccessChildData(user, child);
 
         // 시작일과 종료일을 LocalDateTime 으로 변환
         LocalDateTime[] dateTimes = dateTimeUtils.convertToDateTimes(startDate, endDate);

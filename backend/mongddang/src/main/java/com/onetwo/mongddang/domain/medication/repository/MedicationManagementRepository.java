@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface MedicationManagementRepository extends JpaRepository<MedicationManagement, Long> {
     List<MedicationManagement> findByChild(User child);
+
 }

@@ -8,12 +8,12 @@ import com.onetwo.mongddang.domain.medication.dto.MedicationStandardDto;
 import com.onetwo.mongddang.domain.medication.dto.RegisteredMedicationDto;
 import com.onetwo.mongddang.domain.medication.dto.RequestRegisterMedicationDto;
 import com.onetwo.mongddang.domain.medication.dto.ResponseMedicationDto;
+import com.onetwo.mongddang.domain.medication.errors.CustomMedicationErrorCode;
 import com.onetwo.mongddang.domain.medication.model.MedicationManagement;
 import com.onetwo.mongddang.domain.medication.model.MedicationTime;
 import com.onetwo.mongddang.domain.medication.repository.MedicationManagementRepository;
 import com.onetwo.mongddang.domain.medication.repository.MedicationTimeRepository;
 import com.onetwo.mongddang.domain.user.application.CtoPUtils;
-import com.onetwo.mongddang.domain.user.error.CustomCtoPErrorCode;
 import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
 import com.onetwo.mongddang.domain.user.model.User;
 import com.onetwo.mongddang.domain.user.repository.UserRepository;
@@ -39,17 +39,34 @@ public class MedicationService {
     private final MedicationUtils medicationUtils;
     private final CtoPUtils ctoPUtils;
 
-    @Transactional
-    public ResponseDto registerMedication(Long childId, String requestRegisterMedicationDtoJson, MultipartFile imageFile) {
 
+    /**
+     * 복약 등록하기
+     *
+     * @param userId                           유저 아이디
+     * @param requestRegisterMedicationDtoJson 복약 정보
+     * @param imageFile                        이미지 파일
+     * @return ResponseDto
+     */
+    @Transactional
+    public ResponseDto registerMedication(Long userId, String requestRegisterMedicationDtoJson, MultipartFile imageFile) {
 
         // JSON 문자열을 RequestRegisterMedicationDto 객체로 변환
         RequestRegisterMedicationDto requestDto = medicationUtils.jsonToMedicationDto(requestRegisterMedicationDtoJson);
 
-        User child = userRepository.findById(childId).orElseThrow(() -> new IllegalArgumentException("해당 아이디의 유저가 존재하지 않습니다."));
+        // 요청자의 정보
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
 
+        // 환아의 정보
+        User child = userRepository.findByNickname(requestDto.getNickname())
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.THIS_NICKNAME_USER_NOT_FOUND));
+
+        // 접근하려는 유저가 대상의 데이터에 접근 권한이 있는지 확인
+        ctoPUtils.validateProtectorAccessChildData(user, child);
+
+        // 이미지 파일이 존재하는 경우 S3에 이미지 파일 업로드
         String imageUrl = null;
-
         if (!imageFile.isEmpty()) {
             // 이미지 파일을 S3에 업로드
             try {
@@ -98,17 +115,24 @@ public class MedicationService {
                 .build();
     }
 
-    // 약품 조회
+
+    /**
+     * 등록한 약품 조회하기
+     *
+     * @param userId   유저 아이디
+     * @param nickname 아이 닉네임
+     * @return ResponseDto
+     */
     public ResponseDto getMedication(Long userId, String nickname) {
         log.info("약품 조회 (In English : Medication Inquiry)");
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
-        User child = userRepository.findByNickname(nickname).orElseThrow(() -> new RestApiException(CustomUserErrorCode.THIS_NICKNAME_USER_NOT_FOUND));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+        User child = userRepository.findByNickname(nickname)
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.THIS_NICKNAME_USER_NOT_FOUND));
 
-        // 보호자와 아이가 연결되어 있는지 확인
-        if (!ctoPUtils.checkProtectorAndChildIsConnected(userId, child.getId())) {
-            throw new RestApiException(CustomCtoPErrorCode.CHILD_NOT_LINKED);
-        }
+        // 보호자가 아이의 데이터에 접근 권한이 있는지 확인
+        ctoPUtils.validateProtectorAccessChildData(user, child);
 
         // 복약 관리 테이블에서 아이에 해당하는 복약 시간 데이터 조회
         List<MedicationManagement> medicationManagementList = medicationManagementRepository.findByChild(child);
@@ -120,6 +144,7 @@ public class MedicationService {
             List<MedicationTime> medicationTimeList = medicationTimeRepository.findByMedicationManagement(medicationManagement);
             List<MedicationStandardDto> medicationStandardDtoList = new ArrayList<>();
 
+            // 복약 시간 데이터를 MedicationStandardDto 객체로 변환
             for (MedicationTime medicationTime : medicationTimeList) {
                 MedicationStandardDto medicationStandardDto = MedicationStandardDto.builder()
                         .minGlucose(medicationTime.getMinGlucose())
@@ -130,13 +155,14 @@ public class MedicationService {
                 medicationStandardDtoList.add(medicationStandardDto);
             }
 
+            // RegisteredMedicationDto 객체 생성
             RegisteredMedicationDto registeredMedicationDto = RegisteredMedicationDto.builder()
                     .id(medicationManagement.getId())
                     .name(medicationManagement.getName())
                     .imageUrl(medicationManagement.getImageUrl())
                     .repeatStartTime(medicationManagement.getRepeatStartTime())
                     .repeatEndTime(medicationManagement.getRepeatEndTime())
-                    .isFast(medicationTimeList.get(0).getIsFast())
+                    .isFast(medicationTimeList.getFirst().getIsFast())
                     .repeatTimes(medicationTimeList.stream().map(MedicationTime::getMedicationTime).toList())
                     .standards(medicationStandardDtoList)
                     .build();
@@ -154,4 +180,50 @@ public class MedicationService {
                 .data(responseMedicationDto)
                 .build();
     }
+
+    /**
+     * 등록한 약품 관리 삭제하기
+     *
+     * @param userId                 유저 아이디
+     * @param nickname               아이 닉네임
+     * @param medicationManagementId 복약 관리 아이디
+     * @return ResponseDto
+     */
+    @Transactional
+    public ResponseDto deleteMedication(String nickname, Long medicationManagementId, Long userId) {
+        log.info("약품 관리 삭제 (In English : Medication Management Deletion)");
+
+        // 요청자의 정보
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+
+        // 아이의 정보
+        User child = userRepository.findByNickname(nickname)
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.THIS_NICKNAME_USER_NOT_FOUND));
+
+        // 접근하려는 유저가 대상의 데이터에 접근 권한이 있는지 확인
+        ctoPUtils.validateProtectorAccessChildData(user, child);
+
+        // 복약 관리 테이블에서 복약 관리 아이디로 데이터 조회
+        log.info("복약 관리 정보 조회 (In English : Medication Management Information Inquiry)");
+        MedicationManagement medicationManagement = medicationManagementRepository.findById(medicationManagementId)
+                .orElseThrow(() -> new RestApiException(CustomMedicationErrorCode.MEDICATION_NOT_FOUND));
+
+        // 복약 관리 기록이 아이의 것인지 확인
+        log.info("복약 관리 기록이 아이의 것인지 확인 (In English : Check if the medication management record belongs to the child)");
+        if (!medicationManagement.getChild().equals(child)) {
+            throw new RestApiException(CustomMedicationErrorCode.MEDICATION_NOT_MATCH);
+        }
+
+        log.info("복약 관리 삭제 시도 (In English : Medication Management Deletion Attempt)");
+        log.info("managementId : " + medicationManagementId);
+        medicationTimeRepository.deleteByMedicationManagementId(medicationManagementId);
+        log.info("복약 시간 삭제 시도 (In English : Medication Record Deletion Attempt)");
+        medicationManagementRepository.deleteById(medicationManagementId);
+
+        return ResponseDto.builder()
+                .message("약품 관리 삭제를 성공하였습니다.")
+                .build();
+    }
+
 }
