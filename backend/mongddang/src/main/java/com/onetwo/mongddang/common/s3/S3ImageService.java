@@ -39,15 +39,14 @@ public class S3ImageService {
     private String bucketName;
 
     public String upload(MultipartFile image) {
-        log.info("upload image to s3 메서드 실행");
-        log.info("bucketName {}" + bucketName);
-
-        log.info("image.isEmpty() : " + image.isEmpty());
-        log.info("Objects.isNull(image.getOriginalFilename()) : " + Objects.isNull(image.getOriginalFilename()));
+        log.info("복약 이미지 파일을 S3에 업로드 시도 (in english : Try to upload meal image file to S3)");
 
         if (image.isEmpty() || Objects.isNull(image.getOriginalFilename())) {
             throw new RuntimeException(CustomS3ErrorCode.EMPTY_FILE_EXCEPTION.getMessage());
         }
+
+        log.info("복약 이미지 파일을 S3에 업로드 완료 (in english : Meal image file uploaded to S3)");
+
         return this.uploadImage(image);
     }
 
