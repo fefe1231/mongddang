@@ -6,7 +6,6 @@ import com.onetwo.mongddang.common.s3.S3ImageService;
 import com.onetwo.mongddang.common.s3.errors.CustomS3ErrorCode;
 import com.onetwo.mongddang.common.utils.DateTimeUtils;
 import com.onetwo.mongddang.common.utils.JsonUtils;
-import com.onetwo.mongddang.domain.medication.dto.MedicationDto;
 import com.onetwo.mongddang.domain.record.dto.RecordDetailsDto;
 import com.onetwo.mongddang.domain.record.dto.RecordWithChildIdDto;
 import com.onetwo.mongddang.domain.record.dto.ResponseRecordDto;
@@ -99,43 +98,27 @@ public class RecordService {
 
             RecordDetailsDto details = recordsByDate.get(recordDate);
 
-            // 각 기록의 종류에 따라 분류
-            if (record.getCategory().equals(meal) || record.getCategory().equals(exercise) || record.getCategory().equals(sleeping)) {
-                RecordWithChildIdDto recordWithChildIdDto = RecordWithChildIdDto.builder()
-                        .id(record.getId())
-                        .childId(child.getId())
-                        .category(record.getCategory())
-                        .startTime(record.getStartTime())
-                        .endTime(record.getEndTime())
-                        .content(record.getContent())
-                        .imageUrl(record.getImageUrl())
-                        .isDone(record.getIsDone())
-                        .mealTime(record.getMealTime())
-                        .build();
+            RecordWithChildIdDto recordWithChildIdDto = RecordWithChildIdDto.builder()
+                    .id(record.getId())
+                    .childId(child.getId())
+                    .category(record.getCategory())
+                    .startTime(record.getStartTime())
+                    .endTime(record.getEndTime())
+                    .content(record.getContent())
+                    .imageUrl(record.getImageUrl())
+                    .isDone(record.getIsDone())
+                    .mealTime(record.getMealTime())
+                    .build();
 
-                // 각 기록의 종류에 따라 분류
-                if (record.getCategory().equals(meal)) {
-                    details.getMeal().add(recordWithChildIdDto);
-                } else if (record.getCategory().equals(exercise)) {
-                    details.getExercise().add(recordWithChildIdDto);
-                } else if (record.getCategory().equals(sleeping)) {
-                    details.getSleep().add(recordWithChildIdDto);
-                }
+            // 각 기록의 종류에 따라 분류
+            if (record.getCategory().equals(meal)) {
+                details.getMeal().add(recordWithChildIdDto);
+            } else if (record.getCategory().equals(exercise)) {
+                details.getExercise().add(recordWithChildIdDto);
+            } else if (record.getCategory().equals(sleeping)) {
+                details.getSleep().add(recordWithChildIdDto);
             } else if (record.getCategory().equals(medication)) {
-                details.getMedication().add(MedicationDto.builder()
-                        .id(record.getId())
-                        .name(record.getContent().get("name").asText())
-                        .imageUrl(record.getImageUrl())
-                        .volume(record.getContent().get("volume").asLong())
-                        .route(MedicationDto.RouteType.valueOf(record.getContent().get("route").asText()))
-                        .isRepeated(record.getContent().get("isRepeated").asBoolean())
-                        .repeatDays(record.getContent().get("repeatDays").asText())
-                        .repeatStartTime(LocalDateTime.parse(record.getContent().get("repeatStartTime").asText()))
-                        .repeatEndTime(LocalDateTime.parse(record.getContent().get("repeatEndTime").asText()))
-                        .isDone(record.getIsDone())
-                        .startTime(record.getStartTime())
-                        .endTime(record.getEndTime())
-                        .build());
+                details.getMedication().add(recordWithChildIdDto);
             }
         }
 
@@ -350,7 +333,6 @@ public class RecordService {
             }
             log.info("식사 이미지 파일을 S3에 업로드 완료 (in english : Meal image file uploaded to S3)");
         }
-
         log.info("식사 이미지 파일 없음 (in english : No meal image file)");
 
         log.info(content.toString());
