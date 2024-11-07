@@ -41,6 +41,7 @@ public class MongddangService {
      * @param childId
      * @return
      */
+    // filter, interceptor, aop
     public ResponseDto getMongddangList(Long childId) {
         log.info("getMongddangList childId: {}", childId);
 
@@ -175,8 +176,8 @@ public class MongddangService {
         // 기존 메인 몽땅 해제
         currentMainMongddang.setIsMain(false);
 
-        myMongddangRepository.save(newMainMongddang);
-        myMongddangRepository.save(currentMainMongddang);
+//        myMongddangRepository.save(newMainMongddang);
+//        myMongddangRepository.save(currentMainMongddang);
 
         return ResponseDto.builder()
                 .message("메인 몽땅으로 설정했습니다.")

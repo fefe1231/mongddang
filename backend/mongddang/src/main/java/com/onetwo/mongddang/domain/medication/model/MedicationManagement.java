@@ -9,13 +9,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Builder
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="medication_management")
+@Table(name = "medication_management")
 public class MedicationManagement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,25 +30,25 @@ public class MedicationManagement {
     @NotNull
     private String name;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     private RouteType route;
 
-    @NotNull
-    @Column(name="is_repeated")
+    @Column(name = "is_repeated")
     private Boolean isRepeated;
 
-    @NotNull
-    @Column(name="repeat_days")
-    private String repeatDays;
+    @Column(name = "repeat_days")
+    private List<String> repeatDays;
 
     @NotNull
-    @Column(name="repeat_start_time")
+    @Column(name = "repeat_start_time")
     private LocalDateTime repeatStartTime;
 
     @NotNull
-    @Column(name="repeat_end_time")
+    @Column(name = "repeat_end_time")
     private LocalDateTime repeatEndTime;
+
+    @Column(name = "image_url")
+    private String imageUrl;
 
     @NotNull
     public enum RouteType {
