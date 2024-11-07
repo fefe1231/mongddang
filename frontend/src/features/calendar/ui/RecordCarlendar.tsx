@@ -1,7 +1,7 @@
 import { DatePicker, DatePickerProps } from '@mantine/dates';
 import { useState } from 'react';
 import { formatTwoDigit } from '@/shared/lib/date';
-import { CalendarService } from '../model/calendar.service';
+import { CalendarService } from '../model';
 
 export const RecordCalendar = () => {
   const [dateValue, setDateValue] = useState<Date | null>(null);

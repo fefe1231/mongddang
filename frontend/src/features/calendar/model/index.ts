@@ -1,2 +1,1 @@
-export { DefaultCalendarService } from './calendar.service';
-export type { CalendarState, CalendarDate } from './calendar.types';
+export { CalendarService } from './calendar.service';
