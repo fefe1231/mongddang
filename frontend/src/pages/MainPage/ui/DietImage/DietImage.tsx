@@ -6,6 +6,7 @@ import { useCamera } from '@/shared/lib/cameraUtils';
 
 const DietImage = () => {
   const { imageUrl, openCamera } = useCamera();
+  {console.log('이미지', imageUrl)}
   return (
     <div
       css={imgContainer}
@@ -23,7 +24,7 @@ const DietImage = () => {
           </Typography>
           
         </div>
-      )}      
+      )}
     </div>
   );
 };
