@@ -1,9 +1,8 @@
 import { TopBar } from '@/shared/ui/TopBar';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { DatePicker, DatePickerProps } from '@mantine/dates';
 import { Center } from '@mantine/core';
-import dayjs from 'dayjs';
+import { RecordCalendar } from '@/features/calendar';
 // import { LineChart, LineChartSeries } from '@mantine/charts';
 // import { ScrollArea } from '@mantine/core';
 // import axios from 'axios';
@@ -27,29 +26,11 @@ import dayjs from 'dayjs';
 //   }
 // };
 
-const setDayProps: DatePickerProps['getDayProps'] = (date) => {
-  const formattedDay = String(dayjs().toDate().getDate()).padStart(2, '0');
-
-  if (dayjs(date).format('YYYY-MM-DD') === dayjs().format('YYYY-MM-DD')) {
-    return {
-      style: {
-        textDecoration: 'underline',
-      },
-      children: formattedDay,
-    };
-  }
-
-  return {
-    children: formattedDay,
-  };
-};
-
 export const RecordPage = () => {
   const nav = useNavigate();
 
   // const [data, setData] = useState<Record<Data, ChartData>[]>([]);
 
-  const [dateValue, setDateValue] = useState<Date | null>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
 
   // const checkMeal = (series: LineChartSeries) => ({
@@ -59,7 +40,7 @@ export const RecordPage = () => {
   //       : {},
   // });
 
-  const handleDoubleClick = (date: Date) => {};
+  // const handleDoubleClick = (date: Date) => {};
 
   // mount 시 linechart의 가장 오른쪽으로 이동
   useEffect(() => {
@@ -89,13 +70,7 @@ export const RecordPage = () => {
       </header>
       {/* Calendar start */}
       <Center>
-        <DatePicker
-          value={dateValue}
-          onChange={setDateValue}
-          type="default"
-          size="lg"
-          getDayProps={setDayProps}
-        />
+        <RecordCalendar />
       </Center>
       {/* Calendar end */}
 
