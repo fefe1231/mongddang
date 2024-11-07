@@ -1,3 +1,4 @@
+import { ICharacterData } from "../Encyclopedia/types";
 
 export interface ItitleData {
   titleId: number;
@@ -19,4 +20,10 @@ export interface ItitleInfo {
 
 export interface IAchievement {
   achievementId: number
+}
+
+export interface CharacterResponse {
+  data: {
+    data: ICharacterData[];
+  }
 }

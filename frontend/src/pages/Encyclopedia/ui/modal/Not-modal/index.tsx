@@ -10,8 +10,8 @@ import { BuyModal } from '../buy-modal';
 import { FindModal } from '../find-modal';
 import { base, modalCss, xiconCss, storyTypographyCss } from './styles';
 import { ICharacterData } from '@/pages/Encyclopedia/types';
-import { useQuery } from '@tanstack/react-query';
-import { getCoinInfo } from '@/pages/Encyclopedia/api';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { getCoinInfo, postRecruitment } from '@/pages/Encyclopedia/api';
 
 interface OwnModalProps {
   setstate: (value: boolean) => void;
@@ -21,10 +21,38 @@ interface OwnModalProps {
 export const Notmodal = ({ setstate, data }: OwnModalProps) => {
   const [buyModal, setBuyModal] = useState<boolean>(false);
   const [findModal, setFindModal] = useState<boolean>(false);
+  const accessToken = localStorage.getItem('accessToken') || '';
+
+  const characterMutation = useMutation({
+    mutationFn: async () => {
+      if (!accessToken) {
+        throw new Error('AccessToken이 필요합니다.');
+      }
+      return await postRecruitment(accessToken, data?.id);
+    },
+    onSuccess: () => {
+      // 캐릭터 모집 성공 시 새로고침
+      window.location.reload(); // 페이지 새로고침
+    },
+    onError: (error) => {
+      console.error('Error recruiting character:', error);
+      alert('캐릭터 모집에 실패했습니다. 다시 시도해주세요.'); // 사용자에게 피드백 제공
+    },
+  });
+
+  const CoinQuery = useQuery({
+    queryKey: ['coin'],
+    queryFn: async () => {
+      if (!accessToken) {
+        throw new Error('AccessToken이 필요합니다.');
+      }
+      return await getCoinInfo(accessToken);
+    },
+  });
 
   const handleBuyModalBlue = () => {
     setBuyModal(false);
-    setFindModal(true);
+    characterMutation.mutate(); // mutate 호출
   };
 
   const handlefindModalBlue = () => {
@@ -32,17 +60,6 @@ export const Notmodal = ({ setstate, data }: OwnModalProps) => {
     setFindModal(true);
     setstate(false);
   };
-
-  const CoinQuery = useQuery({
-    queryKey: ['coin'],
-    queryFn: async () => {
-      const accessToken = localStorage.getItem('accessToken') || '';
-      if (!accessToken) {
-        throw new Error('AccessToken이 필요합니다.');
-      }
-      return await getCoinInfo(accessToken);
-    },
-  });
 
   console.log(CoinQuery.data?.data.data.coin);
   return (
