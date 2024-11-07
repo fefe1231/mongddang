@@ -2,24 +2,28 @@ import { Camera, CameraResultType, PermissionStatus } from '@capacitor/camera';
 import { useState } from 'react';
 
 // 사진을 찍는 함수
-export const takePicture = () => {
+export const useCamera = () => {
   // 찍힌 이미지의 url
   const [imageUrl, setImageUrl] = useState('');
 
   // 카메라 권한 확인 함수
-  const checkCamera = async () => {
+  const checkCamera = async (): Promise<boolean> => {
     const permissions: PermissionStatus = await Camera.checkPermissions();
-    return permissions;
+    if (permissions.camera === 'granted') {
+      return true;
+    }
+
+    const requestPermissions = await Camera.requestPermissions();
+    return requestPermissions.camera === 'granted';
   };
 
   const openCamera = async () => {
     // 1. 카메라 권한 확인
-    const permissions = await checkCamera();
+    const hasPermission = await checkCamera();
 
     // 2. 권한이 있다면 사진 가져오기(촬영), 없으면 권한 요청
-    const hasPermission =
-      permissions.camera === 'granted' ||
-      (await Camera.requestPermissions()).camera === 'granted';
+    console.log(hasPermission)
+
     if (hasPermission) {
       const image = await Camera.getPhoto({
         quality: 50,
