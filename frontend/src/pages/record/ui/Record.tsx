@@ -62,12 +62,10 @@ export const RecordPage = () => {
   // }, []);
 
   return (
-    <>
-      <header>
-        <TopBar type="iconpage" iconHandler={() => nav(-1)}>
-          내 기록
-        </TopBar>
-      </header>
+    <div>
+      <TopBar type="iconpage" iconHandler={() => nav(-1)}>
+        내 기록
+      </TopBar>
       {/* Calendar start */}
       <Center>
         <RecordCalendar />
@@ -93,7 +91,6 @@ export const RecordPage = () => {
         />
       </ScrollArea> */}
       {/* LineChart end */}
-      <div>record page</div>
-    </>
+    </div>
   );
 };

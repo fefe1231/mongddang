@@ -2,6 +2,7 @@ import { DatePicker, DatePickerProps } from '@mantine/dates';
 import { useState } from 'react';
 import { formatTwoDigit } from '@/shared/lib/date';
 import { CalendarService } from '../model';
+import './style.css';
 
 export const RecordCalendar = () => {
   const [dateValue, setDateValue] = useState<Date | null>(null);
@@ -49,7 +50,7 @@ export const RecordCalendar = () => {
   };
 
   return (
-    <div>
+    <>
       <DatePicker
         value={dateValue}
         onChange={setDateValue}
@@ -60,7 +61,10 @@ export const RecordCalendar = () => {
         renderDay={renderDay}
         onNextMonth={onNextMonth}
         onPreviousMonth={onPreviousMonth}
+        styles={{
+          day: { height: '7rem', alignItems: 'start', justifyContent: 'left' },
+        }}
       />
-    </div>
+    </>
   );
 };
