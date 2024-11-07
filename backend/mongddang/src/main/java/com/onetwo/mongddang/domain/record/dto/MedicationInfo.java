@@ -1,6 +1,6 @@
 package com.onetwo.mongddang.domain.record.dto;
 
-import com.onetwo.mongddang.domain.medication.dto.MedicationStandard;
+import com.onetwo.mongddang.domain.medication.dto.MedicationStandardDto;
 import com.onetwo.mongddang.domain.medication.model.MedicationManagement;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +25,6 @@ public class MedicationInfo {
     private LocalDateTime repeatEndTime;
     private boolean isFast;
     private List<String> repeatTimes;
-    private List<MedicationStandard> standards;
+    private List<MedicationStandardDto> standards;
 
 }

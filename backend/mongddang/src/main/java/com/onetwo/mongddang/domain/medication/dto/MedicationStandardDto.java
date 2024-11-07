@@ -3,7 +3,7 @@ package com.onetwo.mongddang.domain.medication.dto;
 import lombok.Getter;
 
 @Getter
-public class MedicationStandard {
+public class MedicationStandardDto {
 
     private Long minGlucose;
     private Long maxGlucose;
