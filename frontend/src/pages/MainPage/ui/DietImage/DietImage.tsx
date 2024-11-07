@@ -3,28 +3,44 @@ import addPictureIcon from '@/assets/img/add_photo.svg';
 import { imgContainer, imgGuideCss } from './DietImage.styles';
 import { Typography } from '@/shared/ui/Typography';
 import { useCamera } from '@/shared/lib/cameraUtils';
+import { useState } from 'react';
 
 const DietImage = () => {
-  const { imageUrl, openCamera } = useCamera();
-  {console.log('이미지', imageUrl)}
+  const [previewImg, setPreviewImg] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string>('');
+  const { openCamera } = useCamera();
+
+  const handleCapture = async () => {
+    const returnData = await openCamera();
+    
+    // 허가를 안했거나, 촬영한 파일이 없는 경우
+    if (returnData.file == null) {
+      console.log('추후 권한을 다시 설정하는 방법을 안내');
+      return;
+    }
+    setPreviewImg(returnData.file);
+    setPreviewUrl(returnData.imageUrl);
+  };
+
   return (
-    <div
-      css={imgContainer}
-      onClick={() => {
-        openCamera();
-      }}
-    >
-      {imageUrl !== '' ? (
-        <img src={imageUrl} alt="식단 사진" width='100%' style={{ objectFit: 'contain' }} />
+    <div css={imgContainer} onClick={handleCapture}>
+      {previewImg ? (
+        <img
+          src={previewUrl}
+          alt="식단 사진"
+          width="100%"
+          height="100%"
+          style={{ objectFit: 'contain' }}
+        />
       ) : (
         <div css={imgGuideCss}>
           <img src={addPictureIcon} alt="식단 사진" />
           <Typography color="dark" size="1" weight={500} scale="500">
             뭐 먹는지 찍어줘!
           </Typography>
-          
         </div>
       )}
+      
     </div>
   );
 };
