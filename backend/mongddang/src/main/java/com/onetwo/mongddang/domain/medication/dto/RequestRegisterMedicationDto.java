@@ -45,6 +45,6 @@ public class RequestRegisterMedicationDto {
     @NotNull(message = "복약 시간은 필수입니다.")
     private List<String> repeatTimes;
 
-    private List<MedicationStandard> standards;
+    private List<MedicationStandardDto> standards;
 
 }
