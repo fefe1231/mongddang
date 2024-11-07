@@ -42,7 +42,7 @@ export const Profile = () => {
 
   return (
     <div>
-      <TopBar type="iconpage">프로필</TopBar>
+      <TopBar type="iconpage" iconHandler={()=>nav('/menu')}>프로필</TopBar>
       <div css={base}>
         <Icon size={5}>
           <img alt="icon-1" src="/img/%EB%A7%90%EB%9E%912.png" />
@@ -66,7 +66,7 @@ export const Profile = () => {
             닉네임: {ProfileQuery.data?.data.data.nickname}
           </Typography>
           <Typography color="dark" size="1" weight={700}>
-            성별:{' '}
+            성별:
             {ProfileQuery.data?.data.data.gender === 'male' ? '남자' : '여자'}
           </Typography>
           <Typography color="dark" size="1" weight={700}>

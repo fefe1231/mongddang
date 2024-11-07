@@ -24,11 +24,13 @@ import { Notmodal } from './ui/modal/Not-modal';
 import { Notowncharacter } from './ui/characterlist/notown-character';
 import { Newcharacter } from './ui/characterlist/new-character';
 import { Owncharacter } from './ui/characterlist/owncharacter';
+import { useNavigate } from 'react-router-dom';
 
 export const Encyclopedia = () => {
   const [isOwnModal, setIsOwnModal] = useState(false);
   const [isMainModal, setIsMainModal] = useState(false);
   const [isNotModal, setIsNotModal] = useState(false);
+  const nav = useNavigate();
   const [selectedCharacter, setSelectedCharacter] =
     useState<ICharacterData | null>(null);
 
@@ -114,7 +116,9 @@ export const Encyclopedia = () => {
         <Notmodal data={selectedCharacter} setstate={setIsNotModal} />
       )}
 
-      <TopBar type="iconpage">캐릭터 도감</TopBar>
+      <TopBar type="iconpage" iconHandler={()=>nav('/')}>
+        캐릭터 도감
+      </TopBar>
       <div css={containerCss}>
         <Description>
           <div>
