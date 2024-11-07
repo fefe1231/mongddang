@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import { TopBar } from '@/shared/ui/TopBar';
 import { useState } from 'react';
-import { Transition } from './Transition';
-import { RoleSelector } from './RoleSelector';
-import { DataForm } from './DataForm';
+import { DataForm } from './ui/dataform';
+import { Transition } from './ui/transition';
+import { RoleSelector } from './ui/role-selector';
 
 export type UserRole = 'child' | 'protector' | undefined;
 

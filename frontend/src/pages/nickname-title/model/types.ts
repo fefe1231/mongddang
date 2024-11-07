@@ -1,4 +1,4 @@
-import { ICharacterData } from "../Encyclopedia/types";
+import { ICharacterData } from '@/pages/encyclopedia/model/types';
 
 export interface ItitleData {
   titleId: number;
@@ -19,11 +19,11 @@ export interface ItitleInfo {
 }
 
 export interface IAchievement {
-  achievementId: number
+  achievementId: number;
 }
 
 export interface CharacterResponse {
   data: {
     data: ICharacterData[];
-  }
+  };
 }

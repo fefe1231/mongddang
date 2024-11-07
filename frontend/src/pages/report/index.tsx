@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
 
 import { TopBar } from "@/shared/ui/TopBar";
-import { Item } from "./component/item";
-import { SliderItem } from "./component/slider-item";
-import { GptContent } from "./component/gpt-content";
+import { Item } from "./ui/item";
+import { SliderItem } from "./ui/slider-item";
+import { GptContent } from "./ui/gpt-content";
 
 export const Report = () => {
   return (

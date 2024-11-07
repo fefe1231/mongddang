@@ -1,16 +1,16 @@
 /** @jsxImportSource @emotion/react */
 import { TopBar } from '@/shared/ui/TopBar';
 import space from '../../assets/img/space.png';
-import { containerCss, imgCss } from '../Encyclopedia/styles';
-import { Description } from '../Encyclopedia/description';
+import { containerCss, imgCss } from '../encyclopedia/ui/styles';
+import { Description } from '../encyclopedia/ui/description';
 import { Toggle } from '@/shared/ui/Toggle';
 import { Typography } from '@/shared/ui/Typography';
 import { TitleComponent } from './ui/title-component';
-import { toggleContainerCss } from './styles';
+import { toggleContainerCss } from './ui/styles';
 import { useQuery } from '@tanstack/react-query';
-import { getTitleInfo } from './api';
-import { ItitleData } from './types';
+import { getTitleInfo } from './api/api';
 import { useState, useEffect } from 'react';
+import { ItitleData } from './model/types';
 
 export const NicknameTitle = () => {
   const [isOn, setIsOn] = useState(false);

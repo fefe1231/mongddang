@@ -5,10 +5,10 @@ import { Typography } from '@/shared/ui/Typography';
 import { useState } from 'react';
 import { base, containerCss, progressCss } from './styles';
 import { UpdateCharacter } from '../modal';
-import { ItitleData } from '../../types';
 import { useMutation } from '@tanstack/react-query';
-import { getTitleAchievement, getTitleMain } from '../../api';
-import { AchievementToast } from '../Toast';
+import { getTitleAchievement, getTitleMain } from '../../api/api';
+import { AchievementToast } from '../toast';
+import { ItitleData } from '../../model/types';
 
 interface TitleComponentProps {
   title: ItitleData;

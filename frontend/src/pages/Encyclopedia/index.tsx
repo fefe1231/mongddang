@@ -3,30 +3,34 @@ import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { TopBar } from '@/shared/ui/TopBar';
 import space from '../../assets/img/space.png';
-import { Owncharacter } from './ui/characterlist/owncharacter';
-import { Description } from './description';
+
+import { Description } from './ui/description';
+
+import { getCharacterInfo, getNewInfo } from './api/api';
+import { ICharacterData } from './model/types';
+
+import { AxiosResponse } from 'axios';
+import { CharacterResponse } from '../nickname-title/model/types';
 import {
   base,
   cardContainerCss,
-  containerCss,
   cardsWrapperCss,
+  containerCss,
   imgCss,
-} from './styles';
+} from './ui/styles';
 import { OwnModal } from './ui/modal/own-modal';
 import { MainModal } from './ui/modal/main-modal';
 import { Notmodal } from './ui/modal/Not-modal';
-import { getCharacterInfo, getNewInfo } from './api';
-import { ICharacterData } from './types';
 import { Notowncharacter } from './ui/characterlist/notown-character';
 import { Newcharacter } from './ui/characterlist/new-character';
-import { AxiosResponse } from 'axios';
-import { CharacterResponse } from '../nickname-title/types';
+import { Owncharacter } from './ui/characterlist/owncharacter';
 
 export const Encyclopedia = () => {
   const [isOwnModal, setIsOwnModal] = useState(false);
   const [isMainModal, setIsMainModal] = useState(false);
   const [isNotModal, setIsNotModal] = useState(false);
-  const [selectedCharacter, setSelectedCharacter] = useState<ICharacterData | null>(null);
+  const [selectedCharacter, setSelectedCharacter] =
+    useState<ICharacterData | null>(null);
 
   const accessToken = localStorage.getItem('accessToken');
   const queryClient = useQueryClient();
@@ -46,12 +50,12 @@ export const Encyclopedia = () => {
           ...oldData,
           data: {
             ...oldData.data,
-            data: oldData.data.data.map((character) => 
+            data: oldData.data.data.map((character) =>
               character.id === characterId
                 ? { ...character, isNew: false }
                 : character
-            )
-          }
+            ),
+          },
         };
       });
     },
