@@ -17,3 +17,12 @@ export const getCharacterInfo = (accessToken: string) => {
     },
   });
 };
+
+// 보유 코인 조회
+export const getCoinInfo = (accessToken: string) => {
+  return api.get('/api/game/coin', {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+};

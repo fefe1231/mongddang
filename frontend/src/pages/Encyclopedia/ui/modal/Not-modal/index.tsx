@@ -10,6 +10,8 @@ import { BuyModal } from '../buy-modal';
 import { FindModal } from '../find-modal';
 import { base, modalCss, xiconCss, storyTypographyCss } from './styles';
 import { ICharacterData } from '@/pages/Encyclopedia/types';
+import { useQuery } from '@tanstack/react-query';
+import { getCoinInfo } from '@/pages/Encyclopedia/api';
 
 interface OwnModalProps {
   setstate: (value: boolean) => void;
@@ -31,6 +33,18 @@ export const Notmodal = ({ setstate, data }: OwnModalProps) => {
     setstate(false);
   };
 
+  const CoinQuery = useQuery({
+    queryKey: ['coin'],
+    queryFn: async () => {
+      const accessToken = localStorage.getItem('accessToken') || '';
+      if (!accessToken) {
+        throw new Error('AccessToken이 필요합니다.');
+      }
+      return await getCoinInfo(accessToken);
+    },
+  });
+
+  console.log(CoinQuery.data?.data.data.coin);
   return (
     <div>
       <Modal height={40} width={70} css={modalCss}>
@@ -48,10 +62,10 @@ export const Notmodal = ({ setstate, data }: OwnModalProps) => {
               src="/img/말랑3.png"
             />
           </Icon>
-          <Typography 
-            color="dark" 
-            size="1" 
-            weight={600} 
+          <Typography
+            color="dark"
+            size="1"
+            weight={600}
             css={storyTypographyCss}
           >
             {data?.story}
@@ -64,6 +78,14 @@ export const Notmodal = ({ setstate, data }: OwnModalProps) => {
           >
             400
           </Button>
+          <Typography
+            color="dark"
+            size="1"
+            weight={600}
+            css={storyTypographyCss}
+          >
+            보유 코인 : {CoinQuery.data?.data.data.coin}
+          </Typography>
         </div>
       </Modal>
       {buyModal && (
@@ -72,9 +94,7 @@ export const Notmodal = ({ setstate, data }: OwnModalProps) => {
           redhandler={() => setBuyModal(false)}
         />
       )}
-      {findModal && (
-        <FindModal setstate={handlefindModalBlue}/>
-      )}
+      {findModal && <FindModal setstate={handlefindModalBlue} />}
     </div>
   );
 };
