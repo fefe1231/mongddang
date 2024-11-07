@@ -23,6 +23,7 @@ const DietModal = (props: DietModalProps) => {
   // 마지막 버튼 활성화
   const [isDisabled, setIsDisabled] = useState(true);
   const [diet, setDiet] = useState('');
+  const [dietImgFile, setDietImgFile] = useState<File | null>(null);
 
   // 식단 텍스트 등록
   const debounceSaveDiet = useCallback(
@@ -36,15 +37,21 @@ const DietModal = (props: DietModalProps) => {
     debounceSaveDiet(e.target.value);
   };
 
+  const handleDietImg = (file: File | null) => {
+    if (file) {
+      setDietImgFile(file);
+    }
+  };
+
   // 식단 저장 버튼 활성화
   useEffect(() => {
     const handleDisabledBtn = () => {
-      if (diet !== '') {
+      if (diet !== '' || dietImgFile) {
         setIsDisabled(false);
       }
     };
     return handleDisabledBtn();
-  }, [diet]);
+  }, [diet, dietImgFile]);
 
   return (
     <div>
@@ -65,7 +72,7 @@ const DietModal = (props: DietModalProps) => {
           <DietModalBtnGroup />
 
           {/* 식단 이미지 삽입 */}
-          <DietImage />
+          <DietImage handleDietImg={handleDietImg}/>
 
           {/* 식단 텍스트 입력 */}
           <TextField

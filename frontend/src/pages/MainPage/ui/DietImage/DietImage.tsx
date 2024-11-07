@@ -5,26 +5,29 @@ import { Typography } from '@/shared/ui/Typography';
 import { useCamera } from '@/shared/lib/cameraUtils';
 import { useState } from 'react';
 
-const DietImage = () => {
-  const [previewImg, setPreviewImg] = useState<File | null>(null);
+type DietImageProps = {
+  handleDietImg: (file: File | null) => void;
+};
+
+const DietImage = (props:DietImageProps) => {
   const [previewUrl, setPreviewUrl] = useState<string>('');
   const { openCamera } = useCamera();
 
   const handleCapture = async () => {
     const returnData = await openCamera();
-    
+
     // 허가를 안했거나, 촬영한 파일이 없는 경우
     if (returnData.file == null) {
       console.log('추후 권한을 다시 설정하는 방법을 안내');
       return;
     }
-    setPreviewImg(returnData.file);
+    props.handleDietImg(returnData.file);
     setPreviewUrl(returnData.imageUrl);
   };
 
   return (
     <div css={imgContainer} onClick={handleCapture}>
-      {previewImg ? (
+      {previewUrl ? (
         <img
           src={previewUrl}
           alt="식단 사진"
@@ -40,7 +43,6 @@ const DietImage = () => {
           </Typography>
         </div>
       )}
-      
     </div>
   );
 };
