@@ -156,4 +156,22 @@ public class RecordController {
         ResponseDto responseDto = recordService.editMeal(childId, recordId, contentJson, image, mealTime);
         return ResponseEntity.ok(responseDto);
     }
+
+
+    // 복약 확인하기
+    @PostMapping("/medication/check")
+    @ChildRequired
+    @Tag(name = "Record API", description = "복약 기록 api")
+    @Operation(summary = "복약 확인하기", description = "복약을 확인합니다.")
+    public ResponseEntity<ResponseDto> checkMedication(
+            HttpServletRequest request) {
+        log.info("POST /api/record/medication/check");
+
+        Long childId = jwtExtratService.jwtFindId(request);
+
+        // 서비스 호출
+        ResponseDto responseDto = recordService.checkMedication(childId);
+        return ResponseEntity.ok(responseDto);
+    }
+
 }

@@ -62,7 +62,7 @@ public class RecordService {
                 .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
         log.info("child: {}", child.getEmail());
 
-        // 보호자가 아이의 데이터에 쓰기 권한이 있는지 확인
+        // 보호자가 어린이의 데이터에 쓰기 권한이 있는지 확인
         ctoPUtils.validateProtectorAccessChildData(user, child);
 
         // 시작일과 종료일을 LocalDateTime 으로 변환
@@ -122,7 +122,7 @@ public class RecordService {
     /**
      * 운동 시작하기
      *
-     * @param childId 운동 시작을 시도하는 아이의 아이디
+     * @param childId 운동 시작을 시도하는 어린이의 아이디
      * @return ResponseDto
      */
     @Transactional
@@ -165,7 +165,7 @@ public class RecordService {
     /**
      * 운동 종료하기
      *
-     * @param childId 운동 종료를 시도하는 아이의 아이디
+     * @param childId 운동 종료를 시도하는 어린이의 아이디
      * @return ResponseDto
      */
     @Transactional
@@ -203,7 +203,7 @@ public class RecordService {
     /**
      * 수면 시작하기
      *
-     * @param childId 수면 시작을 시도하는 아이의 아이디
+     * @param childId 수면 시작을 시도하는 어린이의 아이디
      * @return ResponseDto
      */
     @Transactional
@@ -245,7 +245,7 @@ public class RecordService {
     /**
      * 수면 종료하기
      *
-     * @param childId 수면 종료를 시도하는 아이의 아이디
+     * @param childId 수면 종료를 시도하는 어린이의 아이디
      * @return ResponseDto
      */
     @Transactional
@@ -281,7 +281,7 @@ public class RecordService {
     /**
      * 식사 시작하기
      *
-     * @param childId     식사 시작을 시도하는 아이의 아이디
+     * @param childId     식사 시작을 시도하는 어린이의 아이디
      * @param contentJson 식사 내용
      * @param imageFile   이미지 파일 (파일 경로 또는 URL)
      * @param mealTime    식사 시간 (enum으로 처리)
@@ -345,7 +345,7 @@ public class RecordService {
     /**
      * 식사 종료하기
      *
-     * @param childId 식사 종료를 시도하는 아이의 아이디
+     * @param childId 식사 종료를 시도하는 어린이의 아이디
      * @return ResponseDto
      */
     @Transactional
@@ -386,7 +386,7 @@ public class RecordService {
         // SON 문자열을 JsonNode로 변환
         JsonNode content = jsonUtils.JsonStringToJsonNode(contentJson);
 
-        // 아이 정보 조회
+        // 어린이 정보 조회
         User child = userRepository.findById(childId)
                 .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
         log.info("child: {}", child.getEmail());
@@ -396,8 +396,8 @@ public class RecordService {
                 .orElseThrow(() -> new RestApiException(CustomRecordErrorCode.MEAL_RECORD_NOT_FOUND));
         log.info("mealRecord: {}", mealRecord.getId());
 
-        // 식사 기록이 아이의 기록인지 확인
-        log.info("식사 기록이 아이의 기록인지 확인 (in english : Check if the meal record is the child's record)");
+        // 식사 기록이 어린이의 기록인지 확인
+        log.info("식사 기록이 어린이의 기록인지 확인 (in english : Check if the meal record is the child's record)");
         if (!Objects.equals(mealRecord.getChild().getId(), childId)) {
             throw new RestApiException(CustomRecordErrorCode.CHILD_ACCESS_DENIED);
         }
@@ -429,6 +429,39 @@ public class RecordService {
 
         return ResponseDto.builder()
                 .message("식사를 수정합니다.")
+                .build();
+    }
+
+
+    /**
+     * 복약 기록하기
+     *
+     * @param childId 복약 기록을 시도하는 어린이의 아이디
+     * @return ResponseDto
+     */
+    public ResponseDto checkMedication(Long childId) {
+        log.info("checkMedication childId: {}", childId);
+
+        User child = userRepository.findById(childId)
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+        log.info("child: {}", child.getEmail());
+
+        Record newMedicationRecord = Record.builder()
+                .child(child)
+                .category(medication)
+                .startTime(LocalDateTime.now())
+                .endTime(null)
+                .content(null)
+                .imageUrl(null)
+                .isDone(true)
+                .mealTime(null)
+                .build();
+
+        recordRepository.save(newMedicationRecord);
+        log.info("복약 확인 기록 완료. : {}", newMedicationRecord.getStartTime());
+
+        return ResponseDto.builder()
+                .message("복약을 확인합니다.")
                 .build();
     }
 

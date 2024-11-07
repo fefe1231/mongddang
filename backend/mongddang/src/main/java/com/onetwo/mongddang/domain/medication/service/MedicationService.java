@@ -120,7 +120,7 @@ public class MedicationService {
      * 등록한 약품 조회하기
      *
      * @param userId   유저 아이디
-     * @param nickname 아이 닉네임
+     * @param nickname 어린이 닉네임
      * @return ResponseDto
      */
     public ResponseDto getMedication(Long userId, String nickname) {
@@ -131,10 +131,10 @@ public class MedicationService {
         User child = userRepository.findByNickname(nickname)
                 .orElseThrow(() -> new RestApiException(CustomUserErrorCode.THIS_NICKNAME_USER_NOT_FOUND));
 
-        // 보호자가 아이의 데이터에 접근 권한이 있는지 확인
+        // 보호자가 어린이의 데이터에 접근 권한이 있는지 확인
         ctoPUtils.validateProtectorAccessChildData(user, child);
 
-        // 복약 관리 테이블에서 아이에 해당하는 복약 시간 데이터 조회
+        // 복약 관리 테이블에서 어린이에 해당하는 복약 시간 데이터 조회
         List<MedicationManagement> medicationManagementList = medicationManagementRepository.findByChild(child);
         List<RegisteredMedicationDto> registeredMedicationDtoList = new ArrayList<>();
 
@@ -185,7 +185,7 @@ public class MedicationService {
      * 등록한 약품 관리 삭제하기
      *
      * @param userId                 유저 아이디
-     * @param nickname               아이 닉네임
+     * @param nickname               어린이 닉네임
      * @param medicationManagementId 복약 관리 아이디
      * @return ResponseDto
      */
@@ -197,7 +197,7 @@ public class MedicationService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
 
-        // 아이의 정보
+        // 어린이의 정보
         User child = userRepository.findByNickname(nickname)
                 .orElseThrow(() -> new RestApiException(CustomUserErrorCode.THIS_NICKNAME_USER_NOT_FOUND));
 
@@ -209,8 +209,8 @@ public class MedicationService {
         MedicationManagement medicationManagement = medicationManagementRepository.findById(medicationManagementId)
                 .orElseThrow(() -> new RestApiException(CustomMedicationErrorCode.MEDICATION_NOT_FOUND));
 
-        // 복약 관리 기록이 아이의 것인지 확인
-        log.info("복약 관리 기록이 아이의 것인지 확인 (In English : Check if the medication management record belongs to the child)");
+        // 복약 관리 기록이 어린이의 것인지 확인
+        log.info("복약 관리 기록이 어린이의 것인지 확인 (In English : Check if the medication management record belongs to the child)");
         if (!medicationManagement.getChild().equals(child)) {
             throw new RestApiException(CustomMedicationErrorCode.MEDICATION_NOT_MATCH);
         }
