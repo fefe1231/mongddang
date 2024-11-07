@@ -9,8 +9,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { UserRole } from '..';
 import { signUp } from '../api';
 import { useMutation } from '@tanstack/react-query';
-import { updateNickname } from '@/pages/profile/nickname-edit/api';
+import { INickname, updateNickname } from '@/pages/profile/nickname-edit/api';
 import { Palette } from '@/shared/model/globalStylesTyes';
+import { AxiosResponse } from 'axios';
 
 export const DataForm = ({ role }: { role: UserRole }) => {
   const [gender, setGender] = useState<'male' | 'female' | undefined>(
@@ -82,9 +83,18 @@ export const DataForm = ({ role }: { role: UserRole }) => {
       alert('회원가입에 실패했습니다. 다시 시도해주세요.');
     }
   };
-
-  const { mutate } = useMutation({
-    mutationFn: updateNickname,
+  const accessToken = localStorage.getItem('accessToken') || '';
+  const { mutate } = useMutation<
+    AxiosResponse<INickname>,
+    Error,
+    { accessToken: string; nickname: string }
+  >({
+    mutationFn: async ({
+      accessToken,
+      nickname,
+    }): Promise<AxiosResponse<INickname>> => {
+      return await updateNickname(accessToken, nickname);
+    },
     onSuccess: () => {
       setMsg('사용 가능한 닉네임입니다.');
       setColor('primary');
@@ -120,7 +130,7 @@ export const DataForm = ({ role }: { role: UserRole }) => {
             color="primary"
             fontSize="1"
             variant="contained"
-            handler={() => mutate(nickname)}
+            handler={() => mutate({ accessToken, nickname })}
           >
             확인
           </Button>
@@ -138,7 +148,7 @@ export const DataForm = ({ role }: { role: UserRole }) => {
             onChange={(e) => setName(e.target.value)}
           />
         </div>
-        <Typography color='dark' size="1" weight={500}>
+        <Typography color="dark" size="1" weight={500}>
           생년월일
         </Typography>
         <div style={{ display: 'flex', gap: '1rem', margin: '1rem 0' }}>
@@ -164,7 +174,14 @@ export const DataForm = ({ role }: { role: UserRole }) => {
             onChange={handleDateChangeWrapper('day')}
           />
         </div>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop:'1.3rem'}}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '1rem',
+            marginTop: '1.3rem',
+          }}
+        >
           <Button
             color="light"
             fontSize="1"

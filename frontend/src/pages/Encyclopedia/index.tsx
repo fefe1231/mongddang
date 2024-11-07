@@ -1,35 +1,69 @@
 /** @jsxImportSource @emotion/react */
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { TopBar } from '@/shared/ui/TopBar';
 import space from '../../assets/img/space.png';
 import { Owncharacter } from './ui/characterlist/owncharacter';
 import { Description } from './description';
-import { 
-  base, 
-  cardContainerCss, 
-  containerCss, 
-  cardsWrapperCss, 
-  imgCss 
+import {
+  base,
+  cardContainerCss,
+  containerCss,
+  cardsWrapperCss,
+  imgCss,
 } from './styles';
 import { OwnModal } from './ui/modal/own-modal';
 import { MainModal } from './ui/modal/main-modal';
 import { Notmodal } from './ui/modal/Not-modal';
-import { getCharacterInfo } from './api';
+import { getCharacterInfo, getNewInfo } from './api';
 import { ICharacterData } from './types';
 import { Notowncharacter } from './ui/characterlist/notown-character';
 import { Newcharacter } from './ui/characterlist/new-character';
+import { AxiosResponse } from 'axios';
+import { CharacterResponse } from '../nickname-title/types';
 
 export const Encyclopedia = () => {
   const [isOwnModal, setIsOwnModal] = useState(false);
   const [isMainModal, setIsMainModal] = useState(false);
   const [isNotModal, setIsNotModal] = useState(false);
-  const [selectedCharacter, setSelectedCharacter] = useState<ICharacterData | null>(null); // 선택된 캐릭터 데이터 상태
+  const [selectedCharacter, setSelectedCharacter] = useState<ICharacterData | null>(null);
 
-  const CharacterQuery = useQuery({
+  const accessToken = localStorage.getItem('accessToken');
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation<AxiosResponse<string, number>, Error, number>({
+    mutationFn: (characterId) => {
+      if (!accessToken) {
+        throw new Error('AccessToken이 필요합니다.');
+      }
+      return getNewInfo(accessToken, characterId);
+    },
+    onSuccess: (_, characterId) => {
+      queryClient.setQueryData<CharacterResponse>(['character'], (oldData) => {
+        if (!oldData) return oldData;
+
+        return {
+          ...oldData,
+          data: {
+            ...oldData.data,
+            data: oldData.data.data.map((character) => 
+              character.id === characterId
+                ? { ...character, isNew: false }
+                : character
+            )
+          }
+        };
+      });
+    },
+    onError: (error) => {
+      console.error('상태 변경 실패:', error);
+      alert('상태 변경에 실패했습니다. 다시 시도해주세요.');
+    },
+  });
+
+  const CharacterQuery = useQuery<CharacterResponse>({
     queryKey: ['character'],
     queryFn: async () => {
-      const accessToken = localStorage.getItem('accessToken') || '';
       if (!accessToken) {
         throw new Error('AccessToken이 필요합니다.');
       }
@@ -49,13 +83,15 @@ export const Encyclopedia = () => {
     return <div>데이터가 없습니다.</div>;
   }
 
-  // 모달 열기 함수 (선택된 캐릭터 데이터를 설정하고 모달을 열음)
-  const openModal = (character: ICharacterData, modalType: 'own' | 'main' | 'not') => {
-    setSelectedCharacter(character); // 선택한 캐릭터 설정
-
+  const openModal = (
+    character: ICharacterData,
+    modalType: 'own' | 'main' | 'not'
+  ) => {
+    setSelectedCharacter(character);
     if (modalType === 'own') {
       setIsOwnModal(true);
     } else if (modalType === 'main') {
+      mutation.mutate(character.id);
       setIsMainModal(true);
     } else if (modalType === 'not') {
       setIsNotModal(true);
@@ -64,10 +100,15 @@ export const Encyclopedia = () => {
 
   return (
     <div css={base}>
-      {/* 각 모달에 선택된 캐릭터 데이터를 전달 */}
-      {isOwnModal && <OwnModal data={selectedCharacter} setstate={setIsOwnModal} />}
-      {isMainModal && <MainModal data={selectedCharacter} setstate={setIsMainModal} />}
-      {isNotModal && <Notmodal data={selectedCharacter} setstate={setIsNotModal} />}
+      {isOwnModal && (
+        <OwnModal data={selectedCharacter} setstate={setIsOwnModal} />
+      )}
+      {isMainModal && (
+        <MainModal data={selectedCharacter} setstate={setIsMainModal} />
+      )}
+      {isNotModal && (
+        <Notmodal data={selectedCharacter} setstate={setIsNotModal} />
+      )}
 
       <TopBar type="iconpage">캐릭터 도감</TopBar>
       <div css={containerCss}>
@@ -77,12 +118,11 @@ export const Encyclopedia = () => {
           </div>
         </Description>
 
-        {/* 카드들을 감싸는 새로운 컨테이너 */}
         <div css={cardsWrapperCss}>
           {CharacterQuery.data.data.data.map((data: ICharacterData) => (
             <div key={data.id} css={cardContainerCss}>
               {!data.isOwned ? (
-                <div onClick={() => openModal(data, 'not')} >
+                <div onClick={() => openModal(data, 'not')}>
                   <Notowncharacter data={data} />
                 </div>
               ) : data.isOwned && data.isNew ? (
