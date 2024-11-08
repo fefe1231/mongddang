@@ -67,11 +67,11 @@ export const RecordPage = () => {
       <TopBar type="iconpage" iconHandler={() => nav(-1)}>
         내 기록
       </TopBar>
-      {/* Calendar start */}
+      {/* Calendar Start */}
       <Center classNames={{ root: recordStyle.root }}>
         <RecordCalendar />
       </Center>
-      {/* Calendar end */}
+      {/* Calendar End */}
 
       {/* LineChart start */}
       {/* <ScrollArea w={700} h={350} viewportRef={viewportRef}>

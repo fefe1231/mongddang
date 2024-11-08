@@ -8,7 +8,7 @@ import { NicknameEdit } from './pages/profile/ui/nickname-edit';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Profile } from './pages/profile';
 import { Report } from './pages/report';
-import { RecordPage } from './pages/record';
+import { RecordPage, TodayRecordPage } from './pages/record';
 import { Encyclopedia } from './pages/Encyclopedia';
 import { SignUp } from './pages/Signup';
 
@@ -28,10 +28,8 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/nickname/edit" element={<NicknameEdit />} />
           <Route path="/report" element={<Report />} />
-          <Route path="/record" element={<RecordPage />}>
-            <Route index element={<RecordPage />} />
-            <Route path=":date" element={<RecordPage />} />
-          </Route>
+          <Route path="/record" element={<RecordPage />} />
+          <Route path="/record/:date" element={<TodayRecordPage />} />
         </Routes>
       </Router>
     </GoogleOAuthProvider>
