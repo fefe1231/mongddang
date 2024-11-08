@@ -11,7 +11,8 @@ export class CalendarService {
     return previousMonth;
   }
 
-  static isCurrentMonth(date: Date, compareDate: Date): boolean {
+  static isCurrentMonth(date: Date | null, compareDate: Date | null): boolean {
+    if (!compareDate || !date) return false;
     return date.getMonth() === compareDate.getMonth();
   }
 
@@ -21,8 +22,19 @@ export class CalendarService {
 
   static isToday(date: Date): boolean {
     const today = new Date();
-    return date.getDate() === today.getDate() &&
+    return (
+      date.getDate() === today.getDate() &&
       date.getMonth() === today.getMonth() &&
-      date.getFullYear() === today.getFullYear();
+      date.getFullYear() === today.getFullYear()
+    );
+  }
+
+  static isSameDate(date: Date | null, compareDate: Date | null): boolean {
+    if (!date || !compareDate) return false;
+    return (
+      date.getFullYear() === compareDate.getFullYear() &&
+      date.getMonth() === compareDate.getMonth() &&
+      date.getDate() === compareDate.getDate()
+    );
   }
 }
