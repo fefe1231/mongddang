@@ -46,7 +46,7 @@ public class SaveMealService {
             log.info("this user is protector");
 
             //연결 여부 검사
-            if (!ctoPRepository.existsByChildAndProtector(user, child)) {
+            if (ctoPRepository.findByChildAndProtector(user, child).isEmpty()) {
                 throw new RestApiException(CustomCtoPErrorCode.CHILD_NOT_LINKED);
             }
         }

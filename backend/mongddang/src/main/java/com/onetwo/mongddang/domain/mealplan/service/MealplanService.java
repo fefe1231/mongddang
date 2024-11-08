@@ -52,16 +52,16 @@ public class MealplanService {
                 .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
         log.info("Existing User : {}", userId);
 
+        // 닉네임으로 어린이 찾기
+        User child = userRepository.findByNickname(requestMealInfoDto.getNickname())
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.THIS_NICKNAME_USER_NOT_FOUND));
+
         // user가 보호자라면 닉네임 어린이와 연결되어있는지 확인
         if (user.getRole() == User.Role.protector) {
             log.info("this user is protector");
 
-            // 닉네임으로 어린이 찾기
-            User child = userRepository.findByNickname(requestMealInfoDto.getNickname())
-                    .orElseThrow(() -> new RestApiException(CustomUserErrorCode.THIS_NICKNAME_USER_NOT_FOUND));
-
             //연결 여부 검사
-            if (!ctoPRepository.existsByChildAndProtector(user, child)) {
+            if (ctoPRepository.findByChildAndProtector(user, child).isEmpty()) {
                 throw new RestApiException(CustomCtoPErrorCode.CHILD_NOT_LINKED);
             }
         }
