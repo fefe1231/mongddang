@@ -22,8 +22,10 @@ import ChatBubble from './ui/ChatBubble/ChatBubble';
 import { useState } from 'react';
 import DietModal from './ui/DietModal/DietModal';
 import MailBox from './ui/MailBox/MailBox';
+import { useNavigate } from 'react-router-dom';
 
 const KidsMainPage = () => {
+  const navigate = useNavigate();
   const [openDietModal, setOpenDietModal] = useState(false);
   const [openMailBox, setOpenMailBox] = useState(false);
   const closeDietModal = () => {
@@ -31,6 +33,17 @@ const KidsMainPage = () => {
   };
   const closeMailBox = () => {
     setOpenMailBox(false);
+  };
+
+  // 바텀바 url 이동
+  const moveBottomBar = (menu: number | undefined) => {
+    if (menu === 0) {
+      navigate('/encyclopedia');
+    } else if (menu === 1) {
+      navigate('/menu');
+    } else if (menu === 2) {
+      navigate(`/record/${new Date()}`);
+    }
   };
 
   return (
@@ -66,17 +79,19 @@ const KidsMainPage = () => {
                   menu="알림"
                 />
               </div>
-              <IconTypo
-                icon="/img/%EB%A7%90%EB%9E%911.png"
-                fontSize="0.75"
-                menu={
-                  <div>
-                    도전
-                    <br />
-                    퀘스트
-                  </div>
-                }
-              />
+              <div onClick={()=>{navigate('/nickname/title')}}>
+                <IconTypo
+                  icon="/img/%EB%A7%90%EB%9E%911.png"
+                  fontSize="0.75"
+                  menu={
+                    <div>
+                      도전
+                      <br />
+                      퀘스트
+                    </div>
+                  }
+                />
+              </div>
               <CurrentBloodSugar />
             </div>
           </div>
@@ -114,7 +129,7 @@ const KidsMainPage = () => {
               '/img/%EB%A7%90%EB%9E%913.png',
             ]}
             menus={['몽땅 도감', '메뉴', '일일 기록']}
-            onHandleChange={() => {}}
+            onHandleChange={moveBottomBar}
           />
         </div>
       </div>
