@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
 import com.onetwo.mongddang.domain.mealplan.dto.MealplanDto;
 import com.onetwo.mongddang.domain.mealplan.dto.RequestMealInfoDto;
+import com.onetwo.mongddang.domain.mealplan.error.CustomMealplanErrorCode;
 import com.onetwo.mongddang.domain.user.error.CustomCtoPErrorCode;
 import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
 import com.onetwo.mongddang.domain.user.model.User;
@@ -100,7 +101,6 @@ public class MealplanService {
         JsonNode mealInfoList = getMeal(schoolCode, officeCode, mealTimeCode, startDay, endDay);
         log.info("mealInfo : {}", mealInfoList.get(0).toString());
 
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!여기다!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         List<MealplanDto> data = new ArrayList<>();
 
         for (int i = 0; i < mealInfoList.size(); i++) {
@@ -140,52 +140,59 @@ public class MealplanService {
     }
 
     // 학교,교육청 api 코드 받아오기
-    public JsonNode getSchoolInfo(String schoolname) throws JsonProcessingException {
-        log.info("start getSchoolInfo");
-        String apiKey = schoolKey; // 발급받은 API Key를 여기에 입력하세요.
-        String apiUrl = schoolUrl + "?KEY=" + apiKey + "&Type=json&SCHUL_NM=" + schoolname; // 학교명으로 검색
+    public JsonNode getSchoolInfo(String schoolname) {
+        try {
+            log.info("start getSchoolInfo");
+            String apiKey = schoolKey; // 발급받은 API Key를 여기에 입력하세요.
+            String apiUrl = schoolUrl + "?KEY=" + apiKey + "&Type=json&SCHUL_NM=" + schoolname; // 학교명으로 검색
 
-        RestTemplate restTemplate = new RestTemplate();
-        String response = restTemplate.getForObject(apiUrl, String.class);
+            RestTemplate restTemplate = new RestTemplate();
+            String response = restTemplate.getForObject(apiUrl, String.class);
 
-        // JSON 데이터를 파싱
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode rootNode = objectMapper.readTree(response);
+            // JSON 데이터를 파싱
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(response);
 
-        // "schoolInfo"의 "row" 데이터만 반환
-        if (rootNode.has("schoolInfo") && rootNode.get("schoolInfo").size() > 1) {
-            JsonNode rowNode = rootNode.get("schoolInfo").get(1).path("row");
-            return rowNode;
-        } else {
-            return null;
+            // "schoolInfo"의 "row" 데이터만 반환
+            if (rootNode.has("schoolInfo") && rootNode.get("schoolInfo").size() > 1) {
+                JsonNode rowNode = rootNode.get("schoolInfo").get(1).path("row");
+                return rowNode;
+            } else {
+                throw new RestApiException(CustomMealplanErrorCode.SCHOOL_INFO_RETR_FAIL);
+            }
+        } catch (Exception e) {
+            throw new RestApiException(CustomMealplanErrorCode.SCHOOL_INFO_RETR_FAIL);
         }
     }
 
     // 급식표 가져오기
     public JsonNode getMeal(String schoolCode, String officeCode,
                             String mealTimeCode, String startDay,
-                            String endDay) throws JsonProcessingException {
-        String apiKey = mealKey; // 발급받은 API Key를 여기에 입력하세요.
-        String apiUrl = mealUrl + "?KEY=" + apiKey + "&Type=json&pIndex=1&pSize=100&ATPT_OFCDC_SC_CODE=" + officeCode
-                + "&SD_SCHUL_CODE=" + schoolCode + "&MLSV_FROM_YMD=" + startDay
-                + "&MLSV_TO_YMD=" + endDay + "&MMEAL_SC_CODE=" + mealTimeCode;
+                            String endDay) {
+        try {
+            String apiKey = mealKey; // 발급받은 API Key를 여기에 입력하세요.
+            String apiUrl = mealUrl + "?KEY=" + apiKey + "&Type=json&pIndex=1&pSize=100&ATPT_OFCDC_SC_CODE=" + officeCode
+                    + "&SD_SCHUL_CODE=" + schoolCode + "&MLSV_FROM_YMD=" + startDay
+                    + "&MLSV_TO_YMD=" + endDay + "&MMEAL_SC_CODE=" + mealTimeCode;
 
-        log.info("meal api Url : {}", apiUrl);
+            log.info("meal api Url : {}", apiUrl);
 
-        RestTemplate restTemplate = new RestTemplate();
-        String response = restTemplate.getForObject(apiUrl, String.class);
+            RestTemplate restTemplate = new RestTemplate();
+            String response = restTemplate.getForObject(apiUrl, String.class);
 
-        // JSON 데이터를 파싱
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode rootNode = objectMapper.readTree(response);
+            // JSON 데이터를 파싱
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(response);
 
-        // "schoolInfo"의 "row" 데이터만 반환
-        if (rootNode.has("mealServiceDietInfo") && rootNode.get("mealServiceDietInfo").size() > 1) {
-            JsonNode rowNode = rootNode.get("mealServiceDietInfo").get(1).path("row");
-            return rowNode;
-        } else {
-            return null;
+            // "schoolInfo"의 "row" 데이터만 반환
+            if (rootNode.has("mealServiceDietInfo") && rootNode.get("mealServiceDietInfo").size() > 1) {
+                JsonNode rowNode = rootNode.get("mealServiceDietInfo").get(1).path("row");
+                return rowNode;
+            } else {
+                throw new RestApiException(CustomMealplanErrorCode.MEAL_INFO_RETR_FAIL);
+            }
+        } catch (Exception e) {
+            throw new RestApiException(CustomMealplanErrorCode.MEAL_INFO_RETR_FAIL);
         }
-
     }
 }
