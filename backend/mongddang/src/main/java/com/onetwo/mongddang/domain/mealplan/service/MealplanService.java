@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
+import com.onetwo.mongddang.domain.mealplan.dto.MealplanDto;
 import com.onetwo.mongddang.domain.mealplan.dto.RequestMealInfoDto;
 import com.onetwo.mongddang.domain.user.error.CustomCtoPErrorCode;
 import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
@@ -17,8 +18,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -92,13 +97,43 @@ public class MealplanService {
         }
 
         // 학교 코드, 교육청 코드, 식사시간, 시작시간, 종료 시간 넣어서 급식 식단 뽑기 (공공 api사용)
-        JsonNode mealInfo = getMeal(schoolCode, officeCode, mealTimeCode, startDay, endDay);
-        log.info("mealInfo : {}", mealInfo.get(0).toString());
+        JsonNode mealInfoList = getMeal(schoolCode, officeCode, mealTimeCode, startDay, endDay);
+        log.info("mealInfo : {}", mealInfoList.get(0).toString());
+
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!여기다!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        List<MealplanDto> data = new ArrayList<>();
+
+        for (int i = 0; i < mealInfoList.size(); i++) {
+            // 나온 정보 for문 돌리면서 적절히 묶기. mealplanDto 사용
+            JsonNode mealInfo = mealInfoList.get(i);
+
+            // 날짜 타입 문자열을 LocalDate로 변환
+            String dateString = mealInfo.get("MLSV_YMD").asText();
+            LocalDate date = LocalDate.parse(dateString, formatter);
+
+            // 식단 문자열을 List로 변환 + 알러지 정보 떼기
+            String[] mealString = mealInfo.get("DDISH_NM").asText().split("<br/>");
+
+            // 괄호 안의 내용을 제거하고 공백을 제거
+            List<String> mealList = Arrays.stream(mealString)
+                    .map(item -> item.replaceAll("\\s*\\(.*?\\)", "").trim())
+                    .toList();
+
+            MealplanDto oneMeal = MealplanDto.builder()
+                    .school(mealInfo.get("SCHUL_NM").asText())
+                    .date(date)
+                    .mealTime(mealInfo.get("MMEAL_SC_NM").asText())
+                    .meal(mealList)
+                    .build();
+
+            data.add(oneMeal);
+        }
+        // 에러 처리도 좀 해라
 
         //식단 반환
         ResponseDto response = ResponseDto.builder()
                 .message("식단 조회를 성공했습니다.")
-                .data(mealInfo)
+                .data(data)
                 .build();
 
         return response;
