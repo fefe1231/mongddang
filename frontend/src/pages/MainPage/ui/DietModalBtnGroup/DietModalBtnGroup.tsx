@@ -3,19 +3,13 @@ import { Typography } from '@/shared/ui/Typography';
 import { DietModalBtnData } from '../../constants/dietModalBtnData';
 import { Button } from '@/shared/ui/Button';
 import { btn, btnGroup, btnTextCss } from './DietModalBtnGroup.styles';
-import { useState } from 'react';
 
-const DietModalBtnGroup = () => {
-  const [activeBtn, setActiveBtn] = useState(100);
+type DietModalBtnGroupProps = {
+  selectedMealTime: string;
+  handleBtnClick: (info: string) => void;
+};
 
-  const handleBtnClick = (btnId: number) => {
-    if (activeBtn === btnId) {
-      setActiveBtn(100);
-    } else {
-      setActiveBtn(btnId);
-    }
-  };
-
+const DietModalBtnGroup = (props: DietModalBtnGroupProps) => {
   return (
     <div css={btnGroup}>
       {DietModalBtnData.map((item, btnId) => {
@@ -27,12 +21,12 @@ const DietModalBtnGroup = () => {
             fullwidth
             variant="outlined"
             handler={() => {
-              handleBtnClick(btnId);
+              props.handleBtnClick(item.info);
             }}
             css={btn}
             style={{
-              backgroundColor: activeBtn === btnId ? '#8FDCFF' : '#fff',
-              color: activeBtn === btnId ? '#fff' : 'black',
+              backgroundColor:
+                props.selectedMealTime === item.info ? '#8FDCFF' : '#fff',
             }}
           >
             <div css={btnTextCss}>

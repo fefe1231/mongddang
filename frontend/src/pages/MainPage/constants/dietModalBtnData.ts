@@ -4,8 +4,8 @@ import nightIcon from '@/assets/img/night.svg';
 import snackIcon from '@/assets/img/snack.svg';
 
 export const DietModalBtnData = [
-  { icon: `${morningIcon}`, text: '아침' },
-  { icon: `${noonIcon}`, text: '점심' },
-  { icon: `${nightIcon}`, text: '저녁' },
-  { icon: `${snackIcon}`, text: '간식' },
+  { icon: `${morningIcon}`, text: '아침', info: 'breakfast'},
+  { icon: `${noonIcon}`, text: '점심', info: 'lunch'},
+  { icon: `${nightIcon}`, text: '저녁', info: 'dinner'},
+  { icon: `${snackIcon}`, text: '간식', info: 'snack'},
 ];
