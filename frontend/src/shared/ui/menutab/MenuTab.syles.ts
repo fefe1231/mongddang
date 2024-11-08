@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import ColorStyle from '../styles/ColorStyles_edit';
+import ColorStyle from '../styles/colorStyles';
 import { FontWeight, Palette } from '@/shared/model/globalStylesTyes';
 
 export const containerCss = () => css`
