@@ -2,7 +2,7 @@
 import { GoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { base, contentCss, googleCss } from './styles';
+import { base, contentCss, googleCss } from './ui/styles';
 import { Icon } from '@/shared/ui/Icon';
 import { Typography } from '@/shared/ui/Typography';
 

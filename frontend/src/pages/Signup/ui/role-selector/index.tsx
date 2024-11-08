@@ -10,7 +10,7 @@ import {
   btnCss,
 } from './styles';
 import { IconTypo } from '@/shared/ui/IconTypo';
-import { UserRole } from '..';
+import { UserRole } from '../..';
 
 interface UserDataFormProps {
   onSubmit: (role: UserRole) => void;

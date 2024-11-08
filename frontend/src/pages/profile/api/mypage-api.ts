@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { IuserInfo } from '../types/mypage.types';
+import { IuserInfo } from '../model/mypage.types';
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,

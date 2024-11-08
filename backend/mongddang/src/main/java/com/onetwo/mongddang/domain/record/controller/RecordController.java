@@ -108,7 +108,7 @@ public class RecordController {
     @Operation(summary = "식사 시작하기 api", description = "식사를 시작합니다.")
     public ResponseEntity<ResponseDto> startMeal(
             @RequestParam("content") String contentJson,  // JSON 문자열로 받기
-            @RequestParam(value = "image", required = false) MultipartFile image,
+            @RequestParam(value = "image", required = false) MultipartFile imageFile,
             @RequestParam("mealTime") @NotNull(message = "식사 시간은 필수입니다.")
             @Pattern(regexp = "^(breakfast|lunch|dinner|snack)$", message = "식사 시간은 'breakfast', 'lunch', 'dinner', 'snack' 중 하나여야 합니다.") String mealTime,
             HttpServletRequest request) {
@@ -118,7 +118,7 @@ public class RecordController {
         Long childId = jwtExtratService.jwtFindId(request);
 
         // 서비스 호출
-        ResponseDto responseDto = recordService.startMeal(childId, contentJson, image, mealTime);
+        ResponseDto responseDto = recordService.startMeal(childId, contentJson, imageFile, mealTime);
         return ResponseEntity.ok(responseDto);
     }
 
@@ -156,4 +156,22 @@ public class RecordController {
         ResponseDto responseDto = recordService.editMeal(childId, recordId, contentJson, image, mealTime);
         return ResponseEntity.ok(responseDto);
     }
+
+
+    // 복약 확인하기
+    @PostMapping("/medication/check")
+    @ChildRequired
+    @Tag(name = "Record API", description = "복약 기록 api")
+    @Operation(summary = "복약 확인하기", description = "복약을 확인합니다.")
+    public ResponseEntity<ResponseDto> checkMedication(
+            HttpServletRequest request) {
+        log.info("POST /api/record/medication/check");
+
+        Long childId = jwtExtratService.jwtFindId(request);
+
+        // 서비스 호출
+        ResponseDto responseDto = recordService.checkMedication(childId);
+        return ResponseEntity.ok(responseDto);
+    }
+
 }

@@ -17,7 +17,10 @@ export const containerCss = css`
 
 export const newCss = css`
   position: absolute;
-  top: 10%;
-  right: 10%;
+  top: 0%;
+  left: 75%; /* 왼쪽으로부터 50% */
+  transform: translateX(-50%); /* 중앙 정렬 */
   z-index: 2;
+  padding: 2px;
 `
+

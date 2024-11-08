@@ -1,6 +1,6 @@
 package com.onetwo.mongddang.domain.medication.dto;
 
-import jakarta.persistence.Column;
+import com.onetwo.mongddang.domain.record.model.Record;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
@@ -15,9 +15,11 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MedicationDto {
+public class MedicationRecordDto {
 
     private Long id;
+
+    private Long childId;
 
     @NotNull
     private String name;
@@ -45,6 +47,9 @@ public class MedicationDto {
 
     @NotNull
     private Boolean isDone;
+
+    @NotNull
+    private Record.RecordCategoryType category;
 
     @NotNull
     private LocalDateTime startTime;

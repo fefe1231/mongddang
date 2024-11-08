@@ -1,22 +1,23 @@
 /** @jsxImportSource @emotion/react */
 import { TopBar } from '@/shared/ui/TopBar';
 import { useState } from 'react';
-import { Transition } from './Transition';
-import { RoleSelector } from './RoleSelector';
-import { DataForm } from './DataForm';
+import { DataForm } from './ui/dataform';
+import { Transition } from './ui/transition';
+import { RoleSelector } from './ui/role-selector';
+import { useNavigate } from 'react-router-dom';
 
 export type UserRole = 'child' | 'protector' | undefined;
 
 export const SignUp = () => {
   const [step, setStep] = useState<number>(0);
   const [selectedRole, setSelectedRole] = useState<UserRole>(undefined);
-
+  const nav = useNavigate();
   return (
     <div>
       <TopBar
         type="iconpage"
         iconHandler={() => {
-          console.log('뒤로가기 버튼');
+          nav('/login');
         }}
       >
         회원가입

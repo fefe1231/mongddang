@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import { TopBar } from '@/shared/ui/TopBar';
 import { Icon } from '@/shared/ui/Icon';
-import { base, containerCss } from './styles';
+import { base, containerCss } from './ui/styles';
 import { Chip } from '@/shared/ui/Chip';
-import { imgCss } from '../Encyclopedia/styles';
+import { imgCss } from '../encyclopedia/ui/styles';
 import space from '../../assets/img/space.png';
 import { Typography } from '@/shared/ui/Typography';
 import { Button } from '@/shared/ui/Button';
@@ -12,7 +12,7 @@ import { getUserInfo } from './api/mypage-api';
 import { useNavigate } from 'react-router-dom';
 
 export const Profile = () => {
-  const nav = useNavigate()
+  const nav = useNavigate();
   const ProfileQuery = useQuery({
     queryKey: ['profile'],
     queryFn: async () => {
@@ -21,7 +21,7 @@ export const Profile = () => {
     },
   });
 
- const inviteCode = ProfileQuery.data?.data?.data?.invitationCode; // 초대 코드 가져오기
+  const inviteCode = ProfileQuery.data?.data?.data?.invitationCode; // 초대 코드 가져오기
 
   const copyToClipboard = () => {
     if (inviteCode) {
@@ -42,7 +42,7 @@ export const Profile = () => {
 
   return (
     <div>
-      <TopBar type="iconpage">프로필</TopBar>
+      <TopBar type="iconpage" iconHandler={()=>nav('/menu')}>프로필</TopBar>
       <div css={base}>
         <Icon size={5}>
           <img alt="icon-1" src="/img/%EB%A7%90%EB%9E%912.png" />
@@ -53,9 +53,9 @@ export const Profile = () => {
       </div>
       <img css={imgCss} src={space} alt="배경 이미지" />
       <div css={containerCss}>
-          <Chip border={1} color="primary" fontSize={0.8} fontWeight={600}>
-            프로필
-          </Chip>
+        <Chip border={1} color="primary" fontSize={0.8} fontWeight={600}>
+          프로필
+        </Chip>
         <div
           style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}
         >
@@ -66,7 +66,8 @@ export const Profile = () => {
             닉네임: {ProfileQuery.data?.data.data.nickname}
           </Typography>
           <Typography color="dark" size="1" weight={700}>
-            성별: {ProfileQuery.data?.data.data.gender === 'male' ? '남자' : '여자'}
+            성별:
+            {ProfileQuery.data?.data.data.gender === 'male' ? '남자' : '여자'}
           </Typography>
           <Typography color="dark" size="1" weight={700}>
             생년월일: {ProfileQuery.data?.data.data.birth}
@@ -97,7 +98,7 @@ export const Profile = () => {
           초대코드 복사
         </Button>
         <Button
-          handler={()=>nav('/nickname/edit')}
+          handler={() => nav('/nickname/edit')}
           color="primary"
           fontSize="1.25"
           variant="contained"

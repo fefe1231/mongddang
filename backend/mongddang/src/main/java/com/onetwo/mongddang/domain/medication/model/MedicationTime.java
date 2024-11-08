@@ -12,24 +12,27 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="medication_time")
+@Table(name = "medication_time")
 public class MedicationTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(nullable = false, name = "medication_management_id")
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(nullable = false)
     private MedicationManagement medicationManagement;
 
+    @Column(name = "medication_time")
+    private String medicationTime;
+
     @NotNull
-    @Column(name="is_fast", nullable = false)
+    @Column(name = "is_fast", nullable = false)
     private Boolean isFast;
 
-    @Column(name="min_glucose")
+    @Column(name = "min_glucose")
     private Long minGlucose;
 
-    @Column(name="max_glucose")
+    @Column(name = "max_glucose")
     private Long maxGlucose;
 
     @NotNull

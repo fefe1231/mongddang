@@ -1,19 +1,21 @@
 /** @jsxImportSource @emotion/react */
 import { TopBar } from '@/shared/ui/TopBar';
 import space from '../../assets/img/space.png';
-import { containerCss, imgCss } from '../Encyclopedia/styles';
-import { Description } from '../Encyclopedia/description';
+import { containerCss, imgCss } from '../encyclopedia/ui/styles';
+import { Description } from '../encyclopedia/ui/description';
 import { Toggle } from '@/shared/ui/Toggle';
 import { Typography } from '@/shared/ui/Typography';
 import { TitleComponent } from './ui/title-component';
-import { toggleContainerCss } from './styles';
+import { toggleContainerCss } from './ui/styles';
 import { useQuery } from '@tanstack/react-query';
-import { getTitleInfo } from './api';
-import { ItitleData } from './types';
+import { getTitleInfo } from './api/api';
 import { useState, useEffect } from 'react';
+import { ItitleData } from './model/types';
+import { useNavigate } from 'react-router-dom';
 
 export const NicknameTitle = () => {
   const [isOn, setIsOn] = useState(false);
+  const nav = useNavigate();
 
   useEffect(() => {
     const savedToggleState = localStorage.getItem('titleToggle');
@@ -38,7 +40,9 @@ export const NicknameTitle = () => {
 
   return (
     <div>
-      <TopBar type="iconpage">칭호 도감</TopBar>
+      <TopBar type="iconpage" iconHandler={() => nav('/')}>
+        칭호 도감
+      </TopBar>
       <img css={imgCss} src={space} alt="배경 이미지" />
       <div css={containerCss}>
         <Description>

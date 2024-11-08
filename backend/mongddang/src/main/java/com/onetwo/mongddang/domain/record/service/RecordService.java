@@ -6,7 +6,6 @@ import com.onetwo.mongddang.common.s3.S3ImageService;
 import com.onetwo.mongddang.common.s3.errors.CustomS3ErrorCode;
 import com.onetwo.mongddang.common.utils.DateTimeUtils;
 import com.onetwo.mongddang.common.utils.JsonUtils;
-import com.onetwo.mongddang.domain.medication.dto.MedicationDto;
 import com.onetwo.mongddang.domain.record.dto.RecordDetailsDto;
 import com.onetwo.mongddang.domain.record.dto.RecordWithChildIdDto;
 import com.onetwo.mongddang.domain.record.dto.ResponseRecordDto;
@@ -63,23 +62,8 @@ public class RecordService {
                 .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
         log.info("child: {}", child.getEmail());
 
-        // 아이는 본인의 기록만 조회할 수 있음
-        log.info("아이가 다른 유저의 기록 조회 시도");
-        if (user.getRole() == User.Role.child && !Objects.equals(user.getNickname(), nickname)) {
-            throw new RestApiException(CustomRecordErrorCode.CHILD_ACCESS_DENIED);
-        }
-
-        // 보호자의 기록은 조회할 수 없음 (로직상 아이만 존재함)
-        log.info("보호자의 기록 조회 시도");
-        if (child.getRole() == User.Role.protector) {
-            throw new RestApiException(CustomRecordErrorCode.PROTECTOR_ACCESS_DENIED);
-        }
-
-        // 연결된 보호자인지 확인 - 보호자는 연결된 아이의 기록만 조회할 수 있음
-        log.info("연결된 보호자인지 확인");
-        if (!ctoPUtils.checkProtectorAndChildIsConnected(userId, child.getId())) {
-            throw new RestApiException(CustomRecordErrorCode.PROTECTOR_ACCESS_DENIED);
-        }
+        // 보호자가 어린이의 데이터에 쓰기 권한이 있는지 확인
+        ctoPUtils.validateProtectorAccessChildData(user, child);
 
         // 시작일과 종료일을 LocalDateTime 으로 변환
         LocalDateTime[] dateTimes = dateTimeUtils.convertToDateTimes(startDate, endDate);
@@ -99,43 +83,27 @@ public class RecordService {
 
             RecordDetailsDto details = recordsByDate.get(recordDate);
 
-            // 각 기록의 종류에 따라 분류
-            if (record.getCategory().equals(meal) || record.getCategory().equals(exercise) || record.getCategory().equals(sleeping)) {
-                RecordWithChildIdDto recordWithChildIdDto = RecordWithChildIdDto.builder()
-                        .id(record.getId())
-                        .childId(child.getId())
-                        .category(record.getCategory())
-                        .startTime(record.getStartTime())
-                        .endTime(record.getEndTime())
-                        .content(record.getContent())
-                        .imageUrl(record.getImageUrl())
-                        .isDone(record.getIsDone())
-                        .mealTime(record.getMealTime())
-                        .build();
+            RecordWithChildIdDto recordWithChildIdDto = RecordWithChildIdDto.builder()
+                    .id(record.getId())
+                    .childId(child.getId())
+                    .category(record.getCategory())
+                    .startTime(record.getStartTime())
+                    .endTime(record.getEndTime())
+                    .content(record.getContent())
+                    .imageUrl(record.getImageUrl())
+                    .isDone(record.getIsDone())
+                    .mealTime(record.getMealTime())
+                    .build();
 
-                // 각 기록의 종류에 따라 분류
-                if (record.getCategory().equals(meal)) {
-                    details.getMeal().add(recordWithChildIdDto);
-                } else if (record.getCategory().equals(exercise)) {
-                    details.getExercise().add(recordWithChildIdDto);
-                } else if (record.getCategory().equals(sleeping)) {
-                    details.getSleep().add(recordWithChildIdDto);
-                }
+            // 각 기록의 종류에 따라 분류
+            if (record.getCategory().equals(meal)) {
+                details.getMeal().add(recordWithChildIdDto);
+            } else if (record.getCategory().equals(exercise)) {
+                details.getExercise().add(recordWithChildIdDto);
+            } else if (record.getCategory().equals(sleeping)) {
+                details.getSleep().add(recordWithChildIdDto);
             } else if (record.getCategory().equals(medication)) {
-                details.getMedication().add(MedicationDto.builder()
-                        .id(record.getId())
-                        .name(record.getContent().get("name").asText())
-                        .imageUrl(record.getImageUrl())
-                        .volume(record.getContent().get("volume").asLong())
-                        .route(MedicationDto.RouteType.valueOf(record.getContent().get("route").asText()))
-                        .isRepeated(record.getContent().get("isRepeated").asBoolean())
-                        .repeatDays(record.getContent().get("repeatDays").asText())
-                        .repeatStartTime(LocalDateTime.parse(record.getContent().get("repeatStartTime").asText()))
-                        .repeatEndTime(LocalDateTime.parse(record.getContent().get("repeatEndTime").asText()))
-                        .isDone(record.getIsDone())
-                        .startTime(record.getStartTime())
-                        .endTime(record.getEndTime())
-                        .build());
+                details.getMedication().add(recordWithChildIdDto);
             }
         }
 
@@ -154,7 +122,7 @@ public class RecordService {
     /**
      * 운동 시작하기
      *
-     * @param childId 운동 시작을 시도하는 아이의 아이디
+     * @param childId 운동 시작을 시도하는 어린이의 아이디
      * @return ResponseDto
      */
     @Transactional
@@ -197,7 +165,7 @@ public class RecordService {
     /**
      * 운동 종료하기
      *
-     * @param childId 운동 종료를 시도하는 아이의 아이디
+     * @param childId 운동 종료를 시도하는 어린이의 아이디
      * @return ResponseDto
      */
     @Transactional
@@ -235,7 +203,7 @@ public class RecordService {
     /**
      * 수면 시작하기
      *
-     * @param childId 수면 시작을 시도하는 아이의 아이디
+     * @param childId 수면 시작을 시도하는 어린이의 아이디
      * @return ResponseDto
      */
     @Transactional
@@ -277,7 +245,7 @@ public class RecordService {
     /**
      * 수면 종료하기
      *
-     * @param childId 수면 종료를 시도하는 아이의 아이디
+     * @param childId 수면 종료를 시도하는 어린이의 아이디
      * @return ResponseDto
      */
     @Transactional
@@ -313,7 +281,7 @@ public class RecordService {
     /**
      * 식사 시작하기
      *
-     * @param childId     식사 시작을 시도하는 아이의 아이디
+     * @param childId     식사 시작을 시도하는 어린이의 아이디
      * @param contentJson 식사 내용
      * @param imageFile   이미지 파일 (파일 경로 또는 URL)
      * @param mealTime    식사 시간 (enum으로 처리)
@@ -350,7 +318,6 @@ public class RecordService {
             }
             log.info("식사 이미지 파일을 S3에 업로드 완료 (in english : Meal image file uploaded to S3)");
         }
-
         log.info("식사 이미지 파일 없음 (in english : No meal image file)");
 
         log.info(content.toString());
@@ -378,7 +345,7 @@ public class RecordService {
     /**
      * 식사 종료하기
      *
-     * @param childId 식사 종료를 시도하는 아이의 아이디
+     * @param childId 식사 종료를 시도하는 어린이의 아이디
      * @return ResponseDto
      */
     @Transactional
@@ -419,7 +386,7 @@ public class RecordService {
         // SON 문자열을 JsonNode로 변환
         JsonNode content = jsonUtils.JsonStringToJsonNode(contentJson);
 
-        // 아이 정보 조회
+        // 어린이 정보 조회
         User child = userRepository.findById(childId)
                 .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
         log.info("child: {}", child.getEmail());
@@ -429,8 +396,8 @@ public class RecordService {
                 .orElseThrow(() -> new RestApiException(CustomRecordErrorCode.MEAL_RECORD_NOT_FOUND));
         log.info("mealRecord: {}", mealRecord.getId());
 
-        // 식사 기록이 아이의 기록인지 확인
-        log.info("식사 기록이 아이의 기록인지 확인 (in english : Check if the meal record is the child's record)");
+        // 식사 기록이 어린이의 기록인지 확인
+        log.info("식사 기록이 어린이의 기록인지 확인 (in english : Check if the meal record is the child's record)");
         if (!Objects.equals(mealRecord.getChild().getId(), childId)) {
             throw new RestApiException(CustomRecordErrorCode.CHILD_ACCESS_DENIED);
         }
@@ -462,6 +429,39 @@ public class RecordService {
 
         return ResponseDto.builder()
                 .message("식사를 수정합니다.")
+                .build();
+    }
+
+
+    /**
+     * 복약 기록하기
+     *
+     * @param childId 복약 기록을 시도하는 어린이의 아이디
+     * @return ResponseDto
+     */
+    public ResponseDto checkMedication(Long childId) {
+        log.info("checkMedication childId: {}", childId);
+
+        User child = userRepository.findById(childId)
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+        log.info("child: {}", child.getEmail());
+
+        Record newMedicationRecord = Record.builder()
+                .child(child)
+                .category(medication)
+                .startTime(LocalDateTime.now())
+                .endTime(null)
+                .content(null)
+                .imageUrl(null)
+                .isDone(true)
+                .mealTime(null)
+                .build();
+
+        recordRepository.save(newMedicationRecord);
+        log.info("복약 확인 기록 완료. : {}", newMedicationRecord.getStartTime());
+
+        return ResponseDto.builder()
+                .message("복약을 확인합니다.")
                 .build();
     }
 

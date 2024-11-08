@@ -41,7 +41,9 @@ public class MongddangController {
     @ChildRequired
     @Tag(name = "Collection API", description = "도감 api")
     @Operation(summary = "몽땅 모집 api", description = "코인을 지불하여 몽땅을 모집합니다.")
-    public ResponseEntity<ResponseDto> recruitMongddang(@RequestBody RequestMongddangIdDto requestDto, HttpServletRequest request) {
+    public ResponseEntity<ResponseDto> recruitMongddang(
+            @RequestBody RequestMongddangIdDto requestDto,
+            HttpServletRequest request) {
         log.info("POST /api/game/collection/mongddang/recruitment");
 
         Long userId = jwtExtratService.jwtFindId(request);
@@ -59,7 +61,7 @@ public class MongddangController {
         log.info("PUT /api/game/collection/mongddang/check");
 
         Long userId = jwtExtratService.jwtFindId(request);
-        ResponseDto responseDto = mongddangService.checkNewMongddang(requestDto.getMongddangId(),userId);
+        ResponseDto responseDto = mongddangService.checkNewMongddang(requestDto.getMongddangId(), userId);
         return ResponseEntity.ok(responseDto);
     }
 
