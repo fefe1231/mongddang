@@ -27,7 +27,10 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/nickname/edit" element={<NicknameEdit />} />
           <Route path="/report" element={<Report />} />
-          <Route path="/record" element={<RecordPage />} />
+          <Route path="/record" element={<RecordPage />}>
+            <Route index element={<RecordPage />} />
+            <Route path=":date" element={<RecordPage />} />
+          </Route>
         </Routes>
       </Router>
     </GoogleOAuthProvider>
