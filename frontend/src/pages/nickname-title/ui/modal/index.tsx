@@ -22,7 +22,7 @@ const containerCss = css`
   z-index: 1000;
 `;
 
-export const UpdateCharacter = ({bluehandler, redhandler}:ModalProps) => {
+export const UpdateCharacter = ({ bluehandler, redhandler }: ModalProps) => {
   return (
     <div css={containerCss}>
       <Notification

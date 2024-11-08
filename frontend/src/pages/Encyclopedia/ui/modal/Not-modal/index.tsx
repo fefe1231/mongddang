@@ -19,7 +19,7 @@ interface OwnModalProps {
 }
 
 export const Notmodal = ({ setstate, data }: OwnModalProps) => {
-  const [isNew, setIsNew] = useState(false);
+  const [, setIsNew] = useState(false);
   const [buyModal, setBuyModal] = useState<boolean>(false);
   const [findModal, setFindModal] = useState<boolean>(false);
   const accessToken = localStorage.getItem('accessToken') || '';

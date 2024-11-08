@@ -7,31 +7,40 @@ import { Typography } from '@/shared/ui/Typography';
 import { HiOutlineX } from 'react-icons/hi';
 import { Chip } from '@/shared/ui/Chip';
 import { base, modalCss, xiconCss } from '../main-modal/styles';
-import { useQueryClient } from '@tanstack/react-query';  // 추가
+import { useQueryClient } from '@tanstack/react-query';
+import { ICharacterData } from '@/pages/encyclopedia/model/types';  // 캐릭터 타입 import
+
+// Response 타입 정의
+interface CharacterResponse {
+  data: {
+    data: ICharacterData[];
+  };
+}
 
 interface OwnModalProps {
   setstate: (value: boolean) => void;
   setIsNew: (value: boolean) => void;
-  characterId?: number;  // 캐릭터 ID 추가 (필요한 경우)
+  characterId?: number;
 }
 
 export const FindModal = ({ setstate }: OwnModalProps) => {
   const [isParentModalOpen, setIsParentModalOpen] = useState(true);
-  const queryClient = useQueryClient();  // queryClient 추가
+  const queryClient = useQueryClient();
 
   const closeAllModals = () => {
-    // 캐시 업데이트
-    queryClient.setQueryData(['character'], (oldData: any) => {
+    queryClient.setQueryData<CharacterResponse>(['character'], (oldData) => {
+      window.location.reload()
       if (!oldData) return oldData;
 
       return {
         ...oldData,
         data: {
           ...oldData.data,
-          data: oldData.data.data.map((character: any) => ({
+          data: oldData.data.data.map((character) => ({
             ...character,
-            // 여기서 필요한 데이터 업데이트
-            // 예: isFound: character.id === characterId
+            // 타입이 정의되어 있어 자동완성과 타입 체크가 가능
+            isNew: false,
+            // 다른 필요한 업데이트도 타입 안전하게 가능
           })),
         },
       };
@@ -39,7 +48,6 @@ export const FindModal = ({ setstate }: OwnModalProps) => {
 
     setstate(false);
     setIsParentModalOpen(false);
-    // setIsNew(true); // 이제 필요 없음
   };
 
   return (
