@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Center } from '@mantine/core';
 import { RecordCalendar } from '@/features/calendar';
+import recordStyle from './style.module.css';
 // import { LineChart, LineChartSeries } from '@mantine/charts';
 // import { ScrollArea } from '@mantine/core';
 // import axios from 'axios';
@@ -62,12 +63,12 @@ export const RecordPage = () => {
   // }, []);
 
   return (
-    <div>
+    <>
       <TopBar type="iconpage" iconHandler={() => nav(-1)}>
         내 기록
       </TopBar>
       {/* Calendar start */}
-      <Center>
+      <Center classNames={{ root: recordStyle.root }}>
         <RecordCalendar />
       </Center>
       {/* Calendar end */}
@@ -91,6 +92,6 @@ export const RecordPage = () => {
         />
       </ScrollArea> */}
       {/* LineChart end */}
-    </div>
+    </>
   );
 };
