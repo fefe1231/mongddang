@@ -160,7 +160,7 @@ export const TitleComponent = ({ title }: TitleComponentProps) => {
         />
       )}
       {isToast && (
-        <AchievementToast title={title.titleName} />
+        <AchievementToast />
       )}
     </div>
   );

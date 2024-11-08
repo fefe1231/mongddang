@@ -1,16 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 
-
-interface IToast {
-  title: string; // title의 스펠링 수정
-}
-
 const toastCss = css`
   position: fixed;
   top: 20px; /* 화면 상단에 위치 */
-  left: 50%;
-  transform: translateX(-50%);
+  left: 13%;
+  transform: translateX(-35%);
   z-index: 1000; /* 다른 요소 위에 표시 */
   background-color: #fff;
   border: 1px solid #ccc;
@@ -43,10 +38,9 @@ const toastCss = css`
   }
 `;
 
-const AchievementToast = ({ title }:IToast) => {
+const AchievementToast = () => {
   return (
     <div css={toastCss}>
-      <div className="font-bold">{title}</div>
       <div>업적이 성공적으로 획득되었습니다!</div>
     </div>
   );
