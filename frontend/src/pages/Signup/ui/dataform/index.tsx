@@ -10,7 +10,7 @@ import { UserRole } from '../..';
 import { useMutation } from '@tanstack/react-query';
 import {
   INickname,
-  updateNickname,
+  checkNickname,
 } from '@/pages/profile/ui/nickname-edit/api';
 import { Palette } from '@/shared/model/globalStylesTyes';
 import { AxiosResponse } from 'axios';
@@ -93,10 +93,9 @@ export const DataForm = ({ role }: { role: UserRole }) => {
     { accessToken: string; nickname: string }
   >({
     mutationFn: async ({
-      accessToken,
       nickname,
     }): Promise<AxiosResponse<INickname>> => {
-      return await updateNickname(accessToken, nickname);
+      return await checkNickname(nickname);
     },
     onSuccess: () => {
       setMsg('사용 가능한 닉네임입니다.');
