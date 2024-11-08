@@ -6,20 +6,40 @@ import { Modal } from '@/shared/ui/Modal';
 import { Typography } from '@/shared/ui/Typography';
 import { HiOutlineX } from 'react-icons/hi';
 import { Chip } from '@/shared/ui/Chip';
-import { UpdateCharacter } from '../update-character';
 import { base, modalCss, xiconCss } from '../main-modal/styles';
+import { useQueryClient } from '@tanstack/react-query';  // 추가
 
 interface OwnModalProps {
   setstate: (value: boolean) => void;
+  setIsNew: (value: boolean) => void;
+  characterId?: number;  // 캐릭터 ID 추가 (필요한 경우)
 }
 
 export const FindModal = ({ setstate }: OwnModalProps) => {
-  const [isModal, setIsModal] = useState(false);
   const [isParentModalOpen, setIsParentModalOpen] = useState(true);
+  const queryClient = useQueryClient();  // queryClient 추가
 
   const closeAllModals = () => {
-    setstate(false); // 맨 처음 400 버튼 모달 닫기
-    setIsParentModalOpen(false); // 현재 모달 닫기
+    // 캐시 업데이트
+    queryClient.setQueryData(['character'], (oldData: any) => {
+      if (!oldData) return oldData;
+
+      return {
+        ...oldData,
+        data: {
+          ...oldData.data,
+          data: oldData.data.data.map((character: any) => ({
+            ...character,
+            // 여기서 필요한 데이터 업데이트
+            // 예: isFound: character.id === characterId
+          })),
+        },
+      };
+    });
+
+    setstate(false);
+    setIsParentModalOpen(false);
+    // setIsNew(true); // 이제 필요 없음
   };
 
   return (
@@ -49,13 +69,6 @@ export const FindModal = ({ setstate }: OwnModalProps) => {
             </Button>
           </div>
         </Modal>
-      )}
-
-      {isModal && (
-        <UpdateCharacter
-          bluehandler={() => {}}
-          redhandler={() => setIsModal(false)}
-        />
       )}
     </>
   );

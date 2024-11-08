@@ -44,10 +44,11 @@ export const Encyclopedia = () => {
       }
       return getNewInfo(accessToken, characterId);
     },
-    onSuccess: (_, characterId) => {
+    onSuccess: async (_, characterId) => {
+      // 캐시 업데이트
       queryClient.setQueryData<CharacterResponse>(['character'], (oldData) => {
         if (!oldData) return oldData;
-
+  
         return {
           ...oldData,
           data: {
@@ -60,13 +61,32 @@ export const Encyclopedia = () => {
           },
         };
       });
+  
+      // 캐릭터 데이터 무효화하여 새로운 데이터 가져오기
+      await queryClient.invalidateQueries({ queryKey: ['character'] });
+      
+      // 모달 열기
+      setIsMainModal(true);
     },
     onError: (error) => {
       console.error('상태 변경 실패:', error);
       alert('상태 변경에 실패했습니다. 다시 시도해주세요.');
     },
   });
-
+  const openModal = (
+    character: ICharacterData,
+    modalType: 'own' | 'main' | 'not'
+  ) => {
+    setSelectedCharacter(character);
+    if (modalType === 'own') {
+      setIsOwnModal(true);
+    } else if (modalType === 'main') {
+      // 모달 열기를 mutation의 onSuccess로 이동
+      mutation.mutate(character.id);
+    } else if (modalType === 'not') {
+      setIsNotModal(true);
+    }
+  };
   const CharacterQuery = useQuery<CharacterResponse>({
     queryKey: ['character'],
     queryFn: async () => {
@@ -75,6 +95,9 @@ export const Encyclopedia = () => {
       }
       return await getCharacterInfo(accessToken);
     },
+    // 자동 갱신 옵션 추가
+    refetchOnWindowFocus: true,
+    staleTime: 0, // 데이터를 항상 새로 가져오도록 설정
   });
 
   if (CharacterQuery.isLoading) {
@@ -89,20 +112,6 @@ export const Encyclopedia = () => {
     return <div>데이터가 없습니다.</div>;
   }
 
-  const openModal = (
-    character: ICharacterData,
-    modalType: 'own' | 'main' | 'not'
-  ) => {
-    setSelectedCharacter(character);
-    if (modalType === 'own') {
-      setIsOwnModal(true);
-    } else if (modalType === 'main') {
-      mutation.mutate(character.id);
-      setIsMainModal(true);
-    } else if (modalType === 'not') {
-      setIsNotModal(true);
-    }
-  };
 
   return (
     <div css={base}>

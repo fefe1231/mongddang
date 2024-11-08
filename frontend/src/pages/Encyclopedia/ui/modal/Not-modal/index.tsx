@@ -19,6 +19,7 @@ interface OwnModalProps {
 }
 
 export const Notmodal = ({ setstate, data }: OwnModalProps) => {
+  const [isNew, setIsNew] = useState(false);
   const [buyModal, setBuyModal] = useState<boolean>(false);
   const [findModal, setFindModal] = useState<boolean>(false);
   const accessToken = localStorage.getItem('accessToken') || '';
@@ -31,8 +32,8 @@ export const Notmodal = ({ setstate, data }: OwnModalProps) => {
       return await postRecruitment(accessToken, data?.id);
     },
     onSuccess: () => {
-      // 캐릭터 모집 성공 시 새로고침
-      window.location.reload(); // 페이지 새로고침
+      // 캐릭터 모집 성공 시 findModal 열기
+      setFindModal(true);
     },
     onError: (error) => {
       console.error('Error recruiting character:', error);
@@ -55,10 +56,9 @@ export const Notmodal = ({ setstate, data }: OwnModalProps) => {
     characterMutation.mutate(); // mutate 호출
   };
 
-  const handlefindModalBlue = () => {
-    setBuyModal(false);
-    setFindModal(true);
-    setstate(false);
+  const handleFindModalClose = () => {
+    setFindModal(false);
+    setstate(false); // 맨 처음 모달 닫기
   };
 
   console.log(CoinQuery.data?.data.data.coin);
@@ -111,7 +111,9 @@ export const Notmodal = ({ setstate, data }: OwnModalProps) => {
           redhandler={() => setBuyModal(false)}
         />
       )}
-      {findModal && <FindModal setstate={handlefindModalBlue} />}
+      {findModal && (
+        <FindModal setstate={handleFindModalClose} setIsNew={setIsNew} />
+      )}
     </div>
   );
 };
