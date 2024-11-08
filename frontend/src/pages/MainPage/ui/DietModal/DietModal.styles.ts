@@ -8,6 +8,7 @@ export const modalContainer = css`
   width: 90%;
   height: 90%;
   padding: 0;
+  overflow-y: auto;
 `;
 
 export const modalContent = css`
@@ -19,7 +20,7 @@ export const modalContent = css`
 `;
 
 export const modalTopBar = css`
-  position: relative;
+  position: sticky;
   width: 100%;
   border-radius: 10px 10px 0 0;
   justify-content: center;
@@ -52,6 +53,7 @@ export const timeBtn = css`
 `;
 
 export const inputContainer = css`
+  height: 50%;
   border-color: #d9d9d9;
   white-space: pre-line;
 `;
