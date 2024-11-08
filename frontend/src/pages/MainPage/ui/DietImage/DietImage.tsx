@@ -9,10 +9,11 @@ type DietImageProps = {
   handleDietImg: (file: File | null) => void;
 };
 
-const DietImage = (props:DietImageProps) => {
-  const [previewUrl, setPreviewUrl] = useState<string>('');
+const DietImage = (props: DietImageProps) => {
+  const [previewUrl, setPreviewUrl] = useState<string>(''); // 미리보기용
   const { openCamera } = useCamera();
 
+  // 촬영하기 클릭 시
   const handleCapture = async () => {
     const returnData = await openCamera();
 
@@ -27,6 +28,7 @@ const DietImage = (props:DietImageProps) => {
 
   return (
     <div css={imgContainer} onClick={handleCapture}>
+      {/* 사진 입력 시 미리보기 */}
       {previewUrl ? (
         <img
           src={previewUrl}
@@ -36,6 +38,7 @@ const DietImage = (props:DietImageProps) => {
           style={{ objectFit: 'contain' }}
         />
       ) : (
+        // 촬영 안내
         <div css={imgGuideCss}>
           <img src={addPictureIcon} alt="식단 사진" />
           <Typography color="dark" size="1" weight={500} scale="500">
