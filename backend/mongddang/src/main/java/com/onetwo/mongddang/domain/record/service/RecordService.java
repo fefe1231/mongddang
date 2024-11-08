@@ -308,7 +308,7 @@ public class RecordService {
 
         String imageUrl = null;
 
-        if (!imageFile.isEmpty()) {
+        if (imageFile != null && !imageFile.isEmpty()) {
             // 이미지 파일을 S3에 업로드
             log.info("식사 이미지 파일을 S3에 업로드 시도 (in english : Try to upload meal image file to S3)");
             try {
@@ -406,7 +406,7 @@ public class RecordService {
 
         log.info("식사 이미지 파일이 있는지 확인 (in english : Check if there is a meal image file)");
         // 이미지 파일이 있다면 s3 등록 진행
-        if (!imageFile.isEmpty()) {
+        if (imageFile != null && !imageFile.isEmpty()) {
             // 이미지 파일을 S3에 업로드
             log.info("식사 이미지 파일을 S3에 업로드 시도 (in english : Try to upload meal image file to S3)");
             try {

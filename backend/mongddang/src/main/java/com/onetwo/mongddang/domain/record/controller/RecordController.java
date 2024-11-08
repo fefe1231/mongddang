@@ -110,7 +110,7 @@ public class RecordController {
             @RequestParam("content") String contentJson,  // JSON 문자열로 받기
             @RequestParam(value = "image", required = false) MultipartFile imageFile,
             @RequestParam("mealTime") @NotNull(message = "식사 시간은 필수입니다.")
-            @Pattern(regexp = "^(breakfast|lunch|dinner|snack)$", message = "식사 시간은 'breakfast', 'lunch', 'dinner', 'snack' 중 하나여야 합니다.") String mealTime,
+            @Pattern(regexp = "^(breakfast|lunch|dinner|snack)$", message = "식사 시간은 'breakfast', 'lunch', 'dinner', 'snack' 중 하나여야 합니다.") @NotNull String mealTime,
             HttpServletRequest request) {
 
         log.info("POST /api/record/meal/start");

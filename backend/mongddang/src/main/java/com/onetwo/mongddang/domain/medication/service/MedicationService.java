@@ -67,7 +67,7 @@ public class MedicationService {
 
         // 이미지 파일이 존재하는 경우 S3에 이미지 파일 업로드
         String imageUrl = null;
-        if (!imageFile.isEmpty()) {
+        if (imageFile != null && !imageFile.isEmpty()) {
             // 이미지 파일을 S3에 업로드
             try {
                 imageUrl = s3ImageService.upload(imageFile); // MultipartFile을 File로 변환 후 S3에 업로드
