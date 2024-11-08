@@ -64,7 +64,6 @@ export const RecordCalendar = () => {
         classNames={{
           day: calendarStyle.day,
           weekday: calendarStyle.weekday,
-          monthThead: calendarStyle.monthThead,
           calendarHeader: calendarStyle.calendarHeader
         }}
         monthLabelFormat="YYYY년 MM월"
