@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ICharacterInfo } from './types';
+import { ICharacterInfo } from '../model/types';
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -39,11 +39,7 @@ export const getNewInfo = (accessToken: string, mongddangId: number) => {
     },
   };
 
-  return api.patch(
-    '/api/game/collection/mongddang/check',
-    data,
-    options
-  );
+  return api.patch('/api/game/collection/mongddang/check', data, options);
 };
 
 // 몽땅 모집
@@ -75,9 +71,5 @@ export const getMainInfo = (accessToken: string, mongddangId: number) => {
     },
   };
 
-  return api.patch(
-    '/api/game/collection/mongddang/main',
-    data,
-    options
-  );
+  return api.patch('/api/game/collection/mongddang/main', data, options);
 };

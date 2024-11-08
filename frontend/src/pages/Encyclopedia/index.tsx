@@ -3,30 +3,36 @@ import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { TopBar } from '@/shared/ui/TopBar';
 import space from '../../assets/img/space.png';
-import { Owncharacter } from './ui/characterlist/owncharacter';
-import { Description } from './description';
+
+import { Description } from './ui/description';
+
+import { getCharacterInfo, getNewInfo } from './api/api';
+import { ICharacterData } from './model/types';
+
+import { AxiosResponse } from 'axios';
+import { CharacterResponse } from '../nickname-title/model/types';
 import {
   base,
   cardContainerCss,
-  containerCss,
   cardsWrapperCss,
+  containerCss,
   imgCss,
-} from './styles';
+} from './ui/styles';
 import { OwnModal } from './ui/modal/own-modal';
 import { MainModal } from './ui/modal/main-modal';
 import { Notmodal } from './ui/modal/Not-modal';
-import { getCharacterInfo, getNewInfo } from './api';
-import { ICharacterData } from './types';
 import { Notowncharacter } from './ui/characterlist/notown-character';
 import { Newcharacter } from './ui/characterlist/new-character';
-import { AxiosResponse } from 'axios';
-import { CharacterResponse } from '../nickname-title/types';
+import { Owncharacter } from './ui/characterlist/owncharacter';
+import { useNavigate } from 'react-router-dom';
 
 export const Encyclopedia = () => {
   const [isOwnModal, setIsOwnModal] = useState(false);
   const [isMainModal, setIsMainModal] = useState(false);
   const [isNotModal, setIsNotModal] = useState(false);
-  const [selectedCharacter, setSelectedCharacter] = useState<ICharacterData | null>(null);
+  const nav = useNavigate();
+  const [selectedCharacter, setSelectedCharacter] =
+    useState<ICharacterData | null>(null);
 
   const accessToken = localStorage.getItem('accessToken');
   const queryClient = useQueryClient();
@@ -38,29 +44,49 @@ export const Encyclopedia = () => {
       }
       return getNewInfo(accessToken, characterId);
     },
-    onSuccess: (_, characterId) => {
+    onSuccess: async (_, characterId) => {
+      // 캐시 업데이트
       queryClient.setQueryData<CharacterResponse>(['character'], (oldData) => {
         if (!oldData) return oldData;
-
+  
         return {
           ...oldData,
           data: {
             ...oldData.data,
-            data: oldData.data.data.map((character) => 
+            data: oldData.data.data.map((character) =>
               character.id === characterId
                 ? { ...character, isNew: false }
                 : character
-            )
-          }
+            ),
+          },
         };
       });
+  
+      // 캐릭터 데이터 무효화하여 새로운 데이터 가져오기
+      await queryClient.invalidateQueries({ queryKey: ['character'] });
+      
+      // 모달 열기
+      setIsMainModal(true);
     },
     onError: (error) => {
       console.error('상태 변경 실패:', error);
       alert('상태 변경에 실패했습니다. 다시 시도해주세요.');
     },
   });
-
+  const openModal = (
+    character: ICharacterData,
+    modalType: 'own' | 'main' | 'not'
+  ) => {
+    setSelectedCharacter(character);
+    if (modalType === 'own') {
+      setIsOwnModal(true);
+    } else if (modalType === 'main') {
+      // 모달 열기를 mutation의 onSuccess로 이동
+      mutation.mutate(character.id);
+    } else if (modalType === 'not') {
+      setIsNotModal(true);
+    }
+  };
   const CharacterQuery = useQuery<CharacterResponse>({
     queryKey: ['character'],
     queryFn: async () => {
@@ -69,6 +95,9 @@ export const Encyclopedia = () => {
       }
       return await getCharacterInfo(accessToken);
     },
+    // 자동 갱신 옵션 추가
+    refetchOnWindowFocus: true,
+    staleTime: 0, // 데이터를 항상 새로 가져오도록 설정
   });
 
   if (CharacterQuery.isLoading) {
@@ -83,20 +112,6 @@ export const Encyclopedia = () => {
     return <div>데이터가 없습니다.</div>;
   }
 
-  const openModal = (
-    character: ICharacterData,
-    modalType: 'own' | 'main' | 'not'
-  ) => {
-    setSelectedCharacter(character);
-    if (modalType === 'own') {
-      setIsOwnModal(true);
-    } else if (modalType === 'main') {
-      mutation.mutate(character.id);
-      setIsMainModal(true);
-    } else if (modalType === 'not') {
-      setIsNotModal(true);
-    }
-  };
 
   return (
     <div css={base}>
@@ -110,7 +125,9 @@ export const Encyclopedia = () => {
         <Notmodal data={selectedCharacter} setstate={setIsNotModal} />
       )}
 
-      <TopBar type="iconpage">캐릭터 도감</TopBar>
+      <TopBar type="iconpage" iconHandler={()=>nav('/')}>
+        캐릭터 도감
+      </TopBar>
       <div css={containerCss}>
         <Description>
           <div>
