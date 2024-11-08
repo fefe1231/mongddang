@@ -34,6 +34,8 @@ export const MainModal = ({ setstate, data }: OwnModalProps) => {
     setIsParentModalOpen(true); // 메인 모달을 다시 열어줍니다
   };
 
+
+
   return (
     <>
       {isParentModalOpen && (

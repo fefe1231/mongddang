@@ -4,13 +4,17 @@ import com.onetwo.mongddang.common.responseDto.ResponseDto;
 import com.onetwo.mongddang.common.s3.S3ImageService;
 import com.onetwo.mongddang.common.s3.errors.CustomS3ErrorCode;
 import com.onetwo.mongddang.domain.medication.application.MedicationUtils;
-import com.onetwo.mongddang.domain.medication.dto.MedicationStandard;
+import com.onetwo.mongddang.domain.medication.dto.MedicationStandardDto;
+import com.onetwo.mongddang.domain.medication.dto.RegisteredMedicationDto;
 import com.onetwo.mongddang.domain.medication.dto.RequestRegisterMedicationDto;
+import com.onetwo.mongddang.domain.medication.dto.ResponseMedicationDto;
 import com.onetwo.mongddang.domain.medication.model.MedicationManagement;
 import com.onetwo.mongddang.domain.medication.model.MedicationTime;
 import com.onetwo.mongddang.domain.medication.repository.MedicationManagementRepository;
 import com.onetwo.mongddang.domain.medication.repository.MedicationTimeRepository;
-import com.onetwo.mongddang.domain.record.repository.RecordRepository;
+import com.onetwo.mongddang.domain.user.application.CtoPUtils;
+import com.onetwo.mongddang.domain.user.error.CustomCtoPErrorCode;
+import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
 import com.onetwo.mongddang.domain.user.model.User;
 import com.onetwo.mongddang.domain.user.repository.UserRepository;
 import com.onetwo.mongddang.errors.exception.RestApiException;
@@ -28,12 +32,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MedicationService {
 
-    private final RecordRepository recordRepository;
     private final UserRepository userRepository;
     private final S3ImageService s3ImageService;
     private final MedicationManagementRepository medicationManagementRepository;
     private final MedicationTimeRepository medicationTimeRepository;
     private final MedicationUtils medicationUtils;
+    private final CtoPUtils ctoPUtils;
 
     @Transactional
     public ResponseDto registerMedication(Long childId, String requestRegisterMedicationDtoJson, MultipartFile imageFile) {
@@ -56,74 +60,6 @@ public class MedicationService {
         }
         log.info("식사 이미지 파일 없음 (in english : No meal image file)");
 
-        // 기록에 저장할 데이터 리스트 생성
-//        List<Record> recordList = new ArrayList<>();
-
-        // 반복 여부 확인
-//        if (requestDto.getIsRepeated()) {
-        // 반복 기록 처리
-
-        // 반복 기록 생성
-//            List<String> repeatDays = requestDto.getRepeatDays();
-//            LocalDateTime startDate = requestDto.getRepeatStartTime();
-//            LocalDateTime endDate = requestDto.getRepeatEndTime();
-
-        // 반복 요일을 숫자로 변환 (월: 1, 화: 2, 수: 3, 목: 4, 금: 5, 토: 6, 일: 7)
-//            List<Integer> repeatDaysIndex = new ArrayList<>();
-//            String[] daysOfWeek = {"월", "화", "수", "목", "금", "토", "일"};
-//            for (int i = 0; i < daysOfWeek.length; i++) {
-//                if (repeatDays.contains(daysOfWeek[i])) {
-//                    repeatDaysIndex.add(i + 1); // 월요일부터 시작
-//                }
-//            }
-
-        // 시작일과 종료일 사이에 반복 기록 생성
-//            for (LocalDateTime date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
-//                // 반복 요일에 해당하는 경우 기록 생성
-//                if (repeatDaysIndex.contains(date.getDayOfWeek().getValue())) {
-//                    for (String repeatTime : requestDto.getRepeatTimes()) {
-//
-//                        // 반복 시간에 해당하는 의약 기록 생성
-//                        MedicationInfo medicationContent = MedicationInfo.builder()
-//                                .name(requestDto.getName())
-//                                .imageUrl(imageUrl)
-//                                .route(requestDto.getRoute())
-//                                .isRepeated(requestDto.getIsRepeated())
-//                                .repeatDays(requestDto.getRepeatDays())
-//                                .repeatDays(requestDto.getRepeatDays())
-//                                .repeatStartTime(requestDto.getRepeatStartTime())
-//                                .repeatEndTime(requestDto.getRepeatEndTime())
-//                                .isFast(requestDto.getIsFast())
-//                                .repeatTimes(requestDto.getRepeatTimes())
-//                                .standards(requestDto.getStandards())
-//                                .build();
-//
-//                        // MedicationInfo 객체를 JsonNode로 변환
-//                        ObjectMapper objectMapper = new ObjectMapper();
-//                        JsonNode jsonMedicationContent = objectMapper.valueToTree(medicationContent);
-//
-//                        // 문자열을 LocalTime으로 변환
-//                        LocalTime localTime = LocalTime.parse(repeatTime, DateTimeFormatter.ofPattern("HH:mm"));
-//
-//                        // LocalDate와 LocalTime을 결합하여 LocalDateTime 생성
-//                        LocalDateTime newDateTime = LocalDateTime.of(LocalDate.from(date), localTime);
-//
-//                        // 날짜와 시간을 합쳐서 LocalDateTime 으로 변환
-//                        Record medicationRecord = Record.builder()
-//                                .child(child)
-//                                .content(jsonMedicationContent)
-//                                .imageUrl(null)
-//                                .isDone(false)
-//                                .category(Record.RecordCategoryType.medication)
-//                                .startTime(newDateTime)
-//                                .endTime(null)
-//                                .build();
-//
-//                        recordList.add(medicationRecord);
-//                    }
-//                }
-//            }
-
         // 복약 관리 기록 DB 에 저장
         MedicationManagement medicationManagement = MedicationManagement.builder()
                 .child(child)
@@ -139,7 +75,7 @@ public class MedicationService {
         //복약 시간 기록 DB 에 저장
         List<MedicationTime> medicationTimeList = new ArrayList<>();
         for (String repeatTime : requestDto.getRepeatTimes()) {
-            for (MedicationStandard medicationStandard : requestDto.getStandards()) {
+            for (MedicationStandardDto medicationStandard : requestDto.getStandards()) {
                 MedicationTime medicationTime = MedicationTime.builder()
                         .medicationManagement(medicationManagement)
                         .medicationTime(repeatTime)
@@ -153,46 +89,9 @@ public class MedicationService {
             }
         }
 
+        // DB에 저장
         medicationManagementRepository.save(medicationManagement);
         medicationTimeRepository.saveAll(medicationTimeList);
-
-
-//        } else {
-//            // 비반복 기록 처리
-//            if (requestDto.getIsRepeated() == false) {
-//
-//            }
-//
-//            // 반복 시간에 해당하는 의약 기록 생성
-//            MedicationInfo medicationContent = MedicationInfo.builder()
-//                    .name(requestDto.getName())
-//                    .imageUrl(imageUrl)
-//                    .route(requestDto.getRoute())
-//                    .isRepeated(requestDto.getIsRepeated())
-//                    .repeatDays(requestDto.getRepeatDays())
-//                    .repeatDays(requestDto.getRepeatDays())
-//                    .repeatStartTime(requestDto.getRepeatStartTime())
-//                    .repeatEndTime(requestDto.getRepeatEndTime())
-//                    .isFast(requestDto.getIsFast())
-//                    .repeatTimes(requestDto.getRepeatTimes())
-//                    .standards(requestDto.getStandards())
-//                    .build();
-//
-//            Record medicationRecord = Record.builder()
-//                    .child(child)
-//                    .content(null)
-//                    .imageUrl(imageUrl)
-//                    .isDone(false)
-//                    .category(Record.RecordCategoryType.medication)
-//                    .startTime(requestDto.getRepeatStartTime())
-//                    .endTime(null)
-//                    .build();
-//
-//            recordList.add(medicationRecord);
-//        }
-
-        // recordList 에 있는 모든 기록을 DB에 저장
-//        recordRepository.saveAll(recordList);
 
         return ResponseDto.builder()
                 .message("약품 등록을 성공하였습니다.")
@@ -201,6 +100,58 @@ public class MedicationService {
 
     // 약품 조회
     public ResponseDto getMedication(Long userId, String nickname) {
-        return null;
+        log.info("약품 조회 (In English : Medication Inquiry)");
+
+        User user = userRepository.findById(userId).orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+        User child = userRepository.findByNickname(nickname).orElseThrow(() -> new RestApiException(CustomUserErrorCode.THIS_NICKNAME_USER_NOT_FOUND));
+
+        // 보호자와 아이가 연결되어 있는지 확인
+        if (!ctoPUtils.checkProtectorAndChildIsConnected(userId, child.getId())) {
+            throw new RestApiException(CustomCtoPErrorCode.CHILD_NOT_LINKED);
+        }
+
+        // 복약 관리 테이블에서 아이에 해당하는 복약 시간 데이터 조회
+        List<MedicationManagement> medicationManagementList = medicationManagementRepository.findByChild(child);
+        List<RegisteredMedicationDto> registeredMedicationDtoList = new ArrayList<>();
+
+        // 복약 관리 테이블에서 외래키로 참조한 복약 시간 데이터를 registeredMedicationDtoList 에 데이터 저장
+        for (MedicationManagement medicationManagement : medicationManagementList) {
+            // 복약 시간 데이터 조회
+            List<MedicationTime> medicationTimeList = medicationTimeRepository.findByMedicationManagement(medicationManagement);
+            List<MedicationStandardDto> medicationStandardDtoList = new ArrayList<>();
+
+            for (MedicationTime medicationTime : medicationTimeList) {
+                MedicationStandardDto medicationStandardDto = MedicationStandardDto.builder()
+                        .minGlucose(medicationTime.getMinGlucose())
+                        .maxGlucose(medicationTime.getMaxGlucose())
+                        .volume(medicationTime.getVolume())
+                        .build();
+
+                medicationStandardDtoList.add(medicationStandardDto);
+            }
+
+            RegisteredMedicationDto registeredMedicationDto = RegisteredMedicationDto.builder()
+                    .id(medicationManagement.getId())
+                    .name(medicationManagement.getName())
+                    .imageUrl(medicationManagement.getImageUrl())
+                    .repeatStartTime(medicationManagement.getRepeatStartTime())
+                    .repeatEndTime(medicationManagement.getRepeatEndTime())
+                    .isFast(medicationTimeList.get(0).getIsFast())
+                    .repeatTimes(medicationTimeList.stream().map(MedicationTime::getMedicationTime).toList())
+                    .standards(medicationStandardDtoList)
+                    .build();
+
+            registeredMedicationDtoList.add(registeredMedicationDto);
+        }
+
+        // ResponseMedicationDto 객체 생성
+        ResponseMedicationDto responseMedicationDto = ResponseMedicationDto.builder()
+                .medications(registeredMedicationDtoList)
+                .build();
+
+        return ResponseDto.builder()
+                .message("약품 조회를 성공하였습니다.")
+                .data(responseMedicationDto)
+                .build();
     }
 }

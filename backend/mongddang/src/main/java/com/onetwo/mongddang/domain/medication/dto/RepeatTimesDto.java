@@ -6,7 +6,7 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Getter
-public class RepeatTimes {
+public class RepeatTimesDto {
 
     @NotNull
     private LocalDateTime time;

@@ -8,9 +8,10 @@ import { handleDateChange } from '@/Utils/birthUtils';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { UserRole } from '..';
 import { signUp } from '../api';
-// import { useMutation } from '@tanstack/react-query';
-// import { updateNickname } from '@/pages/profile/nickname-edit/api';
-// import { Palette } from '@/shared/model/globalStylesTyes';
+import { useMutation } from '@tanstack/react-query';
+import { INickname, updateNickname } from '@/pages/profile/nickname-edit/api';
+import { Palette } from '@/shared/model/globalStylesTyes';
+import { AxiosResponse } from 'axios';
 
 export const DataForm = ({ role }: { role: UserRole }) => {
   const [gender, setGender] = useState<'male' | 'female' | undefined>(
@@ -21,8 +22,8 @@ export const DataForm = ({ role }: { role: UserRole }) => {
   const [birthDay, setBirthDay] = useState<string>('');
   const [nickname, setNickname] = useState<string>('');
   const [name, setName] = useState<string>('');
-  // const [color, setColor] = useState<Palette>('primary');
-  // const [msg, setMsg] = useState<string>('');
+  const [color, setColor] = useState<Palette>('primary');
+  const [msg, setMsg] = useState<string>('');
   const nav = useNavigate();
   const location = useLocation();
   const idToken = location.state?.idToken;
@@ -82,22 +83,31 @@ export const DataForm = ({ role }: { role: UserRole }) => {
       alert('회원가입에 실패했습니다. 다시 시도해주세요.');
     }
   };
-
-  // const { mutate } = useMutation({
-  //   mutationFn: updateNickname,
-  //   onSuccess: () => {
-  //     setMsg('사용 가능한 닉네임입니다.');
-  //     setColor('primary');
-  //   },
-  //   onError: () => {
-  //     setMsg(
-  //       nickname.length === 0
-  //         ? '닉네임을 작성해주세요.'
-  //         : '이미 사용 중인 닉네임입니다.'
-  //     );
-  //     setColor('danger');
-  //   },
-  // });
+  const accessToken = localStorage.getItem('accessToken') || '';
+  const { mutate } = useMutation<
+    AxiosResponse<INickname>,
+    Error,
+    { accessToken: string; nickname: string }
+  >({
+    mutationFn: async ({
+      accessToken,
+      nickname,
+    }): Promise<AxiosResponse<INickname>> => {
+      return await updateNickname(accessToken, nickname);
+    },
+    onSuccess: () => {
+      setMsg('사용 가능한 닉네임입니다.');
+      setColor('primary');
+    },
+    onError: () => {
+      setMsg(
+        nickname.length === 0
+          ? '닉네임을 작성해주세요.'
+          : '이미 사용 중인 닉네임입니다.'
+      );
+      setColor('danger');
+    },
+  });
 
   return (
     <div style={{ margin: '2rem' }}>
@@ -120,16 +130,16 @@ export const DataForm = ({ role }: { role: UserRole }) => {
             color="primary"
             fontSize="1"
             variant="contained"
-            handler={() => {}}
+            handler={() => mutate({ accessToken, nickname })}
           >
             확인
           </Button>
         </div>
-        {/* {msg && (
+        {msg && (
           <Typography color={color} size="1" weight={500}>
             {msg}
           </Typography>
-        )} */}
+        )}
         <div style={{ margin: '1rem 0' }}>
           <TextField
             color="primary"
@@ -138,7 +148,7 @@ export const DataForm = ({ role }: { role: UserRole }) => {
             onChange={(e) => setName(e.target.value)}
           />
         </div>
-        <Typography color='dark' size="1" weight={500}>
+        <Typography color="dark" size="1" weight={500}>
           생년월일
         </Typography>
         <div style={{ display: 'flex', gap: '1rem', margin: '1rem 0' }}>
@@ -164,7 +174,14 @@ export const DataForm = ({ role }: { role: UserRole }) => {
             onChange={handleDateChangeWrapper('day')}
           />
         </div>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop:'1.3rem'}}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '1rem',
+            marginTop: '1.3rem',
+          }}
+        >
           <Button
             color="light"
             fontSize="1"
