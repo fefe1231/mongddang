@@ -7,13 +7,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface CtoPRepository extends JpaRepository<CtoP, Long> {
 
     // 보호자와 어린이가 함께 엮인 데이터를 조회합니다. 그저 존재여부를 찾기 위함임.
     @Query("SELECT c FROM CtoP c WHERE c.child = :child AND c.protector = :protector")
-    List<CtoP> findByChildAndProtector(@Param("protector") User protector,@Param("child") User child);
+    List<CtoP> findByChildAndProtector(@Param("protector") User protector, @Param("child") User child);
 
     // 보호자 id를 통해, 연결된 어린이 정보들을 리스트 형식으로 조회합니다.
     @Query("SELECT c.child FROM CtoP c WHERE c.protector.id = :protectorId")
