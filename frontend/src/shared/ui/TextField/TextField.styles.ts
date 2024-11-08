@@ -1,7 +1,7 @@
 import { SerializedStyles, css } from '@emotion/react';
 import { TextFieldVariant } from './TextField.types';
 import { Palette } from '@/shared/model/globalStylesTyes';
-import ColorStyle from '../styles/colorStyles';
+import ColorStyle from '../styles/ColorStyles_edit';
 
 export const base = (
   multiLine: boolean,

@@ -1,7 +1,7 @@
 import { ColorScale, Palette } from '@/shared/model/globalStylesTyes';
 import { css } from '@emotion/react';
 import { Colors } from '../styles/globalStyles';
-import ColorStyle from '../styles/colorStyles';
+import ColorStyle from '../styles/ColorStyles_edit';
 
 export const toggle = (
   isOn: boolean,

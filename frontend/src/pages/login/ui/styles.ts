@@ -1,4 +1,4 @@
-import ColorStyle from '@/shared/ui/styles/colorStyles';
+import ColorStyle from '@/shared/ui/styles/ColorStyles_edit';
 import { Colors } from '@/shared/ui/styles/globalStyles';
 import { css } from '@emotion/react';
 

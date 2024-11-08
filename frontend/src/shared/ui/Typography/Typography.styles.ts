@@ -6,7 +6,7 @@ import {
 import { css } from '@emotion/react';
 import { Colors } from '../styles/globalStyles';
 import { Tsize } from './Typography.types';
-import ColorStyle from '../styles/colorStyles';
+import ColorStyle from '../styles/ColorStyles_edit';
 
 export const base = (
   color: Palette,

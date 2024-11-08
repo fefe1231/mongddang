@@ -1,7 +1,7 @@
 import { SerializedStyles, css } from '@emotion/react';
 import { ToastVariant } from './Toast.types';
 import { Palette } from '@/shared/model/globalStylesTyes';
-import ColorStyle from '../styles/colorStyles';
+import ColorStyle from '../styles/ColorStyles_edit';
 
 const colors: Record<Palette, string> = {
   primary: '#F3E5F5',
