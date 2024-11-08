@@ -1,7 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { KidsMainPage } from './pages/MainPage';
-import { SignUp } from './pages/signup';
-import { Encyclopedia } from './pages/encyclopedia';
 import { NicknameTitle } from './pages/nickname-title';
 import { Btn } from './pages/btn';
 import Menu from './pages/Menu/Menu';
@@ -11,6 +9,9 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Profile } from './pages/profile';
 import { Report } from './pages/report';
 import { RecordPage } from './pages/record';
+import { Encyclopedia } from './pages/Encyclopedia';
+import { SignUp } from './pages/Signup';
+
 
 function App() {
   return (
