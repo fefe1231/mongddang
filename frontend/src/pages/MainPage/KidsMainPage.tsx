@@ -38,11 +38,11 @@ const KidsMainPage = () => {
   // 바텀바 url 이동
   const moveBottomBar = (menu: number | undefined) => {
     if (menu === 0) {
-      navigate('/encyclopedia')
+      navigate('/encyclopedia');
     } else if (menu === 1) {
-      navigate('/menu')
+      navigate('/menu');
     } else if (menu === 2) {
-      navigate(`/record/${new Date()}`)
+      navigate(`/record/${new Date()}`);
     }
   };
 
@@ -79,17 +79,19 @@ const KidsMainPage = () => {
                   menu="알림"
                 />
               </div>
-              <IconTypo
-                icon="/img/%EB%A7%90%EB%9E%911.png"
-                fontSize="0.75"
-                menu={
-                  <div>
-                    도전
-                    <br />
-                    퀘스트
-                  </div>
-                }
-              />
+              <div onClick={()=>{navigate('/nickname/title')}}>
+                <IconTypo
+                  icon="/img/%EB%A7%90%EB%9E%911.png"
+                  fontSize="0.75"
+                  menu={
+                    <div>
+                      도전
+                      <br />
+                      퀘스트
+                    </div>
+                  }
+                />
+              </div>
               <CurrentBloodSugar />
             </div>
           </div>
