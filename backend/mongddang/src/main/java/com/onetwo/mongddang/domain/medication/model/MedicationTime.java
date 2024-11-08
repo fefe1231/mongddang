@@ -18,8 +18,8 @@ public class MedicationTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(nullable = false, name = "medication_management_id")
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(nullable = false)
     private MedicationManagement medicationManagement;
 
     @Column(name = "medication_time")

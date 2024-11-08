@@ -19,6 +19,9 @@ import java.util.List;
 @NoArgsConstructor
 public class RequestRegisterMedicationDto {
 
+    @NotNull(message = "유저 닉네임은 필수입니다.")
+    private String nickname;
+
     @NotNull(message = "약품 이름은 필수입니다.")
     private String name;
 
