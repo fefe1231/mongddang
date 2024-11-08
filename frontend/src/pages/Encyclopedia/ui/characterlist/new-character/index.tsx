@@ -2,7 +2,7 @@
 import { IconTypo } from '@/shared/ui/IconTypo';
 import { containerCss, newCss } from './styles';
 import { Typography } from '@/shared/ui/Typography';
-import { ICharacterData } from '@/pages/encyclopedia/model/types';
+import { ICharacterData } from '@/pages/Encyclopedia/model/types';
 
 interface OwnCharacterProps {
   data: ICharacterData;

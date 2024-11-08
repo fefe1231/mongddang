@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { IconTypo } from '@/shared/ui/IconTypo';
 import { containerCss } from './styles';
-import { ICharacterData } from '@/pages/encyclopedia/model/types';
+import { ICharacterData } from '@/pages/Encyclopedia/model/types';
 interface OwnCharacterProps {
   data: ICharacterData;
 }

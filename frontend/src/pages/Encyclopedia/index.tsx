@@ -4,8 +4,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { TopBar } from '@/shared/ui/TopBar';
 import space from '../../assets/img/space.png';
 
-import { Description } from './ui/description';
-
 import { getCharacterInfo, getNewInfo } from './api/api';
 import { ICharacterData } from './model/types';
 
@@ -19,12 +17,13 @@ import {
   imgCss,
 } from './ui/styles';
 import { OwnModal } from './ui/modal/own-modal';
+import { useNavigate } from 'react-router-dom';
 import { MainModal } from './ui/modal/main-modal';
 import { Notmodal } from './ui/modal/Not-modal';
 import { Notowncharacter } from './ui/characterlist/notown-character';
 import { Newcharacter } from './ui/characterlist/new-character';
 import { Owncharacter } from './ui/characterlist/owncharacter';
-import { useNavigate } from 'react-router-dom';
+import { Description } from './ui/description';
 
 export const Encyclopedia = () => {
   const [isOwnModal, setIsOwnModal] = useState(false);
@@ -48,7 +47,7 @@ export const Encyclopedia = () => {
       // 캐시 업데이트
       queryClient.setQueryData<CharacterResponse>(['character'], (oldData) => {
         if (!oldData) return oldData;
-  
+
         return {
           ...oldData,
           data: {
@@ -61,10 +60,10 @@ export const Encyclopedia = () => {
           },
         };
       });
-  
+
       // 캐릭터 데이터 무효화하여 새로운 데이터 가져오기
       await queryClient.invalidateQueries({ queryKey: ['character'] });
-      
+
       // 모달 열기
       setIsMainModal(true);
     },
@@ -112,7 +111,6 @@ export const Encyclopedia = () => {
     return <div>데이터가 없습니다.</div>;
   }
 
-
   return (
     <div css={base}>
       {isOwnModal && (
@@ -125,7 +123,7 @@ export const Encyclopedia = () => {
         <Notmodal data={selectedCharacter} setstate={setIsNotModal} />
       )}
 
-      <TopBar type="iconpage" iconHandler={()=>nav('/')}>
+      <TopBar type="iconpage" iconHandler={() => nav('/')}>
         캐릭터 도감
       </TopBar>
       <div css={containerCss}>

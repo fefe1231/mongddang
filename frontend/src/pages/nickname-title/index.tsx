@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { TopBar } from '@/shared/ui/TopBar';
 import space from '../../assets/img/space.png';
-import { containerCss, imgCss } from '../encyclopedia/ui/styles';
-import { Description } from '../encyclopedia/ui/description';
+import { containerCss, imgCss } from '../Encyclopedia/ui/styles';
+import { Description } from '../Encyclopedia/ui/description';
 import { Toggle } from '@/shared/ui/Toggle';
 import { Typography } from '@/shared/ui/Typography';
 import { TitleComponent } from './ui/title-component';
