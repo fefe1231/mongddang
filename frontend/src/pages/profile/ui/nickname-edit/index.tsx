@@ -15,6 +15,7 @@ export const NicknameEdit = () => {
   const [nickname, setNickname] = useState<string>('');
   const [color, setColor] = useState<Palette>('primary');
   const [msg, setMsg] = useState<string>('');
+  const nav = useNavigate();
 
   const nicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNickname(e.target.value);
@@ -44,7 +45,6 @@ export const NicknameEdit = () => {
   });
 
   const accessToken = localStorage.getItem('accessToken') || '';
-  const nav = useNavigate();
   const { mutate: updateNicknameMutation } = useMutation<
     AxiosResponse<INickname>,
     Error,
@@ -73,7 +73,7 @@ export const NicknameEdit = () => {
 
   return (
     <div>
-      <TopBar type="iconpage">닉네임 수정</TopBar>
+      <TopBar type="iconpage" iconHandler={()=>nav('/profile')}>닉네임 수정</TopBar>
       <div css={containerCss}>
         <Typography color="dark" size="1" weight={700}>
           현재 닉네임 :

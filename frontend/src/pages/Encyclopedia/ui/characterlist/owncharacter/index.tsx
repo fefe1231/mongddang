@@ -1,12 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { IconTypo } from '@/shared/ui/IconTypo';
 import { containerCss } from './styles';
-import { ICharacterData } from '@/pages/Encyclopedia/types';
+import { ICharacterData } from '@/pages/encyclopedia/model/types';
 interface OwnCharacterProps {
   data: ICharacterData;
 }
 
-export const Owncharacter = ({data}: OwnCharacterProps) => {
+export const Owncharacter = ({ data }: OwnCharacterProps) => {
   return (
     <>
       <div css={containerCss}>

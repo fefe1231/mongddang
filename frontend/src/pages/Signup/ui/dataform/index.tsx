@@ -6,12 +6,15 @@ import { Typography } from '@/shared/ui/Typography';
 import { textFieldCss } from './styles';
 import { handleDateChange } from '@/Utils/birthUtils';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { UserRole } from '..';
-import { signUp } from '../api';
+import { UserRole } from '../..';
 import { useMutation } from '@tanstack/react-query';
-import { INickname, updateNickname } from '@/pages/profile/nickname-edit/api';
+import {
+  INickname,
+  checkNickname,
+} from '@/pages/profile/ui/nickname-edit/api';
 import { Palette } from '@/shared/model/globalStylesTyes';
 import { AxiosResponse } from 'axios';
+import { signUp } from '../../api/api';
 
 export const DataForm = ({ role }: { role: UserRole }) => {
   const [gender, setGender] = useState<'male' | 'female' | undefined>(
@@ -90,10 +93,9 @@ export const DataForm = ({ role }: { role: UserRole }) => {
     { accessToken: string; nickname: string }
   >({
     mutationFn: async ({
-      accessToken,
       nickname,
     }): Promise<AxiosResponse<INickname>> => {
-      return await updateNickname(accessToken, nickname);
+      return await checkNickname(nickname);
     },
     onSuccess: () => {
       setMsg('사용 가능한 닉네임입니다.');

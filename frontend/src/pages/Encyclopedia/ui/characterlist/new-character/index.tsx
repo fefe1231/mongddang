@@ -2,7 +2,7 @@
 import { IconTypo } from '@/shared/ui/IconTypo';
 import { containerCss, newCss } from './styles';
 import { Typography } from '@/shared/ui/Typography';
-import { ICharacterData } from '@/pages/Encyclopedia/types';
+import { ICharacterData } from '@/pages/encyclopedia/model/types';
 
 interface OwnCharacterProps {
   data: ICharacterData;
@@ -18,12 +18,7 @@ export const Newcharacter = ({ data }: OwnCharacterProps) => {
           menu={data.name}
           size={5}
         />
-        <Typography
-          color="primary"
-          size="1"
-          weight={600}
-          css={newCss}
-        >
+        <Typography color="primary" size="1" weight={600} css={newCss}>
           New!!
         </Typography>
       </div>

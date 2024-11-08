@@ -6,12 +6,12 @@ import { Modal } from '@/shared/ui/Modal';
 import { Typography } from '@/shared/ui/Typography';
 import { HiOutlineX } from 'react-icons/hi';
 import { Chip } from '@/shared/ui/Chip';
+import { ICharacterData } from '@/pages/encyclopedia/model/types';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { getCoinInfo, postRecruitment } from '@/pages/encyclopedia/api/api';
+import { base, modalCss, storyTypographyCss, xiconCss } from './styles';
 import { BuyModal } from '../buy-modal';
 import { FindModal } from '../find-modal';
-import { base, modalCss, xiconCss, storyTypographyCss } from './styles';
-import { ICharacterData } from '@/pages/Encyclopedia/types';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { getCoinInfo, postRecruitment } from '@/pages/Encyclopedia/api';
 
 interface OwnModalProps {
   setstate: (value: boolean) => void;
@@ -19,6 +19,7 @@ interface OwnModalProps {
 }
 
 export const Notmodal = ({ setstate, data }: OwnModalProps) => {
+  const [, setIsNew] = useState(false);
   const [buyModal, setBuyModal] = useState<boolean>(false);
   const [findModal, setFindModal] = useState<boolean>(false);
   const accessToken = localStorage.getItem('accessToken') || '';
@@ -31,8 +32,8 @@ export const Notmodal = ({ setstate, data }: OwnModalProps) => {
       return await postRecruitment(accessToken, data?.id);
     },
     onSuccess: () => {
-      // 캐릭터 모집 성공 시 새로고침
-      window.location.reload(); // 페이지 새로고침
+      // 캐릭터 모집 성공 시 findModal 열기
+      setFindModal(true);
     },
     onError: (error) => {
       console.error('Error recruiting character:', error);
@@ -55,10 +56,9 @@ export const Notmodal = ({ setstate, data }: OwnModalProps) => {
     characterMutation.mutate(); // mutate 호출
   };
 
-  const handlefindModalBlue = () => {
-    setBuyModal(false);
-    setFindModal(true);
-    setstate(false);
+  const handleFindModalClose = () => {
+    setFindModal(false);
+    setstate(false); // 맨 처음 모달 닫기
   };
 
   console.log(CoinQuery.data?.data.data.coin);
@@ -111,7 +111,9 @@ export const Notmodal = ({ setstate, data }: OwnModalProps) => {
           redhandler={() => setBuyModal(false)}
         />
       )}
-      {findModal && <FindModal setstate={handlefindModalBlue} />}
+      {findModal && (
+        <FindModal setstate={handleFindModalClose} setIsNew={setIsNew} />
+      )}
     </div>
   );
 };
