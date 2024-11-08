@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MissionLogRepository extends JpaRepository<MissionLog, Long> {
+//    List<MissionLog> findByChildAndCreatedAtBetween(Long childId, LocalDateTime todayStart);
 }

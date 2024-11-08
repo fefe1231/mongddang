@@ -11,4 +11,7 @@ import java.util.List;
 public interface MedicationManagementRepository extends JpaRepository<MedicationManagement, Long> {
     List<MedicationManagement> findByChild(User child);
 
+//    // 오늘이 포함된 medication_management 리스트 조회
+//    @Query("SELECT mm FROM MedicationManagement mm WHERE mm.child.id = :child AND mm.repeat_start_time <= :todayStart AND mm.repeat_end_time >= :todayStart", )
+//    List<MedicationManagement> findByChildIdAndTodayIncluded(@Param("child") User child, @Param("todayStart") LocalDateTime todayStart);
 }

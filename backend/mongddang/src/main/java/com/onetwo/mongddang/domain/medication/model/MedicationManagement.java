@@ -23,7 +23,7 @@ public class MedicationManagement {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(nullable = false, name = "child_id")
+    @JoinColumn(nullable = false)
     @NotNull
     private User child;
 
