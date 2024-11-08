@@ -61,7 +61,13 @@ export const RecordCalendar = () => {
         renderDay={renderDay}
         onNextMonth={onNextMonth}
         onPreviousMonth={onPreviousMonth}
-        classNames={{ day: calendarStyle.day, weekday: calendarStyle.weekday }}
+        classNames={{
+          day: calendarStyle.day,
+          weekday: calendarStyle.weekday,
+          monthThead: calendarStyle.monthThead,
+          calendarHeader: calendarStyle.calendarHeader
+        }}
+        monthLabelFormat="YYYY년 MM월"
       />
     </>
   );
