@@ -1,4 +1,4 @@
-import { ICharacterData } from '@/pages/encyclopedia/model/types';
+import { ICharacterData } from "@/pages/Encyclopedia/model/types";
 
 export interface ItitleData {
   titleId: number;

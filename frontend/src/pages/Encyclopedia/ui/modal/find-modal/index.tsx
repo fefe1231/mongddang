@@ -8,7 +8,7 @@ import { HiOutlineX } from 'react-icons/hi';
 import { Chip } from '@/shared/ui/Chip';
 import { base, modalCss, xiconCss } from '../main-modal/styles';
 import { useQueryClient } from '@tanstack/react-query';
-import { ICharacterData } from '@/pages/encyclopedia/model/types';  // 캐릭터 타입 import
+import { ICharacterData } from '@/pages/Encyclopedia/model/types';
 
 // Response 타입 정의
 interface CharacterResponse {

@@ -79,6 +79,11 @@ services:
       CLIENT_ID: ${CLIENT_ID}
       # Firebase
       FIREBASE_CREDENTIALS_PATH: ${FIREBASE_CREDENTIALS_PATH}
+      # School
+      MEAL_KEY: ${MEAL_KEY} 
+      MEAL_URL: ${MEAL_URL} 
+      SCHOOL_KEY: ${SCHOOL_KEY} 
+      SCHOOL_URL: ${SCHOOL_URL}
     expose:
       - "8080"
     volumes:

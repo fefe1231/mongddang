@@ -3,7 +3,7 @@ import { TopBar } from '@/shared/ui/TopBar';
 import { Icon } from '@/shared/ui/Icon';
 import { base, containerCss } from './ui/styles';
 import { Chip } from '@/shared/ui/Chip';
-import { imgCss } from '../encyclopedia/ui/styles';
+import { imgCss } from '../Encyclopedia/ui/styles';
 import space from '../../assets/img/space.png';
 import { Typography } from '@/shared/ui/Typography';
 import { Button } from '@/shared/ui/Button';
@@ -42,7 +42,9 @@ export const Profile = () => {
 
   return (
     <div>
-      <TopBar type="iconpage" iconHandler={()=>nav('/menu')}>프로필</TopBar>
+      <TopBar type="iconpage" iconHandler={() => nav('/menu')}>
+        프로필
+      </TopBar>
       <div css={base}>
         <Icon size={5}>
           <img alt="icon-1" src="/img/%EB%A7%90%EB%9E%912.png" />

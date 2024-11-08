@@ -8,7 +8,7 @@ import { UpdateCharacter } from '../modal';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { getTitleAchievement, getTitleMain } from '../../api/api';
 import { ItitleData } from '../../model/types';
-import AchievementToast from '../toast';
+import AchievementToast from '../Toast';
 
 interface TitleComponentProps {
   title: ItitleData;

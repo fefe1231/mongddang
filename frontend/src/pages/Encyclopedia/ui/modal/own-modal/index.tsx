@@ -6,12 +6,12 @@ import { Typography } from '@/shared/ui/Typography';
 
 import { HiOutlineX } from 'react-icons/hi';
 import { Chip } from '@/shared/ui/Chip';
-import { ICharacterData } from '@/pages/encyclopedia/model/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
-import { getMainInfo } from '@/pages/encyclopedia/api/api';
 import { base, modalCss, storyTypographyCss, xiconCss } from './styles';
 import { useState } from 'react';
+import { ICharacterData } from '@/pages/Encyclopedia/model/types';
+import { getMainInfo } from '@/pages/Encyclopedia/api/api';
 import { UpdateCharacter } from '../update-character';
 
 interface OwnModalProps {

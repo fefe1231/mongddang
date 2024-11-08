@@ -6,10 +6,10 @@ import { Modal } from '@/shared/ui/Modal';
 import { Typography } from '@/shared/ui/Typography';
 import { HiOutlineX } from 'react-icons/hi';
 import { Chip } from '@/shared/ui/Chip';
-import { ICharacterData } from '@/pages/encyclopedia/model/types';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { getCoinInfo, postRecruitment } from '@/pages/encyclopedia/api/api';
 import { base, modalCss, storyTypographyCss, xiconCss } from './styles';
+import { ICharacterData } from '@/pages/Encyclopedia/model/types';
+import { getCoinInfo, postRecruitment } from '@/pages/Encyclopedia/api/api';
 import { BuyModal } from '../buy-modal';
 import { FindModal } from '../find-modal';
 
