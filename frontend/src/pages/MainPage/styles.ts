@@ -10,6 +10,7 @@ export const kidsMainBase = css`
   background-image: url(${MainBackground});
   background-size: cover;
   background-position: bottom;
+  box-sizing: content-box;
 `;
 
 export const kidsMainContent = css`
@@ -75,4 +76,5 @@ export const routineGroupCss = css`
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 10px;
   padding: 0.25rem;
+  box-sizing: content-box;
 `;
