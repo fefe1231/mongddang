@@ -11,6 +11,7 @@ import { Report } from './pages/report';
 import { RecordPage, TodayRecordPage } from './pages/record';
 import { Encyclopedia } from './pages/Encyclopedia';
 import { SignUp } from './pages/Signup';
+import { GmiDetail } from './pages/report/ui/detail/gmi';
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/nickname/edit" element={<NicknameEdit />} />
           <Route path="/report" element={<Report />} />
+          <Route path="/report/detail/gmi" element={<GmiDetail />} />
           <Route path="/record" element={<RecordPage />} />
           <Route path="/record/:date" element={<TodayRecordPage />} />
         </Routes>
