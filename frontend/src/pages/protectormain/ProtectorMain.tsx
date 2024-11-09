@@ -44,7 +44,7 @@ const ProtectorMain = () => {
         <div css={menuBtnContainer}>
           {/* 메뉴 버튼 모음 */}
           <div css={menuBtnGroup}>
-            <MenuBtnGroup userRole={'child'} />
+            <MenuBtnGroup userRole={'protector'} />
           </div>
         </div>
       </div>
