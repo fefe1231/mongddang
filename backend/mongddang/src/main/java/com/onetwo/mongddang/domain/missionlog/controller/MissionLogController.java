@@ -2,6 +2,7 @@ package com.onetwo.mongddang.domain.missionlog.controller;
 
 import com.onetwo.mongddang.common.annotation.ChildRequired;
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
+import com.onetwo.mongddang.domain.missionlog.application.MissionLogUtils;
 import com.onetwo.mongddang.domain.missionlog.service.MissionLogService;
 import com.onetwo.mongddang.domain.user.jwt.JwtExtratService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,7 +24,9 @@ public class MissionLogController {
 
     private final JwtExtratService jwtExtratService;
     private final MissionLogService missionLogService;
+    private final MissionLogUtils missionLogUtils;
 
+    // 미션 목록 조회 api
     @GetMapping("")
     @ChildRequired
     @Tag(name = "Mission API", description = "미션 api")
@@ -35,5 +38,19 @@ public class MissionLogController {
         ResponseDto responseDto = missionLogService.getTodayMissionLogList(childId);
         return ResponseEntity.ok(responseDto);
     }
+
+    // 미션 생성 api
+//    @PostMapping("")
+//    @ChildRequired
+//    @Tag(name = "Mission API", description = "미션 api")
+//    @Operation(summary = "미션 생성 api", description = "미션을 생성합니다.")
+//    public void createMissionList(HttpServletRequest request) {
+//        log.info("POST /api/mission");
+//
+//        Long childId = jwtExtratService.jwtFindId(request);
+//        missionLogUtils.createMission(childId);
+//
+//        log.info("미션 생성 완료");
+//    }
 
 }

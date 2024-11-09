@@ -6,6 +6,9 @@ import com.onetwo.mongddang.common.s3.S3ImageService;
 import com.onetwo.mongddang.common.s3.errors.CustomS3ErrorCode;
 import com.onetwo.mongddang.common.utils.DateTimeUtils;
 import com.onetwo.mongddang.common.utils.JsonUtils;
+import com.onetwo.mongddang.domain.missionlog.application.MissionLogUtils;
+import com.onetwo.mongddang.domain.missionlog.dto.MissionDto;
+import com.onetwo.mongddang.domain.missionlog.repository.MissionLogRepository;
 import com.onetwo.mongddang.domain.record.dto.RecordDetailsDto;
 import com.onetwo.mongddang.domain.record.dto.RecordWithChildIdDto;
 import com.onetwo.mongddang.domain.record.dto.ResponseRecordDto;
@@ -39,6 +42,8 @@ public class RecordService {
     private final DateTimeUtils dateTimeUtils;
     private final S3ImageService s3ImageService;
     private final JsonUtils jsonUtils;
+    private final MissionLogRepository missionLogRepository;
+    private final MissionLogUtils missionLogUtils;
 
     /**
      * 환아의 활동 기록 조회
@@ -154,7 +159,9 @@ public class RecordService {
                 .build();
 
         recordRepository.save(exerciseRecord);
-        log.info("운동 시작 기록 완료. 시작시간 : {}", exerciseRecord.getStartTime());
+
+        // 미션 업데이트
+        missionLogUtils.completeMission(child, MissionDto.Mission.exercise);
 
         return ResponseDto.builder()
                 .message("운동을 시작합니다.")
@@ -337,6 +344,19 @@ public class RecordService {
         recordRepository.save(mealRecord);
         log.info("식사 시작 기록 완료. 시작시간 : {}", mealRecord.getStartTime());
 
+        // 식사 시간에 따른 미션 업데이트
+        switch (mealRecord.getMealTime()) {
+            case breakfast:
+                missionLogUtils.completeMission(child, MissionDto.Mission.breakfast);
+                break;
+            case lunch:
+                missionLogUtils.completeMission(child, MissionDto.Mission.lunch);
+                break;
+            case dinner:
+                missionLogUtils.completeMission(child, MissionDto.Mission.dinner);
+                break;
+        }
+
         return ResponseDto.builder()
                 .message("식사를 시작합니다.")
                 .build();
@@ -439,6 +459,7 @@ public class RecordService {
      * @param childId 복약 기록을 시도하는 어린이의 아이디
      * @return ResponseDto
      */
+    @Transactional
     public ResponseDto checkMedication(Long childId) {
         log.info("checkMedication childId: {}", childId);
 
@@ -459,6 +480,9 @@ public class RecordService {
 
         recordRepository.save(newMedicationRecord);
         log.info("복약 확인 기록 완료. : {}", newMedicationRecord.getStartTime());
+
+        // 미션 업데이트
+        missionLogUtils.completeMission(child, MissionDto.Mission.first_medication);
 
         return ResponseDto.builder()
                 .message("복약을 확인합니다.")
