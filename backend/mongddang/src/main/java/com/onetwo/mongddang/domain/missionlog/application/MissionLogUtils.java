@@ -5,8 +5,10 @@ import com.onetwo.mongddang.common.annotation.ChildRequired;
 import com.onetwo.mongddang.domain.missionlog.dto.MissionDto;
 import com.onetwo.mongddang.domain.missionlog.model.MissionLog;
 import com.onetwo.mongddang.domain.missionlog.repository.MissionLogRepository;
+import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
 import com.onetwo.mongddang.domain.user.model.User;
 import com.onetwo.mongddang.domain.user.repository.UserRepository;
+import com.onetwo.mongddang.errors.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,7 +31,7 @@ public class MissionLogUtils {
         log.info("오늘의 미션 생성 시도");
 
 
-        User child = userRepository.findById(childId).orElseThrow(() -> new IllegalArgumentException("해당 아이디의 유저가 존재하지 않습니다."));
+        User child = userRepository.findById(childId).orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
 
         // 오늘의 미션이 존재하는지 확인
         LocalDateTime now = LocalDateTime.now();
