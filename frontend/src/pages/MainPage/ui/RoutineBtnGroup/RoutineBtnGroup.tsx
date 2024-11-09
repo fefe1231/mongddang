@@ -1,13 +1,21 @@
 /** @jsxImportSource @emotion/react */
 
 import { Icon } from '@/shared/ui/Icon';
-import { container, dietCss, endBtnCss, routineGroupCss, timerCss } from './RoutineBtnGroup.styles';
+import {
+  container,
+  dietCss,
+  endBtnCss,
+  routineGroupCss,
+  timerCss,
+} from './RoutineBtnGroup.styles';
 import { Typography } from '@/shared/ui/Typography';
 import { Button } from '@/shared/ui/Button';
 
 type RoutineBtnGroupProps = {
+  endRoutine: () => void;
   handleDietModal: () => void;
   routine: string;
+  handleEndEatAlert: (status:boolean) => void;
 };
 
 const RoutineBtnGroup = (props: RoutineBtnGroupProps) => {
@@ -45,7 +53,7 @@ const RoutineBtnGroup = (props: RoutineBtnGroupProps) => {
             fontSize="1"
             isShadow
             variant="contained"
-            handler={() => {}}
+            handler={() => {props.handleEndEatAlert(true)}}
             css={endBtnCss}
           >
             먹기 끝

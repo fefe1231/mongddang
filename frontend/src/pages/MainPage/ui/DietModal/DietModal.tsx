@@ -17,13 +17,12 @@ import { debounce } from 'lodash';
 import { saveDiet } from '../../api/dietApi';
 
 type DietModalProps = {
+  accessToken: string | null;
   closeDietModal: () => void;
   startEat: () => void;
 };
 
 const DietModal = (props: DietModalProps) => {
-  // 엑세스 토큰
-  const accessToken = localStorage.getItem('accessToken');
   const [selectedMealTime, setSelectedMealTime] = useState('breakfast');
   const [isDisabled, setIsDisabled] = useState(true);
   const [diet, setDiet] = useState('');
@@ -132,7 +131,9 @@ const DietModal = (props: DietModalProps) => {
             isShadow
             scale="A200"
             variant="contained"
-            handler={()=>{handleSaveDiet(accessToken, selectedMealTime, dietImgFile, diet)}}
+            handler={() => {
+              handleSaveDiet(props.accessToken, selectedMealTime, dietImgFile, diet);
+            }}
             disabled={isDisabled}
           >
             저장하고 밥 먹기 시작

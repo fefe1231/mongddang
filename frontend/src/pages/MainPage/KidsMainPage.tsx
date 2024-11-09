@@ -22,12 +22,15 @@ import DietModal from './ui/DietModal/DietModal';
 import MailBox from './ui/MailBox/MailBox';
 import { useNavigate } from 'react-router-dom';
 import RoutineBtnGroup from './ui/RoutineBtnGroup/RoutineBtnGroup';
+import { EndEatAlert } from './ui/Alerts/Alerts';
 
 const KidsMainPage = () => {
   const navigate = useNavigate();
+  const accessToken = localStorage.getItem('accessToken');
   const [openDietModal, setOpenDietModal] = useState(false);
   const [openMailBox, setOpenMailBox] = useState(false);
   const [routine, setRoutine] = useState('');
+  const [openEndEatAlert, setOpenEndEatAlert] = useState(false);
 
   const handleDietModal = () => {
     setOpenDietModal(true);
@@ -40,8 +43,16 @@ const KidsMainPage = () => {
     setOpenMailBox(false);
   };
 
+  const endRoutine = () => {
+    setRoutine('');
+  };
+
   const startEat = () => {
     setRoutine('diet');
+  };
+
+  const handleEndEatAlert = (status: boolean) => {
+    setOpenEndEatAlert(status);
   };
 
   // 바텀바 url 이동
@@ -118,8 +129,10 @@ const KidsMainPage = () => {
           </div>
           {/* 일상생활 버튼 3종 */}
           <RoutineBtnGroup
+            endRoutine={endRoutine}
             handleDietModal={handleDietModal}
             routine={'diet'}
+            handleEndEatAlert={handleEndEatAlert}
           />
 
           {/* 바텀바 */}
@@ -137,11 +150,13 @@ const KidsMainPage = () => {
 
       {/* 식단 등록 모달 */}
       {openDietModal && (
-        <DietModal closeDietModal={closeDietModal} startEat={startEat} />
+        <DietModal accessToken={accessToken} closeDietModal={closeDietModal} startEat={startEat} />
       )}
 
       {/* 알림창 */}
       {openMailBox && <MailBox closeMailBox={closeMailBox} />}
+
+      {openEndEatAlert && <EndEatAlert handleEndEatAlert={handleEndEatAlert} />}
     </div>
   );
 };

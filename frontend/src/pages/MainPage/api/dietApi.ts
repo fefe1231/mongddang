@@ -1,5 +1,6 @@
 import { api } from '@/shared/api/interceptors';
 
+// 식단 저장 & 식사 시작하기
 export const saveDiet = (
   accessToken: string | null,
   mealTime: string,
@@ -36,4 +37,22 @@ export const saveDiet = (
       });
   }
   return;
+};
+
+// 식사 종료하기
+export const endEating = (accessToken: string | null) => {
+  return api({
+    method: 'PATCH',
+    url: '/api/record/meal/end',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
+  .then((res)=>{
+    console.log(res.data)
+    return res.data
+  })
+  .catch((err)=>{
+    console.log(err)
+  })
 };
