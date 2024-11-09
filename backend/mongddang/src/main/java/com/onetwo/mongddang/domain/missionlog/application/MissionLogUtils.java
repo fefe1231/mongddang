@@ -38,7 +38,7 @@ public class MissionLogUtils {
         // 오늘의 미션이 존재하는지 확인
         if (missionLogRepository.existsByChildAndCreatedAtBetween(child, LocalDate.now().atStartOfDay(), LocalDate.now().atTime(23, 59, 59)
         )) {
-            log.info(CustomMissionLogErrors.MISSION_ALREADY_CREATED.getMessage());
+            log.info("오늘의 미션이 이미 생성되어 있습니다.");
             return;
         }
 
