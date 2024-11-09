@@ -2,10 +2,14 @@
 
 import { IconTypo } from '@/shared/ui/IconTypo';
 import { btn, btnGroup } from './MenuBtnGroup.styles';
-import { menuBtnData } from '../../constants/menuBtnData';
 import { useNavigate } from 'react-router-dom';
+import { menuBtnData } from '../menuBtnData';
 
-const MenuBtnGroup = () => {
+type MenuBtnGroupProps = {
+  userRole: 'child' | 'adult';
+};
+
+const MenuBtnGroup = (props: MenuBtnGroupProps) => {
   const navigate = useNavigate();
   return (
     <div css={btnGroup}>
@@ -18,7 +22,7 @@ const MenuBtnGroup = () => {
             }}
             key={`menuBtn-${i}`}
           >
-            <IconTypo icon={item.icon} menu={item.menu} />
+            <IconTypo icon={item.icon} menu={item.menu[props.userRole]} />
           </div>
         );
       })}
