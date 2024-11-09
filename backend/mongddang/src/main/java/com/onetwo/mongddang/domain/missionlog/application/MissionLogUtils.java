@@ -3,6 +3,7 @@ package com.onetwo.mongddang.domain.missionlog.application;
 
 import com.onetwo.mongddang.common.annotation.ChildRequired;
 import com.onetwo.mongddang.domain.missionlog.dto.MissionDto;
+import com.onetwo.mongddang.domain.missionlog.errors.CustomMissionLogErrors;
 import com.onetwo.mongddang.domain.missionlog.model.MissionLog;
 import com.onetwo.mongddang.domain.missionlog.repository.MissionLogRepository;
 import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,10 +36,9 @@ public class MissionLogUtils {
         User child = userRepository.findById(childId).orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
 
         // 오늘의 미션이 존재하는지 확인
-        LocalDateTime now = LocalDateTime.now();
-        if (missionLogRepository.existsByChildAndCreatedAtBetween(child, now.withHour(0).withMinute(0).withSecond(0), now.withHour(23).withMinute(59).withSecond(59)
+        if (missionLogRepository.existsByChildAndCreatedAtBetween(child, LocalDate.now().atStartOfDay(), LocalDate.now().atTime(23, 59, 59)
         )) {
-            log.info("이미 오늘의 미션을 생성했습니다. (In English : Already created today's mission.)");
+            log.info(CustomMissionLogErrors.MISSION_ALREADY_CREATED.getMessage());
             return;
         }
 
@@ -49,7 +50,7 @@ public class MissionLogUtils {
                     .category(mission)
                     .reward(3L)
                     .status(MissionDto.Status.not_rewardable)
-                    .createdAt(now)
+                    .createdAt(LocalDateTime.now())
                     .build();
             todayMissionList.add(todayMission);
         }
