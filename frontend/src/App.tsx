@@ -11,6 +11,7 @@ import { Report } from './pages/report';
 import { RecordPage, TodayRecordPage } from './pages/record';
 import { Encyclopedia } from './pages/Encyclopedia';
 import { SignUp } from './pages/Signup';
+import ProtectorMain from './pages/protectormain/ProtectorMain';
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
           <Route path="/report" element={<Report />} />
           <Route path="/record" element={<RecordPage />} />
           <Route path="/record/:date" element={<TodayRecordPage />} />
+          <Route path="/protector-main" element={<ProtectorMain />} />
         </Routes>
       </Router>
     </GoogleOAuthProvider>
