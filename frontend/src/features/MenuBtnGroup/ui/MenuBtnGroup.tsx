@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { menuBtnData } from '../menuBtnData';
 
 type MenuBtnGroupProps = {
-  userRole: 'child' | 'adult';
+  userRole: 'child' | 'protector';
 };
 
 const MenuBtnGroup = (props: MenuBtnGroupProps) => {
