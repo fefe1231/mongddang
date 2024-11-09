@@ -18,6 +18,7 @@ import { saveDiet } from '../../api/dietApi';
 
 type DietModalProps = {
   closeDietModal: () => void;
+  startEat: () => void;
 };
 
 const DietModal = (props: DietModalProps) => {
@@ -63,7 +64,27 @@ const DietModal = (props: DietModalProps) => {
     };
     return handleDisabledBtn();
   }, [diet, dietImgFile]);
-  console.log(diet, dietImgFile);
+
+  // 식단 저장
+  const handleSaveDiet = async (
+    accessToken: string | null,
+    selectedMealTime: string,
+    dietImgFile: File | null,
+    diet: string
+  ) => {
+    try {
+      const response = await saveDiet(
+        accessToken,
+        selectedMealTime,
+        dietImgFile,
+        diet
+      );
+      if (response.code === 200) {
+        props.closeDietModal();
+        props.startEat();
+      }
+    } catch {}
+  };
 
   return (
     <div>
@@ -111,9 +132,7 @@ const DietModal = (props: DietModalProps) => {
             isShadow
             scale="A200"
             variant="contained"
-            handler={() => {
-              saveDiet(accessToken, selectedMealTime, dietImgFile, diet);
-            }}
+            handler={()=>{handleSaveDiet(accessToken, selectedMealTime, dietImgFile, diet)}}
             disabled={isDisabled}
           >
             저장하고 밥 먹기 시작
