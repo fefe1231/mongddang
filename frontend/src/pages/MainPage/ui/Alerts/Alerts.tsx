@@ -180,6 +180,10 @@ export const EndRoutineAlert = (props: BloodSugarProps) => {
             <Typography color="dark" size="1" weight={500}>
               🏀 운동 끝! 완전 멋져 🏀
             </Typography>
+          ) : props.currentRoutine === '수면 끝' ? (
+            <Typography color="dark" size="1" weight={500}>
+              🌅 잘 잤어? 좋은 하루 보내 🌅
+            </Typography>
           ) : (
             <></>
           )}
