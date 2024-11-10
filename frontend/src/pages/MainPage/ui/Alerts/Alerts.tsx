@@ -8,6 +8,7 @@ import {
 } from './Alerts.styles';
 import { endEating } from '../../api/dietApi';
 import { Typography } from '@/shared/ui/Typography';
+import { startExercise } from '../../api/exerciseApi';
 
 type AskRoutineAlertProps = {
   accessToken: string | null;
@@ -25,6 +26,14 @@ type BloodSugarProps = {
 
 // 루틴 시작 여부 질문 알림
 export const AskStartRoutineAlert = (props: AskRoutineAlertProps) => {
+  const handleStartRoutine = async () => {
+    if (props.currentRoutine === '운동 준비') {
+      const response = await startExercise();
+      if (response.code === 200) {
+        props.handleBloodSugar(response.data.bloodSugarLevel);
+      }
+    }
+  };
   return (
     <Notification
       ment={props.currentRoutine === '운동 준비' ? '운동 할거야?' : ''}
@@ -39,6 +48,7 @@ export const AskStartRoutineAlert = (props: AskRoutineAlertProps) => {
       bluehandler={() => {
         props.handleAlert('startRoutine');
         props.changeRoutine('운동 중');
+        handleStartRoutine()
       }}
       redHandler={() => {
         props.handleAlert('');

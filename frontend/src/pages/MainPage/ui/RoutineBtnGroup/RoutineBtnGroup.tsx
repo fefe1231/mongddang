@@ -21,7 +21,9 @@ type RoutineBtnGroupProps = {
 const RoutineBtnGroup = (props: RoutineBtnGroupProps) => {
   return (
     <div css={container}>
-      {props.currentRoutine === '' || props.currentRoutine === '먹기 끝' ? (
+      {props.currentRoutine === '' ||
+      props.currentRoutine === '먹기 끝' ||
+      props.currentRoutine === '운동 끝' ? (
         <div css={routineGroupCss}>
           <Icon
             size={2.5}
@@ -31,10 +33,13 @@ const RoutineBtnGroup = (props: RoutineBtnGroupProps) => {
           >
             <img alt="icon-0" src="/img/%EB%A7%90%EB%9E%911.png" />
           </Icon>
-          <Icon size={2.5} onClick={()=>{
-            props.changeRoutine('운동 준비')
-            props.handleAlert('askStartRoutine')
-          }}>
+          <Icon
+            size={2.5}
+            onClick={() => {
+              props.changeRoutine('운동 준비');
+              props.handleAlert('askStartRoutine');
+            }}
+          >
             <img alt="icon-1" src="/img/%EB%A7%90%EB%9E%912.png" />
           </Icon>
           <Icon size={2.5}>
