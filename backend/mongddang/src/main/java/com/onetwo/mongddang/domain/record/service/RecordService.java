@@ -298,9 +298,9 @@ public class RecordService {
     public ResponseDto startMeal(Long childId, String contentJson, MultipartFile imageFile, String mealTime) {
         log.info("startMeal childId: {}", childId);
 
-        // JSON 형식 검증
+        // JSON 형식이 리스트 형식임을 검사
         try {
-            jsonUtils.checkJsonTypeWithDishObjectOrList(contentJson);
+            jsonUtils.checkJsonTypeList(contentJson);
         } catch (Exception e) {
             throw new RestApiException(CustomRecordErrorCode.BAD_INGREDIENT_INPUT);
         }

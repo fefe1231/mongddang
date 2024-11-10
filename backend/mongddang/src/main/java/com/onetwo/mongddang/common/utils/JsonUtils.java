@@ -14,7 +14,7 @@ import java.io.IOException;
 @Service
 public class JsonUtils {
 
-    public void checkJsonTypeWithDishObjectOrList(String contentJson) throws JsonProcessingException {
+    public void checkJsonTypeList(String contentJson) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode content = objectMapper.readTree(contentJson);
 

@@ -19,7 +19,7 @@ public enum CustomRecordErrorCode implements ErrorCode {
     MEAL_NOT_STARTED(HttpStatus.BAD_REQUEST, "RE007", "식사 기록이 시작되지 않았습니다."),
     MEAL_RECORD_NOT_FOUND(HttpStatus.NOT_FOUND, "RE008", "식사 기록을 찾을 수 없습니다."),
     MEAL_ALREADY_ENDED(HttpStatus.BAD_REQUEST, "RE09", "이미 식사 기록이 종료되었습니다."),
-    BAD_INGREDIENT_INPUT(HttpStatus.BAD_REQUEST, "RE010", "잘못된 식재료 입력입니다."),
+    BAD_INGREDIENT_INPUT(HttpStatus.BAD_REQUEST, "RE010", "식재료 입력은 배열만 허용됩니다."),
     ;
 
     private final HttpStatus httpStatus;
