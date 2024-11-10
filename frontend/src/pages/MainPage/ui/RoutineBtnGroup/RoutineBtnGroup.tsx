@@ -14,14 +14,14 @@ import { Button } from '@/shared/ui/Button';
 type RoutineBtnGroupProps = {
   changeRoutine: (currentRoutine: string) => void;
   handleDietModal: () => void;
-  routine: string;
+  routineValue: string;
   handleAlert: (status: string) => void;
 };
 
 const RoutineBtnGroup = (props: RoutineBtnGroupProps) => {
   return (
     <div css={container}>
-      {props.routine === '' || props.routine === '먹기 끝' ? (
+      {props.routineValue === '' || props.routineValue === '먹기 끝' ? (
         <div css={routineGroupCss}>
           <Icon
             size={2.5}
@@ -42,7 +42,7 @@ const RoutineBtnGroup = (props: RoutineBtnGroupProps) => {
         <div css={dietCss}>
           <div css={timerCss}>
             <Typography color="dark" size="1" weight={500}>
-              {props.routine}
+              {props.routineValue}
             </Typography>
             <Typography color="dark" size="1" weight={400}>
               00:01

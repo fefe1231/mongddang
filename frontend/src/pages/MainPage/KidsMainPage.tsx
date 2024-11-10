@@ -17,7 +17,7 @@ import { IconTypo } from '@/shared/ui/IconTypo';
 import CurrentBloodSugar from './ui/CurrentBloodSugar/CurrentBloodSugar';
 import MainCharacter from '@/assets/img/말랑1.png';
 import ChatBubble from './ui/ChatBubble/ChatBubble';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DietModal from './ui/DietModal/DietModal';
 import MailBox from './ui/MailBox/MailBox';
 import { useNavigate } from 'react-router-dom';
@@ -27,15 +27,24 @@ import {
   EndRoutineAlert,
   StartRoutineAlert,
 } from './ui/Alerts/Alerts';
+import { getRoutine, setRoutine } from './hooks/useRoutineStatus';
 
 const KidsMainPage = () => {
   const navigate = useNavigate();
   const accessToken = localStorage.getItem('accessToken');
   const [openDietModal, setOpenDietModal] = useState(false);
   const [openMailBox, setOpenMailBox] = useState(false);
-  const [routine, setRoutine] = useState('');
   const [alertStatus, setAlertStatus] = useState('');
   const [alertBloodSugar, setAlertBloodSugar] = useState(0);
+  const [routineValue, setRoutineValue] = useState<string>('');
+
+  useEffect(() => {
+    const fetchRoutine = async () => {
+      const routineValue = await getRoutine();
+      setRoutineValue(routineValue);
+    };
+    fetchRoutine;
+  }, [routineValue]);
 
   const handleDietModal = () => {
     setOpenDietModal(true);
@@ -142,7 +151,7 @@ const KidsMainPage = () => {
           <RoutineBtnGroup
             changeRoutine={changeRoutine}
             handleDietModal={handleDietModal}
-            routine={routine}
+            routineValue={routineValue}
             handleAlert={handleAlert}
           />
 
@@ -176,14 +185,14 @@ const KidsMainPage = () => {
       {alertStatus === 'startRoutine' ? (
         // 루틴 시작 혈당 알림
         <StartRoutineAlert
-          routine={routine}
+          routineValue={routineValue}
           bloodSugar={alertBloodSugar}
           handleAlert={handleAlert}
         />
       ) : alertStatus === 'askEndRoutine' ? (
         // 루틴 종료 여부 질문 알림
         <AskEndRoutineAlert
-          routine={routine}
+          routineValue={routineValue}
           accessToken={accessToken}
           handleAlert={handleAlert}
           changeRoutine={changeRoutine}
@@ -192,7 +201,7 @@ const KidsMainPage = () => {
       ) : alertStatus === 'endRoutine' ? (
         // 루틴 종료 혈당 알림
         <EndRoutineAlert
-          routine={routine}
+          routineValue={routineValue}
           bloodSugar={alertBloodSugar}
           handleAlert={handleAlert}
         />
