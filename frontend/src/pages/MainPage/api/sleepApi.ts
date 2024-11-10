@@ -14,3 +14,18 @@ export const startSleep = () => {
       return err;
     });
 };
+
+export const endSleep = () => {
+  return api({
+    method: 'PATCH',
+    url: '/api/record/sleep/end',
+  })
+    .then((res) => {
+      console.log(res.data);
+      return res.data;
+    })
+    .catch((err) => {
+      console.log(err);
+      return err;
+    });
+};

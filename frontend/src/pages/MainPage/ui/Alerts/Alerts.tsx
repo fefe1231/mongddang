@@ -9,7 +9,7 @@ import {
 import { endEating } from '../../api/dietApi';
 import { Typography } from '@/shared/ui/Typography';
 import { endExercise, startExercise } from '../../api/exerciseApi';
-import { startSleep } from '../../api/sleepApi';
+import { endSleep, startSleep } from '../../api/sleepApi';
 
 type AskRoutineAlertProps = {
   accessToken: string | null;
@@ -123,6 +123,11 @@ export const AskEndRoutineAlert = (props: AskRoutineAlertProps) => {
       }
     } else if (props.currentRoutine === '운동 중') {
       const response = await endExercise();
+      if (response.code === 200) {
+        props.handleBloodSugar(response.data.bloodSugarLevel);
+      }
+    } else if (props.currentRoutine === '자는 중') {
+      const response = await endSleep();
       if (response.code === 200) {
         props.handleBloodSugar(response.data.bloodSugarLevel);
       }
