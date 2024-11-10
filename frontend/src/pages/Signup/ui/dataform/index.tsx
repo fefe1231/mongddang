@@ -14,7 +14,6 @@ import { AxiosResponse } from 'axios';
 import { signUp } from '../../api/api';
 import { UserService } from '@/shared/api/user/user.service';
 import { useUserStore } from '@/entities/user/model/store';
-import { UserInfo } from '@/shared/api/user/user.type';
 
 export const DataForm = ({ role }: { role: UserRole }) => {
   const [gender, setGender] = useState<'male' | 'female' | undefined>(
