@@ -9,6 +9,7 @@ import {
 import { endEating } from '../../api/dietApi';
 import { Typography } from '@/shared/ui/Typography';
 import { endExercise, startExercise } from '../../api/exerciseApi';
+import { startSleep } from '../../api/sleepApi';
 
 type AskRoutineAlertProps = {
   accessToken: string | null;
@@ -29,6 +30,11 @@ export const AskStartRoutineAlert = (props: AskRoutineAlertProps) => {
   const handleStartRoutine = async () => {
     if (props.currentRoutine === '운동 준비') {
       const response = await startExercise();
+      if (response.code === 200) {
+        props.handleBloodSugar(response.data.bloodSugarLevel);
+      }
+    } else if (props.currentRoutine === '자는 준비') {
+      const response = await startSleep();
       if (response.code === 200) {
         props.handleBloodSugar(response.data.bloodSugarLevel);
       }
