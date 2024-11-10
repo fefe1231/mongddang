@@ -3,6 +3,7 @@ package com.onetwo.mongddang.domain.missionlog.application;
 
 import com.onetwo.mongddang.common.annotation.ChildRequired;
 import com.onetwo.mongddang.domain.missionlog.dto.MissionDto;
+import com.onetwo.mongddang.domain.missionlog.errors.CustomMissionLogErrors;
 import com.onetwo.mongddang.domain.missionlog.model.MissionLog;
 import com.onetwo.mongddang.domain.missionlog.repository.MissionLogRepository;
 import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
@@ -74,9 +75,7 @@ public class MissionLogUtils {
             log.info("미션을 찾지 못한 경우 미션 생성 (In english: Create mission if mission not found)");
             this.createMission(child.getId());
             log.info("미션 생성 완료 (In english: Mission creation completed)");
-
-            // 미션 다시 조회
-            todayMissionLog = missionLogRepository.findTopByChildAndCreatedAtBetweenAndCategoryIs(child, LocalDate.now().atStartOfDay(), LocalDate.now().atTime(23, 59, 59), category).orElse(null);
+            throw new RestApiException(CustomMissionLogErrors.TODAY_MISSION_CREATED);
         }
 
         log.info("미션 업데이트 시도 (In english: Attempt to update mission)");
