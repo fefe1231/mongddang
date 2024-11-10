@@ -24,6 +24,7 @@ import { useNavigate } from 'react-router-dom';
 import RoutineBtnGroup from './ui/RoutineBtnGroup/RoutineBtnGroup';
 import {
   AskEndRoutineAlert,
+  AskStartRoutineAlert,
   EndRoutineAlert,
   StartRoutineAlert,
 } from './ui/Alerts/Alerts';
@@ -36,9 +37,10 @@ const KidsMainPage = () => {
   const [openMailBox, setOpenMailBox] = useState(false);
   const [alertStatus, setAlertStatus] = useState('');
   const [alertBloodSugar, setAlertBloodSugar] = useState(0);
-  const [initialRoutine, setInitialRoutine] = useState<string>('')
+  const [initialRoutine, setInitialRoutine] = useState<string>('');
   const [currentRoutine, setCurrentRoutine] = useState(initialRoutine);
 
+  // 초기 루틴 상태 조회
   useEffect(() => {
     const fetchRoutine = async () => {
       const routineValue = await getRoutine();
@@ -63,7 +65,7 @@ const KidsMainPage = () => {
   // 일상 수행 상태 관리
   const changeRoutine = (currentRoutine: string) => {
     console.log('루틴 변경', currentRoutine);
-    setCurrentRoutine(currentRoutine)
+    setCurrentRoutine(currentRoutine);
     setRoutine(currentRoutine);
   };
 
@@ -187,32 +189,43 @@ const KidsMainPage = () => {
       {/* 알림창 */}
       {openMailBox && <MailBox closeMailBox={closeMailBox} />}
 
-      {alertStatus === 'startRoutine' ? (
-        // 루틴 시작 혈당 알림
-        <StartRoutineAlert
-          currentRoutine={currentRoutine}
-          bloodSugar={alertBloodSugar}
-          handleAlert={handleAlert}
-        />
-      ) : alertStatus === 'askEndRoutine' ? (
-        // 루틴 종료 여부 질문 알림
-        <AskEndRoutineAlert
-          currentRoutine={currentRoutine}
-          accessToken={accessToken}
-          handleAlert={handleAlert}
-          changeRoutine={changeRoutine}
-          handleBloodSugar={handleBloodSugar}
-        />
-      ) : alertStatus === 'endRoutine' ? (
-        // 루틴 종료 혈당 알림
-        <EndRoutineAlert
-          currentRoutine={currentRoutine}
-          bloodSugar={alertBloodSugar}
-          handleAlert={handleAlert}
-        />
-      ) : (
-        <></>
-      )}
+      {
+        // 루틴 시작 여부 질문 알림
+        alertStatus === 'askStartRoutine' ? (
+          <AskStartRoutineAlert
+            currentRoutine={currentRoutine}
+            accessToken={accessToken}
+            handleAlert={handleAlert}
+            changeRoutine={changeRoutine}
+            handleBloodSugar={handleBloodSugar}
+          />
+        ) : alertStatus === 'startRoutine' ? (
+          // 루틴 시작 혈당 알림
+          <StartRoutineAlert
+            currentRoutine={currentRoutine}
+            bloodSugar={alertBloodSugar}
+            handleAlert={handleAlert}
+          />
+        ) : alertStatus === 'askEndRoutine' ? (
+          // 루틴 종료 여부 질문 알림
+          <AskEndRoutineAlert
+            currentRoutine={currentRoutine}
+            accessToken={accessToken}
+            handleAlert={handleAlert}
+            changeRoutine={changeRoutine}
+            handleBloodSugar={handleBloodSugar}
+          />
+        ) : alertStatus === 'endRoutine' ? (
+          // 루틴 종료 혈당 알림
+          <EndRoutineAlert
+            currentRoutine={currentRoutine}
+            bloodSugar={alertBloodSugar}
+            handleAlert={handleAlert}
+          />
+        ) : (
+          <></>
+        )
+      }
     </div>
   );
 };

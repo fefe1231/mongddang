@@ -31,7 +31,10 @@ const RoutineBtnGroup = (props: RoutineBtnGroupProps) => {
           >
             <img alt="icon-0" src="/img/%EB%A7%90%EB%9E%911.png" />
           </Icon>
-          <Icon size={2.5}>
+          <Icon size={2.5} onClick={()=>{
+            props.changeRoutine('운동 준비')
+            props.handleAlert('askStartRoutine')
+          }}>
             <img alt="icon-1" src="/img/%EB%A7%90%EB%9E%912.png" />
           </Icon>
           <Icon size={2.5}>
