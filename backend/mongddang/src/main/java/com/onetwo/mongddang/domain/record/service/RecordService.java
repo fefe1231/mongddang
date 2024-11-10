@@ -6,6 +6,8 @@ import com.onetwo.mongddang.common.s3.S3ImageService;
 import com.onetwo.mongddang.common.s3.errors.CustomS3ErrorCode;
 import com.onetwo.mongddang.common.utils.DateTimeUtils;
 import com.onetwo.mongddang.common.utils.JsonUtils;
+import com.onetwo.mongddang.domain.game.gameLog.application.GameLogUtils;
+import com.onetwo.mongddang.domain.game.gameLog.model.GameLog;
 import com.onetwo.mongddang.domain.missionlog.application.MissionLogUtils;
 import com.onetwo.mongddang.domain.missionlog.dto.MissionDto;
 import com.onetwo.mongddang.domain.missionlog.repository.MissionLogRepository;
@@ -43,8 +45,9 @@ public class RecordService {
     private final DateTimeUtils dateTimeUtils;
     private final S3ImageService s3ImageService;
     private final JsonUtils jsonUtils;
-    private final MissionLogRepository missionLogRepository;
     private final MissionLogUtils missionLogUtils;
+    private final GameLogUtils gameLogUtils;
+
 
     /**
      * 환아의 활동 기록 조회
@@ -164,6 +167,9 @@ public class RecordService {
         // 미션 업데이트
         missionLogUtils.completeMission(child, MissionDto.Mission.exercise);
 
+        // 게임 로그 업데이트
+        gameLogUtils.addGameLog(child, GameLog.GameLogCategory.exercise_count);
+
         return ResponseDto.builder()
                 .message("운동을 시작합니다.")
                 .build();
@@ -244,6 +250,9 @@ public class RecordService {
 
         recordRepository.save(sleepRecord);
         log.info("수면 시작 기록 완료. 시작시간 : {}", sleepRecord.getStartTime());
+
+        // 게임 로그 업데이트
+        gameLogUtils.addGameLog(child, GameLog.GameLogCategory.sleeping_count);
 
         return ResponseDto.builder()
                 .message("수면을 시작합니다.")
@@ -349,6 +358,9 @@ public class RecordService {
                 .isDone(false)
                 .mealTime(Record.MealTimeType.valueOf(mealTime))
                 .build();
+
+        // 게임 로그 업데이트
+        gameLogUtils.addGameLog(child, GameLog.GameLogCategory.meal_count);
 
         recordRepository.save(mealRecord);
         log.info("식사 시작 기록 완료. 시작시간 : {}", mealRecord.getStartTime());
@@ -502,6 +514,9 @@ public class RecordService {
 
         // 미션 업데이트
         missionLogUtils.completeMission(child, MissionDto.Mission.first_medication);
+
+        // 게임 로그 업데이트
+        gameLogUtils.addGameLog(child, GameLog.GameLogCategory.medication_count);
 
         return ResponseDto.builder()
                 .message("복약을 확인합니다.")
