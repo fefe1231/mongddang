@@ -21,39 +21,9 @@ type RoutineBtnGroupProps = {
 const RoutineBtnGroup = (props: RoutineBtnGroupProps) => {
   return (
     <div css={container}>
-      {props.currentRoutine === '' ||
-      props.currentRoutine === '먹기 끝' ||
-      props.currentRoutine === '운동 끝' ||
-      props.currentRoutine === '수면 끝' ? (
-        <div css={routineGroupCss}>
-          <Icon
-            size={2.5}
-            onClick={() => {
-              props.handleDietModal();
-            }}
-          >
-            <img alt="icon-0" src="/img/%EB%A7%90%EB%9E%911.png" />
-          </Icon>
-          <Icon
-            size={2.5}
-            onClick={() => {
-              props.changeRoutine('운동 준비');
-              props.handleAlert('askStartRoutine');
-            }}
-          >
-            <img alt="icon-1" src="/img/%EB%A7%90%EB%9E%912.png" />
-          </Icon>
-          <Icon
-            size={2.5}
-            onClick={() => {
-              props.changeRoutine('수면 준비');
-              props.handleAlert('askStartRoutine');
-            }}
-          >
-            <img alt="icon-2" src="/img/%EB%A7%90%EB%9E%913.png" />
-          </Icon>
-        </div>
-      ) : (
+      {props.currentRoutine === '먹는 중' ||
+      props.currentRoutine === '운동 중' ||
+      props.currentRoutine === '자는 중' ? (
         <div css={dietCss}>
           <div css={timerCss}>
             <Typography color="dark" size="1" weight={500}>
@@ -75,6 +45,35 @@ const RoutineBtnGroup = (props: RoutineBtnGroupProps) => {
           >
             끝내기
           </Button>
+        </div>
+      ) : (
+        <div css={routineGroupCss}>
+          <Icon
+            size={2.5}
+            onClick={() => {
+              props.handleDietModal();
+            }}
+          >
+            <img alt="icon-0" src="/img/%EB%A7%90%EB%9E%911.png" />
+          </Icon>
+          <Icon
+            size={2.5}
+            onClick={() => {
+              props.changeRoutine('운동 준비');
+              props.handleAlert('askStartRoutine');
+            }}
+          >
+            <img alt="icon-1" src="/img/%EB%A7%90%EB%9E%912.png" />
+          </Icon>
+          <Icon
+            size={2.5}
+            onClick={() => {
+              props.changeRoutine('자는 준비');
+              props.handleAlert('askStartRoutine');
+            }}
+          >
+            <img alt="icon-2" src="/img/%EB%A7%90%EB%9E%913.png" />
+          </Icon>
         </div>
       )}
     </div>
