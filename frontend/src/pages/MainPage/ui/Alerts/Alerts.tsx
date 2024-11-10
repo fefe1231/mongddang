@@ -130,7 +130,9 @@ export const AskEndRoutineAlert = (props: AskRoutineAlertProps) => {
           ? '다 먹었어?'
           : props.currentRoutine === '운동 중'
             ? '운동 다 했어?'
-            : ''
+            : props.currentRoutine === '수면 중'
+              ? '이제 일어날거야?'
+              : ''
       }
       twoBtn
       type="confirm"
@@ -140,7 +142,9 @@ export const AskEndRoutineAlert = (props: AskRoutineAlertProps) => {
           ? ['아니, 아직', '응, 다 먹었어!']
           : props.currentRoutine === '운동 중'
             ? ['아니, 아직', '응, 다 했어!']
-            : []
+            : props.currentRoutine === '수면 중'
+              ? ['아니, 더 잘래', '응, 일어났어!']
+              : []
       }
       bluehandler={() => {
         handleEndRoutine();
@@ -149,7 +153,9 @@ export const AskEndRoutineAlert = (props: AskRoutineAlertProps) => {
             ? props.changeRoutine('먹기 끝')
             : props.currentRoutine === '운동 중'
               ? props.changeRoutine('운동 끝')
-              : null;
+              : props.currentRoutine === '수면 중'
+                ? props.changeRoutine('수면 끝')
+                : null;
         }
         props.handleAlert('endRoutine');
       }}
