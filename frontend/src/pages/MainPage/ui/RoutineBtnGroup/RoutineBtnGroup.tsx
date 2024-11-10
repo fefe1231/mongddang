@@ -12,10 +12,10 @@ import { Typography } from '@/shared/ui/Typography';
 import { Button } from '@/shared/ui/Button';
 
 type RoutineBtnGroupProps = {
-  endRoutine: () => void;
+  changeRoutine: (currentRoutine: string) => void;
   handleDietModal: () => void;
   routine: string;
-  handleEndEatAlert: (status:boolean) => void;
+  handleAlert: (status: string) => void;
 };
 
 const RoutineBtnGroup = (props: RoutineBtnGroupProps) => {
@@ -53,7 +53,9 @@ const RoutineBtnGroup = (props: RoutineBtnGroupProps) => {
             fontSize="1"
             isShadow
             variant="contained"
-            handler={() => {props.handleEndEatAlert(true)}}
+            handler={() => {
+              props.handleAlert('askEndEat');
+            }}
             css={endBtnCss}
           >
             먹기 끝

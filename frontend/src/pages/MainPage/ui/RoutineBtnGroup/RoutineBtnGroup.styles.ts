@@ -29,11 +29,12 @@ export const timerCss = css`
   display: flex;
   flex-grow: 1;
   height: 90%;
-  padding: 3%;
+  padding: 1rem;
   align-items: center;
   justify-content: space-around;
   background-color: #fff;
   border-radius: 10px;
+  
 `;
 
 export const endBtnCss = css`

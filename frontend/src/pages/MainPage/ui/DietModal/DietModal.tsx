@@ -19,7 +19,9 @@ import { saveDiet } from '../../api/dietApi';
 type DietModalProps = {
   accessToken: string | null;
   closeDietModal: () => void;
-  startEat: () => void;
+  changeRoutine: (currentRoutine: string) => void;
+  handleAlert: (status: string) => void;
+  handleBloodSugar: (bloodSugar: number) => void;
 };
 
 const DietModal = (props: DietModalProps) => {
@@ -80,7 +82,9 @@ const DietModal = (props: DietModalProps) => {
       );
       if (response.code === 200) {
         props.closeDietModal();
-        props.startEat();
+        props.changeRoutine('diet');
+        props.handleAlert('startEat');
+        props.handleBloodSugar(response.data.bloodSugarLevel);
       }
     } catch {}
   };
@@ -132,7 +136,12 @@ const DietModal = (props: DietModalProps) => {
             scale="A200"
             variant="contained"
             handler={() => {
-              handleSaveDiet(props.accessToken, selectedMealTime, dietImgFile, diet);
+              handleSaveDiet(
+                props.accessToken,
+                selectedMealTime,
+                dietImgFile,
+                diet
+              );
             }}
             disabled={isDisabled}
           >

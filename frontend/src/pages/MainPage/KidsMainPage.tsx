@@ -22,7 +22,11 @@ import DietModal from './ui/DietModal/DietModal';
 import MailBox from './ui/MailBox/MailBox';
 import { useNavigate } from 'react-router-dom';
 import RoutineBtnGroup from './ui/RoutineBtnGroup/RoutineBtnGroup';
-import { EndEatAlert } from './ui/Alerts/Alerts';
+import {
+  EndEatAlert,
+  EndEatBloodSugarAlert,
+  StartEatAlert,
+} from './ui/Alerts/Alerts';
 
 const KidsMainPage = () => {
   const navigate = useNavigate();
@@ -30,7 +34,8 @@ const KidsMainPage = () => {
   const [openDietModal, setOpenDietModal] = useState(false);
   const [openMailBox, setOpenMailBox] = useState(false);
   const [routine, setRoutine] = useState('');
-  const [openEndEatAlert, setOpenEndEatAlert] = useState(false);
+  const [alertStatus, setAlertStatus] = useState('');
+  const [alertBloodSugar, setAlertBloodSugar] = useState(0);
 
   const handleDietModal = () => {
     setOpenDietModal(true);
@@ -43,16 +48,19 @@ const KidsMainPage = () => {
     setOpenMailBox(false);
   };
 
-  const endRoutine = () => {
-    setRoutine('');
+  // 일상 수행 상태 관리
+  const changeRoutine = (currentRoutine: string) => {
+    setRoutine(currentRoutine);
   };
 
-  const startEat = () => {
-    setRoutine('diet');
+  // 알림창 상태 관리
+  const handleAlert = (status: string) => {
+    setAlertStatus(status);
   };
 
-  const handleEndEatAlert = (status: boolean) => {
-    setOpenEndEatAlert(status);
+  // 알림창 혈당 관리
+  const handleBloodSugar = (bloodSugar: number) => {
+    setAlertBloodSugar(bloodSugar);
   };
 
   // 바텀바 url 이동
@@ -65,6 +73,7 @@ const KidsMainPage = () => {
       navigate(`/record/${new Date()}`);
     }
   };
+  console.log('알림창 상태', alertStatus);
 
   return (
     <div css={kidsMainBase}>
@@ -127,12 +136,13 @@ const KidsMainPage = () => {
             <ChatBubble />
             <img src={MainCharacter} alt="" css={mainCharacterCss} />
           </div>
+
           {/* 일상생활 버튼 3종 */}
           <RoutineBtnGroup
-            endRoutine={endRoutine}
+            changeRoutine={changeRoutine}
             handleDietModal={handleDietModal}
-            routine={'diet'}
-            handleEndEatAlert={handleEndEatAlert}
+            routine={routine}
+            handleAlert={handleAlert}
           />
 
           {/* 바텀바 */}
@@ -150,13 +160,38 @@ const KidsMainPage = () => {
 
       {/* 식단 등록 모달 */}
       {openDietModal && (
-        <DietModal accessToken={accessToken} closeDietModal={closeDietModal} startEat={startEat} />
+        <DietModal
+          accessToken={accessToken}
+          closeDietModal={closeDietModal}
+          changeRoutine={changeRoutine}
+          handleAlert={handleAlert}
+          handleBloodSugar={handleBloodSugar}
+        />
       )}
 
       {/* 알림창 */}
       {openMailBox && <MailBox closeMailBox={closeMailBox} />}
 
-      {openEndEatAlert && <EndEatAlert handleEndEatAlert={handleEndEatAlert} />}
+      {alertStatus === 'startEat' ? (
+        // 식사 시작 혈당 알림
+        <StartEatAlert bloodSugar={alertBloodSugar} handleAlert={handleAlert} />
+      ) : alertStatus === 'askEndEat' ? (
+        // 식사 종료 여부 질문 알림
+        <EndEatAlert
+          accessToken={accessToken}
+          handleAlert={handleAlert}
+          changeRoutine={changeRoutine}
+          handleBloodSugar={handleBloodSugar}
+        />
+      ) : alertStatus === 'endEat' ? (
+        // 식사 종료 혈당 알림
+        <EndEatBloodSugarAlert
+          bloodSugar={alertBloodSugar}
+          handleAlert={handleAlert}
+        />
+      ) : (
+        <></>
+      )}
     </div>
   );
 };
