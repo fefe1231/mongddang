@@ -1,7 +1,10 @@
 package com.onetwo.mongddang.common.utils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.onetwo.mongddang.domain.record.errors.CustomRecordErrorCode;
+import com.onetwo.mongddang.errors.exception.RestApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +13,23 @@ import java.io.IOException;
 @Slf4j
 @Service
 public class JsonUtils {
+
+    public void checkJsonTypeWithDishObejctOrList(String contentJson) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode content = objectMapper.readTree(contentJson);
+
+        // 1. 단일 dish 검증
+        if (content.has("dish") && content.get("dish").isTextual()) {
+            String dishValue = content.get("dish").asText();
+            log.info("object type meal content: " + dishValue);
+        }
+        // 2. 리스트 형식 검증
+        else if (content.isArray()) {
+            log.info("list type meal content: ");
+        } else {
+            throw new RestApiException(CustomRecordErrorCode.BAD_INGREDIENT_INPUT);
+        }
+    }
 
     public JsonNode JsonStringToJsonNode(String contentJson) {
 

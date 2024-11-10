@@ -298,8 +298,16 @@ public class RecordService {
     public ResponseDto startMeal(Long childId, String contentJson, MultipartFile imageFile, String mealTime) {
         log.info("startMeal childId: {}", childId);
 
+        // JSON 형식 검증
+        try {
+            jsonUtils.checkJsonTypeWithDishObejctOrList(contentJson);
+        } catch (Exception e) {
+            throw new RestApiException(CustomRecordErrorCode.BAD_INGREDIENT_INPUT);
+        }
+
         // SON 문자열을 JsonNode로 변환
         JsonNode content = jsonUtils.JsonStringToJsonNode(contentJson);
+
 
         User child = userRepository.findById(childId)
                 .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
