@@ -23,9 +23,9 @@ import MailBox from './ui/MailBox/MailBox';
 import { useNavigate } from 'react-router-dom';
 import RoutineBtnGroup from './ui/RoutineBtnGroup/RoutineBtnGroup';
 import {
-  EndEatAlert,
-  EndEatBloodSugarAlert,
-  StartEatAlert,
+  AskEndRoutineAlert,
+  EndRoutineAlert,
+  StartRoutineAlert,
 } from './ui/Alerts/Alerts';
 
 const KidsMainPage = () => {
@@ -44,6 +44,7 @@ const KidsMainPage = () => {
   const closeDietModal = () => {
     setOpenDietModal(false);
   };
+
   const closeMailBox = () => {
     setOpenMailBox(false);
   };
@@ -172,20 +173,26 @@ const KidsMainPage = () => {
       {/* 알림창 */}
       {openMailBox && <MailBox closeMailBox={closeMailBox} />}
 
-      {alertStatus === 'startEat' ? (
-        // 식사 시작 혈당 알림
-        <StartEatAlert bloodSugar={alertBloodSugar} handleAlert={handleAlert} />
-      ) : alertStatus === 'askEndEat' ? (
-        // 식사 종료 여부 질문 알림
-        <EndEatAlert
+      {alertStatus === 'startRoutine' ? (
+        // 루틴 시작 혈당 알림
+        <StartRoutineAlert
+          routine={routine}
+          bloodSugar={alertBloodSugar}
+          handleAlert={handleAlert}
+        />
+      ) : alertStatus === 'askEndRoutine' ? (
+        // 루틴 종료 여부 질문 알림
+        <AskEndRoutineAlert
+          routine={routine}
           accessToken={accessToken}
           handleAlert={handleAlert}
           changeRoutine={changeRoutine}
           handleBloodSugar={handleBloodSugar}
         />
-      ) : alertStatus === 'endEat' ? (
-        // 식사 종료 혈당 알림
-        <EndEatBloodSugarAlert
+      ) : alertStatus === 'endRoutine' ? (
+        // 루틴 종료 혈당 알림
+        <EndRoutineAlert
+          routine={routine}
           bloodSugar={alertBloodSugar}
           handleAlert={handleAlert}
         />

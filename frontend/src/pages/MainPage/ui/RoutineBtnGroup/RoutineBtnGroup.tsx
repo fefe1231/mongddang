@@ -21,7 +21,7 @@ type RoutineBtnGroupProps = {
 const RoutineBtnGroup = (props: RoutineBtnGroupProps) => {
   return (
     <div css={container}>
-      {props.routine === '' ? (
+      {props.routine === '' || props.routine === '먹기 끝' ? (
         <div css={routineGroupCss}>
           <Icon
             size={2.5}
@@ -31,18 +31,18 @@ const RoutineBtnGroup = (props: RoutineBtnGroupProps) => {
           >
             <img alt="icon-0" src="/img/%EB%A7%90%EB%9E%911.png" />
           </Icon>
-          <Icon size={2.5}>
+          <Icon size={2.5} >
             <img alt="icon-1" src="/img/%EB%A7%90%EB%9E%912.png" />
           </Icon>
           <Icon size={2.5}>
             <img alt="icon-2" src="/img/%EB%A7%90%EB%9E%913.png" />
           </Icon>
         </div>
-      ) : props.routine === 'diet' ? (
+      ) : (
         <div css={dietCss}>
           <div css={timerCss}>
             <Typography color="dark" size="1" weight={500}>
-              먹는 중
+              {props.routine}
             </Typography>
             <Typography color="dark" size="1" weight={400}>
               00:01
@@ -54,15 +54,13 @@ const RoutineBtnGroup = (props: RoutineBtnGroupProps) => {
             isShadow
             variant="contained"
             handler={() => {
-              props.handleAlert('askEndEat');
+              props.handleAlert('askEndRoutine');
             }}
             css={endBtnCss}
           >
-            먹기 끝
+            끝내기
           </Button>
         </div>
-      ) : (
-        <></>
       )}
     </div>
   );
