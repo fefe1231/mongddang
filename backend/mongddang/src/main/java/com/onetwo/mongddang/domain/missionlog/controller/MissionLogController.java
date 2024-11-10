@@ -11,9 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -39,18 +37,17 @@ public class MissionLogController {
         return ResponseEntity.ok(responseDto);
     }
 
-    // 미션 생성 api
-//    @PostMapping("")
-//    @ChildRequired
-//    @Tag(name = "Mission API", description = "미션 api")
-//    @Operation(summary = "미션 생성 api", description = "미션을 생성합니다.")
-//    public void createMissionList(HttpServletRequest request) {
-//        log.info("POST /api/mission");
-//
-//        Long childId = jwtExtratService.jwtFindId(request);
-//        missionLogUtils.createMission(childId);
-//
-//        log.info("미션 생성 완료");
-//    }
+    // 미션 보상 수령 api
+    @PostMapping("reward")
+    @ChildRequired
+    @Tag(name = "Mission API", description = "미션 api")
+    @Operation(summary = "미션 보상 수령 api", description = "미션 보상을 수령합니다.")
+    public ResponseEntity<ResponseDto> rewardMission(@RequestParam Long missionId, HttpServletRequest request) {
+        log.info("POST /api/mission");
+
+        Long childId = jwtExtratService.jwtFindId(request);
+        ResponseDto responseDto = missionLogService.rewardMission(missionId, childId);
+        return ResponseEntity.ok(responseDto);
+    }
 
 }

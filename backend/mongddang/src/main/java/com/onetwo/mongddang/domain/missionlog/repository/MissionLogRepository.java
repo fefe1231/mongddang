@@ -18,4 +18,6 @@ public interface MissionLogRepository extends JpaRepository<MissionLog, Long> {
     List<MissionLog> findByChildAndCreatedAtBetween(User child, LocalDateTime localDateTime, LocalDateTime localDateTime1);
 
     Optional<MissionLog> findTopByChildAndCreatedAtBetweenAndCategoryIs(User child, LocalDateTime localDateTimeStart, LocalDateTime localDateTimeEnd, MissionDto.Mission mission);
+
+    Optional<MissionLog> findByIdAndCreatedAtBetween(Long missionId, LocalDateTime localDateTime, LocalDateTime localDateTime1);
 }
