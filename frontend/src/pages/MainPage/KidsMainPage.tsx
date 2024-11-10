@@ -37,14 +37,13 @@ const KidsMainPage = () => {
   const [openMailBox, setOpenMailBox] = useState(false);
   const [alertStatus, setAlertStatus] = useState('');
   const [alertBloodSugar, setAlertBloodSugar] = useState(0);
-  const [initialRoutine, setInitialRoutine] = useState<string>('');
-  const [currentRoutine, setCurrentRoutine] = useState(initialRoutine);
+  const [currentRoutine, setCurrentRoutine] = useState('');
 
   // 초기 루틴 상태 조회
   useEffect(() => {
     const fetchRoutine = async () => {
       const routineValue = await getRoutine();
-      setInitialRoutine(routineValue);
+      setCurrentRoutine(routineValue);
       console.log('루틴 조회', routineValue);
     };
     fetchRoutine();

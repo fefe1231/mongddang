@@ -8,7 +8,7 @@ import {
 } from './Alerts.styles';
 import { endEating } from '../../api/dietApi';
 import { Typography } from '@/shared/ui/Typography';
-import { startExercise } from '../../api/exerciseApi';
+import { endExercise, startExercise } from '../../api/exerciseApi';
 
 type AskRoutineAlertProps = {
   accessToken: string | null;
@@ -48,7 +48,7 @@ export const AskStartRoutineAlert = (props: AskRoutineAlertProps) => {
       bluehandler={() => {
         props.handleAlert('startRoutine');
         props.changeRoutine('운동 중');
-        handleStartRoutine()
+        handleStartRoutine();
       }}
       redHandler={() => {
         props.handleAlert('');
@@ -94,6 +94,11 @@ export const AskEndRoutineAlert = (props: AskRoutineAlertProps) => {
   const handleEndRoutine = async () => {
     if (props.currentRoutine === '식사 중') {
       const response = await endEating(props.accessToken);
+      if (response.code === 200) {
+        props.handleBloodSugar(response.data.bloodSugarLevel);
+      }
+    } else if (props.currentRoutine === '운동 중') {
+      const response = await endExercise();
       if (response.code === 200) {
         props.handleBloodSugar(response.data.bloodSugarLevel);
       }
