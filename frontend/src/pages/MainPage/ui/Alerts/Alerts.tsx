@@ -85,6 +85,10 @@ export const StartRoutineAlert = (props: BloodSugarProps) => {
             <Typography color="dark" size="1" weight={500}>
               🏀 다치지 않기! 🏀
             </Typography>
+          ) : props.currentRoutine === '수면 중' ? (
+            <Typography color="dark" size="1" weight={500}>
+              🌠 좋은 꿈 꿔! 🌠
+            </Typography>
           ) : (
             <></>
           )}
