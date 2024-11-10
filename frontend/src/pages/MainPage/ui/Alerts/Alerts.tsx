@@ -12,13 +12,13 @@ import { Typography } from '@/shared/ui/Typography';
 type AskEndRoutineAlertProps = {
   accessToken: string | null;
   handleAlert: (status: string) => void;
-  routineValue: string;
+  currentRoutine: string;
   changeRoutine: (currentRoutine: string) => void;
   handleBloodSugar: (bloodSugar: number) => void;
 };
 
 type BloodSugarProps = {
-  routineValue: string;
+  currentRoutine: string;
   bloodSugar: number;
   handleAlert: (status: string) => void;
 };
@@ -29,7 +29,7 @@ export const StartRoutineAlert = (props: BloodSugarProps) => {
     <Notification
       ment={
         <div css={bloodSugarTextCss}>
-          {props.routineValue === '먹는 중' ? (
+          {props.currentRoutine === '먹는 중' ? (
             <Typography color="dark" size="1" weight={500}>
               🍽️ 맛있게 먹어! 🍽️
             </Typography>
@@ -62,12 +62,14 @@ export const AskEndRoutineAlert = (props: AskEndRoutineAlertProps) => {
 
   return (
     <Notification
-      ment={props.routineValue === '먹는 중' ? '다 먹었어?' : ''}
+      ment={props.currentRoutine === '먹는 중' ? '다 먹었어?' : ''}
       twoBtn
       type="confirm"
       css={endEatAlertCss}
       children={
-        props.routineValue === '먹는 중' ? ['아니, 아직', '응, 다 먹었어!'] : []
+        props.currentRoutine === '먹는 중'
+          ? ['아니, 아직', '응, 다 먹었어!']
+          : []
       }
       bluehandler={() => {
         handleEndRoutine();
@@ -87,7 +89,7 @@ export const EndRoutineAlert = (props: BloodSugarProps) => {
     <Notification
       ment={
         <div css={bloodSugarTextCss}>
-          {props.routineValue === '먹기 끝' ? (
+          {props.currentRoutine === '먹기 끝' ? (
             <Typography color="dark" size="1" weight={500}>
               🍽️ 다 먹었다! 🍽️
             </Typography>

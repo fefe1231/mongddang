@@ -36,15 +36,17 @@ const KidsMainPage = () => {
   const [openMailBox, setOpenMailBox] = useState(false);
   const [alertStatus, setAlertStatus] = useState('');
   const [alertBloodSugar, setAlertBloodSugar] = useState(0);
-  const [routineValue, setRoutineValue] = useState<string>('');
+  const [initialRoutine, setInitialRoutine] = useState<string>('')
+  const [currentRoutine, setCurrentRoutine] = useState(initialRoutine);
 
   useEffect(() => {
     const fetchRoutine = async () => {
       const routineValue = await getRoutine();
-      setRoutineValue(routineValue);
+      setInitialRoutine(routineValue);
+      console.log('루틴 조회', routineValue);
     };
-    fetchRoutine;
-  }, [routineValue]);
+    fetchRoutine();
+  }, []);
 
   const handleDietModal = () => {
     setOpenDietModal(true);
@@ -60,6 +62,8 @@ const KidsMainPage = () => {
 
   // 일상 수행 상태 관리
   const changeRoutine = (currentRoutine: string) => {
+    console.log('루틴 변경', currentRoutine);
+    setCurrentRoutine(currentRoutine)
     setRoutine(currentRoutine);
   };
 
@@ -84,6 +88,7 @@ const KidsMainPage = () => {
     }
   };
   console.log('알림창 상태', alertStatus);
+  console.log('루틴 상태', currentRoutine);
 
   return (
     <div css={kidsMainBase}>
@@ -151,7 +156,7 @@ const KidsMainPage = () => {
           <RoutineBtnGroup
             changeRoutine={changeRoutine}
             handleDietModal={handleDietModal}
-            routineValue={routineValue}
+            currentRoutine={currentRoutine}
             handleAlert={handleAlert}
           />
 
@@ -185,14 +190,14 @@ const KidsMainPage = () => {
       {alertStatus === 'startRoutine' ? (
         // 루틴 시작 혈당 알림
         <StartRoutineAlert
-          routineValue={routineValue}
+          currentRoutine={currentRoutine}
           bloodSugar={alertBloodSugar}
           handleAlert={handleAlert}
         />
       ) : alertStatus === 'askEndRoutine' ? (
         // 루틴 종료 여부 질문 알림
         <AskEndRoutineAlert
-          routineValue={routineValue}
+          currentRoutine={currentRoutine}
           accessToken={accessToken}
           handleAlert={handleAlert}
           changeRoutine={changeRoutine}
@@ -201,7 +206,7 @@ const KidsMainPage = () => {
       ) : alertStatus === 'endRoutine' ? (
         // 루틴 종료 혈당 알림
         <EndRoutineAlert
-          routineValue={routineValue}
+          currentRoutine={currentRoutine}
           bloodSugar={alertBloodSugar}
           handleAlert={handleAlert}
         />

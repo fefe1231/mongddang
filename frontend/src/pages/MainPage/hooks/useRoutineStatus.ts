@@ -6,6 +6,7 @@ export const setRoutine = async (routine: string) => {
     key: 'routine',
     value: routine,
   });
+  console.log('저장됨',routine)
 };
 
 // 루틴 상태 조회
