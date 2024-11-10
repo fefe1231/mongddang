@@ -36,19 +36,33 @@ export const AskStartRoutineAlert = (props: AskRoutineAlertProps) => {
   };
   return (
     <Notification
-      ment={props.currentRoutine === '운동 준비' ? '운동 할거야?' : ''}
+      ment={
+        props.currentRoutine === '운동 준비'
+          ? '운동 할거야?'
+          : props.currentRoutine === '수면 준비'
+            ? '이제 잘 거야?'
+            : ''
+      }
       twoBtn
       type="confirm"
       css={endEatAlertCss}
       children={
         props.currentRoutine === '운동 준비'
           ? ['아니, 안할래', '응, 할래!']
-          : []
+          : props.currentRoutine === '수면 준비'
+            ? ['아직 안 잘래', '응, 잘래!']
+            : []
       }
       bluehandler={() => {
         props.handleAlert('startRoutine');
-        props.changeRoutine('운동 중');
         handleStartRoutine();
+        {
+          props.currentRoutine === '운동 준비'
+            ? props.changeRoutine('운동 중')
+            : props.currentRoutine === '수면 준비'
+              ? props.changeRoutine('수면 중')
+              : null;
+        }
       }}
       redHandler={() => {
         props.handleAlert('');
