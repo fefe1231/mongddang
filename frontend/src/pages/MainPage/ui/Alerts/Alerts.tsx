@@ -82,27 +82,43 @@ export const StartRoutineAlert = (props: BloodSugarProps) => {
 // 루틴 종료 여부 질문 알림
 export const AskEndRoutineAlert = (props: AskRoutineAlertProps) => {
   const handleEndRoutine = async () => {
-    const response = await endEating(props.accessToken);
-    if (response.code === 200) {
-      props.handleBloodSugar(response.data.bloodSugarLevel);
+    if (props.currentRoutine === '식사 중') {
+      const response = await endEating(props.accessToken);
+      if (response.code === 200) {
+        props.handleBloodSugar(response.data.bloodSugarLevel);
+      }
     }
   };
 
   return (
     <Notification
-      ment={props.currentRoutine === '먹는 중' ? '다 먹었어?' : ''}
+      ment={
+        props.currentRoutine === '먹는 중'
+          ? '다 먹었어?'
+          : props.currentRoutine === '운동 중'
+            ? '운동 다 했어?'
+            : ''
+      }
       twoBtn
       type="confirm"
       css={endEatAlertCss}
       children={
         props.currentRoutine === '먹는 중'
           ? ['아니, 아직', '응, 다 먹었어!']
-          : []
+          : props.currentRoutine === '운동 중'
+            ? ['아니, 아직', '응, 다 했어!']
+            : []
       }
       bluehandler={() => {
         handleEndRoutine();
+        {
+          props.currentRoutine === '먹는 중'
+            ? props.changeRoutine('먹기 끝')
+            : props.currentRoutine === '운동 중'
+              ? props.changeRoutine('운동 끝')
+              : null;
+        }
         props.handleAlert('endRoutine');
-        props.changeRoutine('먹기 끝');
       }}
       redHandler={() => {
         props.handleAlert('');
@@ -120,6 +136,10 @@ export const EndRoutineAlert = (props: BloodSugarProps) => {
           {props.currentRoutine === '먹기 끝' ? (
             <Typography color="dark" size="1" weight={500}>
               🍽️ 다 먹었다! 🍽️
+            </Typography>
+          ) : props.currentRoutine === '운동 끝' ? (
+            <Typography color="dark" size="1" weight={500}>
+              🏀 운동 끝! 완전 멋져 🏀
             </Typography>
           ) : (
             <></>
