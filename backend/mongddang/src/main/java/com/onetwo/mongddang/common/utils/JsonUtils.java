@@ -14,17 +14,12 @@ import java.io.IOException;
 @Service
 public class JsonUtils {
 
-    public void checkJsonTypeWithDishObejctOrList(String contentJson) throws JsonProcessingException {
+    public void checkJsonTypeWithDishObjectOrList(String contentJson) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode content = objectMapper.readTree(contentJson);
 
-        // 1. 단일 dish 검증
-        if (content.has("dish") && content.get("dish").isTextual()) {
-            String dishValue = content.get("dish").asText();
-            log.info("object type meal content: " + dishValue);
-        }
-        // 2. 리스트 형식 검증
-        else if (content.isArray()) {
+        // 리스트 형식 검증
+        if (content.isArray()) {
             log.info("list type meal content: ");
         } else {
             throw new RestApiException(CustomRecordErrorCode.BAD_INGREDIENT_INPUT);
@@ -35,7 +30,7 @@ public class JsonUtils {
 
         JsonNode content;
 
-        // ObjectMapper로 JSON 문자열을 JsonNode로 변환
+        // ObjectMapper 로 JSON 문자열을 JsonNode 로 변환
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             content = objectMapper.readTree(contentJson);

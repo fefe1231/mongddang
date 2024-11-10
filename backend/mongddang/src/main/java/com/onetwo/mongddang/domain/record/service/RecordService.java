@@ -300,12 +300,12 @@ public class RecordService {
 
         // JSON 형식 검증
         try {
-            jsonUtils.checkJsonTypeWithDishObejctOrList(contentJson);
+            jsonUtils.checkJsonTypeWithDishObjectOrList(contentJson);
         } catch (Exception e) {
             throw new RestApiException(CustomRecordErrorCode.BAD_INGREDIENT_INPUT);
         }
 
-        // SON 문자열을 JsonNode로 변환
+        // SON 문자열을 JsonNode 로 변환
         JsonNode content = jsonUtils.JsonStringToJsonNode(contentJson);
 
 
