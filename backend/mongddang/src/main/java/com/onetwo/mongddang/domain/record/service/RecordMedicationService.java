@@ -1,9 +1,6 @@
 package com.onetwo.mongddang.domain.record.service;
 
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
-import com.onetwo.mongddang.common.s3.S3ImageService;
-import com.onetwo.mongddang.common.utils.DateTimeUtils;
-import com.onetwo.mongddang.common.utils.JsonUtils;
 import com.onetwo.mongddang.domain.game.gameLog.application.GameLogUtils;
 import com.onetwo.mongddang.domain.game.gameLog.model.GameLog;
 import com.onetwo.mongddang.domain.missionlog.application.MissionLogUtils;
@@ -11,7 +8,6 @@ import com.onetwo.mongddang.domain.missionlog.dto.MissionDto;
 import com.onetwo.mongddang.domain.record.dto.record.ResponseBloodSugarDto;
 import com.onetwo.mongddang.domain.record.model.Record;
 import com.onetwo.mongddang.domain.record.repository.RecordRepository;
-import com.onetwo.mongddang.domain.user.application.CtoPUtils;
 import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
 import com.onetwo.mongddang.domain.user.model.User;
 import com.onetwo.mongddang.domain.user.repository.UserRepository;
@@ -32,10 +28,6 @@ public class RecordMedicationService {
 
     private final RecordRepository recordRepository;
     private final UserRepository userRepository;
-    private final CtoPUtils ctoPUtils;
-    private final DateTimeUtils dateTimeUtils;
-    private final S3ImageService s3ImageService;
-    private final JsonUtils jsonUtils;
     private final MissionLogUtils missionLogUtils;
     private final GameLogUtils gameLogUtils;
 
@@ -58,7 +50,7 @@ public class RecordMedicationService {
                 .child(child)
                 .category(medication)
                 .startTime(LocalDateTime.now())
-                .endTime(null)
+                .endTime(LocalDateTime.now())
                 .content(null)
                 .imageUrl(null)
                 .isDone(true)
