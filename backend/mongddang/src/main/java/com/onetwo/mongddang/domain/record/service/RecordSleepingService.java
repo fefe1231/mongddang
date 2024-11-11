@@ -82,8 +82,13 @@ public class RecordSleepingService {
         // 게임 로그 업데이트
         gameLogUtils.addGameLog(child, GameLog.GameLogCategory.sleeping_count);
 
+        ResponseBloodSugarDto bloodSugarLevel = ResponseBloodSugarDto.builder()
+                .bloodSugarLevel(100L)
+                .build();
+
         return ResponseDto.builder()
                 .message("수면을 시작합니다.")
+                .data(bloodSugarLevel)
                 .build();
     }
 
