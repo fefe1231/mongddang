@@ -4,10 +4,11 @@ import { useUserStore } from '@/entities/user/model/store';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { useShallow } from 'zustand/shallow';
-import { useEffect, useState, useRef } from 'react';
-import { MAX_CHART_WIDTH, MIN_CHART_WIDTH, POINT_CHART_WIDTH } from '../config';
+import { useRef } from 'react';
 import { ScrollArea } from '@mantine/core';
 import { useChartScroll } from '../model';
+import { useChartWidth } from '../model/useChartWidth';
+import { CHART_CONFIG } from '../config';
 
 export const BloodSugarChart = () => {
   const { date } = useParams();
@@ -15,10 +16,10 @@ export const BloodSugarChart = () => {
     throw new Error('Impossible date');
   }
   const viewportRef = useRef<HTMLDivElement | null>(null);
-  const [chartWidth, setChartWidth] = useState<number>(MIN_CHART_WIDTH);
   const { getUser } = useUserStore(
     useShallow((state) => ({ getUser: state.getUser }))
   );
+
   const user = getUser();
   const nickname = user?.nickname ?? 'test-chart-data';
 
@@ -26,20 +27,11 @@ export const BloodSugarChart = () => {
     BloodsugarQueries.todayBloodSugarQuery(nickname, date)
   );
 
-  // data 양에 따라 그래프 길이 조절
-  useEffect(() => {
-    setChartWidth(
-      data
-        ? Math.max(
-            MIN_CHART_WIDTH,
-            Math.min(MAX_CHART_WIDTH, data.length * POINT_CHART_WIDTH)
-          )
-        : MIN_CHART_WIDTH
-    );
-  }, [data]);
-
   // mount 시 linechart의 가장 오른쪽으로 이동
   useChartScroll(viewportRef, !!data);
+
+  // 그래프 너비값 동적 할당
+  const chartWidth = useChartWidth(data?.length);
 
   if (isError) {
     console.log('Bloodsugarchart error');
@@ -51,9 +43,13 @@ export const BloodSugarChart = () => {
   return (
     <>
       {data && (
-        <ScrollArea w={360} h={350} viewportRef={viewportRef}>
+        <ScrollArea
+          w={CHART_CONFIG.SCROLL_WIDTH}
+          h={CHART_CONFIG.SCROLL_HEIGHT}
+          viewportRef={viewportRef}
+        >
           <LineChart
-            h={'18rem'}
+            h={CHART_CONFIG.DEFAULT_HEIGHT}
             w={chartWidth}
             data={data}
             dataKey="measurementTime"

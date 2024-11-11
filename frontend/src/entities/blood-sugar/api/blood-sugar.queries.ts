@@ -1,4 +1,4 @@
-import { BloodsugarService } from '@/shared/api/blood-sugar';
+import { Bloodsugar, BloodsugarService } from '@/shared/api/blood-sugar';
 import { queryOptions } from '@tanstack/react-query';
 // import { BloodsugarFilter } from '../model';
 import dayjs from 'dayjs';
@@ -14,7 +14,7 @@ export class BloodsugarQueries {
   static todayBloodSugarQuery(nickname: string, date: string) {
     return queryOptions({
       queryKey: [...this.queryKeys.all, date],
-      queryFn: async () => {
+      queryFn: async (): Promise<Bloodsugar[]> => {
         const { data } = await BloodsugarService.bloodSugarQuery(
           nickname,
           date
