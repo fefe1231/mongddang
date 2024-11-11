@@ -7,6 +7,7 @@ import { useShallow } from 'zustand/shallow';
 import { useEffect, useState, useRef } from 'react';
 import { MAX_CHART_WIDTH, MIN_CHART_WIDTH, POINT_CHART_WIDTH } from '../config';
 import { ScrollArea } from '@mantine/core';
+import { useChartScroll } from '../model';
 
 export const BloodSugarChart = () => {
   const { date } = useParams();
@@ -38,17 +39,7 @@ export const BloodSugarChart = () => {
   }, [data]);
 
   // mount 시 linechart의 가장 오른쪽으로 이동
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (viewportRef.current) {
-        viewportRef.current.scrollTo({
-          left: viewportRef.current.scrollWidth,
-          behavior: 'smooth',
-        });
-      }
-    }, 50);
-    return () => clearTimeout(timer);
-  }, [data]);
+  useChartScroll(viewportRef, !!data);
 
   if (isError) {
     console.log('Bloodsugarchart error');
