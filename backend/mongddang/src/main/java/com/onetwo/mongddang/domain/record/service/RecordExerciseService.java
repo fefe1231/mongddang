@@ -8,6 +8,7 @@ import com.onetwo.mongddang.domain.game.gameLog.application.GameLogUtils;
 import com.onetwo.mongddang.domain.game.gameLog.model.GameLog;
 import com.onetwo.mongddang.domain.missionlog.application.MissionLogUtils;
 import com.onetwo.mongddang.domain.missionlog.dto.MissionDto;
+import com.onetwo.mongddang.domain.record.dto.record.ResponseBloodSugarDto;
 import com.onetwo.mongddang.domain.record.errors.CustomRecordErrorCode;
 import com.onetwo.mongddang.domain.record.model.Record;
 import com.onetwo.mongddang.domain.record.repository.RecordRepository;
@@ -84,8 +85,13 @@ public class RecordExerciseService {
         // 게임 로그 업데이트
         gameLogUtils.addGameLog(child, GameLog.GameLogCategory.exercise_count);
 
+        ResponseBloodSugarDto bloodSugarLevel = ResponseBloodSugarDto.builder()
+                .bloodSugarLevel(100L)
+                .build();
+
         return ResponseDto.builder()
                 .message("운동을 시작합니다.")
+                .data(bloodSugarLevel)
                 .build();
 
     }
@@ -122,8 +128,13 @@ public class RecordExerciseService {
         recordRepository.save(exerciseRecord);
         log.info("운동 종료 기록 완료. 종료시간 : {}", exerciseRecord.getEndTime());
 
+        ResponseBloodSugarDto bloodSugarLevel = ResponseBloodSugarDto.builder()
+                .bloodSugarLevel(100L)
+                .build();
+
         return ResponseDto.builder()
                 .message("운동을 종료합니다.")
+                .data(bloodSugarLevel)
                 .build();
     }
 

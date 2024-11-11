@@ -8,6 +8,7 @@ import com.onetwo.mongddang.domain.game.gameLog.application.GameLogUtils;
 import com.onetwo.mongddang.domain.game.gameLog.model.GameLog;
 import com.onetwo.mongddang.domain.missionlog.application.MissionLogUtils;
 import com.onetwo.mongddang.domain.missionlog.dto.MissionDto;
+import com.onetwo.mongddang.domain.record.dto.record.ResponseBloodSugarDto;
 import com.onetwo.mongddang.domain.record.model.Record;
 import com.onetwo.mongddang.domain.record.repository.RecordRepository;
 import com.onetwo.mongddang.domain.user.application.CtoPUtils;
@@ -73,8 +74,13 @@ public class RecordMedicationService {
         // 게임 로그 업데이트
         gameLogUtils.addGameLog(child, GameLog.GameLogCategory.medication_count);
 
+        ResponseBloodSugarDto bloodSugarLevel = ResponseBloodSugarDto.builder()
+                .bloodSugarLevel(100L)
+                .build();
+
         return ResponseDto.builder()
                 .message("복약을 확인합니다.")
+                .data(bloodSugarLevel)
                 .build();
     }
 }
