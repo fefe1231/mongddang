@@ -3,10 +3,10 @@ import { css } from "@emotion/react";
 export const base = css`
   display: flex;
   height: 57px;
-  padding: 14px 9px 15px 7px;
+  padding: 1px 9px 15px 7px;
   justify-content: center;
   align-items: center;
-  margin: 1rem 0;
+  margin:3rem 0;
   flex-direction: column;
 `;
 

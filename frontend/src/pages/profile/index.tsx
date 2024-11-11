@@ -100,7 +100,9 @@ export const Profile = () => {
           초대코드 복사
         </Button>
         <Button
-          handler={() => nav('/nickname/edit')}
+            handler={() => nav('/nickname/edit', { 
+              state: { nickname: ProfileQuery.data?.data.data.nickname }
+            })}
           color="primary"
           fontSize="1.25"
           variant="contained"
