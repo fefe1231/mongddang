@@ -31,7 +31,7 @@ const DietModal = (props: DietModalProps) => {
   const [diet, setDiet] = useState('');
   const [dietImgFile, setDietImgFile] = useState<File | null>(null);
 
-  const { startStopwatch } =  useStopwatchStore();
+  const { startStopwatch } = useStopwatchStore();
 
   // 식사 타임 선택
   const handleBtnClick = (info: string) => {
@@ -88,13 +88,12 @@ const DietModal = (props: DietModalProps) => {
         props.changeRoutine('먹는 중');
         props.handleAlert('startRoutine');
         props.handleBloodSugar(response.data.bloodSugarLevel);
-        startStopwatch()
+        startStopwatch();
       }
     } catch {
-      console.log('에러')
+      console.log('에러');
     }
   };
-
 
   return (
     <div>
@@ -149,7 +148,6 @@ const DietModal = (props: DietModalProps) => {
                 dietImgFile,
                 diet
               );
-              
             }}
             disabled={isDisabled}
           >
