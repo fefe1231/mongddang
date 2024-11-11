@@ -4,6 +4,7 @@ import com.onetwo.mongddang.domain.fcm.model.PushLog;
 import com.onetwo.mongddang.domain.fcm.service.PushNotificationService;
 import com.onetwo.mongddang.domain.user.model.User;
 import com.onetwo.mongddang.domain.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -12,15 +13,11 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class sleep {
 
     private final UserRepository userRepository;
     private final PushNotificationService pushNotificationService;
-
-    public sleep(UserRepository userRepository, PushNotificationService pushNotificationService) {
-        this.userRepository = userRepository;
-        this.pushNotificationService = pushNotificationService;
-    }
 
     @Scheduled(cron = "0 0 22 * * *") // 매일 22시에 실행
     public void sendSleepReminder() {
