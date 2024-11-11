@@ -15,6 +15,7 @@ import { Button } from '@/shared/ui/Button';
 import { useCallback, useEffect, useState } from 'react';
 import { debounce } from 'lodash';
 import { saveDiet } from '../../api/dietApi';
+import { useStopwatchStore } from '../../model/useStopwatchStore';
 
 type DietModalProps = {
   accessToken: string | null;
@@ -29,6 +30,8 @@ const DietModal = (props: DietModalProps) => {
   const [isDisabled, setIsDisabled] = useState(true);
   const [diet, setDiet] = useState('');
   const [dietImgFile, setDietImgFile] = useState<File | null>(null);
+
+  const { startStopwatch } =  useStopwatchStore();
 
   // 식사 타임 선택
   const handleBtnClick = (info: string) => {
@@ -85,9 +88,13 @@ const DietModal = (props: DietModalProps) => {
         props.changeRoutine('먹는 중');
         props.handleAlert('startRoutine');
         props.handleBloodSugar(response.data.bloodSugarLevel);
+        startStopwatch()
       }
-    } catch {}
+    } catch {
+      console.log('에러')
+    }
   };
+
 
   return (
     <div>
@@ -142,6 +149,7 @@ const DietModal = (props: DietModalProps) => {
                 dietImgFile,
                 diet
               );
+              
             }}
             disabled={isDisabled}
           >
