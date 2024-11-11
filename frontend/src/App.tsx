@@ -20,7 +20,7 @@ function App() {
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_AUTH_CLIENT_ID}>
       <Router>
         <Routes>
-          <Route path="/record" element={<KidsMainPage />} />
+          <Route path="/" element={<KidsMainPage />} />
           <Route path="/btn" element={<Btn />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
@@ -30,7 +30,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/nickname/edit" element={<NicknameEdit />} />
           <Route path="/report" element={<Report />} />
-          <Route path="/" element={<RecordPage />} />
+          <Route path="/record" element={<RecordPage />} />
           <Route path="/record/:date" element={<TodayRecordPage />} />
           <Route path="/protector-main" element={<ProtectorMain />} />
         </Routes>
