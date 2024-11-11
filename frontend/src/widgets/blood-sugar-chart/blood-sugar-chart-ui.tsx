@@ -8,6 +8,7 @@ export const BloodSugarChart = () => {
   if (typeof date === 'undefined') {
     throw new Error('Impossible date');
   }
+  const 
 
   const { data, isError, isLoading } = useQuery(
     BloodsugarQueries.todayBloodSugarQuery(nickname, date)
