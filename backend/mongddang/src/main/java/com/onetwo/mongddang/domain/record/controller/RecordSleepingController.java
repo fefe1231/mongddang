@@ -45,10 +45,12 @@ public class RecordSleepingController {
     @Tag(name = "Record API", description = "수면 기록 api")
     @Operation(summary = "수면 종료하기 api", description = "수면을 종료합니다.")
     public ResponseEntity<ResponseDto> endSleep(HttpServletRequest request) {
-        log.info("POST /api/record/sleep/end");
+        log.info("Patch /api/record/sleep/end");
 
         Long childId = jwtExtratService.jwtFindId(request);
         ResponseDto responseDto = recordSleepingService.endSleep(childId);
         return ResponseEntity.ok(responseDto);
     }
+
+
 }

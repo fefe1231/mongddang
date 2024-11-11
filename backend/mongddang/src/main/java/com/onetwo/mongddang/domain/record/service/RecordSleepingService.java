@@ -7,6 +7,7 @@ import com.onetwo.mongddang.common.utils.JsonUtils;
 import com.onetwo.mongddang.domain.game.gameLog.application.GameLogUtils;
 import com.onetwo.mongddang.domain.game.gameLog.model.GameLog;
 import com.onetwo.mongddang.domain.missionlog.application.MissionLogUtils;
+import com.onetwo.mongddang.domain.record.dto.record.ResponseBloodSugarDto;
 import com.onetwo.mongddang.domain.record.errors.CustomRecordErrorCode;
 import com.onetwo.mongddang.domain.record.model.Record;
 import com.onetwo.mongddang.domain.record.repository.RecordRepository;
@@ -109,16 +110,20 @@ public class RecordSleepingService {
         }
 
         // 수면 종료 시간 기록
-        Record sleepRecord = lastedSleepRecord.get();
-        sleepRecord.setEndTime(LocalDateTime.now());
-        sleepRecord.setIsDone(true);
+        lastedSleepRecord.get().setEndTime(LocalDateTime.now());
+        lastedSleepRecord.get().setIsDone(true);
+        log.info("수면 종료 기록 완료. 종료시간 : {}", lastedSleepRecord.get().getEndTime());
 
-        recordRepository.save(sleepRecord);
-        log.info("수면 종료 기록 완료. 종료시간 : {}", sleepRecord.getEndTime());
+        ResponseBloodSugarDto bloodSugarLevel = ResponseBloodSugarDto.builder()
+                .bloodSugarLevel(100L)
+                .build();
 
         return ResponseDto.builder()
                 .message("수면을 종료합니다.")
+                .data(bloodSugarLevel)
                 .build();
+
+
     }
 
 }

@@ -1,5 +1,6 @@
 package com.onetwo.mongddang.domain.record.controller;
 
+import com.onetwo.mongddang.common.annotation.ChildRequired;
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
 import com.onetwo.mongddang.domain.record.service.RecordService;
 import com.onetwo.mongddang.domain.user.jwt.JwtExtratService;
@@ -45,5 +46,16 @@ public class RecordController {
         return ResponseEntity.ok(responseDto);
     }
 
+    // 진행 중인 활동 찾기 api
+    @GetMapping("ongoing")
+    @ChildRequired
+    @Tag(name = "Record API", description = "기록 api")
+    @Operation(summary = "진행 중인 식사 찾기 api", description = "진행 중인 식사를 찾습니다.")
+    public ResponseEntity<ResponseDto> findMeal(HttpServletRequest request) {
+        log.info("GET /api/record/meal/ongoing");
 
+        Long childId = jwtExtratService.jwtFindId(request);
+        ResponseDto responseDto = recordService.findOngoingRecord(childId);
+        return ResponseEntity.ok(responseDto);
+    }
 }

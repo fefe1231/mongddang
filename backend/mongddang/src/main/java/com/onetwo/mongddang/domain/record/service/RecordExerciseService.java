@@ -31,7 +31,7 @@ import static com.onetwo.mongddang.domain.record.model.Record.RecordCategoryType
 @RequiredArgsConstructor
 public class RecordExerciseService {
 
-    
+
     private final RecordRepository recordRepository;
     private final UserRepository userRepository;
     private final CtoPUtils ctoPUtils;
@@ -126,5 +126,6 @@ public class RecordExerciseService {
                 .message("운동을 종료합니다.")
                 .build();
     }
+
 
 }

@@ -52,4 +52,5 @@ public class RecordExerciseController {
         return ResponseEntity.ok(responseDto);
     }
 
+
 }

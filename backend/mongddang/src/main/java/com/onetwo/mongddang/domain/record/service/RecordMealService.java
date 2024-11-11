@@ -11,7 +11,7 @@ import com.onetwo.mongddang.domain.game.gameLog.application.GameLogUtils;
 import com.onetwo.mongddang.domain.game.gameLog.model.GameLog;
 import com.onetwo.mongddang.domain.missionlog.application.MissionLogUtils;
 import com.onetwo.mongddang.domain.missionlog.dto.MissionDto;
-import com.onetwo.mongddang.domain.record.dto.ResponseMealDto;
+import com.onetwo.mongddang.domain.record.dto.record.ResponseBloodSugarDto;
 import com.onetwo.mongddang.domain.record.errors.CustomRecordErrorCode;
 import com.onetwo.mongddang.domain.record.model.Record;
 import com.onetwo.mongddang.domain.record.repository.RecordRepository;
@@ -130,7 +130,7 @@ public class RecordMealService {
                 break;
         }
 
-        ResponseMealDto bloodSugarLevel = ResponseMealDto.builder()
+        ResponseBloodSugarDto bloodSugarLevel = ResponseBloodSugarDto.builder()
                 .bloodSugarLevel(100L)
                 .build();
 
@@ -170,7 +170,7 @@ public class RecordMealService {
         recordRepository.save(mealRecord);
         log.info("식사 종료 기록 완료. 종료시간 : {}", mealRecord.getEndTime());
 
-        ResponseMealDto bloodSugarLevel = ResponseMealDto.builder()
+        ResponseBloodSugarDto bloodSugarLevel = ResponseBloodSugarDto.builder()
                 .bloodSugarLevel(100L)
                 .build();
 

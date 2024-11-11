@@ -1,4 +1,4 @@
-package com.onetwo.mongddang.domain.record.dto;
+package com.onetwo.mongddang.domain.record.dto.medication;
 
 import com.onetwo.mongddang.domain.medication.dto.MedicationStandardDto;
 import com.onetwo.mongddang.domain.medication.model.MedicationManagement;

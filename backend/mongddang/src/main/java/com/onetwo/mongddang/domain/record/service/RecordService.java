@@ -6,9 +6,10 @@ import com.onetwo.mongddang.common.utils.DateTimeUtils;
 import com.onetwo.mongddang.common.utils.JsonUtils;
 import com.onetwo.mongddang.domain.game.gameLog.application.GameLogUtils;
 import com.onetwo.mongddang.domain.missionlog.application.MissionLogUtils;
-import com.onetwo.mongddang.domain.record.dto.RecordDetailsDto;
-import com.onetwo.mongddang.domain.record.dto.RecordWithChildIdDto;
-import com.onetwo.mongddang.domain.record.dto.ResponseRecordDto;
+import com.onetwo.mongddang.domain.record.dto.record.OngoingResponseDto;
+import com.onetwo.mongddang.domain.record.dto.record.RecordDetailsDto;
+import com.onetwo.mongddang.domain.record.dto.record.RecordWithChildIdDto;
+import com.onetwo.mongddang.domain.record.dto.record.ResponseRecordDto;
 import com.onetwo.mongddang.domain.record.model.Record;
 import com.onetwo.mongddang.domain.record.repository.RecordRepository;
 import com.onetwo.mongddang.domain.user.application.CtoPUtils;
@@ -120,4 +121,50 @@ public class RecordService {
     }
 
 
+    /**
+     * 진행 중인 식사 기록 조회
+     *
+     * @param childId 현재 진행 중인 식사 기록을 조회할 어린이의 아이디
+     * @return ResponseDto
+     */
+    public ResponseDto findOngoingRecord(Long childId) {
+        log.info("findOngoingRecord childId: {}", childId);
+
+        // 어린이 정보 조회
+        User child = userRepository.findById(childId)
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+
+        Optional<Record> ongoingRecord = Optional.empty();
+
+        // 가장 최근에 시작된 식사/운동/수면 기록 조회
+        Optional<Record> lastedMealRecord = recordRepository.findTopByChildAndCategoryAndEndTimeIsNullOrderByIdDesc(child, meal);
+        Optional<Record> lastedExerciseRecord = recordRepository.findTopByChildAndCategoryAndEndTimeIsNullOrderByIdDesc(child, exercise);
+        Optional<Record> lastedSleepRecord = recordRepository.findTopByChildAndCategoryAndEndTimeIsNullOrderByIdDesc(child, sleeping);
+
+        if (lastedMealRecord.isPresent()) {
+            ongoingRecord = lastedMealRecord;
+        } else if (lastedExerciseRecord.isPresent()) {
+            ongoingRecord = lastedExerciseRecord;
+        } else if (lastedSleepRecord.isPresent()) {
+            ongoingRecord = lastedSleepRecord;
+        }
+
+        // 진행중인 기록 확인
+        if (ongoingRecord.isEmpty()) {
+            return ResponseDto.builder()
+                    .message("진행 중인 기록이 없습니다.")
+                    .build();
+        }
+
+        OngoingResponseDto ongoingRecordResponse = OngoingResponseDto.builder()
+                .category(ongoingRecord.get().getCategory())
+                .startTime(ongoingRecord.get().getStartTime())
+                .build();
+
+        // 진행 중인 기록의 시작 시간 반환
+        return ResponseDto.builder()
+                .message("진행중인 기록을 조회합니다.")
+                .data(ongoingRecordResponse)
+                .build();
+    }
 }
