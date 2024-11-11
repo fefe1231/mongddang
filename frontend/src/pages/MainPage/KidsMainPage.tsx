@@ -17,25 +17,37 @@ import { IconTypo } from '@/shared/ui/IconTypo';
 import CurrentBloodSugar from './ui/CurrentBloodSugar/CurrentBloodSugar';
 import MainCharacter from '@/assets/img/말랑1.png';
 import ChatBubble from './ui/ChatBubble/ChatBubble';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DietModal from './ui/DietModal/DietModal';
 import MailBox from './ui/MailBox/MailBox';
 import { useNavigate } from 'react-router-dom';
 import RoutineBtnGroup from './ui/RoutineBtnGroup/RoutineBtnGroup';
 import {
-  EndEatAlert,
-  EndEatBloodSugarAlert,
-  StartEatAlert,
+  AskEndRoutineAlert,
+  AskStartRoutineAlert,
+  EndRoutineAlert,
+  StartRoutineAlert,
 } from './ui/Alerts/Alerts';
+import { getRoutine, setRoutine } from './hooks/useRoutineStatus';
 
 const KidsMainPage = () => {
   const navigate = useNavigate();
   const accessToken = localStorage.getItem('accessToken');
   const [openDietModal, setOpenDietModal] = useState(false);
   const [openMailBox, setOpenMailBox] = useState(false);
-  const [routine, setRoutine] = useState('');
   const [alertStatus, setAlertStatus] = useState('');
   const [alertBloodSugar, setAlertBloodSugar] = useState(0);
+  const [currentRoutine, setCurrentRoutine] = useState('');
+
+  // 초기 루틴 상태 조회
+  useEffect(() => {
+    const fetchRoutine = async () => {
+      const routineValue = await getRoutine();
+      setCurrentRoutine(routineValue);
+      console.log('루틴 조회', routineValue);
+    };
+    fetchRoutine();
+  }, []);
 
   const handleDietModal = () => {
     setOpenDietModal(true);
@@ -44,12 +56,15 @@ const KidsMainPage = () => {
   const closeDietModal = () => {
     setOpenDietModal(false);
   };
+
   const closeMailBox = () => {
     setOpenMailBox(false);
   };
 
   // 일상 수행 상태 관리
   const changeRoutine = (currentRoutine: string) => {
+    console.log('루틴 변경', currentRoutine);
+    setCurrentRoutine(currentRoutine);
     setRoutine(currentRoutine);
   };
 
@@ -74,6 +89,7 @@ const KidsMainPage = () => {
     }
   };
   console.log('알림창 상태', alertStatus);
+  console.log('루틴 상태', currentRoutine);
 
   return (
     <div css={kidsMainBase}>
@@ -141,7 +157,7 @@ const KidsMainPage = () => {
           <RoutineBtnGroup
             changeRoutine={changeRoutine}
             handleDietModal={handleDietModal}
-            routine={routine}
+            currentRoutine={currentRoutine}
             handleAlert={handleAlert}
           />
 
@@ -172,26 +188,43 @@ const KidsMainPage = () => {
       {/* 알림창 */}
       {openMailBox && <MailBox closeMailBox={closeMailBox} />}
 
-      {alertStatus === 'startEat' ? (
-        // 식사 시작 혈당 알림
-        <StartEatAlert bloodSugar={alertBloodSugar} handleAlert={handleAlert} />
-      ) : alertStatus === 'askEndEat' ? (
-        // 식사 종료 여부 질문 알림
-        <EndEatAlert
-          accessToken={accessToken}
-          handleAlert={handleAlert}
-          changeRoutine={changeRoutine}
-          handleBloodSugar={handleBloodSugar}
-        />
-      ) : alertStatus === 'endEat' ? (
-        // 식사 종료 혈당 알림
-        <EndEatBloodSugarAlert
-          bloodSugar={alertBloodSugar}
-          handleAlert={handleAlert}
-        />
-      ) : (
-        <></>
-      )}
+      {
+        // 루틴 시작 여부 질문 알림
+        alertStatus === 'askStartRoutine' ? (
+          <AskStartRoutineAlert
+            currentRoutine={currentRoutine}
+            accessToken={accessToken}
+            handleAlert={handleAlert}
+            changeRoutine={changeRoutine}
+            handleBloodSugar={handleBloodSugar}
+          />
+        ) : alertStatus === 'startRoutine' ? (
+          // 루틴 시작 혈당 알림
+          <StartRoutineAlert
+            currentRoutine={currentRoutine}
+            bloodSugar={alertBloodSugar}
+            handleAlert={handleAlert}
+          />
+        ) : alertStatus === 'askEndRoutine' ? (
+          // 루틴 종료 여부 질문 알림
+          <AskEndRoutineAlert
+            currentRoutine={currentRoutine}
+            accessToken={accessToken}
+            handleAlert={handleAlert}
+            changeRoutine={changeRoutine}
+            handleBloodSugar={handleBloodSugar}
+          />
+        ) : alertStatus === 'endRoutine' ? (
+          // 루틴 종료 혈당 알림
+          <EndRoutineAlert
+            currentRoutine={currentRoutine}
+            bloodSugar={alertBloodSugar}
+            handleAlert={handleAlert}
+          />
+        ) : (
+          <></>
+        )
+      }
     </div>
   );
 };

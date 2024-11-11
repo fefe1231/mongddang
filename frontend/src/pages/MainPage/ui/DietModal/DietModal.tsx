@@ -82,8 +82,8 @@ const DietModal = (props: DietModalProps) => {
       );
       if (response.code === 200) {
         props.closeDietModal();
-        props.changeRoutine('diet');
-        props.handleAlert('startEat');
+        props.changeRoutine('먹는 중');
+        props.handleAlert('startRoutine');
         props.handleBloodSugar(response.data.bloodSugarLevel);
       }
     } catch {}
