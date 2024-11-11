@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
 import com.onetwo.mongddang.common.s3.S3ImageService;
 import com.onetwo.mongddang.common.s3.errors.CustomS3ErrorCode;
-import com.onetwo.mongddang.common.utils.DateTimeUtils;
 import com.onetwo.mongddang.common.utils.JsonUtils;
 import com.onetwo.mongddang.domain.game.gameLog.application.GameLogUtils;
 import com.onetwo.mongddang.domain.game.gameLog.model.GameLog;
@@ -15,7 +14,6 @@ import com.onetwo.mongddang.domain.record.dto.record.ResponseBloodSugarDto;
 import com.onetwo.mongddang.domain.record.errors.CustomRecordErrorCode;
 import com.onetwo.mongddang.domain.record.model.Record;
 import com.onetwo.mongddang.domain.record.repository.RecordRepository;
-import com.onetwo.mongddang.domain.user.application.CtoPUtils;
 import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
 import com.onetwo.mongddang.domain.user.model.User;
 import com.onetwo.mongddang.domain.user.repository.UserRepository;
@@ -39,8 +37,6 @@ public class RecordMealService {
 
     private final RecordRepository recordRepository;
     private final UserRepository userRepository;
-    private final CtoPUtils ctoPUtils;
-    private final DateTimeUtils dateTimeUtils;
     private final S3ImageService s3ImageService;
     private final JsonUtils jsonUtils;
     private final MissionLogUtils missionLogUtils;
@@ -75,14 +71,13 @@ public class RecordMealService {
                 .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
         log.info("child: {}", child.getEmail());
 
-        log.info("가장 최근에 시작된 식사 기록 조회 (in english : Retrieve the most recent meal record)");
-        Optional<Record> lastedMealRecord = recordRepository.findTopByChildAndCategoryAndEndTimeIsNullOrderByIdDesc(child, meal);
 
+        // 진행 중인 활동 기록 조회
         log.info("이미 시작된 식사 기록 확인 (in english : Check if the meal record has already started)");
-        if (lastedMealRecord.isPresent()) {
-            throw new RestApiException(CustomRecordErrorCode.MEAL_ALREADY_STARTED);
+        Optional<Record> existingMealRecord = recordRepository.findTopByChildAndEndTimeIsNullOrderByIdDesc(child);
+        if (existingMealRecord.isPresent()) {
+            throw new RestApiException(CustomRecordErrorCode.EXISTING_ONGOING_RECORD);
         }
-
         String imageUrl = null;
 
         if (imageFile != null && !imageFile.isEmpty()) {

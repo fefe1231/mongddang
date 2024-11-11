@@ -1,11 +1,7 @@
 package com.onetwo.mongddang.domain.record.service;
 
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
-import com.onetwo.mongddang.common.s3.S3ImageService;
 import com.onetwo.mongddang.common.utils.DateTimeUtils;
-import com.onetwo.mongddang.common.utils.JsonUtils;
-import com.onetwo.mongddang.domain.game.gameLog.application.GameLogUtils;
-import com.onetwo.mongddang.domain.missionlog.application.MissionLogUtils;
 import com.onetwo.mongddang.domain.record.dto.record.OngoingResponseDto;
 import com.onetwo.mongddang.domain.record.dto.record.RecordDetailsDto;
 import com.onetwo.mongddang.domain.record.dto.record.RecordWithChildIdDto;
@@ -35,10 +31,6 @@ public class RecordService {
     private final UserRepository userRepository;
     private final CtoPUtils ctoPUtils;
     private final DateTimeUtils dateTimeUtils;
-    private final S3ImageService s3ImageService;
-    private final JsonUtils jsonUtils;
-    private final MissionLogUtils missionLogUtils;
-    private final GameLogUtils gameLogUtils;
 
 
     /**
