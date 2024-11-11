@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 public enum CustomFcmErrorCode implements ErrorCode {
 
     FCM_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "N000", "fcm 토큰을 찾을 수 없습니다."),
+    SEND_AND_SAVE_FAILED(HttpStatus.SERVICE_UNAVAILABLE, "N001", "알림 전송 및 저장에 실패했습니다.")
     ;
 
     private final HttpStatus httpStatus;
