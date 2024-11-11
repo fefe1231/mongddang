@@ -5,19 +5,17 @@ import { PreferencesUser } from '@/shared/api/user';
 
 interface UserStoreState extends UserInfo {
   fetchUser(): Promise<void>;
-  getUser(): User | null;
+  getUser(): User | undefined;
   setUser(user: User): void;
 }
 
 export const useUserStore = create<UserStoreState>()(
   devtools((set, get) => ({
-    user: null,
+    user: undefined,
 
     async fetchUser() {
       const userInfo = await PreferencesUser.getUser();
-      set(() => ({
-        user: userInfo.user,
-      }));
+      set(() => ({ user: userInfo.user }));
     },
 
     getUser() {

@@ -17,6 +17,7 @@ export const TodayRecordPage = () => {
 
   return (
     <>
+    <div>Today record</div>
       {/* LineChart start */}
       <ScrollArea w={360} h={350} viewportRef={viewportRef}>
         <BloodSugarChart />
