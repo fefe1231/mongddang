@@ -1,4 +1,4 @@
-package com.onetwo.mongddang.domain.record.dto;
+package com.onetwo.mongddang.domain.record.dto.record;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResponseMealDto {
+public class ResponseBloodSugarDto {
 
     Long bloodSugarLevel;
 }

@@ -1,4 +1,4 @@
-package com.onetwo.mongddang.domain.record.dto;
+package com.onetwo.mongddang.domain.record.dto.record;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.onetwo.mongddang.domain.record.converter.JsonConverter;

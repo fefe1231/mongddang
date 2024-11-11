@@ -1,4 +1,4 @@
-package com.onetwo.mongddang.domain.record.dto;
+package com.onetwo.mongddang.domain.record.dto.meal;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
