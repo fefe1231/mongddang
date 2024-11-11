@@ -1,4 +1,5 @@
 import { BloodsugarQueries } from '@/entities/blood-sugar/api';
+import { useUserStore } from '@/entities/user/model/store';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { LineChart } from 'recharts';
@@ -8,7 +9,9 @@ export const BloodSugarChart = () => {
   if (typeof date === 'undefined') {
     throw new Error('Impossible date');
   }
-  const 
+  const { getUser } = useUserStore((state) => ({ getUser: state.getUser }));
+  const user = getUser();
+  const nickname = user?.nickname ?? '';
 
   const { data, isError, isLoading } = useQuery(
     BloodsugarQueries.todayBloodSugarQuery(nickname, date)

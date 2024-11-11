@@ -25,6 +25,7 @@ export class BloodsugarQueries {
         }));
         return formattedData;
       },
+      enabled: !!nickname,
     });
   }
 }
