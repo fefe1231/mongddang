@@ -79,7 +79,7 @@ export const DataForm = ({ role }: { role: UserRole }) => {
       alert('회원가입이 완료되었습니다.');
       // preference에 user 정보 저장
       const { data } = await UserService.userQuery();
-      setUser(data);
+      setUser(data.data);
       nav('/login');
     },
     onError: (error) => {
