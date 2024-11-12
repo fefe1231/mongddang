@@ -36,7 +36,7 @@ public class PushLog {
     private LocalDateTime createdAt;
 
     @NotNull
-    private Boolean is_new;
+    private Boolean isNew;
 
     public enum Category {
         game,blood_sugar,medication
