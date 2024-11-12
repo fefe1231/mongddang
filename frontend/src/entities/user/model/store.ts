@@ -6,7 +6,8 @@ import { PreferencesUser } from '@/shared/api/user';
 interface UserStoreState extends UserInfo {
   fetchUser(): Promise<void>;
   getUserInfo(): UserInfo;
-  setUser(user: UserInfo): void;
+  setUser(user: UserInfo): Promise<void>;
+  updateUser(newUserInfo: UserInfo): Promise<void>;
 }
 
 export const useUserStore = create<UserStoreState>()(
