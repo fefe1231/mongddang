@@ -18,7 +18,7 @@ const formatTime = (time: number) => {
 };
 
 export const useStopwatchStore = create<StopwatchInfo>((set, get) => ({
-  // 초기값을 설정할 수 있음.
+  // 초기값을 설정
   time: 0,
   isRunning: false,
   intervalRef: null,
@@ -47,6 +47,7 @@ export const useStopwatchStore = create<StopwatchInfo>((set, get) => ({
     if (isRunning === true) {
       if (intervalRef !== null) {
         clearInterval(intervalRef);
+
         set({ isRunning: false, intervalRef: null });
         set({ time: 0 });
         set({ finalTime: '00 : 00' });

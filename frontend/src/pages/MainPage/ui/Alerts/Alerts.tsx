@@ -11,6 +11,7 @@ import { Typography } from '@/shared/ui/Typography';
 import { endExercise, startExercise } from '../../api/exerciseApi';
 import { endSleep, startSleep } from '../../api/sleepApi';
 import { useStopwatchStore } from '../../model/useStopwatchStore';
+import { setStopwatch } from '../../hooks/useRoutineStatus';
 
 type AskRoutineAlertProps = {
   accessToken: string | null;
@@ -163,7 +164,7 @@ export const AskEndRoutineAlert = (props: AskRoutineAlertProps) => {
               : []
       }
       bluehandler={() => {
-        endStopwatch()
+        endStopwatch();
         handleEndRoutine();
         {
           if (props.currentRoutine === '먹는 중') {
