@@ -19,14 +19,10 @@ export class BloodsugarQueries {
           nickname,
           date
         );
-        console.log('formatting');
-
         const formattedData = data.data.bloodSugar.map((item) => ({
           ...item,
           measurementTime: dayjs(item.measurementTime).format('HH:mm'),
         }));
-        console.log('formattedData', formattedData);
-
         return formattedData;
       },
       enabled: !!nickname,
