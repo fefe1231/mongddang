@@ -26,7 +26,6 @@ export const xiconCss = css`
   right: 1rem;
 `;
 
-// Typography 컴포넌트를 위한 새로운 스타일
 export const storyTypographyCss = css`
   word-break: keep-all;
   overflow-wrap: break-word;
