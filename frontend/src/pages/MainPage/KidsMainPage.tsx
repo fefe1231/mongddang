@@ -61,6 +61,7 @@ const KidsMainPage = () => {
 
       console.log('초기 루틴 조회', routineValue);
     };
+
     fetchRoutine();
   }, []);
 
