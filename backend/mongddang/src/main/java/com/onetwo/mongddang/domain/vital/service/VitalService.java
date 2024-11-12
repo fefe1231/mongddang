@@ -1,9 +1,13 @@
 package com.onetwo.mongddang.domain.vital.service;
 
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
+import com.onetwo.mongddang.domain.user.application.CtoPUtils;
 import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
 import com.onetwo.mongddang.domain.user.model.User;
 import com.onetwo.mongddang.domain.user.repository.UserRepository;
+import com.onetwo.mongddang.domain.vital.application.VitalUtils;
+import com.onetwo.mongddang.domain.vital.dto.GlucoseMeasurementTimeDto;
+import com.onetwo.mongddang.domain.vital.dto.ResponseBloodSugarReportDto;
 import com.onetwo.mongddang.domain.vital.dto.ResponseDailyGlucoseDto;
 import com.onetwo.mongddang.domain.vital.model.Vital;
 import com.onetwo.mongddang.domain.vital.repository.VitalRepository;
@@ -26,6 +30,8 @@ public class VitalService {
 
     private final VitalRepository vitalRepository;
     private final UserRepository userRepository;
+    private final CtoPUtils ctoPUtils;
+    private final VitalUtils vitalUtils;
 
 
     /**
@@ -39,11 +45,18 @@ public class VitalService {
     public ResponseDto getBloodSugar(Long userId, String nickname, LocalDate date) {
         log.info("getBloodSugar userId: {}, nickname: {}", userId, nickname);
 
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
         User child = userRepository.findByNickname(nickname)
                 .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
 
+        // 조회 권한 확인
+//        ctoPUtils.validateProtectorAccessChildData(user, child);
+
+        // 해당 날짜의 혈당 기록 조회
         List<Vital> todayVital = vitalRepository.findByChildAndMeasurementTimeBetween(child, date.atStartOfDay(), date.atTime(23, 59, 59));
 
+        // responseDTO 로 변환
         List<ResponseDailyGlucoseDto> responseDailyGlucoseDto = new ArrayList<>();
         for (Vital vital : todayVital) {
             responseDailyGlucoseDto.add(ResponseDailyGlucoseDto.builder()
@@ -66,8 +79,13 @@ public class VitalService {
     public ResponseDto getCurrentBloodSugar(Long userId, String nickname) {
         log.info("getCurrentBloodSugar userId: {}, nickname: {}", userId, nickname);
 
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
         User child = userRepository.findByNickname(nickname)
                 .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+
+        // 조회 권한 확인
+//        ctoPUtils.validateProtectorAccessChildData(user, child);
 
         log.info("child: {}", child.getEmail());
         Vital vital = vitalRepository.findTopByChildOrderById(child).orElse(null);
@@ -116,6 +134,7 @@ public class VitalService {
         // 저장
         vitalRepository.save(vital);
 
+        // responseDTO 로 변환
         ResponseDailyGlucoseDto responseDailyGlucoseDto = ResponseDailyGlucoseDto.builder()
                 .id(vital.getId())
                 .bloodSugarLevel(vital.getBloodSugarLevel())
@@ -130,4 +149,60 @@ public class VitalService {
                 .data(responseDailyGlucoseDto)
                 .build();
     }
+
+    /**
+     * 리포트 조회
+     *
+     * @param userId    유저 아이디
+     * @param nickname  닉네임
+     * @param startDate 시작 날짜
+     * @param endDate   종료 날짜
+     * @return
+     */
+    public ResponseDto getReport(Long userId, String nickname, LocalDate startDate, LocalDate endDate) {
+        log.info("getReport userId: {}, nickname: {}, startDate: {}, endDate: {}", userId, nickname, startDate, endDate);
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+        User child = userRepository.findByNickname(nickname)
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+
+        // 조회 권한 확인
+//        ctoPUtils.validateProtectorAccessChildData(user, child);
+
+        // 해당 날짜의 혈당 기록 조회
+        List<Vital> vitalList = vitalRepository.findByChildAndMeasurementTimeBetween(child, startDate.atStartOfDay(), endDate.atTime(23, 59, 59));
+
+        // 리포트 계산
+        float abg = vitalUtils.getAverageGlucose(vitalList); // 평균 혈당
+        float gmi = vitalUtils.getGMI(abg); // 혈당 관리 지표
+        float cv = vitalUtils.getGlucoseVariability(vitalList, abg); // 혈당 변동성
+        float tir = vitalUtils.getInTargetRangeRatio(vitalList); // 목표 범위 내 비율
+
+        // 혈당 측정 시간대별로 정리
+        List<GlucoseMeasurementTimeDto> glucoseMeasurementTimeList = new ArrayList<>();
+        for (Vital vital : vitalList) {
+            glucoseMeasurementTimeList.add(GlucoseMeasurementTimeDto.builder()
+                    .measurementTime(vital.getMeasurementTime())
+                    .bloodSugarLevel(vital.getBloodSugarLevel())
+                    .build());
+        }
+
+        // responseDTO 로 변환
+        ResponseBloodSugarReportDto responseBloodSugarReportDto = ResponseBloodSugarReportDto.builder()
+                .glucoseMeasurementItmeList(glucoseMeasurementTimeList)
+                .gmi(gmi)
+                .abg(abg)
+                .cv(cv)
+                .tir(tir)
+                .gptSummary("정상")
+                .build();
+
+        return ResponseDto.builder()
+                .message("리포트 조회 성공")
+                .data(responseBloodSugarReportDto)
+                .build();
+    }
+
+
 }
