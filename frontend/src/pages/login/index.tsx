@@ -34,6 +34,7 @@ const Login = () => {
       .then((response) => {
         const accessToken = response.data.body.accessToken;
         console.log('토큰 저장 성공:', accessToken);
+        
 
         // accessToken을 로컬 스토리지에 저장
         localStorage.setItem('accessToken', accessToken);
