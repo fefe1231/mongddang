@@ -1,12 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import { GoogleLogin } from '@react-oauth/google';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { base, contentCss, googleCss } from './ui/styles';
 import { Icon } from '@/shared/ui/Icon';
 import { Typography } from '@/shared/ui/Typography';
 import { useUserStore } from '@/entities/user/model';
 import { UserService } from '@/shared/api/user/user.service';
+import { LoginResponse } from './api/api';
 
 interface IcredentialResponse {
   credential?: string;
@@ -35,23 +36,25 @@ const Login = () => {
           },
         }
       )
-      .then(async (response) => {
-        const accessToken = response.data.body.accessToken;
-        console.log('토큰 저장 성공:', accessToken);
+      .then(async (response: AxiosResponse<LoginResponse>) => {
+        // const accessToken = response.data.body.accessToken;
+        // console.log('토큰 저장 성공:', accessToken);
+        const userToken = response.data.data.accessToken;
 
         // accessToken을 로컬 스토리지에 저장
-        localStorage.setItem('accessToken', accessToken);
-        await updateUser(accessToken);
+        // localStorage.setItem('accessToken', accessToken);
+
+        // accessToken 스토어 및 perference에 저장
+        await updateUser({ userToken });
         // user 정보를 스토어 및 perference에 저장
         const user = (await UserService.userQuery()).data.data;
         await updateUser({ user });
 
         // accessToken을 axios 전역 헤더에 설정
-        axios.defaults.headers.common['Authorization'] =
-          `Bearer ${accessToken}`;
+        axios.defaults.headers.common['Authorization'] = `Bearer ${userToken}`;
 
         // 회원 여부에 따른 페이지 이동
-        if (response.data.body.isRegistered) {
+        if (response.data.data.isRegistered) {
           nav('/');
         } else {
           nav('/signup', { state: { idToken } });
