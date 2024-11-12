@@ -2,7 +2,6 @@ import { BloodsugarQueries } from '@/entities/blood-sugar/api';
 import { LineChart } from '@mantine/charts';
 import { useUserStore } from '@/entities/user/model/store';
 import { useQuery } from '@tanstack/react-query';
-import { useParams } from 'react-router-dom';
 import { useShallow } from 'zustand/shallow';
 import { useRef } from 'react';
 import { ScrollArea } from '@mantine/core';
@@ -10,18 +9,17 @@ import { useChartScroll } from '../model';
 import { useChartWidth } from '../model/useChartWidth';
 import { CHART_CONFIG } from '../config';
 
-export const BloodSugarChart = () => {
-  const { date } = useParams();
-  if (typeof date === 'undefined') {
-    throw new Error('Impossible date');
-  }
+interface BloodSugarChartProps {
+  date: string;
+}
+
+export const BloodSugarChart = ({ date }: BloodSugarChartProps) => {
   const viewportRef = useRef<HTMLDivElement | null>(null);
   const { getUser } = useUserStore(
     useShallow((state) => ({ getUser: state.getUser }))
   );
 
-  const user = getUser();
-  const nickname = user?.nickname ?? 'test-chart-data';
+  const nickname = getUser()?.nickname ?? 'test-chart-data';
 
   const { data, isError, isLoading } = useQuery(
     BloodsugarQueries.todayBloodSugarQuery(nickname, date)
