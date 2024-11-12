@@ -34,7 +34,7 @@ export interface User extends CreateUser {
 }
 
 export interface UserInfo {
-  user: User | null;
+  user: User | undefined;
 }
 
 export interface UserResponse {

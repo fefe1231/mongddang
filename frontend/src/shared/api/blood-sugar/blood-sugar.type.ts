@@ -1,7 +1,7 @@
 export type BloodsugarStatus = 'normal' | 'high' | 'low';
 export interface Bloodsugar {
   id: number;
-  glocoseLevel: number;
+  bloodSugarLevel: number;
   measurementTime: string;
   content: string | null;
   status: BloodsugarStatus;
