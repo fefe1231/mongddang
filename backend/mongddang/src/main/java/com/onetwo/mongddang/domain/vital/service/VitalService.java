@@ -1,6 +1,7 @@
 package com.onetwo.mongddang.domain.vital.service;
 
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
+import com.onetwo.mongddang.domain.user.application.CtoPUtils;
 import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
 import com.onetwo.mongddang.domain.user.model.User;
 import com.onetwo.mongddang.domain.user.repository.UserRepository;
@@ -26,6 +27,7 @@ public class VitalService {
 
     private final VitalRepository vitalRepository;
     private final UserRepository userRepository;
+    private final CtoPUtils ctoPUtils;
 
 
     /**
@@ -39,11 +41,18 @@ public class VitalService {
     public ResponseDto getBloodSugar(Long userId, String nickname, LocalDate date) {
         log.info("getBloodSugar userId: {}, nickname: {}", userId, nickname);
 
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
         User child = userRepository.findByNickname(nickname)
                 .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
 
+        // 조회 권한 확인
+        ctoPUtils.validateProtectorAccessChildData(user, child);
+
+        // 해당 날짜의 혈당 기록 조회
         List<Vital> todayVital = vitalRepository.findByChildAndMeasurementTimeBetween(child, date.atStartOfDay(), date.atTime(23, 59, 59));
 
+        // responseDTO 로 변환
         List<ResponseDailyGlucoseDto> responseDailyGlucoseDto = new ArrayList<>();
         for (Vital vital : todayVital) {
             responseDailyGlucoseDto.add(ResponseDailyGlucoseDto.builder()
@@ -66,8 +75,13 @@ public class VitalService {
     public ResponseDto getCurrentBloodSugar(Long userId, String nickname) {
         log.info("getCurrentBloodSugar userId: {}, nickname: {}", userId, nickname);
 
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
         User child = userRepository.findByNickname(nickname)
                 .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+
+        // 조회 권한 확인
+        ctoPUtils.validateProtectorAccessChildData(user, child);
 
         log.info("child: {}", child.getEmail());
         Vital vital = vitalRepository.findTopByChildOrderById(child).orElse(null);
@@ -116,6 +130,7 @@ public class VitalService {
         // 저장
         vitalRepository.save(vital);
 
+        // responseDTO 로 변환
         ResponseDailyGlucoseDto responseDailyGlucoseDto = ResponseDailyGlucoseDto.builder()
                 .id(vital.getId())
                 .bloodSugarLevel(vital.getBloodSugarLevel())

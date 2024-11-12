@@ -86,7 +86,7 @@ public class RecordController {
     @ChildRequired
     @Tag(name = "Record API", description = "기록 api")
     @Operation(summary = "진행 중인 식사 찾기 api", description = "진행 중인 식사를 찾습니다.")
-    public ResponseEntity<ResponseDto> findMeal(HttpServletRequest request) {
+    public ResponseEntity<ResponseDto> getOngoingRecord(HttpServletRequest request) {
         log.info("GET /api/record/meal/ongoing");
 
         Long childId = jwtExtratService.jwtFindId(request);
