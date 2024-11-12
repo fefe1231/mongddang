@@ -1,8 +1,7 @@
 package com.onetwo.mongddang.domain.fcm.controller;
 
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
-import com.onetwo.mongddang.domain.fcm.dto.DeviceTokenRegisterDto;
-import com.onetwo.mongddang.domain.fcm.dto.RequestReadNotiDto;
+import com.onetwo.mongddang.domain.fcm.dto.RequestReadNotificationDto;
 import com.onetwo.mongddang.domain.fcm.service.GetPushLogService;
 import com.onetwo.mongddang.domain.fcm.service.ReadPushLogService;
 import com.onetwo.mongddang.domain.user.jwt.JwtExtratService;
@@ -39,7 +38,7 @@ public class NotificationController {
     @PatchMapping("/read")
     @Operation(summary = "Push Log 읽음 처리", description = "Push Log를 읽음처리합니다.")
     public ResponseEntity<ResponseDto> getDeviceToken(HttpServletRequest request,
-                                                      @Valid @RequestBody RequestReadNotiDto requestReadNotiDto) {
+                                                      @Valid @RequestBody RequestReadNotificationDto requestReadNotiDto) {
         Long userId = jwtExtratService.jwtFindId(request);
         ResponseDto responseDto = readPushLogService.readPushLog(userId,requestReadNotiDto.getNotificationId());
         return ResponseEntity.ok(responseDto);
