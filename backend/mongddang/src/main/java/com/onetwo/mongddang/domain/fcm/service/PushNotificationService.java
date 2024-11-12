@@ -84,7 +84,7 @@ public class PushNotificationService {
     public void savePushNotification(User user, String content, PushLog.Category category){
         PushLog pushLog = PushLog.builder()
                 .user(user)
-                .is_new(true)
+                .isNew(true)
                 .content(content)
                 .category(category)
                 .createdAt(LocalDateTime.now())
