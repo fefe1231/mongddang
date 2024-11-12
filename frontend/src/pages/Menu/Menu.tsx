@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
+import MenuBtnGroup from '@/features/MenuBtnGroup/ui/MenuBtnGroup';
 import {
   menuBase,
   menuBtnContainer,
@@ -7,7 +8,6 @@ import {
   menuContent,
 } from './styles';
 import CloseBtn from './ui/CloseBtn/CloseBtn';
-import MenuBtnGroup from './ui/MenuBtnGroup/MenuBtnGroup';
 
 const Menu = () => {
   return (
@@ -16,7 +16,7 @@ const Menu = () => {
         {/* 메뉴 버튼 모음 */}
         <div css={menuBtnContainer}>
           <div css={menuBtnGroup}>
-            <MenuBtnGroup />
+            <MenuBtnGroup userRole={'child'}/>
           </div>
         </div>
       </div>

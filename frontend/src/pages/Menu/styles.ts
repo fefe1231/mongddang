@@ -4,7 +4,7 @@ export const menuBase = css`
   display: flex;
   position: relative;
   min-width: 360px;
-  min-height: 640px;
+  min-height: 100vh;
   justify-content: center;
   background-color: #aedbff;
 `;
