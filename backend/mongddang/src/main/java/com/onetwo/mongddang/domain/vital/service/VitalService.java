@@ -6,6 +6,7 @@ import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
 import com.onetwo.mongddang.domain.user.model.User;
 import com.onetwo.mongddang.domain.user.repository.UserRepository;
 import com.onetwo.mongddang.domain.vital.application.VitalUtils;
+import com.onetwo.mongddang.domain.vital.dto.GlucoseMeasurementTimeDto;
 import com.onetwo.mongddang.domain.vital.dto.ResponseBloodSugarReportDto;
 import com.onetwo.mongddang.domain.vital.dto.ResponseDailyGlucoseDto;
 import com.onetwo.mongddang.domain.vital.model.Vital;
@@ -178,15 +179,24 @@ public class VitalService {
         float cv = vitalUtils.getGlucoseVariability(vitalList, abg); // 혈당 변동성
         float tir = vitalUtils.getInTargetRangeRatio(vitalList); // 목표 범위 내 비율
 
+        // 혈당 측정 시간대별로 정리
+        List<GlucoseMeasurementTimeDto> glucoseMeasurementTimeList = new ArrayList<>();
+        for (Vital vital : vitalList) {
+            glucoseMeasurementTimeList.add(GlucoseMeasurementTimeDto.builder()
+                    .measurementTime(vital.getMeasurementTime())
+                    .bloodSugarLevel(vital.getBloodSugarLevel())
+                    .build());
+        }
+
         // responseDTO 로 변환
         ResponseBloodSugarReportDto responseBloodSugarReportDto = ResponseBloodSugarReportDto.builder()
+                .glucoseMeasurementItmeList(glucoseMeasurementTimeList)
                 .gmi(gmi)
                 .abg(abg)
                 .cv(cv)
                 .tir(tir)
                 .gptSummary("정상")
                 .build();
-
 
         return ResponseDto.builder()
                 .message("리포트 조회 성공")
