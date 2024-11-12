@@ -1,1 +1,1 @@
-export { DayRecordPage } from './TodayRecord';
+export { DayRecordPage } from './DayRecord';

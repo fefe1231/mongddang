@@ -25,7 +25,7 @@ export const DayRecordPage = () => {
   const nickname = getUser()?.nickname ?? 'test';
 
   const { data, isError, isLoading } = useQuery(
-    DayRecordQueries.todayRecordQuery(nickname, date)
+    DayRecordQueries.dayRecordQuery(nickname, date)
   );
 
   if (isError) {
