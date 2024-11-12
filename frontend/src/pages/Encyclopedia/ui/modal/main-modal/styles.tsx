@@ -13,6 +13,7 @@ export const base = css`
 export const modalCss = css`
   border: 5px solid #8FDCFF;
   position: relative; 
+  box-sizing: content-box;
 `
 
 export const xiconCss = css`
