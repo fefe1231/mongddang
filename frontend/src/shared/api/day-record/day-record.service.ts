@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { BaseApiResponse } from '../base';
+import { BaseApiResponse } from '../base.types';
 import { DayRecordsResponse, RecordParams } from './day-record.types';
 import { api } from '../interceptors';
 
