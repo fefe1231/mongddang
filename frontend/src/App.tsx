@@ -12,6 +12,7 @@ import { RecordPage, TodayRecordPage } from './pages/record';
 import { Encyclopedia } from './pages/Encyclopedia';
 import { SignUp } from './pages/Signup';
 import ProtectorMain from './pages/protectormain/ProtectorMain';
+import { InviteCode } from './pages/Signup/invite-code';
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
           <Route path="/" element={<KidsMainPage />} />
           <Route path="/btn" element={<Btn />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/invitecode" element={<InviteCode />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/encyclopedia" element={<Encyclopedia />} />
           <Route path="/nickname/title" element={<NicknameTitle />} />

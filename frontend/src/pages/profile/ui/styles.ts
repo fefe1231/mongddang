@@ -20,5 +20,18 @@ export const containerCss = css`
   align-items: center;
   justify-content: center;
   text-align: center;
-  gap: 1rem
+  gap: 1rem;
+
 `
+export const toastCss = (showToast:boolean) => css`
+  position: fixed;
+  bottom: 3rem;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 100;
+  transform: opacity 0.5s ease-in-out;
+  opacity: ${showToast ? 1: 0};
+`
+
