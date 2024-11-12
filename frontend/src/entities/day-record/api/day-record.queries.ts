@@ -19,6 +19,7 @@ export class DayRecordQueries {
 
         return data.data.dates[0];
       },
+      enabled: !!nickname,
     });
   }
 }

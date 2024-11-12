@@ -1,13 +1,44 @@
 import { BloodSugarChart } from '@/widgets/blood-sugar-chart/ui';
 import { TopBar } from '@/shared/ui/TopBar';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { TabMenu } from '@/shared/ui/TabMenu/indes';
+import { useQuery } from '@tanstack/react-query';
+import { DayRecordQueries } from '@/entities/day-record/api';
+import { useUserStore } from '@/entities/user/model/store';
+import { useShallow } from 'zustand/shallow';
 
-export const TodayRecordPage = () => {
+export const DayRecordPage = () => {
   const nav = useNavigate();
+  const { date } = useParams();
+  if (typeof date === 'undefined') {
+    throw new Error('Impossible date');
+  }
+
   const handleTabChange = (tabId: string) => {
     console.log(tabId);
   };
+  const { getUser } = useUserStore(
+    useShallow((state) => ({
+      getUser: state.getUser,
+    }))
+  );
+  const nickname = getUser()?.nickname ?? '어린이 서원';
+
+  const { data, isError, isLoading } = useQuery(
+    DayRecordQueries.todayRecordQuery(nickname, date)
+  );
+
+  const handleClick = () => {
+    console.log(data);
+  };
+
+  if (isError) {
+    console.log('Error in TodayRecordPage');
+    throw new Error('Error in TodayRecordPage');
+  }
+
+  if (isLoading) return null;
+
   return (
     <>
       <header>
@@ -16,7 +47,7 @@ export const TodayRecordPage = () => {
         </TopBar>
       </header>
       <section>
-        <BloodSugarChart />
+        <BloodSugarChart date={date} />
       </section>
       <section>
         <TabMenu
@@ -24,6 +55,7 @@ export const TodayRecordPage = () => {
           onTabChange={handleTabChange}
         />
       </section>
+      <button onClick={handleClick}>click</button>
     </>
   );
 };
