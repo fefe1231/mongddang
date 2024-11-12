@@ -22,15 +22,11 @@ export const DayRecordPage = () => {
       getUser: state.getUser,
     }))
   );
-  const nickname = getUser()?.nickname ?? '어린이 서원';
+  const nickname = getUser()?.nickname ?? 'test';
 
   const { data, isError, isLoading } = useQuery(
     DayRecordQueries.todayRecordQuery(nickname, date)
   );
-
-  const handleClick = () => {
-    console.log(data);
-  };
 
   if (isError) {
     console.log('Error in TodayRecordPage');
@@ -55,7 +51,6 @@ export const DayRecordPage = () => {
           onTabChange={handleTabChange}
         />
       </section>
-      <button onClick={handleClick}>click</button>
     </>
   );
 };
