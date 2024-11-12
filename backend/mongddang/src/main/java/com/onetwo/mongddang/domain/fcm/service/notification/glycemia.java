@@ -1,5 +1,6 @@
 package com.onetwo.mongddang.domain.fcm.service.notification;
 
+import com.onetwo.mongddang.domain.fcm.dto.Notification;
 import com.onetwo.mongddang.domain.fcm.model.PushLog;
 import com.onetwo.mongddang.domain.fcm.service.PushNotificationService;
 import com.onetwo.mongddang.domain.user.model.CtoP;
@@ -35,7 +36,13 @@ public class glycemia {
             if (vital.getStatus() == Vital.GlucoseStatusType.low || vital.getStatus() == Vital.GlucoseStatusType.high) {
                 User child = vital.getChild();
                 String message = (vital.getStatus() == Vital.GlucoseStatusType.low ? "저혈당" : "고혈당") + "이 관측되고 있습니다.";
-                pushNotificationService.sendPushNotification(child, "이상 혈당", message, PushLog.Category.blood_sugar);
+                Notification notification = Notification.builder()
+                        .title("이상 혈당 알림")
+                        .message(message)
+                        .receiver(child)
+                        .child(child)
+                        .build();
+                pushNotificationService.sendPushNotification(child, notification, PushLog.Category.blood_sugar);
             }
         }
     }
@@ -57,7 +64,13 @@ public class glycemia {
             List<CtoP> relations = ctoPRepository.findByChild(child);
             for (CtoP relation : relations) {
                 User protector = relation.getProtector();
-                pushNotificationService.sendPushNotification(protector, "혈당 지속 알림", message, PushLog.Category.blood_sugar);
+                Notification notification = Notification.builder()
+                        .title("이상 혈당 지속 알림")
+                        .message(message)
+                        .receiver(protector)
+                        .child(child)
+                        .build();
+                pushNotificationService.sendPushNotification(child, notification, PushLog.Category.blood_sugar);;
             }
         }
     }

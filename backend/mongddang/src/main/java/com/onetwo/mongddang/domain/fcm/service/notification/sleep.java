@@ -1,5 +1,6 @@
 package com.onetwo.mongddang.domain.fcm.service.notification;
 
+import com.onetwo.mongddang.domain.fcm.dto.Notification;
 import com.onetwo.mongddang.domain.fcm.model.PushLog;
 import com.onetwo.mongddang.domain.fcm.service.PushNotificationService;
 import com.onetwo.mongddang.domain.user.model.User;
@@ -29,7 +30,13 @@ public class sleep {
         // 안자는 어린이들에게 알림 보내기
         for (User child : childrenList) {
             String message = "오후 10시입니다. 몽땅친구들과 함께 잠자리에 들 준비를 하는 건 어떨까요?";
-            pushNotificationService.sendPushNotification(child, "취침 알림", message, PushLog.Category.game);
+            Notification notification = Notification.builder()
+                    .title("수면 시간 알림")
+                    .message(message)
+                    .receiver(child)
+                    .child(child)
+                    .build();
+            pushNotificationService.sendPushNotification(child, notification, PushLog.Category.game);
         }
     }
 }

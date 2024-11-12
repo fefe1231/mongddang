@@ -1,5 +1,6 @@
 package com.onetwo.mongddang.domain.fcm.service.notification;
 
+import com.onetwo.mongddang.domain.fcm.dto.Notification;
 import com.onetwo.mongddang.domain.fcm.model.PushLog;
 import com.onetwo.mongddang.domain.fcm.service.PushNotificationService;
 import com.onetwo.mongddang.domain.record.repository.RecordRepository;
@@ -28,7 +29,13 @@ public class Medication {
         for (Record record : records) {
             User child = record.getChild();
             String message = "복약 시간입니다.";
-            pushNotificationService.sendPushNotification(child, "복약 알림", message, PushLog.Category.medication);
+            Notification notification = Notification.builder()
+                    .title("복약 알림")
+                    .message(message)
+                    .receiver(child)
+                    .child(child)
+                    .build();
+            pushNotificationService.sendPushNotification(child, notification, PushLog.Category.medication);
         }
     }
 }
