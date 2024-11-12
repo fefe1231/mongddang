@@ -174,7 +174,7 @@ public class SignupService {
                 .content("회원가입을 축하합니다:) 첫 몽땅 친구와 별가루가 지급되었습니다!")
                 .category(PushLog.Category.game)
                 .createdAt(LocalDateTime.now())
-                .is_new(true)
+                .isNew(true)
                 .build();
         pushLogRepository.save(firstLog);
     }
