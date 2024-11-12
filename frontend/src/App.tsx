@@ -12,10 +12,12 @@ import { RecordPage, TodayRecordPage } from './pages/record';
 import { Encyclopedia } from './pages/Encyclopedia';
 import { SignUp } from './pages/Signup';
 import ProtectorMain from './pages/protectormain/ProtectorMain';
+import { useLoadState } from './app/hooks/use-load-state';
 import { InviteCode } from './pages/Signup/invite-code';
 
 
 function App() {
+  useLoadState();
   return (
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_AUTH_CLIENT_ID}>
       <Router>

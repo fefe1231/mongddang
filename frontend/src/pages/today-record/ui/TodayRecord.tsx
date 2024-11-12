@@ -1,27 +1,16 @@
-import { useEffect, useRef } from 'react';
-import { ScrollArea } from '@mantine/core';
-import { BloodSugarChart } from '@/widgets/blood-sugar-chart/blood-sugar-chart-ui';
+import { BloodSugarChart } from '@/widgets/blood-sugar-chart/ui';
+import { TopBar } from '@/shared/ui/TopBar';
+import { useNavigate } from 'react-router-dom';
 
 export const TodayRecordPage = () => {
-  const viewportRef = useRef<HTMLDivElement>(null);
-
-  // mount 시 linechart의 가장 오른쪽으로 이동
-  useEffect(() => {
-    if (viewportRef.current) {
-      viewportRef.current.scrollTo({
-        left: viewportRef.current.scrollWidth,
-        behavior: 'smooth',
-      });
-    }
-  }, []);
+  const nav = useNavigate();
 
   return (
     <>
-      {/* LineChart start */}
-      <ScrollArea w={360} h={350} viewportRef={viewportRef}>
-        <BloodSugarChart />
-      </ScrollArea>
-      {/* LineChart end */}
+      <TopBar type="iconpage" iconHandler={() => nav(-1)}>
+        내 기록
+      </TopBar>
+      <BloodSugarChart />
     </>
   );
 };
