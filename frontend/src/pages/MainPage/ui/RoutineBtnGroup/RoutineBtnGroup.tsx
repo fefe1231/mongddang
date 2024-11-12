@@ -21,7 +21,7 @@ type RoutineBtnGroupProps = {
 
 const RoutineBtnGroup = (props: RoutineBtnGroupProps) => {
   const { time, finalTime } = useStopwatchStore();
-  console.log('time', time)
+  console.log('타임', time)
   console.log('finalTime', finalTime)
   return (
     <div css={container}>

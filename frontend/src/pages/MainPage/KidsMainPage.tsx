@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
+import { App } from '@capacitor/app';
 import { BottomBar } from '@/shared/ui/BottomBar';
 import {
   bottomContainer,
@@ -28,8 +29,9 @@ import {
   EndRoutineAlert,
   StartRoutineAlert,
 } from './ui/Alerts/Alerts';
-import { setRoutine } from './hooks/useRoutineStatus';
+import { setRoutine, setStopwatch } from './hooks/useRoutineStatus';
 import { getInitialRoutine } from './api/routineApi';
+import { useStopwatchStore } from './model/useStopwatchStore';
 
 const KidsMainPage = () => {
   const navigate = useNavigate();
@@ -62,7 +64,22 @@ const KidsMainPage = () => {
       console.log('초기 루틴 조회', routineValue);
     };
 
+    const handleAppStateChange = () => {
+      const latestTime = useStopwatchStore.getState().time;
+      setStopwatch(latestTime);
+    };
+
+    App.addListener('appStateChange', ({ isActive }) => {
+      if (!isActive) {
+        handleAppStateChange();
+      }
+    });
+
     fetchRoutine();
+
+    return () => {
+      App.removeAllListeners();
+    };
   }, []);
 
   const handleDietModal = () => {
