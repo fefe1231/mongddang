@@ -59,4 +59,26 @@ public class VitalController {
         ResponseDto responseDto = vitalService.getCurrentBloodSugar(userId, nickname);
         return ResponseEntity.ok(responseDto);
     }
+
+
+    // 리포트 조회
+    @GetMapping("/report")
+    @Tag(name = "Vital API", description = "혈당 api")
+    @Operation(summary = "리포트 조회", description = "리포트를 조회합니다.")
+    public ResponseEntity<ResponseDto> getReport(
+            @NotBlank(message = "닉네임은 필수입니다.") @RequestParam String nickname,
+            @RequestParam LocalDate startDate,
+            @RequestParam LocalDate endDate,
+            HttpServletRequest request
+    ) {
+        log.info("GET /api/bloodsugar/report?nickname={}&startDate={}&endDate={}\", nickname, startDate, endDate");
+
+        Long userId = jwtExtratService.jwtFindId(request);
+
+        // 서비스 작성
+        ResponseDto responseDto = vitalService.getReport(userId, nickname, startDate, endDate);
+        return ResponseEntity.ok(responseDto);
+    }
+
+
 }

@@ -1,14 +1,11 @@
 package com.onetwo.mongddang.domain.record.application;
 
-import com.onetwo.mongddang.common.utils.DateTimeUtils;
 import com.onetwo.mongddang.domain.record.dto.record.RecordDetailsDto;
 import com.onetwo.mongddang.domain.record.dto.record.RecordWithChildIdDto;
 import com.onetwo.mongddang.domain.record.dto.record.ResponseRecordDto;
 import com.onetwo.mongddang.domain.record.model.Record;
 import com.onetwo.mongddang.domain.record.repository.RecordRepository;
-import com.onetwo.mongddang.domain.user.application.CtoPUtils;
 import com.onetwo.mongddang.domain.user.model.User;
-import com.onetwo.mongddang.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,9 +25,6 @@ public class RecordUtils {
 
 
     private final RecordRepository recordRepository;
-    private final UserRepository userRepository;
-    private final CtoPUtils ctoPUtils;
-    private final DateTimeUtils dateTimeUtils;
 
 
     public List<ResponseRecordDto> getRecordDateListBStartTimeBetween(User child, LocalDateTime startDateTime, LocalDateTime endDateTime) {
