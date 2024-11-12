@@ -10,10 +10,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 
@@ -46,4 +43,20 @@ public class VitalController {
 
     }
 
+    // 현재 혈당 조회
+    @PostMapping("/current")
+    @Tag(name = "Vital API", description = "혈당 api")
+    @Operation(summary = "현재 혈당 조회", description = "현재 혈당을 조회합니다.")
+    public ResponseEntity<ResponseDto> getCurrentBloodSugar(
+            @NotBlank(message = "닉네임은 필수입니다.") @RequestParam String nickname,
+            HttpServletRequest request
+    ) {
+        log.info("GET /api/bloodsugar/current?nickname={}\", nickname");
+
+        Long userId = jwtExtratService.jwtFindId(request);
+
+        // 서비스 작성
+        ResponseDto responseDto = vitalService.getCurrentBloodSugar(userId, nickname);
+        return ResponseEntity.ok(responseDto);
+    }
 }
