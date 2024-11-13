@@ -23,16 +23,12 @@ export const Notmodal = ({ setstate, data }: OwnModalProps) => {
   const [, setIsNew] = useState(false);
   const [buyModal, setBuyModal] = useState<boolean>(false);
   const [findModal, setFindModal] = useState<boolean>(false);
-  const accessToken = localStorage.getItem('accessToken') || '';
   const imageKey = formatId(data.id);
   const imagePath = noCharacterImages[imageKey];
 
   const characterMutation = useMutation({
     mutationFn: async () => {
-      if (!accessToken) {
-        throw new Error('AccessToken이 필요합니다.');
-      }
-      return await postRecruitment(accessToken, data.id);
+      return await postRecruitment(data.id);
     },
     onSuccess: () => {
       setFindModal(true);
@@ -46,10 +42,7 @@ export const Notmodal = ({ setstate, data }: OwnModalProps) => {
   const CoinQuery = useQuery({
     queryKey: ['coin'],
     queryFn: async () => {
-      if (!accessToken) {
-        throw new Error('AccessToken이 필요합니다.');
-      }
-      return await getCoinInfo(accessToken);
+      return await getCoinInfo();
     },
   });
 
