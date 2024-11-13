@@ -69,15 +69,17 @@ export interface FastActingMedicationContent extends BaseMedicationContent {
   standards: GlucoseStandard[];
 }
 
+export interface DayRecordTypes {
+  exercise: ExerciseRecord[];
+  meal: MealRecord[];
+  medication: MedicationRecord[];
+  sleep: SleepRecord[];
+}
+
 // 하루 기록
 export interface DayRecords {
   day: string;
-  records: {
-    meal: MealRecord[];
-    exercise: ExerciseRecord[];
-    sleep: SleepRecord[];
-    medication: MedicationRecord[];
-  };
+  records: DayRecordTypes;
 }
 
 export interface DayRecordsResponse {

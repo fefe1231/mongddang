@@ -11,4 +11,5 @@ export type {
   DayRecords,
   DayRecordsResponse,
   RecordParams,
+  DayRecordTypes,
 } from './day-record.types';
