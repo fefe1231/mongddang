@@ -1,4 +1,4 @@
-import { DayRecordService } from '@/shared/api/day-record';
+import { DayRecordService, DayRecords } from '@/shared/api/day-record';
 import { queryOptions } from '@tanstack/react-query';
 import { RecordFilter } from '../model';
 
@@ -9,22 +9,22 @@ export class DayRecordQueries {
       [...this.queryKeys.all, { filters }] as const,
   };
 
-  // private static dayRecordQuery(nickname: string, date: string) {
-  //   return queryOptions({
-  //     queryKey: DayRecordQueries.queryKeys.all,
-  //     queryFn: async (): Promise<DayRecords> => {
-  //       const { data } = await DayRecordService.dayRecordQuery({
-  //         params: {
-  //           nickname,
-  //           date,
-  //         },
-  //       });
+  private static dayRecordQuery(nickname: string, date: string) {
+    return queryOptions({
+      queryKey: DayRecordQueries.queryKeys.all,
+      queryFn: async (): Promise<DayRecords> => {
+        const { data } = await DayRecordService.dayRecordQuery({
+          params: {
+            nickname,
+            date,
+          },
+        });
 
-  //       return data.data.dates[0];
-  //     },
-  //     enabled: !!nickname,
-  //   });
-  // }
+        return data.data.dates[0];
+      },
+      enabled: !!nickname,
+    });
+  }
 
   private static filteredDayRecordsQuery(filters: RecordFilter) {
     return queryOptions({
@@ -56,8 +56,12 @@ export class DayRecordQueries {
     });
   }
 
+  static allRecordsQuery(nickname: string, date: string) {
+    return this.dayRecordQuery(nickname, date);
+  }
+
   // 각 카테고리별 편의 메서드
-  static foodRecordsQuery(nickname: string, date: string) {
+  static mealRecordsQuery(nickname: string, date: string) {
     return this.filteredDayRecordsQuery({
       nickname,
       date,
