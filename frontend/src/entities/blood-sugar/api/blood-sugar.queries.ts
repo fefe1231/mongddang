@@ -1,7 +1,7 @@
 import { Bloodsugar, BloodsugarService } from '@/shared/api/blood-sugar';
 import { queryOptions } from '@tanstack/react-query';
 // import { BloodsugarFilter } from '../model';
-import dayjs from 'dayjs';
+// import dayjs from 'dayjs';
 
 export class BloodsugarQueries {
   static readonly queryKeys = {
@@ -21,11 +21,12 @@ export class BloodsugarQueries {
             date,
           },
         });
-        const formattedData = data.data.bloodSugar.map((item) => ({
-          ...item,
-          measurementTime: dayjs(item.measurementTime).format('HH:mm'),
-        }));
-        return formattedData;
+        // const formattedData = data.data.bloodSugar.map((item) => ({
+        //   ...item,
+        //   measurementTime: dayjs(item.measurementTime).format('HH:mm'),
+        // }));
+        // return formattedData;
+        return data.data.bloodSugar;
       },
       enabled: !!nickname,
     });

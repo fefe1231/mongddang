@@ -1,7 +1,7 @@
 import { DayRecordService, DayRecords } from '@/shared/api/day-record';
 import { queryOptions } from '@tanstack/react-query';
 import { RecordCategory, RecordFilter, RecordType } from './type';
-import dayjs from 'dayjs';
+// import dayjs from 'dayjs';
 
 export class DayRecordQueries {
   static readonly queryKeys = {
@@ -40,12 +40,13 @@ export class DayRecordQueries {
           },
         });
 
-        const baseData = data.data.dates[0].records[filters.category];
-        return baseData.map((item) => ({
-          ...item,
-          startTime: dayjs(item.startTime).format('HH:mm'),
-          endTime: item.endTime ? dayjs(item.endTime).format('HH:mm') : null,
-        })) as RecordType<T>;
+        // const baseData = data.data.dates[0].records[filters.category];
+        // return baseData.map((item) => ({
+        //   ...item,
+        //   startTime: dayjs(item.startTime).format('HH:mm'),
+        //   endTime: item.endTime ? dayjs(item.endTime).format('HH:mm') : null,
+        // })) as RecordType<T>;
+        return data.data.dates[0].records[filters.category];
       },
       enabled: !!filters.nickname,
     });

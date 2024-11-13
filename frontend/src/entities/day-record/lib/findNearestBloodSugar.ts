@@ -1,14 +1,18 @@
 import { Bloodsugar } from '@/shared/api/blood-sugar';
+import dayjs from 'dayjs';
 
 export const findNearestTimeBloodSugar = (
   data: Bloodsugar[],
   targetTime: string
 ): number => {
-  // HH:mm 형식의 시간을 분 단위로 변환하는 함수
-  const convertTimeToMinutes = (time: string): number => {
-    const [hours, minutes] = time.split(':').map(Number);
+  const convertISOTimeToMinutesWithDayjs = (isoTime: string): number => {
+    const time = dayjs(isoTime);
 
-    return hours * 60 + minutes;
+    console.log('m', time.minute());
+    console.log('h', time.hour());
+    console.log('all', time.hour() * 60 + time.minute());
+
+    return time.hour() * 60 + time.minute();
   };
 
   // 두 시간 간의 차이를 분 단위로 계산하는 함수
@@ -17,7 +21,7 @@ export const findNearestTimeBloodSugar = (
   };
 
   // 타겟 시간을 분으로 변환
-  const targetMinutes = convertTimeToMinutes(targetTime);
+  const targetMinutes = convertISOTimeToMinutesWithDayjs(targetTime);
 
   let left = 0;
   let right = data.length - 1;
@@ -26,7 +30,9 @@ export const findNearestTimeBloodSugar = (
 
   while (left <= right) {
     const mid = Math.floor((left + right) / 2);
-    const currentMinutes = convertTimeToMinutes(data[mid].measurementTime);
+    const currentMinutes = convertISOTimeToMinutesWithDayjs(
+      data[mid].measurementTime
+    );
     const timeDiff = getTimeDifference(targetMinutes, currentMinutes);
 
     // 현재 시간이 타겟 시간과의 차이가 더 작으면 업데이트
