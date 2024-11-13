@@ -58,7 +58,7 @@ public class GptUtils {
     private String createRequestBody(String message) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode requestBody = objectMapper.createObjectNode();
-        requestBody.put("model", "gpt-3.5-turbo");
+        requestBody.put("model", "gpt-4o");
         ArrayNode messages = requestBody.putArray("messages");
         ObjectNode messageNode = objectMapper.createObjectNode();
         messageNode.put("role", "user");

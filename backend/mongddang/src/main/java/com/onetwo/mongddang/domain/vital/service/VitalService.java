@@ -218,8 +218,17 @@ public class VitalService {
                     .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
             log.info("Existing User : {}", userId);
 
+            String prompt = """                        
+                        지금 제공한 정보는 1형 당뇨에 걸린 소아의 일주일 간 평균적인 혈당 관리에 대한 정보입니다. gmi(%)란 당화혈색소평균 수치이고 abg란 평균 혈당 수치이며 cv(%)란 혈당 변동성 수치이고 tir(%)란 목표 범위 내 비율입니다. 이 수치 정보를 통해 이번주 소아의 혈당 관리 상태에 대해 종합적인 평가를 3줄 정도로 내려주세요. 현재 상태에 대해 앞으로 혈당 관리를 어떻게 하면 좋을지도 1줄 정도로 함께 제안해주세요. 제공한 수치는 분석과 평가에만 이용하고 답변을 줄 때는 구체적인 수치 대신 평가로 대체해주세요. 소아라는 언급은 필요하지 않습니다.
+                        
+                        (참고 기준을 바탕으로 분석할 것)
+                        gmi기준:(5.7미만:정상, 5.7~9.0:보통, 8.0~11.0:주의, 11초과: 위험) abg기준:(70~180:정상, 180~250:보통, 250~300:주의, 300초과: 위험), cv기준:(<36:정상, 36~49:보통, 50~59:주의, 60초과: 위험), tir기준:(>70:정상, 50~70:보통, 30~50:주의, <30: 위험)
+                    """;
+
+            String messageWithPrompt = message + prompt;
+
             // GPT 요약 생성
-            JsonNode rootNode = gptUtils.requestGpt(message);
+            JsonNode rootNode = gptUtils.requestGpt(messageWithPrompt);
 
             // 필요한 데이터 추출 (예시)
             log.info("rootNode : {}", rootNode.get("choices").get(0).get("message").get("content").asText());
