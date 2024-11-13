@@ -49,20 +49,16 @@ export const visibleCover = css`
   opacity: 0.8;
 `;
 
+// Dot indicator
 export const dotContainer = css`
   position: absolute;
-  right: -1rem;
-  top: 50%;
+  right: -0.5rem;
+  top: 45%;
   transform: translateY(-60%);
-  display: flex;
-  flex-direction: column;
   gap: 4px;
 `;
 
-export const dotStyle = css`
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+export const dotStyle = (isActive: boolean) => css`
   transition: all 0.3s ease;
 
   &::before,
@@ -75,30 +71,14 @@ export const dotStyle = css`
     background-color: #d9d9d9;
   }
 
-  /* &::before {
-    top: -12px;
-  } */
-
-  &::after {
-    top: 12px;
+  &::before {
+    top: -8px;
+    background-color: ${isActive && '#007aff'};
   }
-`;
 
-export const activeDotStyle = css`
-  background-color: #007aff; 
-
-  &::before,
   &::after {
-    background-color: #007aff;
-  }
-`;
-
-export const inactiveDotStyle = css`
-  background-color: #d9d9d9;
-
-  &::before,
-  &::after {
-    background-color: #d9d9d9;
+    top: 8px;
+    background-color: ${!isActive && '#007aff'};
   }
 `;
 

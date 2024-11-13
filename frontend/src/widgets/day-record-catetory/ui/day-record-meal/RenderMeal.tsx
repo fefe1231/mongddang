@@ -1,11 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import { useQuery } from '@tanstack/react-query';
 import {
-  activeDotStyle,
   dotContainer,
   dotStyle,
   imgBox,
-  inactiveDotStyle,
   mealContainer,
   mealImg,
   mealImgCover,
@@ -52,18 +50,7 @@ export const RenderMeal = ({ nickname, date }: RenderMealProps) => {
               <span>{item.content.join(', ')}</span>
             </div>
             <div css={dotContainer}>
-              <span
-                css={[
-                  dotStyle,
-                  isTap[index] ? activeDotStyle : inactiveDotStyle,
-                ]}
-              />
-              <span
-                css={[
-                  dotStyle,
-                  !isTap[index] ? activeDotStyle : inactiveDotStyle,
-                ]}
-              />
+              <span css={[dotStyle(isTap[index])]} />
             </div>
           </div>
           <div css={mealTextBox}>content</div>
