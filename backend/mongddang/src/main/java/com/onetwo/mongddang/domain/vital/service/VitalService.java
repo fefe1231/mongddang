@@ -1,6 +1,9 @@
 package com.onetwo.mongddang.domain.vital.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
+import com.onetwo.mongddang.common.utils.GptUtils;
+import com.onetwo.mongddang.domain.mealplan.error.CustomMealplanErrorCode;
 import com.onetwo.mongddang.domain.user.application.CtoPUtils;
 import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
 import com.onetwo.mongddang.domain.user.model.User;
@@ -32,6 +35,7 @@ public class VitalService {
     private final UserRepository userRepository;
     private final CtoPUtils ctoPUtils;
     private final VitalUtils vitalUtils;
+    private final GptUtils gptUtils;
 
 
     /**
@@ -204,5 +208,32 @@ public class VitalService {
                 .build();
     }
 
+
+    public ResponseDto getGptSummary(Long userId, String nickanme, String message) {
+        log.info("getGptSummary");
+
+        try {
+            // OpenAI API 사용
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+            log.info("Existing User : {}", userId);
+
+            // GPT 요약 생성
+            JsonNode rootNode = gptUtils.requestGpt(message);
+
+            // 필요한 데이터 추출 (예시)
+            log.info("rootNode : {}", rootNode.get("choices").get(0).get("message").get("content").asText());
+            String summary = rootNode.path("choices").get(0).path("message").path("content").asText();
+
+            return ResponseDto.builder()
+                    .message("GPT 요약 생성 성공")
+                    .data(summary)
+                    .build();
+
+        } catch (Exception e) {
+            log.error("Error occurred while getting GPT summary", e);
+            throw new RestApiException(CustomMealplanErrorCode.SCHOOL_INFO_RETR_FAIL);
+        }
+    }
 
 }

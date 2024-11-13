@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/bloodsugar")
+@RequestMapping("/api/vital")
 @Tag(name = "Vital API", description = "혈당 api")
 public class VitalController {
 
@@ -25,7 +25,7 @@ public class VitalController {
     private final JwtExtratService jwtExtratService;
 
     // 혈당 기록 조회
-    @GetMapping("")
+    @GetMapping("bloodsugar")
     @Tag(name = "Vital API", description = "혈당 api")
     @Operation(summary = "혈당 기록 조회", description = "혈당 기록을 조회합니다.")
     public ResponseEntity<ResponseDto> getBloodSugar(
@@ -44,7 +44,7 @@ public class VitalController {
     }
 
     // 현재 혈당 조회
-    @PostMapping("/current")
+    @PostMapping("bloodsugar/current")
     @Tag(name = "Vital API", description = "혈당 api")
     @Operation(summary = "현재 혈당 조회", description = "현재 혈당을 조회합니다.")
     public ResponseEntity<ResponseDto> getCurrentBloodSugar(
@@ -62,7 +62,7 @@ public class VitalController {
 
 
     // 리포트 조회
-    @GetMapping("/report")
+    @GetMapping("bloodsugar/report")
     @Tag(name = "Vital API", description = "혈당 api")
     @Operation(summary = "리포트 조회", description = "리포트를 조회합니다.")
     public ResponseEntity<ResponseDto> getReport(
@@ -77,6 +77,25 @@ public class VitalController {
 
         // 서비스 작성
         ResponseDto responseDto = vitalService.getReport(userId, nickname, startDate, endDate);
+        return ResponseEntity.ok(responseDto);
+    }
+
+
+    // 리포트 GPT 요약 생성
+    @PostMapping("bloodsugar/report/gpt")
+    @Tag(name = "Vital API", description = "혈당 api")
+    @Operation(summary = "리포트 GPT 요약 생성", description = "리포트 GPT 요약을 생성합니다.")
+    public ResponseEntity<ResponseDto> getGptSummary(
+            @NotBlank(message = "닉네임은 필수입니다.") @RequestParam String nickname,
+            @RequestBody String message,
+            HttpServletRequest request
+    ) {
+        log.info("POST /api/bloodsugar/report/gpt?nickname={}&startDate={}&endDate={}\", nickname, startDate, endDate");
+
+        Long userId = jwtExtratService.jwtFindId(request);
+
+        // 서비스 작성
+        ResponseDto responseDto = vitalService.getGptSummary(userId, nickname, message);
         return ResponseEntity.ok(responseDto);
     }
 
