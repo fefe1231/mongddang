@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
 
-import { DayRecordQueries } from '@/entities/day-record/api';
+// import { DayRecordQueries } from '@/entities/day-record/api';
 import { Bloodsugar } from '@/shared/api/blood-sugar';
 import { TabMenu } from '@/shared/ui/TabMenu/indes';
-import { useQuery } from '@tanstack/react-query';
+// import { useQuery } from '@tanstack/react-query';
 import { RenderExercise } from './day-record-exercise';
 import { RenderMeal } from './day-record-meal';
 import { RenderSleep } from './day-record-sleep';
@@ -20,9 +20,9 @@ export const DayRecordCategory = ({
   bloodSugarData,
   nickname,
 }: DayRecordCategoryProps) => {
-  const { data: recordsData } = useQuery(
-    DayRecordQueries.allRecordsQuery(nickname, date)
-  );
+  // const { data: recordsData } = useQuery(
+  //   DayRecordQueries.allRecordsQuery(nickname, date)
+  // );
 
   const handleTabChange = (tabId: string) => {
     console.log(tabId);

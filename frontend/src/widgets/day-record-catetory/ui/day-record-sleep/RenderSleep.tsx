@@ -24,7 +24,8 @@ export const RenderSleep = ({
   }
   if (isLoading) return <div>Loading...</div>;
 
-  return <>
-    test Sleep
-  </>
+  // 빌드 에러 방지용
+  console.log(bloodSugarData, data);
+
+  return <>test Sleep</>;
 };
