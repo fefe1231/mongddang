@@ -1,3 +1,5 @@
+/** @jsxImportSource @emotion/react */
+
 import { TopBar } from '@/shared/ui/TopBar';
 import { useNavigate, useParams } from 'react-router-dom';
 import { DayRecordCategory } from '@/widgets/day-record-catetory';
@@ -6,6 +8,7 @@ import { useShallow } from 'zustand/shallow';
 import { useQuery } from '@tanstack/react-query';
 import { BloodsugarQueries } from '@/entities/blood-sugar/api';
 import { BloodSugarChart } from '@/widgets/blood-sugar-chart';
+import { article, chart } from './style';
 
 export const DayRecordPage = () => {
   const nav = useNavigate();
@@ -31,18 +34,20 @@ export const DayRecordPage = () => {
           내 기록
         </TopBar>
       </header>
-      <section className="blood-sugar-section">
-        {!isBloodSugarErr && !isBloodSugarLoading && (
-          <BloodSugarChart data={bloodSugarData} />
-        )}
-      </section>
-      <section>
-        <DayRecordCategory
-          nickname={nickname}
-          bloodSugarData={bloodSugarData}
-          date={date}
-        />
-      </section>
+      <article css={article}>
+        <section css={chart}>
+          {!isBloodSugarErr && !isBloodSugarLoading && (
+            <BloodSugarChart data={bloodSugarData} />
+          )}
+        </section>
+        <section>
+          <DayRecordCategory
+            nickname={nickname}
+            bloodSugarData={bloodSugarData}
+            date={date}
+          />
+        </section>
+      </article>
     </>
   );
 };
