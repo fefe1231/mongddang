@@ -8,7 +8,6 @@ import {
   container,
   nicknameCss,
 } from './ProfileStatus.styles';
-import Coin from '@/assets/img/Coin.png';
 import { mainIcons } from '../../constants/iconsData';
 
 const ProfileStatus = () => {
@@ -33,9 +32,6 @@ const ProfileStatus = () => {
             40
           </Typography>
           &nbsp;
-          <Typography color="dark" size="0.75" weight={400}>
-            points
-          </Typography>
         </div>
       </div>
     </div>

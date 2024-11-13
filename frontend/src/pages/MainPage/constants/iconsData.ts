@@ -7,7 +7,7 @@ import record_icon from '@/assets/img/icon/record_icon.png';
 import meal_icon from '@/assets/img/icon/meal_icon.png';
 import exercise_icon from '@/assets/img/icon/exercise_icon.png';
 import sleep_icon from '@/assets/img/icon/sleep_icon.png';
-import main_star from '@/assets/img/icon/main_star.png';
+import menu_icon from '@/assets/img/icon/menu_icon.png';
 
 export const mainIcons = {
   starCoin: star_coin,
@@ -19,5 +19,5 @@ export const mainIcons = {
   meal: meal_icon,
   exercise: exercise_icon,
   sleep: sleep_icon,
-  star: main_star
+  menu: menu_icon,
 };

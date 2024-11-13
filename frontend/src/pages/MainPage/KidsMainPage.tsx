@@ -206,7 +206,7 @@ const KidsMainPage = () => {
           <BottomBar
             icons={[
               mainIcons.collection,
-              mainIcons.star,
+              mainIcons.menu,
               mainIcons.record,
             ]}
             menus={['몽땅 도감', '메뉴', '일일 기록']}

@@ -29,6 +29,7 @@ export const coinContainer = css`
   width: 100%;
   justify-content: center;
   padding: 3%;
+  
 `;
 
 export const coinAmountCss = css`
@@ -43,7 +44,8 @@ export const coinAmountCss = css`
 
 export const coinCss = css`
   position: absolute;
+  width: 3rem;
   top: 50%;
   transform: translateY(-50%);
-  left: 0%;
+  left: -3%;
 `;
