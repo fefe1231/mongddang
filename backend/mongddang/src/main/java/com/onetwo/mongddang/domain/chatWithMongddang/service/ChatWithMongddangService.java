@@ -36,14 +36,14 @@ public class ChatWithMongddangService {
             String gptMessage = gptUtils.requestGpt(startPrompt + message, 1.0f);
 
             return ResponseDto.builder()
-                    .message("몽땅과의 새로운 채팅을 시작합니다.")
+                    .message("몽땅과의 새로운 대화를 시작합니다.")
                     .data(gptMessage)
                     .build();
         }
 
         // 몽땅과 기존의 채팅을 진행할 때
         return ResponseDto.builder()
-                .message("몽땅과 기존의 채팅을 진행합니다.")
+                .message("몽땅과 기존의 대화를 진행합니다.")
                 .data(gptUtils.requestGpt(message, 1.0f))
                 .build();
     }

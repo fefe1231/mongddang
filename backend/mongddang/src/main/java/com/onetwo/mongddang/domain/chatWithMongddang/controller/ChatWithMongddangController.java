@@ -2,6 +2,7 @@ package com.onetwo.mongddang.domain.chatWithMongddang.controller;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.onetwo.mongddang.common.annotation.ChildRequired;
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
 import com.onetwo.mongddang.domain.chatWithMongddang.dto.RequestChatWithMongddangDto;
 import com.onetwo.mongddang.domain.chatWithMongddang.service.ChatWithMongddangService;
@@ -30,8 +31,9 @@ public class ChatWithMongddangController {
 
 
     @PostMapping("")
-    @Tag(name = "ChatWithMongddang API", description = "몽땅과의 채팅 api")
-    @Operation(summary = "몽땅과의 채팅", description = "몽땅과의 채팅을 합니다.")
+    @ChildRequired
+    @Tag(name = "ChatWithMongddang API", description = "몽땅과의 대화 api")
+    @Operation(summary = "몽땅과의 대화", description = "몽땅과 대화를 합니다.")
     public ResponseEntity<ResponseDto> getPrompt(@RequestBody RequestChatWithMongddangDto requestChatWithMongddangDto, HttpServletRequest request) throws JsonProcessingException {
         log.info("requestChatWithMongddangDto: {}", requestChatWithMongddangDto);
 
