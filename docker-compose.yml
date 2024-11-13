@@ -84,6 +84,9 @@ services:
       MEAL_URL: ${MEAL_URL} 
       SCHOOL_KEY: ${SCHOOL_KEY} 
       SCHOOL_URL: ${SCHOOL_URL}
+      # ChatGPT
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      OPENAI_URL: ${OPENAI_URL}
     expose:
       - "8080"
     volumes:
