@@ -58,7 +58,7 @@ public class VitalUtils {
                 inTargetRangeCount++;
             }
         }
-        return (float) inTargetRangeCount / vitalList.size();
+        return (float) inTargetRangeCount / vitalList.size() * 100;
     }
 
 }
