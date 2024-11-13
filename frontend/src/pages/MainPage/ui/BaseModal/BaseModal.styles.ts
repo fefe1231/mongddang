@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-export const mailBoxContainer = css`
+export const baseModalContainer = css`
   flex-direction: column;
   width: 90%;
   height: 90%;
@@ -10,4 +10,4 @@ export const mailBoxContainer = css`
 `;
 
 
-export const mailBoxContent = css``;
+export const baseModalContent = css``;

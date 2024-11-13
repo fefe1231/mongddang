@@ -19,7 +19,7 @@ import CurrentBloodSugar from './ui/CurrentBloodSugar/CurrentBloodSugar';
 import ChatBubble from './ui/ChatBubble/ChatBubble';
 import { useEffect, useState } from 'react';
 import DietModal from './ui/DietModal/DietModal';
-import MailBox from './ui/MailBox/MailBox';
+import BaseModal from './ui/BaseModal/BaseModal';
 import { useNavigate } from 'react-router-dom';
 import RoutineBtnGroup from './ui/RoutineBtnGroup/RoutineBtnGroup';
 import {
@@ -47,7 +47,7 @@ const KidsMainPage = () => {
     coin: 0,
   });
   const [openDietModal, setOpenDietModal] = useState(false);
-  const [openMailBox, setOpenMailBox] = useState(false);
+  const [openBaseModal, setOpenBaseModal] = useState(false);
   const [alertStatus, setAlertStatus] = useState('');
   const [alertBloodSugar, setAlertBloodSugar] = useState(0);
   const [currentRoutine, setCurrentRoutine] = useState('');
@@ -113,8 +113,8 @@ const KidsMainPage = () => {
     setOpenDietModal(false);
   };
 
-  const closeMailBox = () => {
-    setOpenMailBox(false);
+  const closeBaseModal = () => {
+    setOpenBaseModal(false);
   };
 
   // 일상 수행 상태 관리
@@ -175,7 +175,7 @@ const KidsMainPage = () => {
             <div css={iconVerticalCss}>
               <div
                 onClick={() => {
-                  setOpenMailBox(true);
+                  setOpenBaseModal(true);
                 }}
               >
                 <IconTypo
@@ -242,7 +242,7 @@ const KidsMainPage = () => {
       )}
 
       {/* 알림창 */}
-      {openMailBox && <MailBox closeMailBox={closeMailBox} />}
+      {openBaseModal && <BaseModal closeBaseModal={closeBaseModal} />}
 
       {
         // 루틴 시작 여부 질문 알림
