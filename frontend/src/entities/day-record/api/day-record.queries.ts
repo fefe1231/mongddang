@@ -1,6 +1,7 @@
 import { DayRecordService, DayRecords } from '@/shared/api/day-record';
 import { queryOptions } from '@tanstack/react-query';
 import { RecordFilter } from '../model';
+import { RecordCategory, RecordType } from './type';
 
 export class DayRecordQueries {
   static readonly queryKeys = {
@@ -26,10 +27,12 @@ export class DayRecordQueries {
     });
   }
 
-  private static filteredDayRecordsQuery(filters: RecordFilter) {
-    return queryOptions({
+  private static filteredDayRecordsQuery<T extends RecordCategory>(
+    filters: RecordFilter & { category: T }
+  ) {
+    return queryOptions<RecordType<T>>({
       queryKey: this.queryKeys.filtered(filters),
-      queryFn: async () => {
+      queryFn: async (): Promise<RecordType<T>> => {
         const { data } = await DayRecordService.dayRecordQuery({
           params: {
             nickname: filters.nickname,
@@ -39,18 +42,7 @@ export class DayRecordQueries {
 
         const baseData = data.data.dates[0];
 
-        switch (filters.category) {
-          case 'exercise':
-            return baseData.records.exercise;
-          case 'meal':
-            return baseData.records.meal;
-          case 'medication':
-            return baseData.records.medication;
-          case 'sleep':
-            return baseData.records.sleep;
-          default:
-            throw new Error('DayRecordQueries filter error');
-        }
+        return baseData.records[filters.category] as RecordType<T>;
       },
       enabled: !!filters.nickname,
     });

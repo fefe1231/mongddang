@@ -24,11 +24,18 @@ interface RenderMealProps {
 }
 
 export const RenderMeal = ({ nickname, date }: RenderMealProps) => {
-  // const mealData = recordsData?.records.meal;
   const [isTap, setIsTap] = useState<IndexedToggleState>({});
-  const { data: mealData } = useQuery(
-    DayRecordQueries.mealRecordsQuery(nickname, date)
-  ) as { data: MealRecord[] };
+  const {
+    data: mealData,
+    isLoading,
+    isError,
+  } = useQuery<MealRecord[]>(DayRecordQueries.mealRecordsQuery(nickname, date));
+
+  if (isError) {
+    console.log('Error in RenderMeal');
+    throw new Error('Error in RenderMeal');
+  }
+  if (isLoading) return <div>Loading...</div>;
 
   return (
     <section css={mealContainer}>
