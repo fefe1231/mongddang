@@ -9,6 +9,7 @@ import {
   nicknameCss,
 } from './ProfileStatus.styles';
 import Coin from '@/assets/img/Coin.png';
+import { mainIcons } from '../../constants/iconsData';
 
 const ProfileStatus = () => {
   return (
@@ -26,7 +27,7 @@ const ProfileStatus = () => {
 
       {/* 총 별가루 */}
       <div css={coinContainer}>
-        <img css={coinCss} src={Coin} alt="coin" />
+        <img css={coinCss} src={mainIcons.starCoin} alt="coin" />
         <div css={coinAmountCss}>
           <Typography color="dark" size="1" weight={600}>
             40

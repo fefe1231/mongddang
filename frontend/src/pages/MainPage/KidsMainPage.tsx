@@ -32,10 +32,8 @@ import {
 import { setRoutine } from './hooks/useRoutineStatus';
 import { getInitialRoutine } from './api/routineApi';
 import { useStopwatchStore } from './model/useStopwatchStore';
-import {
-  setExitTime,
-  setStopwatch,
-} from './hooks/useStopwatchStatus';
+import { setExitTime, setStopwatch } from './hooks/useStopwatchStatus';
+import { mainIcons } from './constants/iconsData';
 
 const KidsMainPage = () => {
   const navigate = useNavigate();
@@ -145,7 +143,7 @@ const KidsMainPage = () => {
           <div css={iconGroupCss}>
             <div css={iconHorizontalCss}>
               <IconTypo
-                icon="/img/%EB%A7%90%EB%9E%911.png"
+                icon={mainIcons.mission}
                 fontSize="0.75"
                 menu={
                   <span>
@@ -162,7 +160,7 @@ const KidsMainPage = () => {
                 }}
               >
                 <IconTypo
-                  icon="/img/%EB%A7%90%EB%9E%911.png"
+                  icon={mainIcons.notification}
                   fontSize="0.75"
                   menu="알림"
                 />
@@ -173,7 +171,7 @@ const KidsMainPage = () => {
                 }}
               >
                 <IconTypo
-                  icon="/img/%EB%A7%90%EB%9E%911.png"
+                  icon={mainIcons.achievement}
                   fontSize="0.75"
                   menu={
                     <div>
@@ -207,9 +205,9 @@ const KidsMainPage = () => {
           {/* 바텀바 */}
           <BottomBar
             icons={[
-              '/img/%EB%A7%90%EB%9E%911.png',
-              '/img/%EB%A7%90%EB%9E%912.png',
-              '/img/%EB%A7%90%EB%9E%913.png',
+              mainIcons.collection,
+              mainIcons.star,
+              mainIcons.record,
             ]}
             menus={['몽땅 도감', '메뉴', '일일 기록']}
             onHandleChange={moveBottomBar}
