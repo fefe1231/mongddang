@@ -6,6 +6,7 @@ import { useChartWidth } from '../model/useChartWidth';
 import { CHART_CONFIG } from '../config';
 import { Bloodsugar } from '@/shared/api/blood-sugar';
 import chartStyle from './style.module.css';
+import { timeConverter } from '../lib';
 
 interface BloodSugarChartProps {
   data: Bloodsugar[] | undefined;
@@ -32,7 +33,7 @@ export const BloodSugarChart = ({ data }: BloodSugarChartProps) => {
             <LineChart
               h={CHART_CONFIG.DEFAULT_HEIGHT}
               w={chartWidth}
-              data={data}
+              data={timeConverter(data)}
               dataKey="measurementTime"
               curveType="bump"
               strokeWidth={3}
