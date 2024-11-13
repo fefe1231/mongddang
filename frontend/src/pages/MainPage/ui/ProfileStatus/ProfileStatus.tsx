@@ -7,34 +7,37 @@ import {
   coinCss,
   container,
   nicknameCss,
+  typoCss,
 } from './ProfileStatus.styles';
-import Coin from '@/assets/img/Coin.png';
+import { mainIcons } from '../../constants/iconsData';
 
-const ProfileStatus = () => {
+type ProfileStatusProps = {
+  nickname: string;
+  mainTitleName: string;
+  coin: number;
+};
+
+const ProfileStatus = (props: ProfileStatusProps) => {
   return (
     <div css={container}>
       {/* 칭호 + 닉네임 */}
       <div css={nicknameCss}>
-        <Typography color="blue" size="1" weight={600}>
-          너 뭐 되는
+        <Typography color="blue" size="1" weight={600} css={typoCss}>
+          {props.mainTitleName}
         </Typography>
-        &nbsp;
         <Typography color="dark" size="1" weight={600}>
-          갱얼쥐
+          {props.nickname} 님
         </Typography>
       </div>
 
       {/* 총 별가루 */}
       <div css={coinContainer}>
-        <img css={coinCss} src={Coin} alt="coin" />
+        <img css={coinCss} src={mainIcons.starCoin} alt="coin" />
         <div css={coinAmountCss}>
           <Typography color="dark" size="1" weight={600}>
-            40
+            {props.coin}
           </Typography>
           &nbsp;
-          <Typography color="dark" size="0.75" weight={400}>
-            points
-          </Typography>
         </div>
       </div>
     </div>
