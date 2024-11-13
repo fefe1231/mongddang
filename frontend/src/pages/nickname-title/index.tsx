@@ -33,8 +33,7 @@ export const NicknameTitle = () => {
   const TitleQuery = useQuery({
     queryKey: ['title'],
     queryFn: async () => {
-      const accessToken = localStorage.getItem('accessToken') || '';
-      return await getTitleInfo(accessToken);
+      return await getTitleInfo();
     },
   });
 
