@@ -15,19 +15,28 @@ import { DayRecordQueries } from '@/entities/day-record/api';
 import { useState } from 'react';
 import { IndexedToggleState } from './types';
 import { MealRecord } from '@/shared/api/day-record';
+import { Bloodsugar } from '@/shared/api/blood-sugar';
+import { useNearestBloodSugar } from '@/entities/day-record';
 
 interface RenderMealProps {
   nickname: string;
   date: string;
+  bloodSugarData?: Bloodsugar[];
 }
 
-export const RenderMeal = ({ nickname, date }: RenderMealProps) => {
+export const RenderMeal = ({
+  nickname,
+  date,
+  bloodSugarData,
+}: RenderMealProps) => {
   const [isTap, setIsTap] = useState<IndexedToggleState>({});
   const {
     data: mealData,
     isLoading,
     isError,
   } = useQuery<MealRecord[]>(DayRecordQueries.mealRecordsQuery(nickname, date));
+
+  const nearestTimeBloodSugar = useNearestBloodSugar(mealData, bloodSugarData);
 
   if (isError) {
     console.log('Error in RenderMeal');
@@ -53,7 +62,9 @@ export const RenderMeal = ({ nickname, date }: RenderMealProps) => {
               <span css={[dotStyle(isTap[index])]} />
             </div>
           </div>
-          <div css={mealTextBox}>content</div>
+          <div css={mealTextBox}>
+            {bloodSugarData && nearestTimeBloodSugar[item.startTime]}
+          </div>
         </div>
       ))}
     </section>

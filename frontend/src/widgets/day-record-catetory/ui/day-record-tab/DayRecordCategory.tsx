@@ -39,7 +39,11 @@ export const DayRecordCategory = ({
     <>
       <TabMenu
         contents={[
-          <RenderMeal nickname={nickname} date={date} />,
+          <RenderMeal
+            nickname={nickname}
+            date={date}
+            bloodSugarData={bloodSugarData}
+          />,
           renderExercise(),
           renderMedication(),
           renderSleep(),
