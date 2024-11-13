@@ -1,1 +1,1 @@
-export { DayRecordCategory } from './ui';
+export { DayRecordCategory } from './ui/day-record-tab';
