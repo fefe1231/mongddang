@@ -3,6 +3,7 @@ import { DayRecordTypes } from '@/shared/api/day-record';
 import { Bloodsugar } from '@/shared/api/blood-sugar';
 import { findNearestTimeBloodSugar } from '../lib/findNearestBloodSugar';
 import { RecordCategory } from '../api';
+import dayjs from 'dayjs';
 
 interface BloodSugarValues {
   startTime: number;
@@ -27,11 +28,20 @@ export const useNearestBloodSugar = <T extends RecordCategory>(
           ? findNearestTimeBloodSugar(bloodSugarData, record.endTime)
           : null;
 
+        const after2HVal =
+          dayjs(record.endTime).add(2, 'hour') <= dayjs()
+            ? findNearestTimeBloodSugar(
+                bloodSugarData,
+                dayjs(record.endTime).add(2, 'hour').toString()
+              )
+            : null;
+
         return {
           ...acc,
           [record.startTime]: {
             startTime: startTimeVal,
             endTime: endTimeVal,
+            after2Hour: after2HVal,
           },
         };
       },
