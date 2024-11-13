@@ -4,6 +4,11 @@ import { Bloodsugar } from '@/shared/api/blood-sugar';
 import { findNearestTimeBloodSugar } from '../lib/findNearestBloodSugar';
 import { RecordCategory } from '../api';
 
+interface BloodSugarValues {
+  startTime: number;
+  endTime: number | null;
+}
+
 export const useNearestBloodSugar = <T extends RecordCategory>(
   recordData: DayRecordTypes[T] | undefined,
   bloodSugarData: Bloodsugar[] | undefined
@@ -13,16 +18,24 @@ export const useNearestBloodSugar = <T extends RecordCategory>(
 
     return recordData.reduce(
       (acc, record) => {
-        const nearestValue = findNearestTimeBloodSugar(
+        const startTimeVal = findNearestTimeBloodSugar(
           bloodSugarData,
           record.startTime
         );
+
+        const endTimeVal = record.endTime
+          ? findNearestTimeBloodSugar(bloodSugarData, record.endTime)
+          : null;
+
         return {
           ...acc,
-          [record.startTime]: nearestValue,
+          [record.startTime]: {
+            startTime: startTimeVal,
+            endTime: endTimeVal,
+          },
         };
       },
-      {} as Record<string, number>
+      {} as Record<string, BloodSugarValues>
     );
   }, [recordData, bloodSugarData]);
 
