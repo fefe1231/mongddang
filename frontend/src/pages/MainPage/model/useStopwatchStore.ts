@@ -24,7 +24,7 @@ export const useStopwatchStore = create<StopwatchInfo>((set, get) => ({
   time: 0,
   isRunning: false,
   intervalRef: null,
-  finalTime: '00 : 00',
+  finalTime: '⏳',
 
   // 스톱워치 시작
   startStopwatch: () => {
@@ -50,9 +50,12 @@ export const useStopwatchStore = create<StopwatchInfo>((set, get) => ({
       if (intervalRef !== null) {
         clearInterval(intervalRef);
 
-        set({ isRunning: false, intervalRef: null });
-        set({ time: 0 });
-        set({ finalTime: '00 : 00' });
+        set({
+          time: 0,
+          finalTime: '⏳',
+          isRunning: false,
+          intervalRef: null,
+        });
       }
     }
     console.log('finalTime 업데이트0');
