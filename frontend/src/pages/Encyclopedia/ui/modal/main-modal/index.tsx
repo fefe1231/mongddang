@@ -4,16 +4,15 @@ import { Button } from '@/shared/ui/Button';
 import { Icon } from '@/shared/ui/Icon';
 import { Modal } from '@/shared/ui/Modal';
 import { Typography } from '@/shared/ui/Typography';
-
 import { HiOutlineX } from 'react-icons/hi';
 import { Chip } from '@/shared/ui/Chip';
-
 import { base, modalCss, xiconCss } from './styles';
 import { UpdateCharacter } from '../update-character';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 import { ICharacterData } from '@/pages/Encyclopedia/model/types';
 import { getMainInfo } from '@/pages/Encyclopedia/api/api';
+import { characterImages, formatId } from '@/pages/Encyclopedia/model/mongddang-img';
 
 interface OwnModalProps {
   setstate: (value: boolean) => void; 
@@ -98,6 +97,9 @@ export const MainModal = ({ setstate, data }: OwnModalProps) => {
       setIsModal(true);
     }
   };
+  if (!data) return null;
+  const imageKey = formatId(data.id);
+  const imagePath = characterImages[imageKey];
 
   return (
     <>
@@ -111,7 +113,7 @@ export const MainModal = ({ setstate, data }: OwnModalProps) => {
               {data?.name}
             </Chip>
             <Icon size={5}>
-              <img alt="icon-1" src="/img/%EB%A7%90%EB%9E%912.png" />
+              <img alt="icon-1" src={imagePath} />
             </Icon>
             <Typography
               color="dark"

@@ -18,6 +18,5 @@ public class ResponseBloodSugarReportDto {
     private float abg; // 평균 혈당
     private float cv; // 혈당 변동성
     private float tir; // 목표 범위 내 비율
-    private String gptSummary;
 
 }

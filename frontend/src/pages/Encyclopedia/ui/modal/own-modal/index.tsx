@@ -13,6 +13,7 @@ import { useState } from 'react';
 import { ICharacterData } from '@/pages/Encyclopedia/model/types';
 import { getMainInfo } from '@/pages/Encyclopedia/api/api';
 import { UpdateCharacter } from '../update-character';
+import { characterImages, formatId } from '@/pages/Encyclopedia/model/mongddang-img';
 
 interface OwnModalProps {
   setstate: (value: boolean) => void;
@@ -39,10 +40,11 @@ export const OwnModal = ({ setstate, data }: OwnModalProps) => {
   const accessToken = localStorage.getItem('accessToken');
   const [isParentModalOpen, setIsParentModalOpen] = useState(true);
   const [isModal, setIsModal] = useState(false);
+  
   const mainMutation = useMutation<
-    AxiosResponse<MainCharacterResponse>,
-    Error,
-    number
+  AxiosResponse<MainCharacterResponse>,
+  Error,
+  number
   >({
     mutationFn: (characterId) => {
       if (!accessToken) {
@@ -54,7 +56,7 @@ export const OwnModal = ({ setstate, data }: OwnModalProps) => {
       queryClient.setQueryData<CharacterResponse>(['character'], (oldData) => {
         console.log(response);
         if (!oldData) return oldData;
-
+        
         return {
           ...oldData,
           data: {
@@ -66,7 +68,7 @@ export const OwnModal = ({ setstate, data }: OwnModalProps) => {
           },
         };
       });
-
+      
       setstate(false);
     },
     onError: (error) => {
@@ -74,7 +76,7 @@ export const OwnModal = ({ setstate, data }: OwnModalProps) => {
       alert('대장 설정에 실패했습니다. 다시 시도해주세요.');
     },
   });
-
+  
   const handleSetMain = () => {
     if (data?.id) {
       mainMutation.mutate(data.id);
@@ -82,18 +84,21 @@ export const OwnModal = ({ setstate, data }: OwnModalProps) => {
       setIsModal(true);
     }
   };
-
+  
   const handleUpdateCharacterClose = () => {
     setIsModal(false);
     setIsParentModalOpen(true);
   };
-
+  
   const clickEvent = () => {
     setIsParentModalOpen(false);
     setIsModal(true);
   };
-
-
+  
+  if (!data) return null;
+  const imageKey = formatId(data.id);
+  const imagePath = characterImages[imageKey];
+  
   return (
     <div>
       {isParentModalOpen && (
@@ -106,7 +111,7 @@ export const OwnModal = ({ setstate, data }: OwnModalProps) => {
               {data?.name}
             </Chip>
             <Icon size={5}>
-              <img alt="icon-1" src="/img/말랑1.png" />
+              <img alt="icon-1" src={imagePath} />
             </Icon>
             <Typography
               color="dark"

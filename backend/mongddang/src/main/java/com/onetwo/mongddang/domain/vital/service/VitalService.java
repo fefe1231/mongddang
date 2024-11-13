@@ -1,6 +1,8 @@
 package com.onetwo.mongddang.domain.vital.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
+import com.onetwo.mongddang.common.utils.GptUtils;
 import com.onetwo.mongddang.domain.user.application.CtoPUtils;
 import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
 import com.onetwo.mongddang.domain.user.model.User;
@@ -9,6 +11,7 @@ import com.onetwo.mongddang.domain.vital.application.VitalUtils;
 import com.onetwo.mongddang.domain.vital.dto.GlucoseMeasurementTimeDto;
 import com.onetwo.mongddang.domain.vital.dto.ResponseBloodSugarReportDto;
 import com.onetwo.mongddang.domain.vital.dto.ResponseDailyGlucoseDto;
+import com.onetwo.mongddang.domain.vital.errors.CustomVitalErrorCode;
 import com.onetwo.mongddang.domain.vital.model.Vital;
 import com.onetwo.mongddang.domain.vital.repository.VitalRepository;
 import com.onetwo.mongddang.errors.exception.RestApiException;
@@ -32,6 +35,7 @@ public class VitalService {
     private final UserRepository userRepository;
     private final CtoPUtils ctoPUtils;
     private final VitalUtils vitalUtils;
+    private final GptUtils gptUtils;
 
 
     /**
@@ -51,7 +55,7 @@ public class VitalService {
                 .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
 
         // 조회 권한 확인
-//        ctoPUtils.validateProtectorAccessChildData(user, child);
+        // ctoPUtils.validateProtectorAccessChildData(user, child);
 
         // 해당 날짜의 혈당 기록 조회
         List<Vital> todayVital = vitalRepository.findByChildAndMeasurementTimeBetween(child, date.atStartOfDay(), date.atTime(23, 59, 59));
@@ -85,7 +89,7 @@ public class VitalService {
                 .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
 
         // 조회 권한 확인
-//        ctoPUtils.validateProtectorAccessChildData(user, child);
+        // ctoPUtils.validateProtectorAccessChildData(user, child);
 
         log.info("child: {}", child.getEmail());
         Vital vital = vitalRepository.findTopByChildOrderById(child).orElse(null);
@@ -168,7 +172,7 @@ public class VitalService {
                 .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
 
         // 조회 권한 확인
-//        ctoPUtils.validateProtectorAccessChildData(user, child);
+        // ctoPUtils.validateProtectorAccessChildData(user, child);
 
         // 해당 날짜의 혈당 기록 조회
         List<Vital> vitalList = vitalRepository.findByChildAndMeasurementTimeBetween(child, startDate.atStartOfDay(), endDate.atTime(23, 59, 59));
@@ -195,7 +199,6 @@ public class VitalService {
                 .abg(abg)
                 .cv(cv)
                 .tir(tir)
-                .gptSummary("정상")
                 .build();
 
         return ResponseDto.builder()
@@ -204,5 +207,39 @@ public class VitalService {
                 .build();
     }
 
+
+    public ResponseDto getGptSummary(Long userId, String nickanme, String message) {
+        log.info("getGptSummary");
+
+        try {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
+            log.info("Existing User : {}", userId);
+
+            String prompt = """                        
+                        지금 제공한 정보는 1형 당뇨에 걸린 소아의 일주일 간 평균적인 혈당 관리에 대한 정보입니다. gmi(%)란 당화혈색소평균 수치이고 abg란 평균 혈당 수치이며 cv(%)란 혈당 변동성 수치이고 tir(%)란 목표 범위 내 비율입니다. 이 수치 정보를 통해 이번주 소아의 혈당 관리 상태에 대해 종합적인 평가를 내려주세요. 현재 상태에 대해 앞으로 혈당 관리를 어떻게 하면 좋을지도 1줄 정도로 함께 제안해주세요. 소아라는 언급은 필요하지 않습니다. 문자열 강조나 줄바꿈은 절대로 필요하지 않습니다. 8-10세 어린이에게 말하듯 해요체를 사용한 부드러운 존댓말을 사용해주세요. 마지막에 혈당 관리 팁을 하나 제시하고, 잘 하고 있으니 앞으로도 힘내자는 식의 말로 사랑스럽게 마무리해주세요.
+                        
+                        (참고 기준을 바탕으로 분석할 것)
+                        gmi기준:(5.7미만:정상, 5.7~9.0:보통, 8.0~11.0:주의, 11초과: 위험) abg기준:(70~180:정상, 180~250:보통, 250~300:주의, 300초과: 위험), cv기준:(<36:정상, 36~49:보통, 50~59:주의, 60초과: 위험), tir기준:(>70:정상, 50~70:보통, 30~50:주의, <30: 위험)
+                    """;
+
+            String messageWithPrompt = message + prompt;
+
+            // GPT 요약 생성
+            JsonNode rootNode = gptUtils.requestGpt(messageWithPrompt);
+
+            log.info("rootNode : {}", rootNode.get("choices").get(0).get("message").get("content").asText());
+            String summary = rootNode.path("choices").get(0).path("message").path("content").asText();
+
+            return ResponseDto.builder()
+                    .message("GPT 요약 생성 성공")
+                    .data(summary)
+                    .build();
+
+        } catch (Exception e) {
+            log.error("Error occurred while getting GPT summary", e);
+            throw new RestApiException(CustomVitalErrorCode.VITAL_GENERATE_GPT_FAILED);
+        }
+    }
 
 }

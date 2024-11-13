@@ -6,7 +6,6 @@ import com.onetwo.mongddang.domain.game.achievement.errors.CustomAchievementErro
 import com.onetwo.mongddang.domain.game.achievement.model.Achievement;
 import com.onetwo.mongddang.domain.game.achievement.repository.AchievementRepository;
 import com.onetwo.mongddang.domain.game.gameLog.application.GameLogUtils;
-import com.onetwo.mongddang.domain.game.gameLog.repository.GameLogRepository;
 import com.onetwo.mongddang.domain.game.title.errors.CustomTitleErrorCode;
 import com.onetwo.mongddang.domain.game.title.model.MyTitle;
 import com.onetwo.mongddang.domain.game.title.model.Title;
@@ -34,7 +33,6 @@ public class AchievementService {
     private final TitleRepository titleRepository;
     private final MyTitleRepository myTitleRepository;
     private final UserRepository userRepository;
-    private final GameLogRepository gameLogRepository;
     private final GameLogUtils gameLogUtils;
 
     // 업적 목록 조회
@@ -54,7 +52,7 @@ public class AchievementService {
                     // 번호에 해당하는 칭호 조회
                     Optional<MyTitle> myTitle = myTitleRepository.findByTitleIdAndChildId(title.getId(), childId);
 
-                    // 업적 달성 횟수
+                    // 업적 달성에 요구되는 횟수
                     int executionCount = gameLogUtils.getGameLogCountByCategory(childId, achievement.getCategory());
                     log.info("executionCount: {}", executionCount);
 

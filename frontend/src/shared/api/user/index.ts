@@ -1,7 +1,7 @@
 export { PreferencesUser } from './user.preference-service';
 export type {
   UserResponse,
-  UserUpdateInfo,
+  // UserUpdateInfo,
   UserInfo,
   User,
   UpdateUser,
