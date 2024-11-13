@@ -25,15 +25,6 @@ interface CharacterResponse {
   };
 }
 
-interface MainCharacterResponse {
-  code: string;
-  message: string;
-  data: {
-    mongddangId: number;
-    isMain: boolean;
-  };
-}
-
 
 export const MainModal = ({ setstate, data }: OwnModalProps) => {
   const [isModal, setIsModal] = useState(false);
@@ -54,17 +45,13 @@ export const MainModal = ({ setstate, data }: OwnModalProps) => {
     setIsParentModalOpen(true); 
   };
   const queryClient = useQueryClient();
-  const accessToken = localStorage.getItem('accessToken');
   const mainMutation = useMutation<
-    AxiosResponse<MainCharacterResponse>,
+    AxiosResponse<ICharacterData>,
     Error,
     number
   >({
     mutationFn: (characterId) => {
-      if (!accessToken) {
-        throw new Error('AccessToken이 필요합니다.');
-      }
-      return getMainInfo(accessToken, characterId);
+      return getMainInfo(characterId);
     },
     onSuccess: (response, characterId) => {
       queryClient.setQueryData<CharacterResponse>(['character'], (oldData) => {

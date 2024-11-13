@@ -3,7 +3,6 @@ import { Button } from '@/shared/ui/Button';
 import { Icon } from '@/shared/ui/Icon';
 import { Modal } from '@/shared/ui/Modal';
 import { Typography } from '@/shared/ui/Typography';
-
 import { HiOutlineX } from 'react-icons/hi';
 import { Chip } from '@/shared/ui/Chip';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -26,35 +25,16 @@ interface CharacterResponse {
   };
 }
 
-interface MainCharacterResponse {
-  code: string;
-  message: string;
-  data: {
-    mongddangId: number;
-    isMain: boolean;
-  };
-}
 
 export const OwnModal = ({ setstate, data }: OwnModalProps) => {
   const queryClient = useQueryClient();
-  const accessToken = localStorage.getItem('accessToken');
   const [isParentModalOpen, setIsParentModalOpen] = useState(true);
   const [isModal, setIsModal] = useState(false);
   
-  const mainMutation = useMutation<
-  AxiosResponse<MainCharacterResponse>,
-  Error,
-  number
-  >({
-    mutationFn: (characterId) => {
-      if (!accessToken) {
-        throw new Error('AccessToken이 필요합니다.');
-      }
-      return getMainInfo(accessToken, characterId);
-    },
+  const mainMutation = useMutation<AxiosResponse<ICharacterData>, Error, number>({
+    mutationFn: (characterId: number) => getMainInfo(characterId),
     onSuccess: (response, characterId) => {
       queryClient.setQueryData<CharacterResponse>(['character'], (oldData) => {
-        console.log(response);
         if (!oldData) return oldData;
         
         return {

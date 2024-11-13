@@ -11,6 +11,7 @@ import {
 import { Typography } from '@/shared/ui/Typography';
 import { Button } from '@/shared/ui/Button';
 import { useStopwatchStore } from '../../model/useStopwatchStore';
+import { mainIcons } from '../../constants/iconsData';
 
 type RoutineBtnGroupProps = {
   changeRoutine: (currentRoutine: string) => void;
@@ -58,7 +59,7 @@ const RoutineBtnGroup = (props: RoutineBtnGroupProps) => {
               props.handleDietModal();
             }}
           >
-            <img alt="icon-0" src="/img/%EB%A7%90%EB%9E%911.png" />
+            <img alt="icon-0" src={mainIcons.meal} />
           </Icon>
           <Icon
             size={2.5}
@@ -67,7 +68,7 @@ const RoutineBtnGroup = (props: RoutineBtnGroupProps) => {
               props.handleAlert('askStartRoutine');
             }}
           >
-            <img alt="icon-1" src="/img/%EB%A7%90%EB%9E%912.png" />
+            <img alt="icon-1" src={mainIcons.exercise} />
           </Icon>
           <Icon
             size={2.5}
@@ -76,7 +77,7 @@ const RoutineBtnGroup = (props: RoutineBtnGroupProps) => {
               props.handleAlert('askStartRoutine');
             }}
           >
-            <img alt="icon-2" src="/img/%EB%A7%90%EB%9E%913.png" />
+            <img alt="icon-2" src={mainIcons.sleep} />
           </Icon>
         </div>
       )}

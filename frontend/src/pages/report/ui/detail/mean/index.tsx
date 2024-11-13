@@ -4,6 +4,7 @@ import { TopBar } from '@/shared/ui/TopBar';
 import { useNavigate } from 'react-router-dom';
 import { containerCss } from '../gmi/styles';
 import { Typography } from '@/shared/ui/Typography';
+import { DetailAverageChart } from '../../chart/abg-chart';
 
 export const Mean = () => {
   const nav = useNavigate();
@@ -12,6 +13,7 @@ export const Mean = () => {
       <TopBar type="iconpage" iconHandler={() => nav('/report')}>
         평균 혈당
       </TopBar>
+      <DetailAverageChart/>
       <div css={containerCss}>
         <Typography color="dark" size="1.25" weight={600}>
           평균 혈당

@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
 import { SpinnerProps } from './Spinner.types';
 import { base } from './Spinner.styles';
 

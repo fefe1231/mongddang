@@ -1,6 +1,8 @@
 package com.onetwo.mongddang.domain.user.service;
 
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
+import com.onetwo.mongddang.domain.fcm.repository.PushLogRepository;
+import com.onetwo.mongddang.domain.game.achievement.application.AchievementUtils;
 import com.onetwo.mongddang.domain.game.coinLog.errors.CustomCoinLogErrorCode;
 import com.onetwo.mongddang.domain.game.coinLog.model.CoinLog;
 import com.onetwo.mongddang.domain.game.coinLog.repository.CoinLogRepository;
@@ -14,6 +16,8 @@ import com.onetwo.mongddang.domain.game.title.model.MyTitle;
 import com.onetwo.mongddang.domain.game.title.model.Title;
 import com.onetwo.mongddang.domain.game.title.repository.MyTitleRepository;
 import com.onetwo.mongddang.domain.game.title.repository.TitleRepository;
+import com.onetwo.mongddang.domain.missionlog.dto.MissionDto;
+import com.onetwo.mongddang.domain.missionlog.repository.MissionLogRepository;
 import com.onetwo.mongddang.domain.user.dto.MainpageDto;
 import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
 import com.onetwo.mongddang.domain.user.model.User;
@@ -36,6 +40,9 @@ public class MainService {
     private final MyTitleRepository myTitleRepository;
     private final TitleRepository titleRepository;
     private final CoinLogRepository coinLogRepository;
+    private final AchievementUtils achievementUtils;
+    private final MissionLogRepository missionLogRepository;
+    private final PushLogRepository pushLogRepository;
 
     public ResponseDto getMainInfo(Long userId) {
 
@@ -88,13 +95,25 @@ public class MainService {
         // coinLog 있는지 확인
         CoinLog coinLog = coinLogRepository.findTopByChildIdOrderByIdDesc(userId)
                 .orElseThrow(() -> new RestApiException(CustomCoinLogErrorCode.NOT_FOUND_COIN_LOG));
-        
+
+        // 확인하지 않은 알림 있는지 확인
+        Boolean UnreadNotification = pushLogRepository.existsByUserIdAndIsNewTrue(userId);
+
+        // 수령하지 않은 미션 보상 있는지 확인
+        Boolean UnclaimedMissionReward = missionLogRepository.existsByChildIdAndStatus(userId, MissionDto.Status.rewardable);
+
+        // 수령하지 않은 업적 보상 있는지 확인
+        Boolean UnclaimedAchivementReward = achievementUtils.getIsExistRewardableTitle(userId);
+
         // response data
         MainpageDto data = MainpageDto.builder()
                 .mainMongddangId(mongddang.get().getId())
                 .mainTitleName(title.get().getName())
                 .nickname(user.getNickname())
                 .coin(coinLog.getCoin())
+                .UnreadNotification(UnreadNotification)
+                .UnclaimedMissionReward(UnclaimedMissionReward)
+                .UnclaimedAchivementReward(UnclaimedAchivementReward)
                 .build();
 
         // response

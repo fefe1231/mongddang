@@ -4,6 +4,8 @@ import com.onetwo.mongddang.domain.missionlog.dto.MissionDto;
 import com.onetwo.mongddang.domain.missionlog.model.MissionLog;
 import com.onetwo.mongddang.domain.user.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -20,4 +22,6 @@ public interface MissionLogRepository extends JpaRepository<MissionLog, Long> {
     Optional<MissionLog> findTopByChildAndCreatedAtBetweenAndCategoryIs(User child, LocalDateTime localDateTimeStart, LocalDateTime localDateTimeEnd, MissionDto.Mission mission);
 
     Optional<MissionLog> findByIdAndCreatedAtBetween(Long missionId, LocalDateTime localDateTime, LocalDateTime localDateTime1);
+
+    boolean existsByChildIdAndStatus(Long childId, MissionDto.Status status);
 }
