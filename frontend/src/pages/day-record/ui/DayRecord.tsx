@@ -1,4 +1,3 @@
-import { BloodSugarChart } from '@/widgets/blood-sugar-chart/ui';
 import { TopBar } from '@/shared/ui/TopBar';
 import { useNavigate, useParams } from 'react-router-dom';
 import { DayRecordCategory } from '@/widgets/day-record-catetory';
@@ -6,6 +5,7 @@ import { useUserStore } from '@/entities/user/model/store';
 import { useShallow } from 'zustand/shallow';
 import { useQuery } from '@tanstack/react-query';
 import { BloodsugarQueries } from '@/entities/blood-sugar/api';
+import { BloodSugarChart } from '@/widgets/blood-sugar-chart';
 
 export const DayRecordPage = () => {
   const nav = useNavigate();
