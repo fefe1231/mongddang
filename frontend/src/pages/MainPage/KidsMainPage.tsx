@@ -16,7 +16,6 @@ import {
 import ProfileStatus from './ui/ProfileStatus/ProfileStatus';
 import { IconTypo } from '@/shared/ui/IconTypo';
 import CurrentBloodSugar from './ui/CurrentBloodSugar/CurrentBloodSugar';
-import MainCharacter from '@/assets/img/말랑1.png';
 import ChatBubble from './ui/ChatBubble/ChatBubble';
 import { useEffect, useState } from 'react';
 import DietModal from './ui/DietModal/DietModal';
@@ -36,6 +35,7 @@ import { setExitTime, setStopwatch } from './hooks/useStopwatchStatus';
 import { mainIcons } from './constants/iconsData';
 import { getMainInfo } from './api/infoApi';
 import Loading from '@/shared/ui/Loading';
+import { characterImages, formatId } from '../Encyclopedia/model/mongddang-img';
 
 const KidsMainPage = () => {
   const navigate = useNavigate();
@@ -43,6 +43,7 @@ const KidsMainPage = () => {
   const [mainInfo, setMainInfo] = useState({
     nickname: '',
     mainTitleName: '',
+    mainMongddangId: 0,
     coin: 0,
   });
   const [openDietModal, setOpenDietModal] = useState(false);
@@ -209,7 +210,7 @@ const KidsMainPage = () => {
           {/* 메인캐릭터 + 말풍선 */}
           <div css={CharacterContainer}>
             <ChatBubble />
-            <img src={MainCharacter} alt="" css={mainCharacterCss} />
+            <img src={characterImages[formatId(mainInfo.mainMongddangId)]} alt="" css={mainCharacterCss} />
           </div>
 
           {/* 일상생활 버튼 3종 */}

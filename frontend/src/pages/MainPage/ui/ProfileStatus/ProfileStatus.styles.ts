@@ -5,7 +5,6 @@ export const container = css`
   flex-direction: column;
   width: 9rem;
   padding: 2%;
-  gap: 0.25rem;
   height: fit-content;
   align-items: center;
   background-color: #fff;
@@ -17,10 +16,17 @@ export const container = css`
 
 export const nicknameCss = css`
   display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
   padding: 3%;
   justify-content: center;
   font-weight: 500;
+`;
+
+export const typoCss = css`
+  white-space: nowrap;
+  overflow-wrap: break-word;
 `;
 
 export const coinContainer = css`
@@ -29,7 +35,6 @@ export const coinContainer = css`
   width: 100%;
   justify-content: center;
   padding: 3%;
-  
 `;
 
 export const coinAmountCss = css`

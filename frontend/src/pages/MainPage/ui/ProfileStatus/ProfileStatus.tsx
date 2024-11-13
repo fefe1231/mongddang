@@ -7,6 +7,7 @@ import {
   coinCss,
   container,
   nicknameCss,
+  typoCss,
 } from './ProfileStatus.styles';
 import { mainIcons } from '../../constants/iconsData';
 
@@ -21,12 +22,11 @@ const ProfileStatus = (props: ProfileStatusProps) => {
     <div css={container}>
       {/* 칭호 + 닉네임 */}
       <div css={nicknameCss}>
-        <Typography color="blue" size="1" weight={600}>
+        <Typography color="blue" size="1" weight={600} css={typoCss}>
           {props.mainTitleName}
         </Typography>
-        &nbsp;
         <Typography color="dark" size="1" weight={600}>
-          {props.nickname}
+          {props.nickname} 님
         </Typography>
       </div>
 
