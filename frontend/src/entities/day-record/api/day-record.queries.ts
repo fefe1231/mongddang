@@ -1,10 +1,8 @@
 import { DayRecordService } from '@/shared/api/day-record';
-import { QueryClient, queryOptions } from '@tanstack/react-query';
+import { queryOptions } from '@tanstack/react-query';
 import { RecordFilter } from '../model';
 
 export class DayRecordQueries {
-  private static queryClient = new QueryClient();
-
   static readonly queryKeys = {
     all: ['dayRecords'] as const,
     filtered: (filters: RecordFilter) =>
