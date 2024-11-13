@@ -37,7 +37,7 @@ export const NicknameTitle = () => {
       return await getTitleInfo(accessToken);
     },
   });
-
+  console.log(TitleQuery.data?.data?.data)
   return (
     <div>
       <TopBar type="iconpage" iconHandler={() => nav('/')}>
