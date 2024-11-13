@@ -10,7 +10,7 @@ export const mealItem = css`
   align-items: center;
   width: 100%;
   height: 10rem;
-  gap: 1rem;
+  gap: 1.5rem;
   border-bottom: 2px solid red;
 `;
 
@@ -31,10 +31,22 @@ export const mealImg = css`
 `;
 
 export const mealImgCover = css`
-  display: absolute;
-  background-color: black;
+  position: absolute;
+  background: rgb(0 0 0);
   width: 100%;
   height: 100%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  color: white;
+
+  display: flex;
+  padding: 0 1rem 0 1rem;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const visibleCover = css`
+  opacity: 0.8;
 `;
 
 export const mealTextBox = css`

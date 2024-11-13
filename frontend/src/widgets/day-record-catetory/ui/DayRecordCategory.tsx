@@ -11,7 +11,10 @@ import {
   mealImgCover,
   mealItem,
   mealTextBox,
+  visibleCover,
 } from './styles';
+import { useState } from 'react';
+import { IndexedToggleState } from './types';
 
 interface DayRecordCategoryProps {
   date: string;
@@ -27,20 +30,27 @@ export const DayRecordCategory = ({
   const { data: recordsData } = useQuery(
     DayRecordQueries.allRecordsQuery(nickname, date)
   );
+  const [isTap, setIsTap] = useState<IndexedToggleState>({});
 
   const renderMeal = () => {
     const mealData = recordsData?.records.meal;
+
     return (
       <section css={mealContainer}>
-        {mealData?.map((item) => (
-          <div css={mealItem}>
-            <div css={imgBox}>
+        {mealData?.map((item, index) => (
+          <div key={index} css={mealItem}>
+            <div
+              css={imgBox}
+              onClick={() =>
+                setIsTap((prev) => ({ ...prev, [index]: !prev[index] }))
+              }
+            >
               <img css={mealImg} src={`${item.imageUrl}`} />
-              <div css={mealImgCover}>
-                <span></span>
+              <div css={[mealImgCover, isTap[index] && visibleCover]}>
+                <span>{item.content.join(', ')}</span>
               </div>
             </div>
-            <div css={mealTextBox}>contents</div>
+            <div css={mealTextBox}>content</div>
           </div>
         ))}
       </section>
