@@ -1,29 +1,30 @@
 import { useMemo } from 'react';
-import { MealRecord } from '@/shared/api/day-record';
+import { DayRecordTypes } from '@/shared/api/day-record';
 import { Bloodsugar } from '@/shared/api/blood-sugar';
 import { findNearestTimeBloodSugar } from '../lib/findNearestBloodSugar';
+import { RecordCategory } from '../api';
 
-export const useNearestBloodSugar = (
-  mealData: MealRecord[] | undefined,
+export const useNearestBloodSugar = <T extends RecordCategory>(
+  recordData: DayRecordTypes[T] | undefined,
   bloodSugarData: Bloodsugar[] | undefined
 ) => {
   const nearestBloodSugarValues = useMemo(() => {
-    if (!mealData || !bloodSugarData) return {};
+    if (!recordData || !bloodSugarData) return {};
 
-    return mealData.reduce(
-      (acc, meal) => {
+    return recordData.reduce(
+      (acc, record) => {
         const nearestValue = findNearestTimeBloodSugar(
           bloodSugarData,
-          meal.startTime
+          record.startTime
         );
         return {
           ...acc,
-          [meal.startTime]: nearestValue,
+          [record.startTime]: nearestValue,
         };
       },
       {} as Record<string, number>
     );
-  }, [mealData, bloodSugarData]);
+  }, [recordData, bloodSugarData]);
 
   return nearestBloodSugarValues;
 };
