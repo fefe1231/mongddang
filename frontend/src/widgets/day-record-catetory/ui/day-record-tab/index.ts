@@ -1,1 +1,0 @@
-export { DayRecordCategory } from './DayRecordCategory';

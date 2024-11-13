@@ -4,7 +4,10 @@ import { DayRecordQueries } from '@/entities/day-record/api';
 import { Bloodsugar } from '@/shared/api/blood-sugar';
 import { TabMenu } from '@/shared/ui/TabMenu/indes';
 import { useQuery } from '@tanstack/react-query';
-import { RenderMeal } from '../day-record-meal/RenderMeal';
+import { RenderExercise } from './day-record-exercise';
+import { RenderMeal } from './day-record-meal';
+import { RenderSleep } from './day-record-sleep';
+import { RenderMedication } from './day-record-medication';
 
 interface DayRecordCategoryProps {
   date: string;
@@ -21,16 +24,6 @@ export const DayRecordCategory = ({
     DayRecordQueries.allRecordsQuery(nickname, date)
   );
 
-  const renderExercise = () => {
-    return <div>exercise</div>;
-  };
-  const renderMedication = () => {
-    return <div>Medication</div>;
-  };
-  const renderSleep = () => {
-    return <div>Sleep</div>;
-  };
-
   const handleTabChange = (tabId: string) => {
     console.log(tabId);
   };
@@ -44,9 +37,21 @@ export const DayRecordCategory = ({
             date={date}
             bloodSugarData={bloodSugarData}
           />,
-          renderExercise(),
-          renderMedication(),
-          renderSleep(),
+          <RenderExercise
+            nickname={nickname}
+            date={date}
+            bloodSugarData={bloodSugarData}
+          />,
+          <RenderSleep
+            nickname={nickname}
+            date={date}
+            bloodSugarData={bloodSugarData}
+          />,
+          <RenderMedication
+            nickname={nickname}
+            date={date}
+            bloodSugarData={bloodSugarData}
+          />
         ]}
         onTabChange={handleTabChange}
       />

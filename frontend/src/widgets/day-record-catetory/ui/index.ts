@@ -1,2 +1,2 @@
-export { DayRecordCategory } from './day-record-tab';
+export { DayRecordCategory } from './DayRecordCategory';
 export { RenderMeal } from './day-record-meal';
