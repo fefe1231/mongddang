@@ -17,3 +17,10 @@ export const setExitTime = async (exitTime:number) =>{
     })
     console.log('exitTime 저장', exitTime)
 }
+
+// 앱 열 때 지난 마지막 시간 조회
+export const getExitTime = async (): Promise<string> => {
+    const { value } = await Preferences.get({ key: 'exitTime' });
+    console.log('exitTime 조회')
+    return value || '0';
+  };
