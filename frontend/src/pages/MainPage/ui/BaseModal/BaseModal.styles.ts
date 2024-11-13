@@ -9,5 +9,10 @@ export const baseModalContainer = css`
   justify-content: flex-start;
 `;
 
-
-export const baseModalContent = css``;
+export const baseModalContent = css`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 3%;
+  gap: 0.5rem;
+`;

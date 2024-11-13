@@ -47,18 +47,19 @@ const KidsMainPage = () => {
     coin: 0,
   });
   const [openDietModal, setOpenDietModal] = useState(false);
-  const [openBaseModal, setOpenBaseModal] = useState(false);
+  const [openBaseModal, setOpenBaseModal] = useState(true);
+  const [contentType, setContentType] = useState('dailyMission');
   const [alertStatus, setAlertStatus] = useState('');
   const [alertBloodSugar, setAlertBloodSugar] = useState(0);
   const [currentRoutine, setCurrentRoutine] = useState('');
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
 
   // 초기 루틴 상태 조회
   useEffect(() => {
     const fetchMainInfo = async () => {
       const mainInfo = await getMainInfo();
       setMainInfo(mainInfo);
-      setIsLoading(false)
+      setIsLoading(false);
     };
     const fetchRoutine = async () => {
       const routineValue = await getInitialRoutine();
@@ -147,8 +148,8 @@ const KidsMainPage = () => {
   console.log('알림창 상태', alertStatus);
   console.log('루틴 상태', currentRoutine);
 
-  return (
-    !isLoading ? <div css={kidsMainBase}>
+  return !isLoading ? (
+    <div css={kidsMainBase}>
       <div css={kidsMainContent}>
         {/* 상단 컴포넌트들 */}
         <div css={topContainer}>
@@ -161,21 +162,29 @@ const KidsMainPage = () => {
           {/* 아이콘 모음 */}
           <div css={iconGroupCss}>
             <div css={iconHorizontalCss}>
-              <IconTypo
-                icon={mainIcons.mission}
-                fontSize="0.75"
-                menu={
-                  <span>
-                    오늘의 <br />
-                    퀘스트
-                  </span>
-                }
-              />
+              <div
+                onClick={() => {
+                  setOpenBaseModal(true);
+                  setContentType('dailyMission');
+                }}
+              >
+                <IconTypo
+                  icon={mainIcons.mission}
+                  fontSize="0.75"
+                  menu={
+                    <span>
+                      오늘의 <br />
+                      퀘스트
+                    </span>
+                  }
+                />
+              </div>
             </div>
             <div css={iconVerticalCss}>
               <div
                 onClick={() => {
                   setOpenBaseModal(true);
+                  setContentType('notification');
                 }}
               >
                 <IconTypo
@@ -210,7 +219,11 @@ const KidsMainPage = () => {
           {/* 메인캐릭터 + 말풍선 */}
           <div css={CharacterContainer}>
             <ChatBubble />
-            <img src={characterImages[formatId(mainInfo.mainMongddangId)]} alt="" css={mainCharacterCss} />
+            <img
+              src={characterImages[formatId(mainInfo.mainMongddangId)]}
+              alt=""
+              css={mainCharacterCss}
+            />
           </div>
 
           {/* 일상생활 버튼 3종 */}
@@ -242,7 +255,9 @@ const KidsMainPage = () => {
       )}
 
       {/* 알림창 */}
-      {openBaseModal && <BaseModal closeBaseModal={closeBaseModal} />}
+      {openBaseModal && (
+        <BaseModal contentType={contentType} closeBaseModal={closeBaseModal} />
+      )}
 
       {
         // 루틴 시작 여부 질문 알림
@@ -281,7 +296,9 @@ const KidsMainPage = () => {
           <></>
         )
       }
-    </div> : <Loading/>
+    </div>
+  ) : (
+    <Loading />
   );
 };
 
