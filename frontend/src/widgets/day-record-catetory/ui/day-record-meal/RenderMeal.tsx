@@ -77,9 +77,9 @@ export const RenderMeal = ({
                 </div>
                 <div css={afterMeal}>
                   <span>
-                    식사 후 혈당
+                    2시간 후 혈당
                     <br />:
-                    {nearestTimeBloodSugar[item.startTime].endTime ?? '-'}
+                    {nearestTimeBloodSugar[item.startTime].after2Hour ?? '-'}
                     mg/dl
                   </span>
                 </div>
