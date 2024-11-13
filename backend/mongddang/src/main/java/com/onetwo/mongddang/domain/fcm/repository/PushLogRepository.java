@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PushLogRepository extends JpaRepository<PushLog, Long> {
     Page<PushLog> findAllByUserId(Long userId, Pageable pageable);
+
+    Boolean existsByUserIdAndIsNewTrue(Long userId);
 }
