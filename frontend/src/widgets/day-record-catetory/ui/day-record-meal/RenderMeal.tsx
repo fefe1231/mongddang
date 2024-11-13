@@ -1,12 +1,15 @@
 /** @jsxImportSource @emotion/react */
 import { useQuery } from '@tanstack/react-query';
 import {
+  afterMeal,
+  beforeMeal,
   dotContainer,
   dotStyle,
   imgBox,
   mealContainer,
   mealImg,
   mealImgCover,
+  mealInnerBox,
   mealItem,
   mealTextBox,
   visibleCover,
@@ -62,8 +65,26 @@ export const RenderMeal = ({
               <span css={[dotStyle(isTap[index])]} />
             </div>
           </div>
-          <div css={mealTextBox}>
-            {bloodSugarData && nearestTimeBloodSugar[item.startTime]}
+          <div css={mealTextBox} className="meal">
+            {bloodSugarData && nearestTimeBloodSugar[item.startTime] && (
+              <div css={mealInnerBox}>
+                <div css={beforeMeal}>
+                  <span>
+                    식사 전 혈당
+                    <br />:{nearestTimeBloodSugar[item.startTime].startTime}
+                    mg/dl
+                  </span>
+                </div>
+                <div css={afterMeal}>
+                  <span>
+                    식사 후 혈당
+                    <br />:
+                    {nearestTimeBloodSugar[item.startTime].endTime ?? '-'}
+                    mg/dl
+                  </span>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       ))}

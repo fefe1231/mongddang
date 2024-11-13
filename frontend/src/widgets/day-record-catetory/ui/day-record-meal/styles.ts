@@ -1,3 +1,4 @@
+import ColorStyle from '@/shared/ui/styles/colorStyles';
 import { css } from '@emotion/react';
 
 export const mealContainer = css`
@@ -11,7 +12,7 @@ export const mealItem = css`
   width: 100%;
   height: 10rem;
   gap: 1.8rem;
-  border-bottom: 2px solid red;
+  border-bottom: 2px dashed ${ColorStyle.blue.active};
 `;
 
 export const imgBox = css`
@@ -84,4 +85,33 @@ export const dotStyle = (isActive: boolean) => css`
 
 export const mealTextBox = css`
   flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  font-weight: 500;
+  font-size: 1.15rem;
 `;
+
+export const mealInnerBox = css`
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 0.5rem;
+`;
+
+export const beforeMeal = css`
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    height: 1.5px;
+    width: 100%;
+    // 부모 요소 제일 아래에서 식전/후 혈당의 gap 절반 값
+    top: calc(100% + 0.25rem);
+    background-color: #C0C0C0;
+  }
+`;
+
+export const afterMeal = css``;
