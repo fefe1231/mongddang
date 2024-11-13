@@ -24,7 +24,6 @@ import { Notowncharacter } from './ui/characterlist/notown-character';
 import { Newcharacter } from './ui/characterlist/new-character';
 import { Owncharacter } from './ui/characterlist/owncharacter';
 import { Description } from './ui/description';
-import { characterImages, formatId } from './characterImages';
 
 export const Encyclopedia = () => {
   const [isOwnModal, setIsOwnModal] = useState(false);
