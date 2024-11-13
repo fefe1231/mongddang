@@ -24,7 +24,7 @@ export const buttonGroupCss = css`
 `;
 
 export const nextbtnCss = css`
-  width: 17.1rem;
+  width: 19rem;
   margin-top: 1rem;
 `;
 
