@@ -34,10 +34,16 @@ import { getInitialRoutine } from './api/routineApi';
 import { useStopwatchStore } from './model/useStopwatchStore';
 import { setExitTime, setStopwatch } from './hooks/useStopwatchStatus';
 import { mainIcons } from './constants/iconsData';
+import { getMainInfo } from './api/infoApi';
 
 const KidsMainPage = () => {
   const navigate = useNavigate();
   const accessToken = localStorage.getItem('accessToken');
+  const [mainInfo, setMainInfo] = useState({
+    nickname: '',
+    mainTitleName: '',
+    coin: 0,
+  });
   const [openDietModal, setOpenDietModal] = useState(false);
   const [openMailBox, setOpenMailBox] = useState(false);
   const [alertStatus, setAlertStatus] = useState('');
@@ -46,6 +52,10 @@ const KidsMainPage = () => {
 
   // 초기 루틴 상태 조회
   useEffect(() => {
+    const fetchMainInfo = async () => {
+      const mainInfo = await getMainInfo();
+      setMainInfo(mainInfo);
+    };
     const fetchRoutine = async () => {
       const routineValue = await getInitialRoutine();
       if (routineValue.data === undefined) {
@@ -83,6 +93,7 @@ const KidsMainPage = () => {
       }
     });
 
+    fetchMainInfo();
     fetchRoutine();
 
     return () => {
@@ -138,7 +149,11 @@ const KidsMainPage = () => {
         {/* 상단 컴포넌트들 */}
         <div css={topContainer}>
           {/* 프로필 상태창 */}
-          <ProfileStatus />
+          <ProfileStatus
+            nickname={mainInfo.nickname}
+            mainTitleName={mainInfo.mainTitleName}
+            coin={mainInfo.coin}
+          />
           {/* 아이콘 모음 */}
           <div css={iconGroupCss}>
             <div css={iconHorizontalCss}>
@@ -204,11 +219,7 @@ const KidsMainPage = () => {
 
           {/* 바텀바 */}
           <BottomBar
-            icons={[
-              mainIcons.collection,
-              mainIcons.menu,
-              mainIcons.record,
-            ]}
+            icons={[mainIcons.collection, mainIcons.menu, mainIcons.record]}
             menus={['몽땅 도감', '메뉴', '일일 기록']}
             onHandleChange={moveBottomBar}
           />

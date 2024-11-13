@@ -10,17 +10,23 @@ import {
 } from './ProfileStatus.styles';
 import { mainIcons } from '../../constants/iconsData';
 
-const ProfileStatus = () => {
+type ProfileStatusProps = {
+  nickname: string;
+  mainTitleName: string;
+  coin: number;
+};
+
+const ProfileStatus = (props: ProfileStatusProps) => {
   return (
     <div css={container}>
       {/* 칭호 + 닉네임 */}
       <div css={nicknameCss}>
         <Typography color="blue" size="1" weight={600}>
-          너 뭐 되는
+          {props.mainTitleName}
         </Typography>
         &nbsp;
         <Typography color="dark" size="1" weight={600}>
-          갱얼쥐
+          {props.nickname}
         </Typography>
       </div>
 
@@ -29,7 +35,7 @@ const ProfileStatus = () => {
         <img css={coinCss} src={mainIcons.starCoin} alt="coin" />
         <div css={coinAmountCss}>
           <Typography color="dark" size="1" weight={600}>
-            40
+            {props.coin}
           </Typography>
           &nbsp;
         </div>
