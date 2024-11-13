@@ -8,16 +8,31 @@ import { useNavigate } from 'react-router-dom';
 import { WeekChart } from './ui/chart/week-chart';
 import { useQuery } from '@tanstack/react-query';
 import { getreport } from './api/api';
+import useBloodSugarStore from './store/bloodSugarStore';
+import { useEffect } from 'react';
 
 export const Report = () => {
   const nav = useNavigate();
+  const setWeeklyData = useBloodSugarStore((state) => state.setWeeklyData);
   const { data, isLoading, error } = useQuery({
     queryKey: ['bloodSugarReport'],
     queryFn: getreport,
   });
 
-  console.log(data?.data.data
-  )
+  useEffect(() => {
+    console.log('API Response data:', data?.data?.data?.glucoseMeasurementItmeList);
+    
+    const measurements = data?.data?.data?.glucoseMeasurementItmeList;
+    if (measurements && Array.isArray(measurements)) {
+      // 데이터 타입 변환이 필요한 경우
+      const transformedData = measurements.map(item => ({
+        measurementTime: item.measurementTime,
+        bloodSugarLevel: Number(item.bloodSugarLevel)
+      }));
+      
+      setWeeklyData(transformedData);
+    }
+  }, [data, setWeeklyData]);
 
   if (isLoading) {
     console.log('Loading data...');
@@ -28,14 +43,39 @@ export const Report = () => {
     console.log('Error:', error);
     return <div>Error occurred!</div>;
   }
+
+  const measurementList = data?.data?.data?.glucoseMeasurementItmeList || [];
+  console.log('Final measurement list:', measurementList);  
+
   return (
     <div>
       <TopBar type="iconpage" iconHandler={()=>nav('/menu')}>주간 리포트</TopBar>
-      <WeekChart data={data?.data.data.glucoseMeasurementItmeList}/>
-      <Item title="혈당관리지표(GMI)" ment={Number(data?.data.data.gmi).toFixed(1)} unit="%" />
-      <SliderItem title="이번주 평균 혈당" max={400} standard={100} ment={Number(data?.data.data.abg).toFixed(1)} unit="mg/dl" url = '/report/detail/mean'/>
-      <SliderItem title="혈당 변동성" max={100} standard={36} ment={Number(data?.data.data.cv).toFixed(1)} unit="%" url = '/report/detail/gv'/>
-      <SliderItem title="목표 범위 내 비율" max={100} standard={20} ment={Number(data?.data.data.tir).toFixed(1)} unit="%" url = '/report/detail/tir'/>
+      <WeekChart data={measurementList}/>
+      <Item title="혈당관리지표(GMI)" ment={Number(data?.data?.data?.gmi || 0).toFixed(1)} unit="%" />
+      <SliderItem 
+        title="이번주 평균 혈당" 
+        max={400} 
+        standard={100} 
+        ment={Number(data?.data?.data?.abg || 0).toFixed(1)} 
+        unit="mg/dl" 
+        url='/report/detail/mean'
+      />
+      <SliderItem 
+        title="혈당 변동성" 
+        max={100} 
+        standard={36} 
+        ment={Number(data?.data?.data?.cv || 0).toFixed(1)} 
+        unit="%" 
+        url='/report/detail/gv'
+      />
+      <SliderItem 
+        title="목표 범위 내 비율" 
+        max={100} 
+        standard={20} 
+        ment={Number(data?.data?.data?.tir || 0).toFixed(1)} 
+        unit="%" 
+        url='/report/detail/tir'
+      />
       <GptContent />
     </div>
   );
