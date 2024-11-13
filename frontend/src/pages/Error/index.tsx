@@ -21,10 +21,10 @@ const Error = ({ height = '100%', error, resetErrorBoundary }: ErrorProps) => {
 
   return (
     <div css={containerCss} style={{ height }}>
-      <Icon size={3.5} color="danger">
-        {surprised}
+      <Icon size={8} color="danger">
+        <img src={surprised} alt="배경 이미지" />
       </Icon>
-      <Typography color="danger" css={descriptionCss}>
+      <Typography weight={400} color="danger" css={descriptionCss}>
         {error.message}
       </Typography>
       <Button color="danger" handler={handleRetryClick}>

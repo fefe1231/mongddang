@@ -31,10 +31,10 @@ const NoResult = ({
   };
   return (
     <div css={[containerCss, fit && fitCss]}>
-      <Icon size={5} color="grey">
-        {not_found}
+      <Icon size={8} color="grey">
+      <img src={not_found} alt="배경 이미지" />
       </Icon>
-      <Typography size='1' color="dark" css={textCss}>
+      <Typography size='1.5' weight={500} color="dark" css={textCss}>
         {msg}
       </Typography>
       {url ? (
