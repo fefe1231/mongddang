@@ -1,9 +1,11 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
 import { containerCss, descriptionCss } from './styles';
 import { FallbackProps } from 'react-error-boundary';
 import { useQueryClient } from '@tanstack/react-query';
-
+import { Icon } from '@/shared/ui/Icon';
+import { Typography } from '@/shared/ui/Typography';
+import { Button } from '@/shared/ui/Button';
+import surprised from '../../assets/img/fox_and_capybara/mongddang14_surprised.png';
 
 interface ErrorProps extends FallbackProps {
   height?: string;
@@ -20,12 +22,12 @@ const Error = ({ height = '100%', error, resetErrorBoundary }: ErrorProps) => {
   return (
     <div css={containerCss} style={{ height }}>
       <Icon size={3.5} color="danger">
-        <ExclamationTriangleIcon />
+        {surprised}
       </Icon>
       <Typography color="danger" css={descriptionCss}>
         {error.message}
       </Typography>
-      <Button color="danger" rounded={0.5} handler={handleRetryClick}>
+      <Button color="danger" handler={handleRetryClick}>
         재시도
       </Button>
     </div>
