@@ -24,6 +24,7 @@ import { Notowncharacter } from './ui/characterlist/notown-character';
 import { Newcharacter } from './ui/characterlist/new-character';
 import { Owncharacter } from './ui/characterlist/owncharacter';
 import { Description } from './ui/description';
+import { characterImages, formatId } from './characterImages';
 
 export const Encyclopedia = () => {
   const [isOwnModal, setIsOwnModal] = useState(false);
@@ -78,7 +79,6 @@ export const Encyclopedia = () => {
     if (modalType === 'own') {
       setIsOwnModal(true);
     } else if (modalType === 'main') {
-
       mutation.mutate(character.id);
     } else if (modalType === 'not') {
       setIsNotModal(true);
@@ -109,15 +109,17 @@ export const Encyclopedia = () => {
     return <div>데이터가 없습니다.</div>;
   }
 
+  console.log(CharacterQuery.data?.data);
+
   return (
     <div css={base}>
-      {isOwnModal && (
+      {isOwnModal && selectedCharacter && (
         <OwnModal data={selectedCharacter} setstate={setIsOwnModal} />
       )}
-      {isMainModal && (
+      {isMainModal && selectedCharacter && (
         <MainModal data={selectedCharacter} setstate={setIsMainModal} />
       )}
-      {isNotModal && (
+      {isNotModal && selectedCharacter && (
         <Notmodal data={selectedCharacter} setstate={setIsNotModal} />
       )}
 
