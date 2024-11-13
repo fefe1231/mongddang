@@ -5,7 +5,11 @@ import { Bloodsugar } from '@/shared/api/blood-sugar';
 import { TabMenu } from '@/shared/ui/TabMenu/indes';
 import { useQuery } from '@tanstack/react-query';
 import {
+  activeDotStyle,
+  dotContainer,
+  dotStyle,
   imgBox,
+  inactiveDotStyle,
   mealContainer,
   mealImg,
   mealImgCover,
@@ -48,6 +52,20 @@ export const DayRecordCategory = ({
               <img css={mealImg} src={`${item.imageUrl}`} />
               <div css={[mealImgCover, isTap[index] && visibleCover]}>
                 <span>{item.content.join(', ')}</span>
+              </div>
+              <div css={dotContainer}>
+                <span
+                  css={[
+                    dotStyle,
+                    isTap[index] ? activeDotStyle : inactiveDotStyle,
+                  ]}
+                />
+                <span
+                  css={[
+                    dotStyle,
+                    !isTap[index] ? activeDotStyle : inactiveDotStyle,
+                  ]}
+                />
               </div>
             </div>
             <div css={mealTextBox}>content</div>

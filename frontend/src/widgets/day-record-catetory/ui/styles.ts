@@ -10,7 +10,7 @@ export const mealItem = css`
   align-items: center;
   width: 100%;
   height: 10rem;
-  gap: 1.5rem;
+  gap: 1.8rem;
   border-bottom: 2px solid red;
 `;
 
@@ -47,6 +47,59 @@ export const mealImgCover = css`
 
 export const visibleCover = css`
   opacity: 0.8;
+`;
+
+export const dotContainer = css`
+  position: absolute;
+  right: -1rem;
+  top: 50%;
+  transform: translateY(-60%);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`;
+
+export const dotStyle = css`
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #d9d9d9;
+  }
+
+  /* &::before {
+    top: -12px;
+  } */
+
+  &::after {
+    top: 12px;
+  }
+`;
+
+export const activeDotStyle = css`
+  background-color: #007aff; 
+
+  &::before,
+  &::after {
+    background-color: #007aff;
+  }
+`;
+
+export const inactiveDotStyle = css`
+  background-color: #d9d9d9;
+
+  &::before,
+  &::after {
+    background-color: #d9d9d9;
+  }
 `;
 
 export const mealTextBox = css`
