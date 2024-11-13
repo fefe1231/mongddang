@@ -29,9 +29,13 @@ import {
   EndRoutineAlert,
   StartRoutineAlert,
 } from './ui/Alerts/Alerts';
-import { setRoutine, setStopwatch } from './hooks/useRoutineStatus';
+import { setRoutine } from './hooks/useRoutineStatus';
 import { getInitialRoutine } from './api/routineApi';
 import { useStopwatchStore } from './model/useStopwatchStore';
+import {
+  setExitTime,
+  setStopwatch,
+} from './hooks/useStopwatchStatus';
 
 const KidsMainPage = () => {
   const navigate = useNavigate();
@@ -59,6 +63,7 @@ const KidsMainPage = () => {
         } else {
           setCurrentRoutine('');
         }
+        useStopwatchStore.getState().updateStopwatch();
       }
 
       console.log('초기 루틴 조회', routineValue);
@@ -67,11 +72,16 @@ const KidsMainPage = () => {
     const handleAppStateChange = () => {
       const latestTime = useStopwatchStore.getState().time;
       setStopwatch(latestTime);
+      const exitTime = Date.now();
+      setExitTime(exitTime);
     };
 
-    App.addListener('appStateChange', ({ isActive }) => {
+    App.addListener('appStateChange', async ({ isActive }) => {
       if (!isActive) {
         handleAppStateChange();
+        useStopwatchStore.getState().endStopwatch();
+      } else {
+        useStopwatchStore.getState().updateStopwatch();
       }
     });
 

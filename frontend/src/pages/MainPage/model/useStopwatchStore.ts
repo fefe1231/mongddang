@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { getExitTime, getStopwatch } from '../hooks/useStopwatchStatus';
 
 // 사용할 필드와 메서드를 선언하기
 type StopwatchInfo = {
@@ -7,6 +8,7 @@ type StopwatchInfo = {
   intervalRef: NodeJS.Timeout | null;
   startStopwatch: () => void;
   endStopwatch: () => void;
+  updateStopwatch: () => void;
   finalTime: string;
 };
 
@@ -22,7 +24,7 @@ export const useStopwatchStore = create<StopwatchInfo>((set, get) => ({
   time: 0,
   isRunning: false,
   intervalRef: null,
-  finalTime: '00 : 00',
+  finalTime: '⏳',
 
   // 스톱워치 시작
   startStopwatch: () => {
@@ -48,10 +50,41 @@ export const useStopwatchStore = create<StopwatchInfo>((set, get) => ({
       if (intervalRef !== null) {
         clearInterval(intervalRef);
 
-        set({ isRunning: false, intervalRef: null });
-        set({ time: 0 });
-        set({ finalTime: '00 : 00' });
+        set({
+          time: 0,
+          finalTime: '⏳',
+          isRunning: false,
+          intervalRef: null,
+        });
       }
+    }
+    console.log('finalTime 업데이트0');
+  },
+
+  // 앱 다시 켰을 때 스톱워치 업데이트
+  updateStopwatch: async () => {
+    const latestExitTimeString = await getExitTime();
+    const latestExitTime = Number(latestExitTimeString);
+    if (latestExitTime !== 0) {
+      const latestStopwatchTime = await getStopwatch();
+      const newTime = Date.now() - latestExitTime + Number(latestStopwatchTime);
+
+      const { intervalRef } = get();
+      if (intervalRef) {
+        clearInterval(intervalRef);
+      }
+
+      set({ time: newTime, isRunning: true });
+      const newInterval = setInterval(() => {
+        set((state) => {
+          const restartTime = state.time + 1000;
+          return {
+            time: restartTime,
+            finalTime: formatTime(restartTime),
+          };
+        });
+      }, 1000);
+      set({ intervalRef: newInterval });
     }
   },
 }));

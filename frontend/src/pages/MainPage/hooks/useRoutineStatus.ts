@@ -14,12 +14,3 @@ export const getRoutine = async (): Promise<string> => {
   const { value } = await Preferences.get({ key: 'routine' });
   return value || '';
 };
-
-// 루틴 스톱워치 저장
-export const setStopwatch = async (time: number) => {
-  await Preferences.set({
-    key: 'prevTime',
-    value: time.toString(),
-  });
-  console.log('마지막 스톱워치 저장', time.toString());
-};
