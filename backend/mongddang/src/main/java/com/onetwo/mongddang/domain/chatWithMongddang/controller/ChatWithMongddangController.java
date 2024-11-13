@@ -1,0 +1,44 @@
+package com.onetwo.mongddang.domain.chatWithMongddang.controller;
+
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.onetwo.mongddang.common.responseDto.ResponseDto;
+import com.onetwo.mongddang.domain.chatWithMongddang.dto.RequestChatWithMongddangDto;
+import com.onetwo.mongddang.domain.chatWithMongddang.service.ChatWithMongddangService;
+import com.onetwo.mongddang.domain.user.jwt.JwtExtratService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@Slf4j
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/chat/mongddang")
+@Tag(name = "ChatWithMongddang API", description = "몽땅과의 채팅 api")
+public class ChatWithMongddangController {
+
+
+    private final ChatWithMongddangService chatWithMongddangService;
+    private final JwtExtratService jwtExtratService;
+
+
+    @PostMapping("")
+    @Tag(name = "ChatWithMongddang API", description = "몽땅과의 채팅 api")
+    @Operation(summary = "몽땅과의 채팅", description = "몽땅과의 채팅을 합니다.")
+    public ResponseEntity<ResponseDto> getPrompt(@RequestBody RequestChatWithMongddangDto requestChatWithMongddangDto, HttpServletRequest request) throws JsonProcessingException {
+        log.info("requestChatWithMongddangDto: {}", requestChatWithMongddangDto);
+
+        Long userId = jwtExtratService.jwtFindId(request);
+
+        ResponseDto responseDto = chatWithMongddangService.chatWithMongddang(userId, requestChatWithMongddangDto.getMessage(), requestChatWithMongddangDto.getIsStart());
+        return ResponseEntity.ok(responseDto);
+    }
+
+}
