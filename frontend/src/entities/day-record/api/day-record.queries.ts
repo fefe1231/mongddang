@@ -1,12 +1,11 @@
 import { DayRecordService, DayRecords } from '@/shared/api/day-record';
 import { queryOptions } from '@tanstack/react-query';
-import { RecordFilter } from '../model';
-import { RecordCategory, RecordType } from './type';
+import { RecordCategory, RecordFilter, RecordType } from './type';
 
 export class DayRecordQueries {
   static readonly queryKeys = {
     all: ['dayRecords'] as const,
-    filtered: (filters: RecordFilter) =>
+    filtered: (filters: RecordFilter<RecordCategory>) =>
       [...this.queryKeys.all, { filters }] as const,
   };
 
@@ -28,7 +27,7 @@ export class DayRecordQueries {
   }
 
   private static filteredDayRecordsQuery<T extends RecordCategory>(
-    filters: RecordFilter & { category: T }
+    filters: RecordFilter<T>
   ) {
     return queryOptions<RecordType<T>>({
       queryKey: this.queryKeys.filtered(filters),
@@ -42,7 +41,7 @@ export class DayRecordQueries {
 
         const baseData = data.data.dates[0];
 
-        return baseData.records[filters.category] as RecordType<T>;
+        return baseData.records[filters.category];
       },
       enabled: !!filters.nickname,
     });
