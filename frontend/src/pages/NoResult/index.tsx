@@ -1,10 +1,10 @@
 /** @jsxImportSource @emotion/react */
-import { SlQuestion } from 'react-icons/sl';
 import { containerCss, fitCss, textCss } from './styles';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@/shared/ui/Icon';
 import { Typography } from '@/shared/ui/Typography';
 import { Button } from '@/shared/ui/Button';
+import not_found from '../../assets/img/page/not_found.png';
 
 interface NoResultProps {
   fit?: boolean;
@@ -32,7 +32,7 @@ const NoResult = ({
   return (
     <div css={[containerCss, fit && fitCss]}>
       <Icon size={5} color="grey">
-        <SlQuestion />
+        {not_found}
       </Icon>
       <Typography size='1' color="dark" css={textCss}>
         {msg}
