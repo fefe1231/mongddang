@@ -35,6 +35,7 @@ import { useStopwatchStore } from './model/useStopwatchStore';
 import { setExitTime, setStopwatch } from './hooks/useStopwatchStatus';
 import { mainIcons } from './constants/iconsData';
 import { getMainInfo } from './api/infoApi';
+import Loading from '@/shared/ui/Loading';
 
 const KidsMainPage = () => {
   const navigate = useNavigate();
@@ -49,12 +50,14 @@ const KidsMainPage = () => {
   const [alertStatus, setAlertStatus] = useState('');
   const [alertBloodSugar, setAlertBloodSugar] = useState(0);
   const [currentRoutine, setCurrentRoutine] = useState('');
+  const [isLoading, setIsLoading] = useState(true)
 
   // 초기 루틴 상태 조회
   useEffect(() => {
     const fetchMainInfo = async () => {
       const mainInfo = await getMainInfo();
       setMainInfo(mainInfo);
+      setIsLoading(false)
     };
     const fetchRoutine = async () => {
       const routineValue = await getInitialRoutine();
@@ -144,7 +147,7 @@ const KidsMainPage = () => {
   console.log('루틴 상태', currentRoutine);
 
   return (
-    <div css={kidsMainBase}>
+    !isLoading ? <div css={kidsMainBase}>
       <div css={kidsMainContent}>
         {/* 상단 컴포넌트들 */}
         <div css={topContainer}>
@@ -277,7 +280,7 @@ const KidsMainPage = () => {
           <></>
         )
       }
-    </div>
+    </div> : <Loading/>
   );
 };
 
