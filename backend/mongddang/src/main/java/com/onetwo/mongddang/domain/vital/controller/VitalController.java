@@ -24,10 +24,10 @@ public class VitalController {
     private final VitalService vitalService;
     private final JwtExtratService jwtExtratService;
 
-    // 혈당 기록 조회
+    // 일일 혈당 기록 조회
     @GetMapping("bloodsugar")
     @Tag(name = "Vital API", description = "혈당 api")
-    @Operation(summary = "혈당 기록 조회", description = "혈당 기록을 조회합니다.")
+    @Operation(summary = "일일 혈당 기록 조회", description = "혈당 기록을 조회합니다.")
     public ResponseEntity<ResponseDto> getBloodSugar(
             @NotBlank(message = "닉네임은 필수입니다.") @RequestParam String nickname,
             @RequestParam LocalDate date,
@@ -37,7 +37,6 @@ public class VitalController {
 
         Long userId = jwtExtratService.jwtFindId(request);
 
-        // 서비스 작성
         ResponseDto responseDto = vitalService.getBloodSugar(userId, nickname, date);
         return ResponseEntity.ok(responseDto);
 
@@ -55,7 +54,6 @@ public class VitalController {
 
         Long userId = jwtExtratService.jwtFindId(request);
 
-        // 서비스 작성
         ResponseDto responseDto = vitalService.getCurrentBloodSugar(userId, nickname);
         return ResponseEntity.ok(responseDto);
     }
@@ -75,7 +73,6 @@ public class VitalController {
 
         Long userId = jwtExtratService.jwtFindId(request);
 
-        // 서비스 작성
         ResponseDto responseDto = vitalService.getReport(userId, nickname, startDate, endDate);
         return ResponseEntity.ok(responseDto);
     }
@@ -94,7 +91,6 @@ public class VitalController {
 
         Long userId = jwtExtratService.jwtFindId(request);
 
-        // 서비스 작성
         ResponseDto responseDto = vitalService.getGptSummary(userId, nickname, message);
         return ResponseEntity.ok(responseDto);
     }

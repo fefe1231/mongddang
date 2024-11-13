@@ -3,7 +3,6 @@ package com.onetwo.mongddang.domain.vital.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
 import com.onetwo.mongddang.common.utils.GptUtils;
-import com.onetwo.mongddang.domain.mealplan.error.CustomMealplanErrorCode;
 import com.onetwo.mongddang.domain.user.application.CtoPUtils;
 import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
 import com.onetwo.mongddang.domain.user.model.User;
@@ -12,6 +11,7 @@ import com.onetwo.mongddang.domain.vital.application.VitalUtils;
 import com.onetwo.mongddang.domain.vital.dto.GlucoseMeasurementTimeDto;
 import com.onetwo.mongddang.domain.vital.dto.ResponseBloodSugarReportDto;
 import com.onetwo.mongddang.domain.vital.dto.ResponseDailyGlucoseDto;
+import com.onetwo.mongddang.domain.vital.errors.CustomVitalErrorCode;
 import com.onetwo.mongddang.domain.vital.model.Vital;
 import com.onetwo.mongddang.domain.vital.repository.VitalRepository;
 import com.onetwo.mongddang.errors.exception.RestApiException;
@@ -55,7 +55,7 @@ public class VitalService {
                 .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
 
         // 조회 권한 확인
-//        ctoPUtils.validateProtectorAccessChildData(user, child);
+        // ctoPUtils.validateProtectorAccessChildData(user, child);
 
         // 해당 날짜의 혈당 기록 조회
         List<Vital> todayVital = vitalRepository.findByChildAndMeasurementTimeBetween(child, date.atStartOfDay(), date.atTime(23, 59, 59));
@@ -89,7 +89,7 @@ public class VitalService {
                 .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
 
         // 조회 권한 확인
-//        ctoPUtils.validateProtectorAccessChildData(user, child);
+        // ctoPUtils.validateProtectorAccessChildData(user, child);
 
         log.info("child: {}", child.getEmail());
         Vital vital = vitalRepository.findTopByChildOrderById(child).orElse(null);
@@ -172,7 +172,7 @@ public class VitalService {
                 .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
 
         // 조회 권한 확인
-//        ctoPUtils.validateProtectorAccessChildData(user, child);
+        // ctoPUtils.validateProtectorAccessChildData(user, child);
 
         // 해당 날짜의 혈당 기록 조회
         List<Vital> vitalList = vitalRepository.findByChildAndMeasurementTimeBetween(child, startDate.atStartOfDay(), endDate.atTime(23, 59, 59));
@@ -199,7 +199,6 @@ public class VitalService {
                 .abg(abg)
                 .cv(cv)
                 .tir(tir)
-                .gptSummary("정상")
                 .build();
 
         return ResponseDto.builder()
@@ -213,7 +212,6 @@ public class VitalService {
         log.info("getGptSummary");
 
         try {
-            // OpenAI API 사용
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
             log.info("Existing User : {}", userId);
@@ -230,7 +228,6 @@ public class VitalService {
             // GPT 요약 생성
             JsonNode rootNode = gptUtils.requestGpt(messageWithPrompt);
 
-            // 필요한 데이터 추출 (예시)
             log.info("rootNode : {}", rootNode.get("choices").get(0).get("message").get("content").asText());
             String summary = rootNode.path("choices").get(0).path("message").path("content").asText();
 
@@ -241,7 +238,7 @@ public class VitalService {
 
         } catch (Exception e) {
             log.error("Error occurred while getting GPT summary", e);
-            throw new RestApiException(CustomMealplanErrorCode.SCHOOL_INFO_RETR_FAIL);
+            throw new RestApiException(CustomVitalErrorCode.VITAL_GENERATE_GPT_FAILED);
         }
     }
 

@@ -14,7 +14,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Slf4j
@@ -41,18 +40,10 @@ public class GptUtils {
         HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
 
         RestTemplate restTemplate = new RestTemplate();
-        try {
-            String response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class).getBody();
-            log.info("Response: {}", response);
-            ObjectMapper objectMapper = new ObjectMapper();
-            return objectMapper.readTree(response);
-        } catch (HttpClientErrorException e) {
-            log.error("HTTP error: {} - Response body: {}", e.getStatusCode(), e.getResponseBodyAsString());
-            throw new RuntimeException("Failed to get GPT response: " + e.getMessage());
-        } catch (Exception e) {
-            log.error("An error occurred while requesting GPT: {}", e.getMessage(), e);
-            throw new RuntimeException("Error while processing GPT request: " + e.getMessage());
-        }
+        String response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class).getBody();
+        log.info("Response: {}", response);
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readTree(response);
     }
 
     private String createRequestBody(String message) throws JsonProcessingException {
