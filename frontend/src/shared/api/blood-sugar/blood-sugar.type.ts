@@ -15,3 +15,8 @@ export interface BloodsugarResponse {
     bloodSugar: Bloodsugar[];
   };
 }
+
+export interface BloodsuagrParams {
+  nickname: string;
+  date: string;
+}

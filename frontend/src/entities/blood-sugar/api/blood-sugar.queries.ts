@@ -15,10 +15,12 @@ export class BloodsugarQueries {
     return queryOptions({
       queryKey: [...this.queryKeys.all, date],
       queryFn: async (): Promise<Bloodsugar[]> => {
-        const { data } = await BloodsugarService.bloodSugarQuery(
-          nickname,
-          date
-        );
+        const { data } = await BloodsugarService.bloodSugarQuery({
+          params: {
+            nickname,
+            date,
+          },
+        });
         const formattedData = data.data.bloodSugar.map((item) => ({
           ...item,
           measurementTime: dayjs(item.measurementTime).format('HH:mm'),
