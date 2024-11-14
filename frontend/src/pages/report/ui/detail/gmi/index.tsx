@@ -4,6 +4,7 @@ import { TopBar } from '@/shared/ui/TopBar';
 import { Typography } from '@/shared/ui/Typography';
 import { useNavigate } from 'react-router-dom';
 import { containerCss } from './styles';
+import DiabetesIndicator from '../../chart/gmi-chart';
 
 export const GmiDetail = () => {
   const nav = useNavigate();
@@ -12,6 +13,7 @@ export const GmiDetail = () => {
       <TopBar type="iconpage" iconHandler={() => nav('/report')}>
         혈당관리지표(GMI)
       </TopBar>
+      <DiabetesIndicator currentValue={9.1} />
       <div css={containerCss}>
         <Typography color="dark" size="1.25" weight={600}>
           혈당관리지표(GMI)란?

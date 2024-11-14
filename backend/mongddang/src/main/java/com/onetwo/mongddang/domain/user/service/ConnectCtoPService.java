@@ -60,7 +60,7 @@ public class ConnectCtoPService {
         if (!ctoPRepository.findByChildAndProtector(user.get(), child.get()).isEmpty()) {
             throw new RestApiException(CustomCtoPErrorCode.ALREADY_LINKED);
         }
-        log.info(ctoPRepository.findByChildAndProtector(child.get(),user.get()).toString());
+        log.info(ctoPRepository.findByChildAndProtector(child.get(), user.get()).toString());
         log.info("Connection Start!");
 
         // 연결 시작

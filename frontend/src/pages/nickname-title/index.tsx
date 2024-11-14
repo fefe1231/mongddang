@@ -33,11 +33,10 @@ export const NicknameTitle = () => {
   const TitleQuery = useQuery({
     queryKey: ['title'],
     queryFn: async () => {
-      const accessToken = localStorage.getItem('accessToken') || '';
-      return await getTitleInfo(accessToken);
+      return await getTitleInfo();
     },
   });
-
+  console.log(TitleQuery.data?.data?.data)
   return (
     <div>
       <TopBar type="iconpage" iconHandler={() => nav('/')}>

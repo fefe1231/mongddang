@@ -11,6 +11,8 @@ import {
 } from './styles';
 import { IconTypo } from '@/shared/ui/IconTypo';
 import { UserRole } from '../..';
+import child from '../../../../assets/img/page/child.png'
+import protector from '../../../../assets/img/page/protector.png'
 
 interface UserDataFormProps {
   onSubmit: (role: UserRole) => void;
@@ -29,9 +31,9 @@ export const RoleSelector = ({ onSubmit }: UserDataFormProps) => {
           <div css={btnCss(role, 'child')} onClick={() => setRole('child')}>
             <IconTypo
               fontSize="1.75"
-              icon="/img/%EB%A7%90%EB%9E%911.png"
+              icon={child}
               menu="어린이"
-              size={5}
+              size={6}
             />
           </div>
           <div
@@ -40,15 +42,15 @@ export const RoleSelector = ({ onSubmit }: UserDataFormProps) => {
           >
             <IconTypo
               fontSize="1.75"
-              icon="/img/%EB%A7%90%EB%9E%911.png"
+              icon={protector}
               menu="보호자"
-              size={5}
+              size={6}
             />
           </div>
         </div>
         <div>
           <Button
-            css={nextbtnCss} // 버튼 스타일 적용
+            css={nextbtnCss}
             disabled={!role}
             color={'light'}
             fontSize="1"

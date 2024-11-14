@@ -3,7 +3,6 @@ import { Button } from '@/shared/ui/Button';
 import { Icon } from '@/shared/ui/Icon';
 import { Modal } from '@/shared/ui/Modal';
 import { Typography } from '@/shared/ui/Typography';
-
 import { HiOutlineX } from 'react-icons/hi';
 import { Chip } from '@/shared/ui/Chip';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -13,6 +12,7 @@ import { useState } from 'react';
 import { ICharacterData } from '@/pages/Encyclopedia/model/types';
 import { getMainInfo } from '@/pages/Encyclopedia/api/api';
 import { UpdateCharacter } from '../update-character';
+import { characterImages, formatId } from '@/pages/Encyclopedia/model/mongddang-img';
 
 interface OwnModalProps {
   setstate: (value: boolean) => void;
@@ -25,36 +25,18 @@ interface CharacterResponse {
   };
 }
 
-interface MainCharacterResponse {
-  code: string;
-  message: string;
-  data: {
-    mongddangId: number;
-    isMain: boolean;
-  };
-}
 
 export const OwnModal = ({ setstate, data }: OwnModalProps) => {
   const queryClient = useQueryClient();
-  const accessToken = localStorage.getItem('accessToken');
   const [isParentModalOpen, setIsParentModalOpen] = useState(true);
   const [isModal, setIsModal] = useState(false);
-  const mainMutation = useMutation<
-    AxiosResponse<MainCharacterResponse>,
-    Error,
-    number
-  >({
-    mutationFn: (characterId) => {
-      if (!accessToken) {
-        throw new Error('AccessToken이 필요합니다.');
-      }
-      return getMainInfo(accessToken, characterId);
-    },
+  
+  const mainMutation = useMutation<AxiosResponse<ICharacterData>, Error, number>({
+    mutationFn: (characterId: number) => getMainInfo(characterId),
     onSuccess: (response, characterId) => {
       queryClient.setQueryData<CharacterResponse>(['character'], (oldData) => {
-        console.log(response);
         if (!oldData) return oldData;
-
+        
         return {
           ...oldData,
           data: {
@@ -66,7 +48,7 @@ export const OwnModal = ({ setstate, data }: OwnModalProps) => {
           },
         };
       });
-
+      
       setstate(false);
     },
     onError: (error) => {
@@ -74,7 +56,7 @@ export const OwnModal = ({ setstate, data }: OwnModalProps) => {
       alert('대장 설정에 실패했습니다. 다시 시도해주세요.');
     },
   });
-
+  
   const handleSetMain = () => {
     if (data?.id) {
       mainMutation.mutate(data.id);
@@ -82,18 +64,21 @@ export const OwnModal = ({ setstate, data }: OwnModalProps) => {
       setIsModal(true);
     }
   };
-
+  
   const handleUpdateCharacterClose = () => {
     setIsModal(false);
-    setIsParentModalOpen(true); // 메인 모달을 다시 열어줍니다
+    setIsParentModalOpen(true);
   };
-
+  
   const clickEvent = () => {
     setIsParentModalOpen(false);
     setIsModal(true);
   };
-
-
+  
+  if (!data) return null;
+  const imageKey = formatId(data.id);
+  const imagePath = characterImages[imageKey];
+  
   return (
     <div>
       {isParentModalOpen && (
@@ -106,7 +91,7 @@ export const OwnModal = ({ setstate, data }: OwnModalProps) => {
               {data?.name}
             </Chip>
             <Icon size={5}>
-              <img alt="icon-1" src="/img/말랑1.png" />
+              <img alt="icon-1" src={imagePath} />
             </Icon>
             <Typography
               color="dark"

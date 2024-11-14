@@ -20,5 +20,5 @@ export const iconCss = (size: number, disabled: boolean) => css`
 
 export const menuCss = (selected: boolean) => css`
   color: ${selected ? '#3498db' : '#333'};
-  font-weight: ${selected ? 'bold' : 'normal'};
+  font-weight: ${selected ? 'bold' : 600};
 `;

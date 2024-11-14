@@ -4,34 +4,24 @@ import { Button } from '@/shared/ui/Button';
 import { Icon } from '@/shared/ui/Icon';
 import { Modal } from '@/shared/ui/Modal';
 import { Typography } from '@/shared/ui/Typography';
-
 import { HiOutlineX } from 'react-icons/hi';
 import { Chip } from '@/shared/ui/Chip';
-
 import { base, modalCss, xiconCss } from './styles';
 import { UpdateCharacter } from '../update-character';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 import { ICharacterData } from '@/pages/Encyclopedia/model/types';
 import { getMainInfo } from '@/pages/Encyclopedia/api/api';
+import { characterImages, formatId } from '@/pages/Encyclopedia/model/mongddang-img';
 
 interface OwnModalProps {
-  setstate: (value: boolean) => void; // setstate는 boolean 값을 받는 함수
-  data: ICharacterData | null; // 캐릭터 데이터 prop 추가
+  setstate: (value: boolean) => void; 
+  data: ICharacterData | null; 
 }
 
 interface CharacterResponse {
   data: {
     data: ICharacterData[];
-  };
-}
-
-interface MainCharacterResponse {
-  code: string;
-  message: string;
-  data: {
-    mongddangId: number;
-    isMain: boolean;
   };
 }
 
@@ -52,20 +42,16 @@ export const MainModal = ({ setstate, data }: OwnModalProps) => {
 
   const handleUpdateCharacterClose = () => {
     setIsModal(false);
-    setIsParentModalOpen(true); // 메인 모달을 다시 열어줍니다
+    setIsParentModalOpen(true); 
   };
   const queryClient = useQueryClient();
-  const accessToken = localStorage.getItem('accessToken');
   const mainMutation = useMutation<
-    AxiosResponse<MainCharacterResponse>,
+    AxiosResponse<ICharacterData>,
     Error,
     number
   >({
     mutationFn: (characterId) => {
-      if (!accessToken) {
-        throw new Error('AccessToken이 필요합니다.');
-      }
-      return getMainInfo(accessToken, characterId);
+      return getMainInfo(characterId);
     },
     onSuccess: (response, characterId) => {
       queryClient.setQueryData<CharacterResponse>(['character'], (oldData) => {
@@ -98,6 +84,9 @@ export const MainModal = ({ setstate, data }: OwnModalProps) => {
       setIsModal(true);
     }
   };
+  if (!data) return null;
+  const imageKey = formatId(data.id);
+  const imagePath = characterImages[imageKey];
 
   return (
     <>
@@ -111,7 +100,7 @@ export const MainModal = ({ setstate, data }: OwnModalProps) => {
               {data?.name}
             </Chip>
             <Icon size={5}>
-              <img alt="icon-1" src="/img/%EB%A7%90%EB%9E%912.png" />
+              <img alt="icon-1" src={imagePath} />
             </Icon>
             <Typography
               color="dark"

@@ -12,56 +12,50 @@ import { ICharacterData } from '@/pages/Encyclopedia/model/types';
 import { getCoinInfo, postRecruitment } from '@/pages/Encyclopedia/api/api';
 import { BuyModal } from '../buy-modal';
 import { FindModal } from '../find-modal';
+import { formatId, noCharacterImages } from '@/pages/Encyclopedia/model/no-mongddang-img';
 
 interface OwnModalProps {
   setstate: (value: boolean) => void;
-  data: ICharacterData | null;
+  data: ICharacterData;
 }
 
 export const Notmodal = ({ setstate, data }: OwnModalProps) => {
   const [, setIsNew] = useState(false);
   const [buyModal, setBuyModal] = useState<boolean>(false);
   const [findModal, setFindModal] = useState<boolean>(false);
-  const accessToken = localStorage.getItem('accessToken') || '';
+  const imageKey = formatId(data.id);
+  const imagePath = noCharacterImages[imageKey];
 
   const characterMutation = useMutation({
     mutationFn: async () => {
-      if (!accessToken) {
-        throw new Error('AccessToken이 필요합니다.');
-      }
-      return await postRecruitment(accessToken, data?.id);
+      return await postRecruitment(data.id);
     },
     onSuccess: () => {
-      // 캐릭터 모집 성공 시 findModal 열기
       setFindModal(true);
     },
     onError: (error) => {
       console.error('Error recruiting character:', error);
-      alert('캐릭터 모집에 실패했습니다. 다시 시도해주세요.'); // 사용자에게 피드백 제공
+      alert('캐릭터 모집에 실패했습니다. 다시 시도해주세요.');
     },
   });
 
   const CoinQuery = useQuery({
     queryKey: ['coin'],
     queryFn: async () => {
-      if (!accessToken) {
-        throw new Error('AccessToken이 필요합니다.');
-      }
-      return await getCoinInfo(accessToken);
+      return await getCoinInfo();
     },
   });
 
   const handleBuyModalBlue = () => {
     setBuyModal(false);
-    characterMutation.mutate(); // mutate 호출
+    characterMutation.mutate(); 
   };
 
   const handleFindModalClose = () => {
     setFindModal(false);
-    setstate(false); // 맨 처음 모달 닫기
+    setstate(false); 
   };
 
-  console.log(CoinQuery.data?.data.data.coin);
   return (
     <div>
       <Modal height={40} width={70} css={modalCss}>
@@ -70,13 +64,12 @@ export const Notmodal = ({ setstate, data }: OwnModalProps) => {
         </Icon>
         <div css={base}>
           <Chip border={0.625} color="primary" fontSize={1} fontWeight={700}>
-            {data?.name}
+            {data.name}
           </Chip>
           <Icon size={5}>
             <img
-              style={{ filter: 'grayscale(100%) brightness(0%' }}
-              alt="icon-1"
-              src="/img/말랑3.png"
+              alt={`${data.name} 캐릭터 이미지`}
+              src={imagePath}
             />
           </Icon>
           <Typography
@@ -85,7 +78,7 @@ export const Notmodal = ({ setstate, data }: OwnModalProps) => {
             weight={600}
             css={storyTypographyCss}
           >
-            {data?.story}
+            {data.story}
           </Typography>
           <Button
             handler={() => setBuyModal(true)}
@@ -93,7 +86,7 @@ export const Notmodal = ({ setstate, data }: OwnModalProps) => {
             fontSize="1"
             variant="contained"
           >
-            400
+            {data.price}
           </Button>
           <Typography
             color="dark"
@@ -112,7 +105,11 @@ export const Notmodal = ({ setstate, data }: OwnModalProps) => {
         />
       )}
       {findModal && (
-        <FindModal setstate={handleFindModalClose} setIsNew={setIsNew} />
+        <FindModal 
+          data={data}
+          setstate={handleFindModalClose} 
+          setIsNew={setIsNew}
+        />
       )}
     </div>
   );
