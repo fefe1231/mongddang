@@ -6,7 +6,7 @@ export const getMainInfo = () => {
         url: '/api/main'
     })
     .then((res)=>{
-        console.log('메인페이지 정보 조회 성공', res.data)
+        console.log('메인페이지 정보 조회 성공', res.data.data)
         return res.data.data
     })
     .catch((err)=>{

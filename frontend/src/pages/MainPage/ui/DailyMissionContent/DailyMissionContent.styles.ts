@@ -12,19 +12,28 @@ export const container = css`
 
 export const missionListCss = css`
   display: flex;
+  flex-direction: column;
   width: 100%;
-  padding: 3%;
+  padding: 3% 7%;
   align-items: center;
+  /* flex-grow: 1; */
 `;
 
 export const missionItemCss = css`
   display: flex;
   width: 100%;
+  height: 100%;
   align-items: center;
   justify-content: space-between;
   /* background-color: wheat; */
 `;
 
+export const missionNameCss = css`
+display: flex;
+align-items: center;
+gap: 1rem;
+
+`
 export const checkImgCss = css`
   height: 2rem;
 `;
