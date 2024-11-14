@@ -20,6 +20,7 @@ public class FcmMessage {
     public static class Message {
 
         private final Data data; // 수신자에게 전달될 내용
+        private final Notification notification; // 알림 메시지 추가
         private final String token; // 수신자 식별 코드. db에 저장되어있음
     }
 
@@ -32,5 +33,14 @@ public class FcmMessage {
         private final String childNickname; // 알림 대상자의 닉네임(이상혈당 지속시)
         private final String title; // 제목 ("혈당 이상")
         private final String message; // 내용 ("고혈당입니다!")
+    }
+
+    // 알림 메시지 설정을 위한 Notification 클래스
+    @RequiredArgsConstructor
+    @Getter
+    @Builder
+    public static class Notification {
+        private final String title; // 알림 제목
+        private final String body;  // 알림 내용
     }
 }

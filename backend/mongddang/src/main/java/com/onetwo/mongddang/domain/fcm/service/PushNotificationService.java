@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -28,8 +29,8 @@ public class PushNotificationService {
     private final PushLogRepository pushLogRepository;
     private final FcmTokenRepository fcmTokenRepository;
     private final GetAccessToken getAccessToken;
-    private ObjectMapper objectMapper;
-    private WebClient webClient;
+    private final ObjectMapper objectMapper;
+    private final WebClient webClient;
 
     @Value("${fcm.url.postfix}")
     private String urlPostfix;
@@ -43,10 +44,15 @@ public class PushNotificationService {
     // 푸시 알림을 보내는 서비스
     public void sendPushNotification(User user, Notification notification, PushLog.Category category){
         // fcm토큰 찾기
-        FcmToken token = fcmTokenRepository.findByUser(user)
-                .orElseThrow(()-> new RestApiException(CustomFcmErrorCode.FCM_TOKEN_NOT_FOUND));
+        Optional<FcmToken> token = fcmTokenRepository.findByUser(user);
 
-        String fcmToken = token.getToken();
+        // FCM 토큰이 없는 경우 메서드를 종료하여 알림을 건너뜀
+        if (token.isEmpty()) {
+            log.warn("User {}에 대한 FCM 토큰이 존재하지 않아 알림을 건너뜁니다.", user.getId());
+            return;
+        }
+
+        String fcmToken = token.get().getToken();
 
         // 메시지 만들기
         String message = makeMessage(fcmToken,notification);
@@ -93,9 +99,7 @@ public class PushNotificationService {
         pushLogRepository.save(pushLog);
     }
 
-    public String makeMessage(String targetToken, Notification notification){
-        // 보내는 사람같은거 없음 -> 모두 시스템에서 보냄
-
+    public String makeMessage(String targetToken, Notification notification) {
         // data 설정
         FcmMessage.Data messageData = FcmMessage.Data.builder()
                 .receiverNickname(notification.getReceiver().getNickname())
@@ -104,10 +108,17 @@ public class PushNotificationService {
                 .message(notification.getMessage())
                 .build();
 
-        // message 설정
+        // notification 설정
+        FcmMessage.Notification messageNotification = FcmMessage.Notification.builder()
+                .title(notification.getTitle()) // 알림 제목 설정
+                .body(notification.getMessage()) // 알림 본문 설정
+                .build();
+
+        // message 설정 - data와 notification을 함께 포함
         FcmMessage.Message message = FcmMessage.Message.builder()
                 .token(targetToken)
-                .data(messageData)
+                .data(messageData)               // 데이터 메시지
+                .notification(messageNotification) // 알림 메시지
                 .build();
 
         // 최종 fcm message 설정
@@ -123,4 +134,5 @@ public class PushNotificationService {
             throw new RestApiException(CustomFcmErrorCode.CONVERTING_JSON_ERROR);
         }
     }
+
 }
