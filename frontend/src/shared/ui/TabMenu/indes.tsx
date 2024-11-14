@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { TabMenuProps } from './TabMenu.types';
 import { Icon } from '../Icon';
 import { Typography } from '../Typography';
-import { contentCss, labelCss } from './styles';
+import { containerCss, contentCss, labelCss, tabListCss } from './styles';
 import meal from '../../../assets/img/icon/meal_icon.png'
 import exercise from '../../../assets/img/icon/exercise_icon.png'
 import medication from '../../../assets/img/icon/medication_icon.png'
@@ -83,8 +83,8 @@ export const TabMenu: React.FC<TabMenuProps> = ({
   };
 
   return (
-    <div>
-      <div>
+    <div css={containerCss}>
+      <div css={tabListCss}>
         {items.map((item) => (
           <button
             key={item.id}
