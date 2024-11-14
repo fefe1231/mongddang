@@ -13,10 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -30,6 +27,20 @@ public class ChatWithMongddangController {
     private final JwtExtratService jwtExtratService;
 
 
+    @GetMapping("start")
+    @ChildRequired
+    @Tag(name = "ChatWithMongddang API", description = "몽땅과의 대화 api")
+    @Operation(summary = "몽땅과의 대화", description = "몽땅과 대화를 시작 합니다.")
+    public ResponseEntity<ResponseDto> startChatWithMongddang(@RequestBody RequestChatWithMongddangDto requestChatWithMongddangDto, HttpServletRequest request) throws JsonProcessingException {
+        log.info("requestChatWithMongddangDto: {}", requestChatWithMongddangDto);
+
+        Long userId = jwtExtratService.jwtFindId(request);
+
+        ResponseDto responseDto = chatWithMongddangService.startChatWithMongddang(userId, requestChatWithMongddangDto.getMessage());
+        return ResponseEntity.ok(responseDto);
+    }
+
+
     @PostMapping("")
     @ChildRequired
     @Tag(name = "ChatWithMongddang API", description = "몽땅과의 대화 api")
@@ -39,7 +50,7 @@ public class ChatWithMongddangController {
 
         Long userId = jwtExtratService.jwtFindId(request);
 
-        ResponseDto responseDto = chatWithMongddangService.chatWithMongddang(userId, requestChatWithMongddangDto.getMessage(), requestChatWithMongddangDto.getIsStart());
+        ResponseDto responseDto = chatWithMongddangService.chatWithMongddang(userId, requestChatWithMongddangDto.getMessage());
         return ResponseEntity.ok(responseDto);
     }
 
