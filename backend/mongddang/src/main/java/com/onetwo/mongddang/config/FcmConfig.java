@@ -6,14 +6,14 @@ import com.google.firebase.FirebaseOptions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 @Configuration
 public class FcmConfig {
 
-    // application.properties에 시크릿키 경로
     @Value("${firebase.credentials.path}")
     private String firebaseCredentialsPath;
 
@@ -21,7 +21,8 @@ public class FcmConfig {
     public FirebaseApp initializeFirebaseApp() throws IOException {
         // 이미 초기화된 FirebaseApp이 있는지 확인
         if (FirebaseApp.getApps().isEmpty()) {
-            try (FileInputStream serviceAccount = new FileInputStream(firebaseCredentialsPath)) {
+            // ClassPathResource를 사용해 InputStream을 얻습니다.
+            try (InputStream serviceAccount = new ClassPathResource(firebaseCredentialsPath).getInputStream()) {
                 FirebaseOptions options = FirebaseOptions.builder()
                         .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                         .build();
@@ -33,3 +34,4 @@ public class FcmConfig {
         }
     }
 }
+
