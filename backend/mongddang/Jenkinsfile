@@ -39,6 +39,19 @@ pipeline {
             }
         }
 
+        stage('firebase json key download') {
+            setps {
+                withCredentials([file(credentialId: 'fcm_certification', variable: 'certificationFile')]) {
+                    script {
+                        echo "download certification.json"
+                        echo "current dirctory"
+                        sh 'pwd'
+                        sh 'ls -la'
+                    }
+                }
+            }
+        }
+
         stage('Builds Backend .JAR') {
           steps {
             dir("${BACKEND_DIR}") {
