@@ -15,7 +15,4 @@ public class RequestChatWithMongddangDto {
     @NotNull(message = "message 는 필수값입니다.")
     private String message;
 
-    @NotNull(message = "isStart 는 필수값입니다.")
-    private Boolean isStart;
-
 }
