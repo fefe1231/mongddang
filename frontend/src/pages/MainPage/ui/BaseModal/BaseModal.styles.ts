@@ -7,11 +7,14 @@ export const baseModalContainer = css`
   border-radius: 1.5rem;
   padding: 0;
   justify-content: flex-start;
+  overflow-y: auto;
 `;
 
 export const baseModalContent = css`
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
   height: 100%;
   padding: 3%;
   gap: 0.5rem;

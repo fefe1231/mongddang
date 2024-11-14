@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 
 export const btnCss = css`
   display: flex;
-  padding : 3%;
+  padding : 1%;
   padding-left: 3%;
   padding-right: 4%;
   height: 70%;

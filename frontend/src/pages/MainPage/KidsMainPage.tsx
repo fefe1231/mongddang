@@ -36,6 +36,7 @@ import { mainIcons } from './constants/iconsData';
 import { getMainInfo } from './api/infoApi';
 import Loading from '@/shared/ui/Loading';
 import { characterImages, formatId } from '../Encyclopedia/model/mongddang-img';
+import { useDailyMissionStore } from './model/useDailyMissionStore';
 
 const KidsMainPage = () => {
   const navigate = useNavigate();
@@ -47,12 +48,13 @@ const KidsMainPage = () => {
     coin: 0,
   });
   const [openDietModal, setOpenDietModal] = useState(false);
-  const [openBaseModal, setOpenBaseModal] = useState(true);
+  const [openBaseModal, setOpenBaseModal] = useState(false);
   const [contentType, setContentType] = useState('dailyMission');
   const [alertStatus, setAlertStatus] = useState('');
   const [alertBloodSugar, setAlertBloodSugar] = useState(0);
   const [currentRoutine, setCurrentRoutine] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const { getMissions } = useDailyMissionStore();
 
   // 초기 루틴 상태 조회
   useEffect(() => {
@@ -164,6 +166,7 @@ const KidsMainPage = () => {
             <div css={iconHorizontalCss}>
               <div
                 onClick={() => {
+                  getMissions()
                   setOpenBaseModal(true);
                   setContentType('dailyMission');
                 }}

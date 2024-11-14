@@ -7,18 +7,19 @@ import { mainIcons } from '../../constants/iconsData';
 
 type DailyMissionBtnProps = {
   btnStatus: string;
+  reward: number;
 };
 
 const DailyMissionBtn = (props: DailyMissionBtnProps) => {
-  const { btnStatus } = props;
+  const { btnStatus, reward } = props;
 
   return (
     <Button
       color={btnStatus === 'rewardable' ? 'light' : 'dark'}
       fontSize="1"
-      disabled={btnStatus === 'rewardable' ? true : false}
+      disabled={btnStatus === 'rewardable' ? false : true}
       isShadow={btnStatus === 'rewardable' ? true : false}
-      scale={btnStatus === 'rewardable' ? '100' : '500'}
+      scale={btnStatus === 'rewardable' ? '200' : '500'}
       variant="contained"
       handler={() => {}}
       css={btnCss}
@@ -27,7 +28,7 @@ const DailyMissionBtn = (props: DailyMissionBtnProps) => {
         <img src={mainIcons.starCoin} alt="star" css={starCss} />
         <Typography color="dark" size="1" weight={600}>
           {btnStatus === 'rewardable' || btnStatus === 'not_rewardable'
-            ? '400'
+            ? reward
             : btnStatus === 'already_rewarded'
               ? '보상완료'
               : ''}
