@@ -4,7 +4,7 @@ import { Progress } from '@/shared/ui/Progress';
 import { Typography } from '@/shared/ui/Typography';
 import { useState, useEffect } from 'react';
 import { base, containerCss, progressCss } from './styles';
-import { UpdateCharacter } from '../modal';
+import { UpdateCharacter } from '../modal/update-character';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { getTitleAchievement, getTitleMain } from '../../api/api';
 import { ItitleData } from '../../model/types';
@@ -17,7 +17,6 @@ interface TitleComponentProps {
 export const TitleComponent = ({ title }: TitleComponentProps) => {
   const [isModal, setIsModal] = useState(false);
   const [isToast, setIsToast] = useState(false);
-  const [isUpdateModal, setIsUpdateModal] = useState(false);
   const queryClient = useQueryClient();
   // const queryClient = new QueryClient();
 
@@ -57,7 +56,7 @@ export const TitleComponent = ({ title }: TitleComponentProps) => {
   });
 
   const handleAchievementClick = () => {
-    setIsUpdateModal(true);
+    achievementMutate();
   };
 
   // 토스트 상태를 일정 시간 후에 자동으로 숨기기
@@ -150,18 +149,7 @@ export const TitleComponent = ({ title }: TitleComponentProps) => {
           redhandler={() => setIsModal(false)}
         />
       )}
-      {isUpdateModal && (
-        <UpdateCharacter
-          bluehandler={() => {
-            achievementMutate();
-            setIsUpdateModal(false);
-          }}
-          redhandler={() => setIsUpdateModal(false)}
-        />
-      )}
-      {isToast && (
-        <AchievementToast />
-      )}
+      {isToast && <AchievementToast />}
     </div>
   );
 };

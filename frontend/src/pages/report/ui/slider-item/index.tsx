@@ -12,9 +12,11 @@ interface ItemProps {
   ment: string;
   unit: string;
   url: string;
+  max: number;
+  standard: number;
 }
 
-export const SliderItem = ({ title, ment, unit, url }: ItemProps) => {
+export const SliderItem = ({ title, ment, unit, url, max, standard }: ItemProps) => {
   const nav = useNavigate();
   return (
     <div css={base}>
@@ -61,10 +63,10 @@ export const SliderItem = ({ title, ment, unit, url }: ItemProps) => {
         <Slider
           css={SliderCss}
           blueMent="권장"
-          max={50}
+          max={max}
           redMent="주의"
-          standard={30}
-          value={30}
+          standard={standard}
+          value={Number(ment)}
         />
       </div>
     </div>

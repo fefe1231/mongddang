@@ -17,7 +17,7 @@ export const BuyModal = ({bluehandler, redhandler}:OwnModalProps) => {
         ment={
           <div>
             <Typography color="dark" size="1" weight={600}>
-              정말 몰라요 몽땅을 찾을 거야?
+              정말 몽땅을 찾을 거야?
             </Typography>
           </div>
         }
