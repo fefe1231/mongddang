@@ -71,7 +71,9 @@ export const chatCss = css`
   top: 5%;
   right: 0;
   justify-content: center;
-  padding: 7%;
+  /* padding: 7%; */
+  width: 9rem;
+  height: 3.5rem;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   align-items: center;

@@ -18,4 +18,5 @@ export const baseModalContent = css`
   height: 100%;
   padding: 3%;
   gap: 0.5rem;
+  overflow-y: auto;
 `;

@@ -1,5 +1,6 @@
 import { api } from '@/shared/api/interceptors';
 
+// 유저 정보
 export const getMainInfo = () => {
   return api({
     method: 'GET',
@@ -14,6 +15,7 @@ export const getMainInfo = () => {
     });
 };
 
+// 일일 미션 조회
 export const getDailyMission = () => {
   return api({
     method: 'GET',
@@ -22,6 +24,24 @@ export const getDailyMission = () => {
     .then((res) => {
       console.log(res.data.data);
       return res.data.data;
+    })
+    .catch((err) => {
+      console.log(err);
+      return err;
+    });
+};
+
+// 일일 미션 보상 수령
+export const getReward = (missionId: number) => {
+  api({
+    method: 'POST',
+    url: '/api/mission/reward',
+    data: {
+      missionId: missionId,
+    },
+  })
+    .then((res) => {
+      console.log(res);
     })
     .catch((err) => {
       console.log(err);

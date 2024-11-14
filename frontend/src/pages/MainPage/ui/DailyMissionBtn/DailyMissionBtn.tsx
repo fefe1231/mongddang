@@ -4,6 +4,7 @@ import { Button } from '@/shared/ui/Button';
 import { btnContent, btnCss, starCss } from './DailyMissionBtn.styles';
 import { Typography } from '@/shared/ui/Typography';
 import { mainIcons } from '../../constants/iconsData';
+import { getReward } from '../../api/infoApi';
 
 type DailyMissionBtnProps = {
   btnStatus: string;
@@ -13,6 +14,10 @@ type DailyMissionBtnProps = {
 const DailyMissionBtn = (props: DailyMissionBtnProps) => {
   const { btnStatus, reward } = props;
 
+  const handleRewardBtn = (missionId: number) => {
+    getReward(missionId);
+  };
+
   return (
     <Button
       color={btnStatus === 'rewardable' ? 'light' : 'dark'}
@@ -21,7 +26,7 @@ const DailyMissionBtn = (props: DailyMissionBtnProps) => {
       isShadow={btnStatus === 'rewardable' ? true : false}
       scale={btnStatus === 'rewardable' ? '200' : '500'}
       variant="contained"
-      handler={() => {}}
+      handler={()=>{handleRewardBtn(1)}}
       css={btnCss}
     >
       <div css={btnContent}>
