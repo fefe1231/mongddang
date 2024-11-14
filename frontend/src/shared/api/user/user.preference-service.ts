@@ -8,6 +8,7 @@ export class PreferencesUser {
       const state: UserInfo = {
         user: undefined,
         userAccessToken: undefined,
+        userIdToken: undefined,
       };
       await this.setState(state);
       return state;

@@ -36,8 +36,8 @@ export interface User extends CreateUser {
 export interface UserInfo {
   user?: User;
   userAccessToken?: string;
+  userIdToken?: string;
 }
-
 
 export interface UserResponse {
   code: number;

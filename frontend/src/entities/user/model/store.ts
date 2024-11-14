@@ -14,6 +14,7 @@ export const useUserStore = create<UserStoreState>()(
   devtools((set, get) => ({
     user: undefined,
     userAccessToken: undefined,
+    userIdToken: undefined,
 
     async fetchUserInfo() {
       const userInfo = await PreferencesUser.getUser();

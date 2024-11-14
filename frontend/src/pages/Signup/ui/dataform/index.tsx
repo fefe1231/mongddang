@@ -81,6 +81,7 @@ export const DataForm = ({ role }: { role: UserRole }) => {
       return await signUp(idToken, role, birth, name, nickname, gender);
     },
     onSuccess: async (data) => {
+      //TODO: capa 토스트 고려해보기
       alert('회원가입이 완료되었습니다.');
       // preference에 user 정보 저장
       setUserInfo({ userAccessToken: data.data.accessToken });
