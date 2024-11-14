@@ -29,9 +29,9 @@ export const DataForm = ({ role }: { role: UserRole }) => {
   const nav = useNavigate();
   const location = useLocation();
   const idToken = location.state?.idToken;
-  const { setUser, getUserInfo } = useUserStore(
+  const { setUserInfo, getUserInfo } = useUserStore(
     useShallow((state) => ({
-      setUser: state.setUser,
+      setUserInfo: state.setUserInfo,
       getUserInfo: state.getUserInfo,
     }))
   );
@@ -83,7 +83,7 @@ export const DataForm = ({ role }: { role: UserRole }) => {
     onSuccess: async (data) => {
       alert('회원가입이 완료되었습니다.');
       // preference에 user 정보 저장
-      setUser({ userToken: data.data.accessToken });
+      setUserInfo({ userAccessToken: data.data.accessToken });
       nav('/login');
     },
     onError: (error) => {
@@ -92,7 +92,7 @@ export const DataForm = ({ role }: { role: UserRole }) => {
     },
   });
 
-  const accessToken = getUserInfo().userToken || '';
+  const accessToken = getUserInfo().userAccessToken || '';
   const { mutate } = useMutation<
     AxiosResponse<INickname>,
     Error,

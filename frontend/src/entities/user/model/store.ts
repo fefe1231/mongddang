@@ -4,10 +4,10 @@ import { UserInfo } from './types';
 import { PreferencesUser } from '@/shared/api/user';
 
 interface UserStoreState extends UserInfo {
-  fetchUser(): Promise<void>;
+  fetchUserInfo(): Promise<void>;
   getUserInfo(): UserInfo;
-  setUser(user: UserInfo): Promise<void>;
-  updateUser(newUserInfo: UserInfo): Promise<void>;
+  setUserInfo(user: UserInfo): Promise<void>;
+  updateUserInfo(newUserInfo: UserInfo): Promise<void>;
 }
 
 export const useUserStore = create<UserStoreState>()(
@@ -15,7 +15,7 @@ export const useUserStore = create<UserStoreState>()(
     user: undefined,
     userAccessToken: undefined,
 
-    async fetchUser() {
+    async fetchUserInfo() {
       const userInfo = await PreferencesUser.getUser();
       set(() => ({ ...userInfo }));
     },
@@ -24,12 +24,12 @@ export const useUserStore = create<UserStoreState>()(
       return { user: get().user, userToken: get().userAccessToken };
     },
 
-    async setUser(newUserInfo: UserInfo) {
+    async setUserInfo(newUserInfo: UserInfo) {
       const userInfo = await PreferencesUser.setUser(newUserInfo);
       set(() => ({ ...userInfo }));
     },
 
-    async updateUser(newUserInfo: UserInfo) {
+    async updateUserInfo(newUserInfo: UserInfo) {
       const userInfo = await PreferencesUser.updateUser(newUserInfo);
       set(() => ({ ...userInfo }));
     },
