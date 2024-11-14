@@ -24,4 +24,4 @@ COPY ${JAR_FILE} ./app.jar
 COPY src/main/resources/certification.json ./resources/certification.json
 ENV TZ=Asia/Seoul
 ENV SPRING_PROFILES_ACTIVE=${PROFILE}
-ENTRYPOINT ["java", "-jar","/app.jar"]
+ENTRYPOINT ["java", "-jar","./app.jar"]
