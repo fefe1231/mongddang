@@ -35,5 +35,5 @@ export interface User extends CreateUser {
 
 export interface UserInfo {
   user?: User;
-  userToken?: string
+  userAccessToken?: string
 }

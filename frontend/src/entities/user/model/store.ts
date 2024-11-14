@@ -13,7 +13,7 @@ interface UserStoreState extends UserInfo {
 export const useUserStore = create<UserStoreState>()(
   devtools((set, get) => ({
     user: undefined,
-    userToken: undefined,
+    userAccessToken: undefined,
 
     async fetchUser() {
       const userInfo = await PreferencesUser.getUser();
@@ -21,7 +21,7 @@ export const useUserStore = create<UserStoreState>()(
     },
 
     getUserInfo() {
-      return { user: get().user, userToken: get().userToken };
+      return { user: get().user, userToken: get().userAccessToken };
     },
 
     async setUser(newUserInfo: UserInfo) {

@@ -5,10 +5,11 @@
 import { base, contentCss, googleCss } from './ui/styles';
 import { Icon } from '@/shared/ui/Icon';
 import { Typography } from '@/shared/ui/Typography';
-// import { useUserStore } from '@/entities/user/model';
+import { useUserStore } from '@/entities/user/model';
 // import { UserService } from '@/shared/api/user/user.service';
 // import { LoginResponse } from './api/api';
 import { SocialLogin } from '@capgo/capacitor-social-login';
+import { api } from './api/api';
 
 // interface IcredentialResponse {
 //   credential?: string;
@@ -18,8 +19,7 @@ import { SocialLogin } from '@capgo/capacitor-social-login';
 
 const Login = () => {
   // const nav = useNavigate();
-
-  // const updateUser = useUserStore((state) => state.updateUser);
+  const updateUser = useUserStore((state) => state.updateUser);
 
   // const handleLoginSuccess = (credentialResponse: IcredentialResponse) => {
   //   const idToken = credentialResponse.credential;
@@ -72,17 +72,49 @@ const Login = () => {
   // };
 
   const googleLogin = async () => {
-    const res = await SocialLogin.login({
+    await SocialLogin.login({
       provider: 'google',
       options: {
         scopes: ['email', 'profile'],
       },
+    }).then(async (res) => {
+      const idToken = res.result.idToken;
+      const userAccessToken = res.result.accessToken?.token;
+
+      // await updateUser({ userAccessToken });
+      console.log('****google res test****');
+      console.log('****google res test****');
+      console.log(JSON.stringify(res));
+      console.log('****google res test****');
+      console.log('****google res test****');
+      console.log('-----------------------');
+      console.log('****google id Token****');
+      console.log('****google id Token****');
+      console.log(JSON.stringify(idToken));
+      console.log('-----------------------');
+      console.log('****google id Token****');
+      console.log('****google id Token****');
+      console.log('-----------------------');
+      console.log('****google id accessToken****');
+      console.log('****google id accessToken****');
+      console.log(JSON.stringify(userAccessToken));
+      console.log('****google id accessToken****');
+      console.log('****google id accessToken****');
+
+      api
+        .post('/api/auth/login', {
+          data: {
+            idToken,
+          },
+        })
+        .then((res) => {
+          console.log('login response from server');
+          console.log('login response from server');
+          console.log(JSON.stringify(res));
+          console.log('login response from server');
+          console.log('login response from server');
+        });
     });
-    console.log('****login res****');
-    console.log('****login res****');
-    console.log('AccessToken', res.result.accessToken?.token);
-    console.log('****login res****');
-    console.log('****login res****');
   };
 
   return (
