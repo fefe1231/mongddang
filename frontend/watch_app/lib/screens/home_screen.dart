@@ -29,18 +29,18 @@ class HomeScreen extends StatelessWidget {
               _buildBackground(),
               _buildActivityIcon(
                 position: const Offset(50, 18),
-                imagePath: 'assets/img/img1.png',
+                imagePath: 'assets/img/exercise_icon.png',
                 onTap: () => _navigateToActivity(context, ActivityType.sleep),
               ),
               _buildActivityIcon(
                 position: const Offset(43, 18),
-                imagePath: 'assets/img/img2.png',
+                imagePath: 'assets/img/sleep_icon.png',
                 onTap: () => _navigateToActivity(context, ActivityType.exercise),
                 alignment: Alignment.topRight,
               ),
               _buildActivityIcon(
                 position: const Offset(18, 68),
-                imagePath: 'assets/img/img3.png',
+                imagePath: 'assets/img/meal_icon.png',
                 onTap: () => _navigateToActivity(context, ActivityType.eating),
               ),
               _buildScoreDisplay(),
@@ -160,7 +160,7 @@ class HomeScreen extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Image.asset(
-            'assets/img/img3.png',
+            'assets/img/mongddang01.png',
             width: 70,
             height: 70,
             errorBuilder: (context, error, stackTrace) {

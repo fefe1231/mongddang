@@ -27,7 +27,7 @@ class Activity {
       activeTitle: '밥 먹기 중!',
       completeTitle: '밥 먹기 끝!',
       question: '밥 다 먹었어?',
-      imagePath: 'assets/img/img3.png',
+      imagePath: 'assets/img/meal_mongddang.png',
       defaultScore: 120,
     ),
     ActivityType.exercise: Activity(
@@ -36,7 +36,7 @@ class Activity {
       activeTitle: '운동 중!',
       completeTitle: '운동 끝!',
       question: '운동 다했어?',
-      imagePath: 'assets/img/img2.png',
+      imagePath: 'assets/img/exercise_mongddang.png',
       defaultScore: 70,
     ),
     ActivityType.sleep: Activity(
@@ -45,7 +45,7 @@ class Activity {
       activeTitle: '잠자기 중!',
       completeTitle: '잠자기 끝!',
       question: '이제 일어날거야?',
-      imagePath: 'assets/img/img1.png',
+      imagePath: 'assets/img/sleep_mongddang.png',
       defaultScore: 70,
     ),
   };
