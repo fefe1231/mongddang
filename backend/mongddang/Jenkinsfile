@@ -42,7 +42,7 @@ pipeline {
         stage('firebase json key download') {
             steps {
                 dir("${BACKEND_DIR}") {
-                    withCredentials([file(credentialId: 'fcm_certification', variable: 'certificationFile')]) {
+                    withCredentials([file(credentialsId: 'fcm_certification', variable: 'certificationFile')]) {
                         script {
                             echo "download certification.json"
                             sh '''
