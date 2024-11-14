@@ -41,12 +41,15 @@ pipeline {
 
         stage('firebase json key download') {
             setps {
-                withCredentials([file(credentialId: 'fcm_certification', variable: 'certificationFile')]) {
-                    script {
-                        echo "download certification.json"
-                        echo "current dirctory"
-                        sh 'pwd'
-                        sh 'ls -la'
+                dir("${BACKEND_DIR}") {
+                    withCredentials([file(credentialId: 'fcm_certification', variable: 'certificationFile')]) {
+                        script {
+                            echo "download certification.json"
+                            sh '''
+                                mkdir -p ./src/main/resources/firebase
+                                cp -f $certificationFile ./src/main/resources/certification.json
+                            '''
+                        }
                     }
                 }
             }
