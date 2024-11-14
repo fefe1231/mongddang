@@ -1,6 +1,5 @@
 package com.onetwo.mongddang.domain.vital.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
 import com.onetwo.mongddang.common.utils.GptUtils;
 import com.onetwo.mongddang.domain.user.application.CtoPUtils;
@@ -226,10 +225,7 @@ public class VitalService {
             String messageWithPrompt = message + prompt;
 
             // GPT 요약 생성
-            JsonNode rootNode = gptUtils.requestGpt(messageWithPrompt);
-
-            log.info("rootNode : {}", rootNode.get("choices").get(0).get("message").get("content").asText());
-            String summary = rootNode.path("choices").get(0).path("message").path("content").asText();
+            String summary = gptUtils.requestGpt(messageWithPrompt);
 
             return ResponseDto.builder()
                     .message("GPT 요약 생성 성공")
