@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+    <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" /> <!-- 포그라운드 서비스용 권한 설정 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- workmanager+alarm manager 용 권한 설정 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.SET_ALARM" /> <!-- 알림을 위한 권한 (안드로이드 13 이상) -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" /> <!-- 데이터 동기화 위한 권한 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" /> <!-- 알림을 위한 권한 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
 
+    <queries>
+
+        <!-- Samsung Health 앱이 설치되어 있는지 확인하기 위한 쿼리 -->
+        <package android:name="com.sec.android.app.shealth" />
+    </queries>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
