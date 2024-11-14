@@ -10,6 +10,8 @@ import {
 } from './RoutineBtnGroup.styles';
 import { Typography } from '@/shared/ui/Typography';
 import { Button } from '@/shared/ui/Button';
+import { useStopwatchStore } from '../../model/useStopwatchStore';
+import { mainIcons } from '../../constants/iconsData';
 
 type RoutineBtnGroupProps = {
   changeRoutine: (currentRoutine: string) => void;
@@ -19,6 +21,9 @@ type RoutineBtnGroupProps = {
 };
 
 const RoutineBtnGroup = (props: RoutineBtnGroupProps) => {
+  const { time, finalTime } = useStopwatchStore();
+  console.log('타임', time)
+  console.log('finalTime', finalTime)
   return (
     <div css={container}>
       {props.currentRoutine === '먹는 중' ||
@@ -29,8 +34,8 @@ const RoutineBtnGroup = (props: RoutineBtnGroupProps) => {
             <Typography color="dark" size="1" weight={500}>
               {props.currentRoutine}
             </Typography>
-            <Typography color="dark" size="1" weight={400}>
-              00:01
+            <Typography color="dark" size="1" weight={500}>
+              {finalTime}
             </Typography>
           </div>
           <Button
@@ -54,7 +59,7 @@ const RoutineBtnGroup = (props: RoutineBtnGroupProps) => {
               props.handleDietModal();
             }}
           >
-            <img alt="icon-0" src="/img/%EB%A7%90%EB%9E%911.png" />
+            <img alt="icon-0" src={mainIcons.meal} />
           </Icon>
           <Icon
             size={2.5}
@@ -63,7 +68,7 @@ const RoutineBtnGroup = (props: RoutineBtnGroupProps) => {
               props.handleAlert('askStartRoutine');
             }}
           >
-            <img alt="icon-1" src="/img/%EB%A7%90%EB%9E%912.png" />
+            <img alt="icon-1" src={mainIcons.exercise} />
           </Icon>
           <Icon
             size={2.5}
@@ -72,7 +77,7 @@ const RoutineBtnGroup = (props: RoutineBtnGroupProps) => {
               props.handleAlert('askStartRoutine');
             }}
           >
-            <img alt="icon-2" src="/img/%EB%A7%90%EB%9E%913.png" />
+            <img alt="icon-2" src={mainIcons.sleep} />
           </Icon>
         </div>
       )}

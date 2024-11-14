@@ -1,31 +1,18 @@
 /** @jsxImportSource @emotion/react */
 import { Notification } from '@/shared/ui/Notification';
 import { Typography } from '@/shared/ui/Typography';
-import { css } from '@emotion/react';
+import { containerCss } from './styles';
 
 interface ModalProps {
   bluehandler: () => void;
   redhandler: () => void;
 }
 
-const containerCss = css`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-`;
-
 export const UpdateCharacter = ({ bluehandler, redhandler }: ModalProps) => {
   return (
     <div css={containerCss}>
       <Notification
+        style={{boxSizing:"content-box"}}
         redHandler={redhandler}
         bluehandler={bluehandler}
         ment={

@@ -25,7 +25,7 @@ export const RenderSleep = ({
   if (isLoading) return <div>Loading...</div>;
 
   // 빌드 에러 방지용
-  console.log(bloodSugarData, data);
+  console.log('Prevent Error log', bloodSugarData, data);
 
   return <>test Sleep</>;
 };

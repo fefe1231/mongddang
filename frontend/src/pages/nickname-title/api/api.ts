@@ -1,58 +1,54 @@
-import axios from 'axios';
-import { IAchievement, ItitleInfo } from '../model/types';
+
+import { api } from '@/shared/api/interceptors';
+
+export const getTitleInfo = () => {
+  return api({
+      method: 'GET',
+      url: '/api/game/collection/achievement'
+  })
+  .then((res)=>{
+      console.log('업적 정보 조회 성공', res.data)
+      return res
+  })
+  .catch((err)=>{
+      console.log('업적 정보 조회 실패', err.message)
+  })
+}
 
 
-export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  withCredentials: true,
-});
-
-export const getTitleInfo = (accessToken: string) => {
-  return api.get<ItitleInfo>('/api/game/collection/achievement', {
+export const getTitleAchievement = (accessToken: string | null, achievementId: number) => {
+  return api({
+    method: 'post',
+    url: '/api/game/collection/achievement/claim',
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
-  });
+    data: achievementId
+  })
+  .then((res)=>{
+    console.log(res.data)
+    return res
+  })
+  .catch((err)=>{
+    console.log(err)
+  })
 };
 
-export const getTitleAchievement = (
-  accessToken: string,
-  achievementId: number
-) => {
-  const data = {
-    achievementId,
-  };
 
-  const options = {
+export const getTitleMain = (accessToken: string | null, titleId: number) => {
+  return api({
+    method: 'post',
+    url: '/api/game/collection/achievement/claim',
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
-  };
-
-  return api.post<IAchievement>(
-    '/api/game/collection/achievement/claim',
-    data,
-    options
-  );
-};
-
-export const getTitleMain = (accessToken: string, titleId: number) => {
-  const data = {
-    titleId,
-  };
-
-  const options = {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  };
-
-  return api.patch<IAchievement>(
-    '/api/game/collection/title/main',
-    data,
-    options
-  );
+    data: titleId
+  })
+  .then((res)=>{
+    console.log(res.data)
+    return res
+  })
+  .catch((err)=>{
+    console.log(err)
+  })
 };

@@ -7,8 +7,8 @@ import { useUserStore } from '@/entities/user/model/store';
 import { useShallow } from 'zustand/shallow';
 import { useQuery } from '@tanstack/react-query';
 import { BloodsugarQueries } from '@/entities/blood-sugar/api';
-import { BloodSugarChart } from '@/widgets/blood-sugar-chart';
 import { article, chart } from './style';
+import { BloodSugarChart } from '@/widgets/blood-sugar-chart';
 
 export const DayRecordPage = () => {
   const nav = useNavigate();
@@ -16,10 +16,10 @@ export const DayRecordPage = () => {
   if (typeof date === 'undefined') {
     throw new Error('Impossible date');
   }
-  const { getUser } = useUserStore(
-    useShallow((state) => ({ getUser: state.getUser }))
+  const { getUserInfo } = useUserStore(
+    useShallow((state) => ({ getUserInfo: state.getUserInfo }))
   );
-  const nickname = getUser()?.nickname ?? 'test';
+  const nickname = getUserInfo()?.user?.nickname ?? 'test';
 
   const {
     data: bloodSugarData,

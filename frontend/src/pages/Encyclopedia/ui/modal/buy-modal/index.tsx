@@ -11,15 +11,13 @@ export const BuyModal = ({bluehandler, redhandler}:OwnModalProps) => {
   return (
     <div>
       <Notification
+        style={{boxSizing:'content-box'}}
         redHandler={redhandler}
         bluehandler={bluehandler}
         ment={
           <div>
             <Typography color="dark" size="1" weight={600}>
-              정말 몰라요 몽땅을 찾을 거야?
-            </Typography>
-            <Typography color="dark" size="0.75" weight={500}>
-              400
+              정말 몽땅을 찾을 거야?
             </Typography>
           </div>
         }

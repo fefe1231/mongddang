@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
+import { App } from '@capacitor/app';
 import { BottomBar } from '@/shared/ui/BottomBar';
 import {
   bottomContainer,
@@ -15,7 +16,6 @@ import {
 import ProfileStatus from './ui/ProfileStatus/ProfileStatus';
 import { IconTypo } from '@/shared/ui/IconTypo';
 import CurrentBloodSugar from './ui/CurrentBloodSugar/CurrentBloodSugar';
-import MainCharacter from '@/assets/img/말랑1.png';
 import ChatBubble from './ui/ChatBubble/ChatBubble';
 import { useEffect, useState } from 'react';
 import DietModal from './ui/DietModal/DietModal';
@@ -28,25 +28,81 @@ import {
   EndRoutineAlert,
   StartRoutineAlert,
 } from './ui/Alerts/Alerts';
-import { getRoutine, setRoutine } from './hooks/useRoutineStatus';
+import { setRoutine } from './hooks/useRoutineStatus';
+import { getInitialRoutine } from './api/routineApi';
+import { useStopwatchStore } from './model/useStopwatchStore';
+import { setExitTime, setStopwatch } from './hooks/useStopwatchStatus';
+import { mainIcons } from './constants/iconsData';
+import { getMainInfo } from './api/infoApi';
+import Loading from '@/shared/ui/Loading';
+import { characterImages, formatId } from '../Encyclopedia/model/mongddang-img';
 
 const KidsMainPage = () => {
   const navigate = useNavigate();
   const accessToken = localStorage.getItem('accessToken');
+  const [mainInfo, setMainInfo] = useState({
+    nickname: '',
+    mainTitleName: '',
+    mainMongddangId: 0,
+    coin: 0,
+  });
   const [openDietModal, setOpenDietModal] = useState(false);
   const [openMailBox, setOpenMailBox] = useState(false);
   const [alertStatus, setAlertStatus] = useState('');
   const [alertBloodSugar, setAlertBloodSugar] = useState(0);
   const [currentRoutine, setCurrentRoutine] = useState('');
+  const [isLoading, setIsLoading] = useState(true)
 
   // 초기 루틴 상태 조회
   useEffect(() => {
-    const fetchRoutine = async () => {
-      const routineValue = await getRoutine();
-      setCurrentRoutine(routineValue);
-      console.log('루틴 조회', routineValue);
+    const fetchMainInfo = async () => {
+      const mainInfo = await getMainInfo();
+      setMainInfo(mainInfo);
+      setIsLoading(false)
     };
+    const fetchRoutine = async () => {
+      const routineValue = await getInitialRoutine();
+      if (routineValue.data === undefined) {
+        setCurrentRoutine('');
+      } else {
+        const { category } = routineValue.data;
+        if (category === 'meal') {
+          setCurrentRoutine('먹는 중');
+        } else if (category === 'exercise') {
+          setCurrentRoutine('운동 중');
+        } else if (category === 'sleeping') {
+          setCurrentRoutine('자는 중');
+        } else {
+          setCurrentRoutine('');
+        }
+        useStopwatchStore.getState().updateStopwatch();
+      }
+
+      console.log('초기 루틴 조회', routineValue);
+    };
+
+    const handleAppStateChange = () => {
+      const latestTime = useStopwatchStore.getState().time;
+      setStopwatch(latestTime);
+      const exitTime = Date.now();
+      setExitTime(exitTime);
+    };
+
+    App.addListener('appStateChange', async ({ isActive }) => {
+      if (!isActive) {
+        handleAppStateChange();
+        useStopwatchStore.getState().endStopwatch();
+      } else {
+        useStopwatchStore.getState().updateStopwatch();
+      }
+    });
+
+    fetchMainInfo();
     fetchRoutine();
+
+    return () => {
+      App.removeAllListeners();
+    };
   }, []);
 
   const handleDietModal = () => {
@@ -92,17 +148,21 @@ const KidsMainPage = () => {
   console.log('루틴 상태', currentRoutine);
 
   return (
-    <div css={kidsMainBase}>
+    !isLoading ? <div css={kidsMainBase}>
       <div css={kidsMainContent}>
         {/* 상단 컴포넌트들 */}
         <div css={topContainer}>
           {/* 프로필 상태창 */}
-          <ProfileStatus />
+          <ProfileStatus
+            nickname={mainInfo.nickname}
+            mainTitleName={mainInfo.mainTitleName}
+            coin={mainInfo.coin}
+          />
           {/* 아이콘 모음 */}
           <div css={iconGroupCss}>
             <div css={iconHorizontalCss}>
               <IconTypo
-                icon="/img/%EB%A7%90%EB%9E%911.png"
+                icon={mainIcons.mission}
                 fontSize="0.75"
                 menu={
                   <span>
@@ -119,7 +179,7 @@ const KidsMainPage = () => {
                 }}
               >
                 <IconTypo
-                  icon="/img/%EB%A7%90%EB%9E%911.png"
+                  icon={mainIcons.notification}
                   fontSize="0.75"
                   menu="알림"
                 />
@@ -130,7 +190,7 @@ const KidsMainPage = () => {
                 }}
               >
                 <IconTypo
-                  icon="/img/%EB%A7%90%EB%9E%911.png"
+                  icon={mainIcons.achievement}
                   fontSize="0.75"
                   menu={
                     <div>
@@ -150,7 +210,7 @@ const KidsMainPage = () => {
           {/* 메인캐릭터 + 말풍선 */}
           <div css={CharacterContainer}>
             <ChatBubble />
-            <img src={MainCharacter} alt="" css={mainCharacterCss} />
+            <img src={characterImages[formatId(mainInfo.mainMongddangId)]} alt="" css={mainCharacterCss} />
           </div>
 
           {/* 일상생활 버튼 3종 */}
@@ -163,11 +223,7 @@ const KidsMainPage = () => {
 
           {/* 바텀바 */}
           <BottomBar
-            icons={[
-              '/img/%EB%A7%90%EB%9E%911.png',
-              '/img/%EB%A7%90%EB%9E%912.png',
-              '/img/%EB%A7%90%EB%9E%913.png',
-            ]}
+            icons={[mainIcons.collection, mainIcons.menu, mainIcons.record]}
             menus={['몽땅 도감', '메뉴', '일일 기록']}
             onHandleChange={moveBottomBar}
           />
@@ -225,7 +281,7 @@ const KidsMainPage = () => {
           <></>
         )
       }
-    </div>
+    </div> : <Loading/>
   );
 };
 

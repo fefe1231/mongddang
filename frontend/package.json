@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@capacitor/android": "^6.1.2",
+    "@capacitor/app": "^6.0.1",
     "@capacitor/camera": "^6.1.0",
     "@capacitor/core": "^6.1.2",
     "@capacitor/filesystem": "^6.0.1",
@@ -29,6 +30,7 @@
     "lodash": "^4.17.21",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-error-boundary": "^4.1.2",
     "react-icons": "^5.3.0",
     "react-router-dom": "^6.27.0",
     "recharts": "^2.13.3",

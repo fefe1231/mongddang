@@ -28,7 +28,7 @@ export const RenderMedication = ({
   if (isLoading) return <div>Loading...</div>;
 
   // 빌드 에러 방지용
-  console.log(nearestTimeBloodSugar);
+  console.log('Prevent Error log', nearestTimeBloodSugar);
 
   return <>test Medication</>;
 };
