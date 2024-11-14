@@ -87,6 +87,10 @@ services:
       # ChatGPT
       OPENAI_API_KEY: ${OPENAI_API_KEY}
       OPENAI_URL: ${OPENAI_URL}
+      # FCM
+      FCM_URL_PREFIX: ${FCM_URL_PREFIX}
+      FCM_URL_POSTFIX: ${FCM_URL_POSTFIX}
+      FCM_PROJECT_ID: ${FCM_PROJECT_ID}
     expose:
       - "8080"
     volumes:

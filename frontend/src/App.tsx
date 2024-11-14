@@ -8,7 +8,7 @@ import { NicknameEdit } from './pages/profile/ui/nickname-edit';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Profile } from './pages/profile';
 import { Report } from './pages/report';
-import { RecordPage, TodayRecordPage } from './pages/record';
+import { RecordPage } from './pages/record';
 import { Encyclopedia } from './pages/Encyclopedia';
 import { SignUp } from './pages/Signup';
 import ProtectorMain from './pages/protectormain/ProtectorMain';
@@ -18,6 +18,7 @@ import { GmiDetail } from './pages/report/ui/detail/gmi';
 import { Variability } from './pages/report/ui/detail/variability';
 import { Mean } from './pages/report/ui/detail/mean';
 import { Tir } from './pages/report/ui/detail/tir/indesx';
+import { DayRecordPage } from './pages/day-record';
 
 
 function App() {
@@ -42,7 +43,7 @@ function App() {
           <Route path="/report/detail/mean" element={<Mean />} />
           <Route path="/report/detail/tir" element={<Tir />} />
           <Route path="/record" element={<RecordPage />} />
-          <Route path="/record/:date" element={<TodayRecordPage />} />
+          <Route path="/record/:date" element={<DayRecordPage />} />
           <Route path="/protector-main" element={<ProtectorMain />} />
         </Routes>
       </Router>

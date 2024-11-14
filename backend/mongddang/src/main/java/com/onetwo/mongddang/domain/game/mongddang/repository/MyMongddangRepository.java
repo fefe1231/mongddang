@@ -2,7 +2,6 @@ package com.onetwo.mongddang.domain.game.mongddang.repository;
 
 import com.onetwo.mongddang.domain.game.mongddang.model.MyMongddang;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -16,4 +15,5 @@ public interface MyMongddangRepository extends JpaRepository<MyMongddang, Long> 
     Optional<MyMongddang> findByChildIdAndIsMainTrue(Long mongddangId);
 
     Optional<MyMongddang> findByMongddangIdAndChildId(Long mongddangId, Long childId);
+
 }
