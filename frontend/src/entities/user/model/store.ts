@@ -7,14 +7,14 @@ interface UserStoreState extends UserInfo {
   fetchUserInfo(): Promise<void>;
   getUserInfo(): UserInfo;
   setUserInfo(user: UserInfo): Promise<void>;
-  updateUserInfo(newUserInfo: UserInfo): Promise<void>;
+  updateUserInfo(newUserInfo: Partial<UserInfo>): Promise<void>;
 }
 
 export const useUserStore = create<UserStoreState>()(
   devtools((set, get) => ({
-    user: undefined,
-    userAccessToken: undefined,
-    userIdToken: undefined,
+    user: null,
+    userAccessToken: null,
+    userIdToken: null,
 
     async fetchUserInfo() {
       const userInfo = await PreferencesUser.getUser();
@@ -22,7 +22,11 @@ export const useUserStore = create<UserStoreState>()(
     },
 
     getUserInfo() {
-      return { user: get().user, userToken: get().userAccessToken };
+      return {
+        user: get().user,
+        userAccessToken: get().userAccessToken,
+        userIdToken: get().userIdToken,
+      };
     },
 
     async setUserInfo(newUserInfo: UserInfo) {
@@ -30,9 +34,9 @@ export const useUserStore = create<UserStoreState>()(
       set(() => ({ ...userInfo }));
     },
 
-    async updateUserInfo(newUserInfo: UserInfo) {
+    async updateUserInfo(newUserInfo: Partial<UserInfo>) {
       const userInfo = await PreferencesUser.updateUser(newUserInfo);
-      set(() => ({ ...userInfo }));
+      set((state) => ({ ...state, ...userInfo }));
     },
   }))
 );

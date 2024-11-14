@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 // import { GoogleLogin } from '@react-oauth/google';
 // import axios, { AxiosResponse } from 'axios';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { base, contentCss, googleCss } from './ui/styles';
 import { Icon } from '@/shared/ui/Icon';
 import { Typography } from '@/shared/ui/Typography';
@@ -10,6 +10,8 @@ import { useUserStore } from '@/entities/user/model';
 // import { LoginResponse } from './api/api';
 import { SocialLogin } from '@capgo/capacitor-social-login';
 import { api } from './api/api';
+import { AxiosResponse } from 'axios';
+import { LoginResponse } from '@/shared/api/user/user.type';
 
 // interface IcredentialResponse {
 //   credential?: string;
@@ -18,8 +20,8 @@ import { api } from './api/api';
 // }
 
 const Login = () => {
-  // const nav = useNavigate();
-  const updateUser = useUserStore((state) => state.updateUser);
+  const nav = useNavigate();
+  const updateUserInfo = useUserStore((state) => state.updateUserInfo);
 
   // const handleLoginSuccess = (credentialResponse: IcredentialResponse) => {
   //   const idToken = credentialResponse.credential;
@@ -79,27 +81,10 @@ const Login = () => {
       },
     }).then(async (res) => {
       const idToken = res.result.idToken;
-      const userAccessToken = res.result.accessToken?.token;
+      // const userAccessToken = res.result.accessToken?.token;
+      const userIdToken = res.result.idToken;
 
-      // await updateUser({ userAccessToken });
-      console.log('****google res test****');
-      console.log('****google res test****');
-      console.log(JSON.stringify(res));
-      console.log('****google res test****');
-      console.log('****google res test****');
-      console.log('-----------------------');
-      console.log('****google id Token****');
-      console.log('****google id Token****');
-      console.log(JSON.stringify(idToken));
-      console.log('-----------------------');
-      console.log('****google id Token****');
-      console.log('****google id Token****');
-      console.log('-----------------------');
-      console.log('****google id accessToken****');
-      console.log('****google id accessToken****');
-      console.log(JSON.stringify(userAccessToken));
-      console.log('****google id accessToken****');
-      console.log('****google id accessToken****');
+      await updateUserInfo({ userIdToken });
 
       api
         .post('/api/auth/login', {
@@ -107,12 +92,12 @@ const Login = () => {
             idToken,
           },
         })
-        .then((res) => {
-          console.log('login response from server');
-          console.log('login response from server');
-          console.log(JSON.stringify(res));
-          console.log('login response from server');
-          console.log('login response from server');
+        .then((res: AxiosResponse<LoginResponse>) => {
+          if (res.data.data.isRegistered) {
+            nav('/main');
+          } else {
+            nav('/signup');
+          }
         });
     });
   };

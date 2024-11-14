@@ -6,9 +6,9 @@ export class PreferencesUser {
     const { value } = await Preferences.get({ key: 'user' });
     if (value === null) {
       const state: UserInfo = {
-        user: undefined,
-        userAccessToken: undefined,
-        userIdToken: undefined,
+        user: null,
+        userAccessToken: null,
+        userIdToken: null,
       };
       await this.setState(state);
       return state;
@@ -32,7 +32,7 @@ export class PreferencesUser {
     return userInfo;
   }
 
-  static async updateUser(userInfo: UserInfo) {
+  static async updateUser(userInfo: Partial<UserInfo>) {
     const currentState = await this.getState();
     const updateState: UserInfo = {
       ...currentState,

@@ -14,6 +14,7 @@ import { AxiosResponse } from 'axios';
 import { signUp } from '../../api/api';
 import { useUserStore } from '@/entities/user/model';
 import { useShallow } from 'zustand/shallow';
+import { SignupResponse } from '@/shared/api/user/user.type';
 
 export const DataForm = ({ role }: { role: UserRole }) => {
   const [gender, setGender] = useState<'male' | 'female' | undefined>(
@@ -29,9 +30,9 @@ export const DataForm = ({ role }: { role: UserRole }) => {
   const nav = useNavigate();
   const location = useLocation();
   const idToken = location.state?.idToken;
-  const { setUserInfo, getUserInfo } = useUserStore(
+  const { updateUserInfo, getUserInfo } = useUserStore(
     useShallow((state) => ({
-      setUserInfo: state.setUserInfo,
+      updateUserInfo: state.updateUserInfo,
       getUserInfo: state.getUserInfo,
     }))
   );
@@ -80,11 +81,11 @@ export const DataForm = ({ role }: { role: UserRole }) => {
       const birth = getBirthString();
       return await signUp(idToken, role, birth, name, nickname, gender);
     },
-    onSuccess: async (data) => {
+    onSuccess: async (data: AxiosResponse<SignupResponse>) => {
       //TODO: capa 토스트 고려해보기
       alert('회원가입이 완료되었습니다.');
       // preference에 user 정보 저장
-      setUserInfo({ userAccessToken: data.data.accessToken });
+      updateUserInfo({ userAccessToken: data.data.data.accessToken });
       nav('/login');
     },
     onError: (error) => {

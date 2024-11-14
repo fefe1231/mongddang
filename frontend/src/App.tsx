@@ -35,7 +35,7 @@ function App() {
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_AUTH_CLIENT_ID}>
       <Router>
         <Routes>
-          <Route path="/login" element={<KidsMainPage />} />
+          <Route path="/main" element={<KidsMainPage />} />
           <Route path="/btn" element={<Btn />} />
           <Route path="/" element={<Login />} />
           <Route path="/invitecode" element={<InviteCode />} />
