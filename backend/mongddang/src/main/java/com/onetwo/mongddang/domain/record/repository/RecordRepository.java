@@ -22,7 +22,8 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
     List<Record> findByCategoryAndStartTime(@Param("category") Record.RecordCategoryType category,
                                             @Param("startTime") LocalDateTime startTime);
 
-//    List<Record> findByChildIdAndStartTimeBetween(Long childId, LocalDateTime todayStart, LocalDateTime todayEnd);
+    //    List<Record> findByChildIdAndStartTimeBetween(Long childId, LocalDateTime todayStart, LocalDateTime todayEnd);
     Optional<Record> findTopByChildAndEndTimeIsNullOrderByIdDesc(User child);
 
+    Optional<Record> findTopByChildAndEndTimeIsBetweenOrderByIdDesc(User child, LocalDateTime localDateTime, LocalDateTime now);
 }
