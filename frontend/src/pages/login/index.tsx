@@ -12,6 +12,7 @@ import { SocialLogin } from '@capgo/capacitor-social-login';
 import { api } from './api/api';
 import { AxiosResponse } from 'axios';
 import { LoginResponse } from '@/shared/api/user/user.type';
+import { useShallow } from 'zustand/shallow';
 
 // interface IcredentialResponse {
 //   credential?: string;
@@ -21,7 +22,16 @@ import { LoginResponse } from '@/shared/api/user/user.type';
 
 const Login = () => {
   const nav = useNavigate();
-  const updateUserInfo = useUserStore((state) => state.updateUserInfo);
+  const { updateUserInfo, getUserInfo } = useUserStore(
+    useShallow((state) => ({
+      updateUserInfo: state.updateUserInfo,
+      getUserInfo: state.getUserInfo,
+    }))
+  );
+
+  // 유저 정보가 존재하면 로그인 안 하고 바로 각각의 메인 페이지로 이동
+  if (getUserInfo().user?.role === 'child') nav('/main');
+  if (getUserInfo().user?.role === 'protector') nav('menu');
 
   // const handleLoginSuccess = (credentialResponse: IcredentialResponse) => {
   //   const idToken = credentialResponse.credential;
@@ -94,11 +104,18 @@ const Login = () => {
           console.log(JSON.stringify(res));
           console.log('*****login response*****');
           console.log('*****login response*****');
-          
+
           if (res.data.data.isRegistered) {
             const userAccessToken = res.data.data.accessToken;
-            await updateUserInfo({ userAccessToken });
-            nav('/main');
+            const userInfo = res.data.data.userInfo;
+            await updateUserInfo({ userAccessToken, user: userInfo });
+
+            const user = getUserInfo();
+            if (user.user?.role === 'protector') {
+              nav('/menu');
+            } else if (user.user?.role === 'child') {
+              nav('/main');
+            }
           } else {
             nav('/signup');
           }

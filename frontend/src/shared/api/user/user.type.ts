@@ -50,12 +50,14 @@ export interface UserResponse {
 export interface LoginResponseData {
   isRegistered: boolean;
   accessToken: string;
+  userInfo: User;
 }
 
 export type LoginResponse = BaseApiResponse<LoginResponseData>;
 
 export interface SignupResponseData {
   accessToken: string;
+  userInfo: User;
 }
 
 export type SignupResponse = BaseApiResponse<SignupResponseData>;
