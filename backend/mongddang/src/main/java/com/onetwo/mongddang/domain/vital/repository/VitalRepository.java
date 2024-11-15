@@ -29,4 +29,6 @@ public interface VitalRepository extends JpaRepository<Vital, Long> {
     List<Vital> findByChildAndMeasurementTimeBetween(User child, LocalDateTime startDate, LocalDateTime endDate);
 
     Optional<Vital> findTopByChildOrderById(User child);
+
+    Optional<Vital> findTopByChildOrderByIdDesc(User child);
 }
