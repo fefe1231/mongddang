@@ -5,7 +5,7 @@ import bubble from '@/assets/audios/bubble.mp3';
 
 const AudioCollectionComponent: React.FC = () => {
   return (
-    <div>
+    <div style={{ visibility: 'hidden' }}>
       <Audio audioSrc={bgm} type="bgm" autoplay loop />
       <Audio audioSrc={bubble} type="bubble" />
     </div>
