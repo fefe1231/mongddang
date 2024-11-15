@@ -7,7 +7,8 @@ export class PreferencesUser {
     if (value === null) {
       const state: UserInfo = {
         user: null,
-        userAccessToken: null,
+        // TODO: Access Token 하드코딩 수정
+        userAccessToken: 'eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InF1c3RqZG5qc0BuYXZlci5jb20iLCJyb2xlIjoiY2hpbGQiLCJpZCI6MSwiaWF0IjoxNzMwNjQ1MjkxLCJleHAiOjQ4ODQyNDUyOTF9.Et9n4VbL5WmTX39kgHZw8AYbV5mkojfPVicNCEI09Rk',
         userIdToken: null,
       };
       await this.setState(state);

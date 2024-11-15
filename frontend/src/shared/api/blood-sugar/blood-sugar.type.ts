@@ -11,9 +11,7 @@ export interface Bloodsugar {
 export interface BloodsugarResponse {
   code: number;
   message: string;
-  data: {
-    bloodSugar: Bloodsugar[];
-  };
+  data: Bloodsugar[];
 }
 
 export interface BloodsuagrParams {

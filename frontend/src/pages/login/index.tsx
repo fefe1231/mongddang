@@ -95,26 +95,16 @@ const Login = () => {
       const userIdToken = res.result.idToken;
 
       await updateUserInfo({ userIdToken });
-
-      console.log('***userIdToken***');
-      console.log('***userIdToken***');
-      console.log(userIdToken);
-      console.log('***userIdToken***');
-      console.log('***userIdToken***');
-
+      
       await api
         .post('/api/auth/login', { idToken })
         .then(async (res: AxiosResponse<LoginResponse>) => {
-          // console.log('*****login response*****');
-          // console.log('*****login response*****');
-          // console.log(JSON.stringify(res));
-          // console.log('*****login response*****');
-          // console.log('*****login response*****');
 
           if (res.data.data.isRegistered) {
-            const userAccessToken = res.data.data.accessToken;
+            // TODO: Access Token 하드코딩 수정
+            // const userAccessToken = res.data.data.accessToken;
             const userInfo = res.data.data.userInfo;
-            await updateUserInfo({ userAccessToken, user: userInfo });
+            await updateUserInfo({ user: userInfo });
 
             const user = getUserInfo();
             console.log('****user rola****');
