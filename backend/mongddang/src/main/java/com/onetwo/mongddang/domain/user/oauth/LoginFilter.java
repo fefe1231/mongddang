@@ -2,6 +2,7 @@ package com.onetwo.mongddang.domain.user.oauth;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.onetwo.mongddang.common.responseDto.ResponseDto;
 import com.onetwo.mongddang.domain.user.dto.LoginRequestDto;
 import com.onetwo.mongddang.domain.user.jwt.JwtTokenProvider;
 import com.onetwo.mongddang.domain.user.model.User;
@@ -98,12 +99,14 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
         dataMap.put("accessToken", jwtToken);
         dataMap.put("isRegistered", is_registered);
 
-        Map<String, Object> responseMap = new HashMap<>();
-        responseMap.put("success", "google oAuth 로그인에 성공하였습니다.");
-        responseMap.put("body", dataMap);
-        // Convert the response map to JSON
+        ResponseDto responseDto = ResponseDto.builder()
+                .message("로그인 성공")
+                .data(dataMap)
+                .build();
+
+        // ObjectMapper로 JSON 변환
         ObjectMapper objectMapper = new ObjectMapper();
-        String jsonResponse = objectMapper.writeValueAsString(responseMap);
+        String jsonResponse = objectMapper.writeValueAsString(responseDto);
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
