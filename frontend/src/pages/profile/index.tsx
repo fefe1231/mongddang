@@ -65,7 +65,7 @@ export const Profile = () => {
           <img alt="icon-1" src="/img/%EB%A7%90%EB%9E%912.png" />
         </Icon>
         <Chip border={1} color="primary" fontSize={0.8} fontWeight={600}>
-          어린이
+          {user?.role === 'child' ? '어린이' : '보호자'}
         </Chip>
       </div>
       <img css={imgCss} src={space} alt="배경 이미지" />
@@ -93,9 +93,11 @@ export const Profile = () => {
         <div
           style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}
         >
-          <Chip border={1} color="primary" fontSize={0.8} fontWeight={600}>
-            연결된 보호자
-          </Chip>
+          {user?.role === 'child' && (
+            <Chip border={1} color="primary" fontSize={0.8} fontWeight={600}>
+              연결된 보호자
+            </Chip>
+          )}
           {user?.connected?.map((guardian, index) => (
             <Typography key={index} color="dark" size="1" weight={700}>
               {guardian.name} ({guardian.nickname})
@@ -104,15 +106,17 @@ export const Profile = () => {
         </div>
       </div>
       <div style={{ display: 'flex', margin: '0 1rem', gap: '1rem' }}>
-        <Button
-          handler={copyToClipboard}
-          color="secondary"
-          fontSize="1.25"
-          variant="contained"
-          fullwidth
-        >
-          초대코드 복사
-        </Button>
+        {user?.role === 'child' && (
+          <Button
+            handler={copyToClipboard}
+            color="secondary"
+            fontSize="1.25"
+            variant="contained"
+            fullwidth
+          >
+            초대코드 복사
+          </Button>
+        )}
         <Button
           handler={() =>
             nav('/nickname/edit', {

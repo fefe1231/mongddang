@@ -96,6 +96,12 @@ const Login = () => {
 
       await updateUserInfo({ userIdToken });
 
+      console.log('***userIdToken***');
+      console.log('***userIdToken***');
+      console.log(userIdToken);
+      console.log('***userIdToken***');
+      console.log('***userIdToken***');
+      
       await api
         .post('/api/auth/login', { idToken })
         .then(async (res: AxiosResponse<LoginResponse>) => {
