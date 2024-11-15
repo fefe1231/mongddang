@@ -51,14 +51,14 @@ const KidsMainPage = () => {
   const [alertStatus, setAlertStatus] = useState('');
   const [alertBloodSugar, setAlertBloodSugar] = useState(0);
   const [currentRoutine, setCurrentRoutine] = useState('');
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
 
   // 초기 루틴 상태 조회
   useEffect(() => {
     const fetchMainInfo = async () => {
       const mainInfo = await getMainInfo();
       setMainInfo(mainInfo);
-      setIsLoading(false)
+      setIsLoading(false);
     };
     const fetchRoutine = async () => {
       const routineValue = await getInitialRoutine();
@@ -147,8 +147,8 @@ const KidsMainPage = () => {
   console.log('알림창 상태', alertStatus);
   console.log('루틴 상태', currentRoutine);
 
-  return (
-    !isLoading ? <div css={kidsMainBase}>
+  return !isLoading ? (
+    <div css={kidsMainBase}>
       <div css={kidsMainContent}>
         {/* 상단 컴포넌트들 */}
         <div css={topContainer}>
@@ -209,8 +209,12 @@ const KidsMainPage = () => {
         <div css={bottomContainer}>
           {/* 메인캐릭터 + 말풍선 */}
           <div css={CharacterContainer}>
-            <ChatBubble />
-            <img src={characterImages[formatId(mainInfo.mainMongddangId)]} alt="" css={mainCharacterCss} />
+            <ChatBubble status={alertStatus} />
+            <img
+              src={characterImages[formatId(mainInfo.mainMongddangId)]}
+              alt=""
+              css={mainCharacterCss}
+            />
           </div>
 
           {/* 일상생활 버튼 3종 */}
@@ -281,7 +285,9 @@ const KidsMainPage = () => {
           <></>
         )
       }
-    </div> : <Loading/>
+    </div>
+  ) : (
+    <Loading />
   );
 };
 
