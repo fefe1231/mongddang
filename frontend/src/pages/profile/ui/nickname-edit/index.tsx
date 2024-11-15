@@ -2,7 +2,7 @@
 import { Button } from '@/shared/ui/Button';
 import { TextField } from '@/shared/ui/TextField';
 import { TopBar } from '@/shared/ui/TopBar';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { containerCss, editCss } from './styles';
 import { Typography } from '@/shared/ui/Typography';
 import { Palette } from '@/shared/model/globalStylesTyes';
@@ -11,20 +11,27 @@ import { INickname, checkNickname, updateNickname } from './api';
 import { AxiosResponse } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useUserStore } from '@/entities/user/model';
+import { useShallow } from 'zustand/shallow';
+import { UserInfo } from '@/shared/api/user';
 
 export const NicknameEdit = () => {
-  // const [nickname, setNickname] = useState<string>('');
+  const [nickname, setNickname] = useState<string>('');
   const [color, setColor] = useState<Palette>('primary');
   const [msg, setMsg] = useState<string>('');
   const nav = useNavigate();
   // const location = useLocation();
   // const prenickname = location.state?.nickname;
-  const getUserInfo = useUserStore((state) => state.getUserInfo);
+  const { getUserInfo, setUserInfo } = useUserStore(
+    useShallow((state) => ({
+      getUserInfo: state.getUserInfo,
+      setUserInfo: state.setUserInfo,
+    }))
+  );
   const userInfo = getUserInfo();
 
-  // const nicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setNickname(e.target.value);
-  // };
+  const nicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNickname(e.target.value);
+  };
 
   const { mutate: checkNicknameMutation } = useMutation<
     AxiosResponse<void>,
@@ -39,7 +46,7 @@ export const NicknameEdit = () => {
     },
     onError: () => {
       console.log('닉네임 조회 실패');
-      if (userInfo.user?.nickname.length === 0) {
+      if (nickname.length === 0) {
         setMsg('닉네임을 작성해주세요.');
         setColor('danger');
       } else {
@@ -59,16 +66,19 @@ export const NicknameEdit = () => {
     mutationFn: async (nickname: string): Promise<AxiosResponse<INickname>> => {
       return await updateNickname(accessToken, nickname);
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       console.log('닉네임 업데이트 성공');
 
       setMsg('닉네임이 변경되었습니다.');
       setColor('primary');
+      const userInfo = getUserInfo();
+      const newUserInfo = { ...userInfo, user: { ...userInfo.user, nickname } };
+      await setUserInfo(newUserInfo as UserInfo);
       nav('/profile');
     },
     onError: (error) => {
       console.log('닉네임 업데이트 실패', error);
-      if (userInfo.user?.nickname.length === 0) {
+      if (nickname.length === 0) {
         setMsg('닉네임을 작성해주세요.');
         setColor('danger');
       } else {
@@ -77,6 +87,11 @@ export const NicknameEdit = () => {
       }
     },
   });
+
+  useEffect(() => {
+    const userNickname = getUserInfo().user?.nickname ?? '';
+    setNickname(userNickname);
+  }, []);
 
   return (
     <div>
@@ -94,23 +109,17 @@ export const NicknameEdit = () => {
             label="닉네임"
             type="text"
             variant="outlined"
-            value={userInfo.user?.nickname}
-            // onChange={nicknameChange}
+            value={nickname}
+            onChange={nicknameChange}
           />
-          {userInfo.user ? (
-            <Button
-              handler={
-                userInfo.user
-                  ? () => checkNicknameMutation(userInfo.user!.nickname)
-                  : () => {}
-              } // 확인 버튼에서 확인
-              color="primary"
-              fontSize="1"
-              variant="contained"
-            >
-              확인
-            </Button>
-          ) : null}
+          <Button
+            handler={() => checkNicknameMutation(nickname)} // 확인 버튼에서 확인
+            color="primary"
+            fontSize="1"
+            variant="contained"
+          >
+            확인
+          </Button>
         </div>
 
         {msg && (
@@ -121,11 +130,7 @@ export const NicknameEdit = () => {
 
         <Button
           style={{ margin: '1rem 0' }}
-          handler={
-            userInfo.user
-              ? () => updateNicknameMutation(userInfo.user!.nickname)
-              : () => {}
-          } // 변경하기 버튼에서 변경
+          handler={() => updateNicknameMutation(nickname)} // 변경하기 버튼에서 변경
           color="primary"
           fontSize="1"
           fullwidth
