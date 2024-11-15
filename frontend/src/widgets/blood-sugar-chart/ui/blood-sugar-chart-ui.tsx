@@ -13,13 +13,13 @@ interface BloodSugarChartProps {
 }
 
 export const BloodSugarChart = ({ data }: BloodSugarChartProps) => {
-  const viewportRef = useRef<HTMLDivElement | null>(null);
+  // const viewportRef = useRef<HTMLDivElement | null>(null);
 
 //   // mount 시 linechart의 가장 오른쪽으로 이동
-  useChartScroll(viewportRef, !!data);
+  // useChartScroll(viewportRef, !!data);
 
   // 그래프 너비값 동적 할당
-  const chartWidth = useChartWidth(data?.length);
+  // const chartWidth = useChartWidth(data?.length);
 
   return (
     <>
@@ -28,11 +28,11 @@ export const BloodSugarChart = ({ data }: BloodSugarChartProps) => {
           <ScrollArea
             w={CHART_CONFIG.SCROLL_WIDTH}
             h={CHART_CONFIG.SCROLL_HEIGHT}
-            viewportRef={viewportRef}
+            // viewportRef={viewportRef}
           >
             <LineChart
               h={CHART_CONFIG.DEFAULT_HEIGHT}
-              w={chartWidth}
+              // w={chartWidth}
               data={timeConverter(data)}
               dataKey="measurementTime"
               curveType="bump"

@@ -27,6 +27,9 @@ export const DayRecordPage = () => {
     isLoading: isBloodSugarLoading,
   } = useQuery(BloodsugarQueries.todayBloodSugarQuery(nickname, date));
 
+  if (isBloodSugarErr) throw new Error('Blood data error');
+  if (isBloodSugarLoading) return <div>Loading...</div>;
+
   return (
     <>
       <header>
