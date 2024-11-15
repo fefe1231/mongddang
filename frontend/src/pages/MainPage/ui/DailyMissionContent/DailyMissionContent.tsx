@@ -15,16 +15,41 @@ import {
 } from './DailyMissionContent.styles';
 import { mainIcons } from '../../constants/iconsData';
 import DailyMissionBtn from '../DailyMissionBtn/DailyMissionBtn';
-import { useDailyMissionStore } from '../../model/useDailyMissionStore';
-import React from 'react';
+import React, { useEffect } from 'react';
+import {
+  useDailyMissionQuery,
+  useMissionRewardMutation,
+} from '../../model/useDailyMissionQuery';
+import Loading from '@/shared/ui/Loading';
+
+type MissionInfo = {
+  missionId: number;
+  name: string;
+  reward: number;
+  status: string;
+};
 
 const DailyMissionContent = () => {
-  const { missions } = useDailyMissionStore();
+  const { data, isLoading } = useDailyMissionQuery();
+  const missionRewardMutation = useMissionRewardMutation();
+
+  useEffect(() => {
+    console.log('2. 새로고침');
+    console.log('3. 새로운 데이터', data);
+  }, [data]);
+
+  if (isLoading) return <Loading />;
+
+  const handleRewardBtn = (missionId: number) => {
+    console.log('0번 보상수령');
+    missionRewardMutation.mutate(missionId);
+  };
+
   return (
     <div css={container}>
       <div css={missionListCss}>
         {/* 보상 */}
-        {missions.map((mission, i) => {
+        {data?.map((mission: MissionInfo, i: number) => {
           return (
             <React.Fragment key={`mission-${new Date()}-${i}`}>
               <div css={missionItemCss}>
@@ -37,8 +62,10 @@ const DailyMissionContent = () => {
 
                 {/* 보상 버튼 */}
                 <DailyMissionBtn
+                  missionId={mission.missionId}
                   btnStatus={mission.status}
                   reward={mission.reward}
+                  handleRewardBtn={handleRewardBtn}
                 />
               </div>
               <div css={lineCss}></div>

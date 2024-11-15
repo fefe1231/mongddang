@@ -16,7 +16,7 @@ import {
 import ProfileStatus from './ui/ProfileStatus/ProfileStatus';
 import { IconTypo } from '@/shared/ui/IconTypo';
 import CurrentBloodSugar from './ui/CurrentBloodSugar/CurrentBloodSugar';
-import ChatBubble from './ui/ChatBubble/ChatBubble';
+// import ChatBubble from './ui/ChatBubble/ChatBubble';
 import { useEffect, useState } from 'react';
 import DietModal from './ui/DietModal/DietModal';
 import BaseModal from './ui/BaseModal/BaseModal';
@@ -36,7 +36,7 @@ import { mainIcons } from './constants/iconsData';
 import { getMainInfo } from './api/infoApi';
 import Loading from '@/shared/ui/Loading';
 import { characterImages, formatId } from '../Encyclopedia/model/mongddang-img';
-import { useDailyMissionStore } from './model/useDailyMissionStore';
+// import { useDailyMissionStore } from './model/useDailyMissionStore';
 
 const KidsMainPage = () => {
   const navigate = useNavigate();
@@ -54,7 +54,7 @@ const KidsMainPage = () => {
   const [alertBloodSugar, setAlertBloodSugar] = useState(0);
   const [currentRoutine, setCurrentRoutine] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  const { getMissions } = useDailyMissionStore();
+  // const { getMissions } = useDailyMissionStore();
 
   // 초기 루틴 상태 조회
   useEffect(() => {
@@ -150,6 +150,8 @@ const KidsMainPage = () => {
   console.log('알림창 상태', alertStatus);
   console.log('루틴 상태', currentRoutine);
 
+  
+
   return !isLoading ? (
     <div css={kidsMainBase}>
       <div css={kidsMainContent}>
@@ -166,7 +168,6 @@ const KidsMainPage = () => {
             <div css={iconHorizontalCss}>
               <div
                 onClick={() => {
-                  getMissions();
                   setOpenBaseModal(true);
                   setContentType('dailyMission');
                 }}

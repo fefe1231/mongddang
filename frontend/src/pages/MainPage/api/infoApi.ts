@@ -32,8 +32,8 @@ export const getDailyMission = () => {
 };
 
 // 일일 미션 보상 수령
-export const getReward = (missionId: number) => {
-  api({
+export const getReward = async (missionId: number) => {
+  await api({
     method: 'POST',
     url: '/api/mission/reward',
     data: {
