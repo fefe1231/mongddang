@@ -13,7 +13,7 @@ export const api = axios.create({
 // 요청에 자동으로 accessToken 추가
 api.interceptors.request.use(async (config) => {
   // const accessToken = localStorage.getItem('accessToken');
-  const accessToken = (await PreferencesUser.getUser()).userToken;
+  const accessToken = (await PreferencesUser.getUser()).userAccessToken;
 
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`;

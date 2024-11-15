@@ -11,8 +11,8 @@ import {
 } from './styles';
 import { IconTypo } from '@/shared/ui/IconTypo';
 import { UserRole } from '../..';
-import child from '../../../../assets/img/page/child.png'
-import protector from '../../../../assets/img/page/protector.png'
+import child from '@/assets/img/page/child.png'
+import protector from '@/assets/img/page/protector.png'
 
 interface UserDataFormProps {
   onSubmit: (role: UserRole) => void;

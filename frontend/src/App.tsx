@@ -19,17 +19,25 @@ import { Variability } from './pages/report/ui/detail/variability';
 import { Mean } from './pages/report/ui/detail/mean';
 import { Tir } from './pages/report/ui/detail/tir/indesx';
 import { DayRecordPage } from './pages/day-record';
-
+import { useEffect } from 'react';
+import { SocialLogin } from '@capgo/capacitor-social-login';
 
 function App() {
   useLoadState();
+  useEffect(() => {
+    SocialLogin.initialize({
+      google: {
+        webClientId: import.meta.env.VITE_GOOGLE_WEB_CLIENT_ID,
+      },
+    });
+  }, []);
   return (
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_AUTH_CLIENT_ID}>
       <Router>
         <Routes>
-          <Route path="/" element={<KidsMainPage />} />
+          <Route path="/main" element={<KidsMainPage />} />
           <Route path="/btn" element={<Btn />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Login />} />
           <Route path="/invitecode" element={<InviteCode />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/encyclopedia" element={<Encyclopedia />} />
