@@ -11,7 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ResponseMissionListDto {
 
-    private MissionDto.Mission name;
+    private Long missionId;
+    private String name;
     private Long reward;
     private MissionDto.Status status;
 
