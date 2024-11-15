@@ -31,7 +31,7 @@ const Login = () => {
 
   // 유저 정보가 존재하면 로그인 안 하고 바로 각각의 메인 페이지로 이동
   if (getUserInfo().user?.role === 'child') nav('/main');
-  if (getUserInfo().user?.role === 'protector') nav('menu');
+  if (getUserInfo().user?.role === 'protector') nav('/protector-main');
 
   // const handleLoginSuccess = (credentialResponse: IcredentialResponse) => {
   //   const idToken = credentialResponse.credential;
@@ -99,11 +99,11 @@ const Login = () => {
       await api
         .post('/api/auth/login', { idToken })
         .then(async (res: AxiosResponse<LoginResponse>) => {
-          console.log('*****login response*****');
-          console.log('*****login response*****');
-          console.log(JSON.stringify(res));
-          console.log('*****login response*****');
-          console.log('*****login response*****');
+          // console.log('*****login response*****');
+          // console.log('*****login response*****');
+          // console.log(JSON.stringify(res));
+          // console.log('*****login response*****');
+          // console.log('*****login response*****');
 
           if (res.data.data.isRegistered) {
             const userAccessToken = res.data.data.accessToken;
@@ -111,11 +111,18 @@ const Login = () => {
             await updateUserInfo({ userAccessToken, user: userInfo });
 
             const user = getUserInfo();
+            console.log('****user rola****');
+            console.log('****user rola****');
+            console.log(user.user?.role);
+            console.log('****user rola****');
+            console.log('****user rola****');
+
             if (user.user?.role === 'protector') {
               nav('/menu');
             } else if (user.user?.role === 'child') {
-              nav('/main');
+              nav('/protector-main');
             }
+            nav('/protector-main');
           } else {
             nav('/signup');
           }

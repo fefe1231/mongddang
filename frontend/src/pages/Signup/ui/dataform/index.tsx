@@ -97,8 +97,8 @@ export const DataForm = ({ role }: { role: UserRole }) => {
       const userAccessToken = data.data.data.accessToken;
       const user = data.data.data.userInfo;
       await updateUserInfo({ userAccessToken, user });
-      if (user.role === 'child') nav('main');
-      if (user.role === 'protector') nav('menu');
+      if (user.role === 'child') nav('/main');
+      if (user.role === 'protector') nav('/protector-main');
     },
     onError: (error) => {
       console.error('회원가입 실패:', error);
