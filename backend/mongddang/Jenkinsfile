@@ -45,10 +45,7 @@ pipeline {
                     withCredentials([file(credentialsId: 'fcm_certification', variable: 'certificationFile')]) {
                         script {
                             echo "download certification.json"
-                            sh '''
-                                mkdir -p ./src/main/resources/firebase
-                                cp -f $certificationFile ./src/main/resources/certification.json
-                            '''
+                            sh 'cp -f $certificationFile ./src/main/resources/certification.json'
                         }
                     }
                 }
