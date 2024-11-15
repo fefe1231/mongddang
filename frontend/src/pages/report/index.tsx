@@ -20,16 +20,19 @@ export const Report = () => {
   });
 
   useEffect(() => {
-    console.log('API Response data:', data?.data?.data?.glucoseMeasurementItmeList);
-    
+    console.log(
+      'API Response data:',
+      data?.data?.data?.glucoseMeasurementItmeList
+    );
+
     const measurements = data?.data?.data?.glucoseMeasurementItmeList;
     if (measurements && Array.isArray(measurements)) {
       // 데이터 타입 변환이 필요한 경우
-      const transformedData = measurements.map(item => ({
+      const transformedData = measurements.map((item) => ({
         measurementTime: item.measurementTime,
-        bloodSugarLevel: Number(item.bloodSugarLevel)
+        bloodSugarLevel: Number(item.bloodSugarLevel),
       }));
-      
+
       setWeeklyData(transformedData);
     }
   }, [data, setWeeklyData]);
@@ -45,38 +48,51 @@ export const Report = () => {
   }
 
   const measurementList = data?.data?.data?.glucoseMeasurementItmeList || [];
-  console.log('Final measurement list:', measurementList);  
+  console.log('Final measurement list:', measurementList);
 
   return (
     <div>
-      <TopBar type="iconpage" iconHandler={()=>nav('/menu')}>주간 리포트</TopBar>
-      <WeekChart data={measurementList}/>
-      <Item title="혈당관리지표(GMI)" ment={Number(data?.data?.data?.gmi || 0).toFixed(1)} unit="%" />
-      <SliderItem 
-        title="이번주 평균 혈당" 
-        max={400} 
-        standard={100} 
-        ment={Number(data?.data?.data?.abg || 0).toFixed(1)} 
-        unit="mg/dl" 
-        url='/report/detail/mean'
+      <TopBar type="iconpage" iconHandler={() => nav('/menu')}>
+        주간 리포트
+      </TopBar>
+      <WeekChart data={measurementList} />
+      <Item
+        title="혈당관리지표(GMI)"
+        ment={Number(data?.data?.data?.gmi || 0).toFixed(1)}
+        unit="%"
       />
-      <SliderItem 
-        title="혈당 변동성" 
-        max={100} 
-        standard={36} 
-        ment={Number(data?.data?.data?.cv || 0).toFixed(1)} 
-        unit="%" 
-        url='/report/detail/gv'
+      <SliderItem
+        title="이번주 평균 혈당"
+        max={400}
+        standard={100}
+        ment={Number(data?.data?.data?.abg || 0).toFixed(1)}
+        unit="mg/dl"
+        url="/report/detail/mean"
       />
-      <SliderItem 
-        title="목표 범위 내 비율" 
-        max={100} 
-        standard={20} 
-        ment={Number(data?.data?.data?.tir || 0).toFixed(1)} 
-        unit="%" 
-        url='/report/detail/tir'
+      <SliderItem
+        title="혈당 변동성"
+        max={100}
+        standard={36}
+        ment={Number(data?.data?.data?.cv || 0).toFixed(1)}
+        unit="%"
+        url="/report/detail/gv"
       />
-      <GptContent />
+      <SliderItem
+        title="목표 범위 내 비율"
+        max={100}
+        standard={20}
+        ment={Number(data?.data?.data?.tir || 0).toFixed(1)}
+        unit="%"
+        url="/report/detail/tir"
+      />
+      <GptContent
+        data={{
+          gmi: Number(data?.data?.data?.gmi || 0),
+          abg: Number(data?.data?.data?.abg || 0),
+          cv: Number(data?.data?.data?.cv || 0),
+          tir: Number(data?.data?.data?.tir || 0),
+        }}
+      />
     </div>
   );
 };
