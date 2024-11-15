@@ -7,6 +7,7 @@ import com.onetwo.mongddang.domain.user.oauth.GoogleTokenService;
 import com.onetwo.mongddang.domain.user.oauth.LoginFilter;
 import com.onetwo.mongddang.domain.user.repository.UserRepository;
 import com.onetwo.mongddang.domain.user.service.CustomUserDetailsService;
+import com.onetwo.mongddang.domain.user.service.GetUserInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,7 +45,7 @@ public class SecurityConfig {
     private String allowedOrigins;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, GetUserInfoService getUserInfoService) throws Exception {
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS 설정 추가
                 .csrf(csrf -> csrf.disable()) // CSRF 비활성화 실험
@@ -64,7 +65,8 @@ public class SecurityConfig {
                         jwtTokenProvider,
                         customUserDetailsService,
                         userRepository,
-                        googleTokenService), UsernamePasswordAuthenticationFilter.class)
+                        googleTokenService,
+                        getUserInfoService), UsernamePasswordAuthenticationFilter.class)
                 //JWT 필터 추가 (UsernamePasswordAuthenticationFilter 전에 실행)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
