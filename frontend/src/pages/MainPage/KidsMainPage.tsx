@@ -36,7 +36,6 @@ import { mainIcons } from './constants/iconsData';
 import { getMainInfo } from './api/infoApi';
 import Loading from '@/shared/ui/Loading';
 import { characterImages, formatId } from '../Encyclopedia/model/mongddang-img';
-// import { useDailyMissionStore } from './model/useDailyMissionStore';
 
 const KidsMainPage = () => {
   const navigate = useNavigate();
@@ -54,7 +53,6 @@ const KidsMainPage = () => {
   const [alertBloodSugar, setAlertBloodSugar] = useState(0);
   const [currentRoutine, setCurrentRoutine] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  // const { getMissions } = useDailyMissionStore();
 
   // 초기 루틴 상태 조회
   useEffect(() => {

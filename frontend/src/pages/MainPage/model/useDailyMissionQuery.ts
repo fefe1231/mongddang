@@ -16,7 +16,6 @@ export const useMissionRewardMutation = () => {
       await getReward(missionId);
     },
     onSuccess: () => {
-      console.log('1. 데이터 무효화 성공');
       queryClient.invalidateQueries({
         queryKey: ['dailyMissionList'],
       });

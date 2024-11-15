@@ -12,6 +12,7 @@ export const getMainInfo = () => {
     })
     .catch((err) => {
       console.log('메인페이지 정보 조회 실패', err.message);
+      return err;
     });
 };
 
@@ -46,5 +47,6 @@ export const getReward = async (missionId: number) => {
     })
     .catch((err) => {
       console.log(err);
+      return err;
     });
 };

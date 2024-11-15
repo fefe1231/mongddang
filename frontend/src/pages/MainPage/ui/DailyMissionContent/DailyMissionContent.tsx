@@ -34,14 +34,11 @@ const DailyMissionContent = () => {
   const missionRewardMutation = useMissionRewardMutation();
 
   useEffect(() => {
-    console.log('2. 새로고침');
-    console.log('3. 새로운 데이터', data);
   }, [data]);
 
   if (isLoading) return <Loading />;
 
   const handleRewardBtn = (missionId: number) => {
-    console.log('0번 보상수령');
     missionRewardMutation.mutate(missionId);
   };
 
