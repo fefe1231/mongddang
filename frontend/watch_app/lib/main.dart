@@ -1,4 +1,3 @@
-// lib/main.dart
 import 'package:flutter/material.dart';
 import 'screens/home_screen.dart';
 
@@ -12,10 +11,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Galaxy Watch Widget',
+      title: '혈당 모니터 앱',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue),
-        scaffoldBackgroundColor: Colors.black,
+        primarySwatch: Colors.blue,
       ),
       home: const HomeScreen(),
     );

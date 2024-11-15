@@ -1,9 +1,46 @@
 import 'package:flutter/material.dart';
 import '../models/activity.dart';
+import '../repository/stat_repository.dart';
 import 'activity_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int? bloodSugar;
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchBloodSugar();
+  }
+
+  Future<void> fetchBloodSugar() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      final response = await StatRepository.fetchData();
+      setState(() {
+        bloodSugar = response['bloodSugarLevel'] as int?;
+      });
+    } catch (e) {
+      print('혈당 데이터 가져오기 실패: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('혈당 데이터를 가져오는데 실패했습니다.')),
+      );
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -126,24 +163,33 @@ class HomeScreen extends StatelessWidget {
     return Positioned(
       top: 70,
       right: 20,
-      child: Container(
-        width: 36,
-        height: 36,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.white,
-          border: Border.all(
-            color: Colors.grey[300]!,
-            width: 2,
+      child: GestureDetector(
+        onTap: fetchBloodSugar,  // 새로고침 기능 추가
+        child: Container(
+          width: 36,
+          height: 36,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.white,
+            border: Border.all(
+              color: Colors.grey[300]!,
+              width: 2,
+            ),
           ),
-        ),
-        child: const Center(
-          child: Text(
-            '80',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
+          child: isLoading
+              ? const SizedBox(
+            width: 20,
+            height: 20,
+            child: CircularProgressIndicator(strokeWidth: 2),
+          )
+              : Center(
+            child: Text(
+              bloodSugar?.toString() ?? '--',
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
             ),
           ),
         ),
