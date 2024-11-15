@@ -44,6 +44,7 @@ export interface EchoPlugin {
 
 export interface ForegroundPlugin {
   startForeground(): Promise<{ message: string }>;
+  stopForeground(): Promise<{ message: string}>;
 }
 
 export const Echo = registerPlugin<EchoPlugin>('Echo');
@@ -56,10 +57,14 @@ const KidsMainPage = () => {
       console.log(`가보자고: ${response}`)
   }
 
-  const checkForegroundPermission = async() =>{
+  const startForegroundPermission = async() =>{
     const response = Foreground.startForeground()
-    console.log(`췍췍: ${response}`)
-}
+    console.log(`startForeground: ${response}`)
+  }
+  const stopForegroundPermission = async() =>{
+    const response = Foreground.stopForeground()
+    console.log(`stopForeground: ${response}`)
+  }
 
   const navigate = useNavigate();
   const accessToken = localStorage.getItem('accessToken');
@@ -171,7 +176,6 @@ console.log(closeMailBox)
   };
   console.log('알림창 상태', alertStatus);
   console.log('루틴 상태', currentRoutine);
-  checkForegroundPermission
   return (
     !isLoading ? <div css={kidsMainBase}>
       <div css={kidsMainContent}>
@@ -198,24 +202,35 @@ console.log(closeMailBox)
                 }
               />
             </div>
-            <div
-                onClick={testPlugin}
-              >
-                <IconTypo
-                  icon={mainIcons.notification}
-                  fontSize="0.75"
-                  menu="설정"
-                />
-              </div>
-              <div
-                onClick={checkForegroundPermission }
-              >
-                <IconTypo
-                  icon={mainIcons.notification}
-                  fontSize="0.75"
-                  menu="포그라운드"
-                />
-              </div>
+            <div>
+                  <div
+                    onClick={testPlugin}
+                  >
+                    <IconTypo
+                      icon={mainIcons.notification}
+                      fontSize="0.75"
+                      menu="설정"
+                    />
+                  </div>
+                  <div
+                    onClick={startForegroundPermission }
+                  >
+                    <IconTypo
+                      icon={mainIcons.notification}
+                      fontSize="0.75"
+                      menu="포그라운드 시작" 
+                    />
+                  </div>
+                  <div
+                    onClick={stopForegroundPermission}
+                  >
+                    <IconTypo
+                      icon={mainIcons.notification}
+                      fontSize="0.75"
+                      menu="포그라운드 종료" 
+                    />
+                  </div>
+                </div>
               </div>
             <div css={iconVerticalCss}>
               <div

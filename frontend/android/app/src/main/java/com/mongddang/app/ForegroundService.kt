@@ -1,9 +1,11 @@
 package com.mongddang.app
 
+import android.app.ActivityManager
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
@@ -22,8 +24,14 @@ class ForegroundService : Service() {
 
     private val serviceScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
+    // 서비스 상태를 나타냄
+    companion object {
+        var isRunning = false 
+    }
+
     override fun onCreate() {
         super.onCreate()
+        isRunning = true
         Log.i(TAG, "onCreate: ")
         createNotificationChannel()
 
@@ -81,8 +89,21 @@ class ForegroundService : Service() {
     override fun onDestroy() {
         Log.i(TAG, "onDestroy")
         super.onDestroy()
+        isRunning=false
         serviceScope.cancel() // 서비스가 종료될 때 모든 코루틴 작업 취소
     }
+
+//    private fun isServiceRunning(context: Context, serviceClass: Class<*>): Boolean {
+//        Log.i(TAG, "isServiceRunning: ")
+//        val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+//        @Suppress("DEPRECATION") // ForegroundService 확인을 위해 사용
+//        for (service in activityManager.getRunningServices(Int.MAX_VALUE)) {
+//            if (serviceClass.name == service.service.className) {
+//                return true // 서비스가 실행 중임
+//            }
+//        }
+//        return false // 서비스가 실행 중이 아님
+//    }
 
     override fun onBind(intent: Intent): IBinder? = null
 }

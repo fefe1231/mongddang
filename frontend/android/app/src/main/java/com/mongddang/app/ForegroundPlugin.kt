@@ -72,4 +72,17 @@ class ForegroundPlugin : Plugin() {
             }
         }
     }
+
+    @PluginMethod
+    fun stopForeground(call: PluginCall) {
+        if(ForegroundService.isRunning){
+            Log.d(TAG, "stopForeground: 동작")
+            val intent = Intent(context, ForegroundService::class.java)
+            context.stopService(intent)
+            call.resolve(JSObject().put("message", "Foreground service stop"))
+        } else{
+            Log.d(TAG, "stopForeground: 현재 모니터링 하는 중이 아님.")
+            call.resolve(JSObject().put("message", "Foreground service is not working now"))
+        }
+    }
 }
