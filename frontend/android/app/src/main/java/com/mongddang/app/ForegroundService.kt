@@ -57,7 +57,7 @@ class ForegroundService : Service() {
         // 알림 생성
         return Notification.Builder(this, "monitoring_channel")
             .setContentTitle("모니터링 중")
-            .setContentText("10초마다 상태를 확인하고 있습니다.")
+            .setContentText("5분마다 상태를 확인하고 있습니다.")
             .setSmallIcon(android.R.drawable.ic_menu_info_details)
             .build()
     }
@@ -73,7 +73,7 @@ class ForegroundService : Service() {
         serviceScope.launch {
             while (isActive) { // 서비스가 활성 상태일 동안 반복
                 monitorStatus() // 모니터링 작업 실행
-                delay(10000)    // 1분 대기 (1분 = 60000밀리초)
+                delay(300000)    // 1분 대기 (1분 = 60000밀리초)
             }
         }
     }

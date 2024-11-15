@@ -54,7 +54,11 @@ class ForegroundPlugin : Plugin() {
             call.reject("Permission required")
             return
         }
-
+        if(ForegroundService.isRunning){
+            Log.d(TAG, "startForeground: 이미 동작중입니다.")
+            call.reject("ForegroundService is already working")
+            return
+        }
         try {
             // 포그라운드 서비스 시작 로직을 여기에 구현합니다.
             val intent = Intent(context, ForegroundService::class.java)

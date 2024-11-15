@@ -47,15 +47,9 @@ export interface ForegroundPlugin {
   stopForeground(): Promise<{ message: string}>;
 }
 
-export const Echo = registerPlugin<EchoPlugin>('Echo');
 export const Foreground = registerPlugin<ForegroundPlugin>('Foreground')
 
 const KidsMainPage = () => {
-
-  const testPlugin = async() =>{
-      const response = Echo.echo({value: "hello"})
-      console.log(`가보자고: ${response}`)
-  }
 
   const startForegroundPermission = async() =>{
     const response = Foreground.startForeground()
@@ -203,15 +197,6 @@ console.log(closeMailBox)
               />
             </div>
             <div>
-                  <div
-                    onClick={testPlugin}
-                  >
-                    <IconTypo
-                      icon={mainIcons.notification}
-                      fontSize="0.75"
-                      menu="설정"
-                    />
-                  </div>
                   <div
                     onClick={startForegroundPermission }
                   >
