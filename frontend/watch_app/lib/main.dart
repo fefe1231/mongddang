@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'screens/home_screen.dart';
+import 'repository/stat_repository.dart';  // StatRepository import 추가
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();  // Flutter 바인딩 초기화
+  StatRepository.startSync();  // 동기화 시작
   runApp(const MyApp());
 }
 
