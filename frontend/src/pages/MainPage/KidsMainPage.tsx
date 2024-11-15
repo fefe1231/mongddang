@@ -36,8 +36,22 @@ import { mainIcons } from './constants/iconsData';
 import { getMainInfo } from './api/infoApi';
 import Loading from '@/shared/ui/Loading';
 import { characterImages, formatId } from '../Encyclopedia/model/mongddang-img';
+import { registerPlugin } from '@capacitor/core';
+
+export interface EchoPlugin {
+  echo(options: { value: string }): Promise<{ value: string }>;
+}
+
+export const Echo = registerPlugin<EchoPlugin>('Echo');
+
 
 const KidsMainPage = () => {
+
+  const testPlugin = async() =>{
+      const response = Echo.echo({value: "hello"})
+      console.log(`가보자고: ${response}`)
+  }
+
   const navigate = useNavigate();
   const accessToken = localStorage.getItem('accessToken');
   const [mainInfo, setMainInfo] = useState({
@@ -172,6 +186,15 @@ const KidsMainPage = () => {
                 }
               />
             </div>
+            <div
+                onClick={testPlugin}
+              >
+                <IconTypo
+                  icon={mainIcons.notification}
+                  fontSize="0.75"
+                  menu="설정"
+                />
+              </div>
             <div css={iconVerticalCss}>
               <div
                 onClick={() => {
