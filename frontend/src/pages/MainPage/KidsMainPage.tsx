@@ -16,7 +16,7 @@ import {
 import ProfileStatus from './ui/ProfileStatus/ProfileStatus';
 import { IconTypo } from '@/shared/ui/IconTypo';
 import CurrentBloodSugar from './ui/CurrentBloodSugar/CurrentBloodSugar';
-// import ChatBubble from './ui/ChatBubble/ChatBubble';
+import ChatBubble from './ui/ChatBubble/ChatBubble';
 import { useEffect, useState } from 'react';
 import DietModal from './ui/DietModal/DietModal';
 import BaseModal from './ui/BaseModal/BaseModal';
@@ -150,8 +150,6 @@ const KidsMainPage = () => {
   console.log('알림창 상태', alertStatus);
   console.log('루틴 상태', currentRoutine);
 
-  
-
   return !isLoading ? (
     <div css={kidsMainBase}>
       <div css={kidsMainContent}>
@@ -222,7 +220,7 @@ const KidsMainPage = () => {
         <div css={bottomContainer}>
           {/* 메인캐릭터 + 말풍선 */}
           <div css={CharacterContainer}>
-            {/* <ChatBubble status={currentRoutine} /> */}
+            <ChatBubble status={currentRoutine} />
             <img
               src={characterImages[formatId(mainInfo.mainMongddangId)]}
               alt=""
