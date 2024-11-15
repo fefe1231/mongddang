@@ -14,3 +14,14 @@ export interface ICharacterInfo {
   message: string;
   data: ICharacterData[];
 }
+
+export interface INewInfoResponse {
+  code: number;
+  message: string;
+}
+
+export interface CharacterResponse {
+  data: {
+    data: ICharacterData[];
+  };
+}
