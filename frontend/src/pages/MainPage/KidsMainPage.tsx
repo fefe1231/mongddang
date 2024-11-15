@@ -166,7 +166,7 @@ const KidsMainPage = () => {
             <div css={iconHorizontalCss}>
               <div
                 onClick={() => {
-                  getMissions()
+                  getMissions();
                   setOpenBaseModal(true);
                   setContentType('dailyMission');
                 }}
@@ -221,7 +221,7 @@ const KidsMainPage = () => {
         <div css={bottomContainer}>
           {/* 메인캐릭터 + 말풍선 */}
           <div css={CharacterContainer}>
-            <ChatBubble />
+            <ChatBubble status={alertStatus} />
             <img
               src={characterImages[formatId(mainInfo.mainMongddangId)]}
               alt=""
