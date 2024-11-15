@@ -43,7 +43,7 @@ const ChatBubble = ({ status }: ChatBubbleProps) => {
   const filteredMongddangStatusMessage =
     status &&
     mongddangStatusMessages.filter((message) => message.status === status)[0]
-      .message;
+      ?.message;
 
   // 메시지를 주기적으로 변경
   useEffect(() => {

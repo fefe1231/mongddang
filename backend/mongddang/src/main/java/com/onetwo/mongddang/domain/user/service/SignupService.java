@@ -16,6 +16,7 @@ import com.onetwo.mongddang.domain.game.title.model.Title;
 import com.onetwo.mongddang.domain.game.title.repository.MyTitleRepository;
 import com.onetwo.mongddang.domain.game.title.repository.TitleRepository;
 import com.onetwo.mongddang.domain.user.dto.SignupRequestDto;
+import com.onetwo.mongddang.domain.user.dto.UserInfoDto;
 import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
 import com.onetwo.mongddang.domain.user.jwt.JwtTokenProvider;
 import com.onetwo.mongddang.domain.user.model.User;
@@ -49,6 +50,7 @@ public class SignupService {
     private final MyMongddangRepository myMongddangRepository;
     private final MyTitleRepository myTitleRepository;
     private final PushLogRepository pushLogRepository;
+    private final GetUserInfoService getUserInfoService;
 
     @Transactional
     public ResponseDto signup(SignupRequestDto signupRequestDto) {
@@ -81,9 +83,14 @@ public class SignupService {
 
         // jwt token 생성
         String jwtToken = jwtTokenProvider.generateToken(newUser.getEmail(), newUser.getRole().toString(), newUser.getId());
+
+        // 가입한 user 정보
+        UserInfoDto userInfoDto = getUserInfoService.getUserInfoDto(newUser, newUser.getId());
+
         // response
         Map<Object, Object> data = new HashMap<>();
         data.put("accessToken", jwtToken);
+        data.put("userInfo", userInfoDto);
 
         ResponseDto response = ResponseDto.builder()
                 .message("회원가입을 성공했습니다.")

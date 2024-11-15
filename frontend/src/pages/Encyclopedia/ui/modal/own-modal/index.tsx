@@ -33,7 +33,8 @@ export const OwnModal = ({ setstate, data }: OwnModalProps) => {
   
   const mainMutation = useMutation<AxiosResponse<ICharacterData>, Error, number>({
     mutationFn: (characterId: number) => getMainInfo(characterId),
-    onSuccess: (_, characterId) => {
+    onSuccess: (response, characterId) => {
+      console.log(response)
       queryClient.setQueryData<CharacterResponse>(['character'], (oldData) => {
         if (!oldData) return oldData;
         
