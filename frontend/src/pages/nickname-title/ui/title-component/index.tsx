@@ -30,7 +30,7 @@ export const TitleComponent = ({ title }: TitleComponentProps) => {
     },
     onSuccess: () => {
       setIsModal(false);
-      setIsToast(true); // 토스트 표시
+      setIsToast(true);
       queryClient.invalidateQueries({ queryKey: ['titles'] });
     },
     onError: () => {
@@ -44,7 +44,7 @@ export const TitleComponent = ({ title }: TitleComponentProps) => {
       if (!accessToken) {
         throw new Error('AccessToken이 필요합니다.');
       }
-      return await getTitleMain(accessToken, title.titleId);
+      return await getTitleMain(title.titleId);
     },
     onSuccess: () => {
       setIsModal(false);
@@ -64,9 +64,9 @@ export const TitleComponent = ({ title }: TitleComponentProps) => {
     if (isToast) {
       const timer = setTimeout(() => {
         setIsToast(false);
-      }, 5000); // 5초 후에 사라짐
+      }, 4000); 
 
-      return () => clearTimeout(timer); // 컴포넌트 언마운트 시 타이머 클리어
+      return () => clearTimeout(timer); 
     }
   }, [isToast]);
 
@@ -104,7 +104,6 @@ export const TitleComponent = ({ title }: TitleComponentProps) => {
               fontSize="1"
               variant="contained"
               handler={() => setIsModal(true)}
-              disabled={title.count !== title.executionCount}
             >
               대표설정
             </Button>
