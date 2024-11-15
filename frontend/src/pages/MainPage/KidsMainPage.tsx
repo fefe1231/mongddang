@@ -221,7 +221,7 @@ const KidsMainPage = () => {
         <div css={bottomContainer}>
           {/* 메인캐릭터 + 말풍선 */}
           <div css={CharacterContainer}>
-            <ChatBubble status={alertStatus} />
+            {/* <ChatBubble status={currentRoutine} /> */}
             <img
               src={characterImages[formatId(mainInfo.mainMongddangId)]}
               alt=""

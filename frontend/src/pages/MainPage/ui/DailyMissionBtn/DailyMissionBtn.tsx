@@ -26,7 +26,7 @@ const DailyMissionBtn = (props: DailyMissionBtnProps) => {
       isShadow={btnStatus === 'rewardable' ? true : false}
       scale={btnStatus === 'rewardable' ? '200' : '500'}
       variant="contained"
-      handler={()=>{handleRewardBtn(1)}}
+      handler={()=>{handleRewardBtn(missionId)}}
       css={btnCss}
     >
       <div css={btnContent}>

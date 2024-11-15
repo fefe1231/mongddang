@@ -22,7 +22,7 @@ export const getDailyMission = () => {
     url: '/api/mission',
   })
     .then((res) => {
-      console.log(res.data.data);
+      console.log('일일 미션 조회 성공', res.data);
       return res.data.data;
     })
     .catch((err) => {
@@ -42,6 +42,7 @@ export const getReward = (missionId: number) => {
   })
     .then((res) => {
       console.log(res);
+      return missionId;
     })
     .catch((err) => {
       console.log(err);
