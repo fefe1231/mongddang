@@ -26,13 +26,13 @@ class StatRepository {
 
       // 헤더 설정
       dio.options.headers = {
-        'Authorization': 'Bearer '
+        'Authorization': 'Bearer ',
         'Content-Type': 'application/json',
       };
 
       // API 요청
       final response = await dio.post(
-        'https:///api/vital/bloodsugar/current?nickname=어린이 서원',
+        'https://baseurl/api/vital/bloodsugar/current?nickname=어린이 서원',
       );
 
       print('API 응답: ${response.data}'); // 디버깅용
