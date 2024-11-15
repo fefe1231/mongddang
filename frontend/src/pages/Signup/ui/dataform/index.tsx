@@ -5,7 +5,7 @@ import { TextField } from '@/shared/ui/TextField';
 import { Typography } from '@/shared/ui/Typography';
 import { textFieldCss } from './styles';
 import { handleDateChange } from '@/Utils/birthUtils';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { UserRole } from '../..';
 import { useMutation } from '@tanstack/react-query';
 import { INickname, checkNickname } from '@/pages/profile/ui/nickname-edit/api';
@@ -28,8 +28,8 @@ export const DataForm = ({ role }: { role: UserRole }) => {
   const [color, setColor] = useState<Palette>('primary');
   const [msg, setMsg] = useState<string>('');
   const nav = useNavigate();
-  const location = useLocation();
-  const idToken = location.state?.idToken;
+  // const location = useLocation();
+  // const idToken = location.state?.idToken;
   const { updateUserInfo, getUserInfo } = useUserStore(
     useShallow((state) => ({
       updateUserInfo: state.updateUserInfo,
@@ -79,13 +79,22 @@ export const DataForm = ({ role }: { role: UserRole }) => {
       }
 
       const birth = getBirthString();
-      return await signUp(idToken, role, birth, name, nickname, gender);
+
+      try {
+        const idToken = getUserInfo().userIdToken;
+        if (!idToken) throw new Error('no idToken');
+
+        return await signUp(idToken, role, birth, name, nickname, gender);
+      } catch (err) {
+        console.log(JSON.stringify(err));
+        throw new Error('SignUp err');
+      }
     },
     onSuccess: async (data: AxiosResponse<SignupResponse>) => {
       //TODO: capa 토스트 고려해보기
       alert('회원가입이 완료되었습니다.');
       // preference에 user 정보 저장
-      updateUserInfo({ userAccessToken: data.data.data.accessToken });
+      await updateUserInfo({ userAccessToken: data.data.data.accessToken });
       nav('/login');
     },
     onError: (error) => {
@@ -94,7 +103,7 @@ export const DataForm = ({ role }: { role: UserRole }) => {
     },
   });
 
-  const accessToken = getUserInfo().userAccessToken || '';
+  const accessToken = getUserInfo().userAccessToken ?? '';
   const { mutate } = useMutation<
     AxiosResponse<INickname>,
     Error,

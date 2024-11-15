@@ -86,18 +86,30 @@ const Login = () => {
 
       await updateUserInfo({ userIdToken });
 
-      api
-        .post('/api/auth/login', {
-          data: {
-            idToken,
-          },
-        })
-        .then((res: AxiosResponse<LoginResponse>) => {
+      await api
+        .post('/api/auth/login', { idToken })
+        .then(async (res: AxiosResponse<LoginResponse>) => {
+          console.log('*****login response*****');
+          console.log('*****login response*****');
+          console.log(JSON.stringify(res));
+          console.log('*****login response*****');
+          console.log('*****login response*****');
+          
           if (res.data.data.isRegistered) {
+            const userAccessToken = res.data.data.accessToken;
+            await updateUserInfo({ userAccessToken });
             nav('/main');
           } else {
             nav('/signup');
           }
+        })
+        .catch((err) => {
+          console.log('*****로그인 에러*****');
+          console.log('*****로그인 에러*****');
+          console.log(JSON.stringify(err));
+          console.log(err);
+          console.log('*****로그인 에러*****');
+          console.log('*****로그인 에러*****');
         });
     });
   };
