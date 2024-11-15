@@ -106,7 +106,7 @@ public class VitalService {
         log.info("measurementTime: {}", measurementTime);
         log.info("currentTime: {}", currentTime);
         log.info("duration: {}", duration.toMinutes());
-        if (duration.toMinutes() < -99999999) {
+        if (duration.toMinutes() < 1) {
             log.info("동일한 결과 반환 (There's a vital that passed time is less than 1min.");
             // 1분이내 => 동일한 결과 반환
             ResponseDailyGlucoseDto responseDailyGlucoseDto = ResponseDailyGlucoseDto.builder()
@@ -184,7 +184,7 @@ public class VitalService {
                     correctionValue = curBloodSugarLevel + random.nextInt(21) - 10;
                 }
 
-                // 반환할 상태값 설정 
+                // 반환할 상태값 설정
                 Vital.GlucoseStatusType status;
                 if (correctionValue < 70) {
                     status = Vital.GlucoseStatusType.low;
