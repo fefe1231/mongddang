@@ -56,6 +56,9 @@ public class MissionLogService {
             log.info("미션을 찾지 못한 경우 미션 생성 (In english: Create mission if mission not found)");
             missionLogUtils.createMission(child.getId());
             log.info("미션 생성 완료 (In english: Mission creation completed)");
+
+            todayMissionList = missionLogRepository.findByChildAndCreatedAtBetween(child, LocalDateTime.now().withHour(0).withMinute(0).withSecond(0), LocalDateTime.now().withHour(23).withMinute(59).withSecond(59));
+
         }
 
         List<ResponseMissionListDto> missionListDto = todayMissionList.stream()
