@@ -53,7 +53,8 @@ public class MissionLogService {
 
         List<ResponseMissionListDto> missionListDto = todayMissionList.stream()
                 .map(missionLog -> ResponseMissionListDto.builder()
-                        .name(missionLog.getCategory())
+                        .missionId(missionLog.getId())
+                        .name(missionLog.getCategory().getDescription())
                         .reward(missionLog.getReward())
                         .status(missionLog.getStatus())
                         .build())
