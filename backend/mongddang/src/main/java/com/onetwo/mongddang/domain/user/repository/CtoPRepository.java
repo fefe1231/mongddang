@@ -21,4 +21,6 @@ public interface CtoPRepository extends JpaRepository<CtoP, Long> {
     // 어린이 id를 통해, 연결된 보호자 정보들을 리스트 형식으로 조회합니다.
     @Query("SELECT c.protector FROM CtoP c WHERE c.child.id = :childId")
     List<User> findProtectorByChildId(@Param("childId") Long childId);
+
+    List<CtoP> findByChild(User child);
 }

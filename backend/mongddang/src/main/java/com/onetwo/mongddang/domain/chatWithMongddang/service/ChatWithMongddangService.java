@@ -13,6 +13,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -23,25 +26,34 @@ public class ChatWithMongddangService {
     private final MyMongddangRepository myMongddangRepository;
 
 
-    public ResponseDto chatWithMongddang(Long userId, String message, Boolean isStart) throws JsonProcessingException {
-        log.info("userId: {}, isStart: {}", userId, isStart);
+    public ResponseDto startChatWithMongddang(Long userId, String message) throws JsonProcessingException {
+        log.info("userId: {}", userId);
 
         MyMongddang mongddang = myMongddangRepository.findByChildIdAndIsMainTrue(userId)
                 .orElseThrow(() -> new RestApiException(CustomMongddangErrorCode.CHARACTER_NOT_OWNED));
 
-        // 몽땅과의 채팅을 시작할 때
-        if (isStart) {
-            String startPrompt = promptConstants.getPrompt(mongddang.getMongddang().getId());
+        // 몽땅과의 채팅을 새롭게 시작할 때
+        String startPrompt = promptConstants.getPrompt(mongddang.getMongddang().getId());
+        String gptMessage = gptUtils.requestGpt(startPrompt + message, 1.0f);
 
-            String gptMessage = gptUtils.requestGpt(startPrompt + message, 1.0f);
+        Map<String, Object> response = new HashMap<>();
+        response.put("prompt", startPrompt);
+        response.put("message", gptMessage);
 
-            return ResponseDto.builder()
-                    .message("몽땅과의 새로운 대화를 시작합니다.")
-                    .data(gptMessage)
-                    .build();
-        }
+        return ResponseDto.builder()
+                .message("몽땅과의 새로운 대화를 시작합니다.")
+                .data(response)
+                .build();
+    }
 
-        // 몽땅과 기존의 채팅을 진행할 때
+
+    public ResponseDto chatWithMongddang(Long userId, String message) throws JsonProcessingException {
+        log.info("userId: {}", userId);
+
+        myMongddangRepository.findByChildIdAndIsMainTrue(userId)
+                .orElseThrow(() -> new RestApiException(CustomMongddangErrorCode.CHARACTER_NOT_OWNED));
+
+        // 몽땅과 기존의 채팅을 바탕으로 진행
         return ResponseDto.builder()
                 .message("몽땅과 기존의 대화를 진행합니다.")
                 .data(gptUtils.requestGpt(message, 1.0f))

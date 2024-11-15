@@ -1,14 +1,13 @@
 import axios, { AxiosResponse } from 'axios';
 import { api } from '../interceptors';
-import { BloodsugarResponse } from './blood-sugar.type';
+import { BloodsuagrParams, BloodsugarResponse } from './blood-sugar.type';
 
 export class BloodsugarService {
-  static bloodSugarQuery(
-    nickname: string,
-    date: string
-  ): Promise<AxiosResponse<BloodsugarResponse>> {
-    return nickname === 'test-chart-data'
+  static bloodSugarQuery(config: {
+    params: BloodsuagrParams;
+  }): Promise<AxiosResponse<BloodsugarResponse>> {
+    return config.params.nickname === 'test'
       ? axios.get('/public/dummy/blood-sugar.json')
-      : api.get(`/api/bloodsuger/${nickname}/${date}`);
+      : api.get(`/api/vital/bloodsuger`, config);
   }
 }

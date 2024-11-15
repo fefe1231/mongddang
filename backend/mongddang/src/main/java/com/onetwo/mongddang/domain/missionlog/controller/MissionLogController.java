@@ -3,6 +3,7 @@ package com.onetwo.mongddang.domain.missionlog.controller;
 import com.onetwo.mongddang.common.annotation.ChildRequired;
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
 import com.onetwo.mongddang.domain.missionlog.application.MissionLogUtils;
+import com.onetwo.mongddang.domain.missionlog.dto.RequestMissionRewardDto;
 import com.onetwo.mongddang.domain.missionlog.service.MissionLogService;
 import com.onetwo.mongddang.domain.user.jwt.JwtExtratService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,11 +43,11 @@ public class MissionLogController {
     @ChildRequired
     @Tag(name = "Mission API", description = "미션 api")
     @Operation(summary = "미션 보상 수령 api", description = "미션 보상을 수령합니다.")
-    public ResponseEntity<ResponseDto> rewardMission(@RequestParam Long missionId, HttpServletRequest request) {
+    public ResponseEntity<ResponseDto> rewardMission(@RequestBody RequestMissionRewardDto requestMissionRewardDto, HttpServletRequest request) {
         log.info("POST /api/mission");
 
         Long childId = jwtExtratService.jwtFindId(request);
-        ResponseDto responseDto = missionLogService.rewardMission(missionId, childId);
+        ResponseDto responseDto = missionLogService.rewardMission(requestMissionRewardDto.getMissionId(), childId);
         return ResponseEntity.ok(responseDto);
     }
 
