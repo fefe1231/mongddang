@@ -3,27 +3,29 @@ import { create } from 'zustand';
 type AudioInfo = {
   audioRef: HTMLAudioElement | null;
   play: () => void;
+  toggleMute: () => void;
 };
 
 export type SoundType = 'bubble' | 'bgm';
 
 type AudioStoreInfo = {
-  bubble: AudioInfo;
   bgm: AudioInfo;
+  bubble: AudioInfo;
 
-  initAudioRefs: () => void;
   setAudioRef: (type: SoundType, ref: HTMLAudioElement) => void;
+
+  toggleMuteBgm: () => void;
+
+  toggleMuteEffect: () => void;
 };
 
-export const useAudioStore = create<AudioStoreInfo>((set) => ({
-  bubble: { audioRef: null, play: () => {} },
-  bgm: { audioRef: null, play: () => {} },
-
-  initAudioRefs: () => {
-    set({
-      bubble: { audioRef: null, play: () => {} },
-      bgm: { audioRef: null, play: () => {} },
-    });
+export const useAudioStore = create<AudioStoreInfo>((set, get) => ({
+  bgm: { audioRef: null, play: () => {}, toggleMute: () => {} },
+  bubble: {
+    audioRef: null,
+    play: () => {},
+    toggleMute: () => {},
+    isMuted: false,
   },
 
   setAudioRef: (type, ref) => {
@@ -31,9 +33,14 @@ export const useAudioStore = create<AudioStoreInfo>((set) => ({
       const audioInfo = {
         audioRef: ref,
         play: () => {
-          ref.play().catch((error) => {
-            console.error(`${type} play error:`, error);
-          });
+          ref.play();
+        },
+        toggleMute: () => {
+          if (ref.volume === 0) {
+            ref.volume = 1;
+          } else {
+            ref.volume = 0;
+          }
         },
       };
 
@@ -42,5 +49,13 @@ export const useAudioStore = create<AudioStoreInfo>((set) => ({
         [type]: audioInfo,
       };
     });
+  },
+
+  toggleMuteBgm: () => {
+    get().bgm.toggleMute();
+  },
+
+  toggleMuteEffect: () => {
+    get().bubble.toggleMute();
   },
 }));

@@ -19,7 +19,7 @@ import { Variability } from './pages/report/ui/detail/variability';
 import { Mean } from './pages/report/ui/detail/mean';
 import { Tir } from './pages/report/ui/detail/tir/indesx';
 import { DayRecordPage } from './pages/day-record';
-
+import SettingPage from './pages/settingPage/SettingPage';
 
 function App() {
   useLoadState();
@@ -45,6 +45,7 @@ function App() {
           <Route path="/record" element={<RecordPage />} />
           <Route path="/record/:date" element={<DayRecordPage />} />
           <Route path="/protector-main" element={<ProtectorMain />} />
+          <Route path="/setting" element={<SettingPage />} />
         </Routes>
       </Router>
     </GoogleOAuthProvider>
