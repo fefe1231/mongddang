@@ -17,7 +17,6 @@ import {
 } from './ui/styles';
 import { OwnModal } from './ui/modal/own-modal';
 import { useNavigate } from 'react-router-dom';
-import { MainModal } from './ui/modal/main-modal';
 import { Notmodal } from './ui/modal/Not-modal';
 import { Notowncharacter } from './ui/characterlist/notown-character';
 import { Newcharacter } from './ui/characterlist/new-character';
@@ -78,7 +77,7 @@ export const Encyclopedia = () => {
         <OwnModal data={selectedCharacter} setstate={setIsOwnModal} />
       )}
       {isMainModal && selectedCharacter && (
-        <MainModal data={selectedCharacter} setstate={setIsMainModal} />
+        <OwnModal data={selectedCharacter} setstate={setIsOwnModal} />
       )}
       {isNotModal && selectedCharacter && (
         <Notmodal data={selectedCharacter} setstate={setIsNotModal} />
