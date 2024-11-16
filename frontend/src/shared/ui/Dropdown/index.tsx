@@ -74,15 +74,15 @@ export const Dropdown = ({
           >
             {options.map((option) => (
               <div
-                key={option}
+                key={option.name}
                 css={styles.option}
-                className={selectedValue === option ? 'selected' : ''}
+                className={selectedValue === option.name ? 'selected' : ''}
                 onClick={() => {
-                  onSelect(option);
+                  onSelect(option.name);
                   setIsOpen(false);
                 }}
               >
-                {option}
+                {option.name}
               </div>
             ))}
           </div>,

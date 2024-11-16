@@ -1,5 +1,7 @@
+import { ConnectedUser } from "@/entities/user/model";
+
 export interface DropdownProps {
-  options: string[];
+  options: ConnectedUser[];
   onSelect: (value: string) => void;
   isOpen: boolean;
   onOpen: () => void;
