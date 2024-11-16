@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 
 import { Modal } from '@/shared/ui/Modal';
-import { baseModalContainer, baseModalContent } from './BaseModal.styles';
+import { baseModalContainer, baseModalContent, baseModalTopBar } from './BaseModal.styles';
 import { TopBar } from '@/shared/ui/TopBar';
 import DailyMissionContent from '../DailyMissionContent/DailyMissionContent';
 import NotificationContent from '../NotificationContent/NotificationContent';
@@ -20,6 +20,7 @@ const BaseModal = (props: BaseModalProps) => {
         iconHandler={() => {
           props.closeBaseModal();
         }}
+        css={baseModalTopBar}
       >
         {
           contentType === 'dailyMission' ? '오늘의 퀘스트' : contentType === 'notification' ? '알림함' : ''

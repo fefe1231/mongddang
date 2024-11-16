@@ -22,7 +22,7 @@ export const readNotification = async (notificationId: number) => {
     method: 'PATCH',
     url: '/api/push/read',
     data: {
-      NotificationId: notificationId,
+      notificationId: notificationId,
     },
   })
     .then((res) => {

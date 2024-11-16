@@ -13,7 +13,8 @@ export const notificationListCss = css`
   display: flex;
   width: 100%;
   height: 100%;
-  justify-content: flex-start;
+  justify-content: flex-end;
+  gap: 0.5rem;
   align-items: center;
   flex-direction: column-reverse;
 `;
@@ -24,15 +25,7 @@ export const notificationItemCss = css`
   background-color: #e1f5fe;
   border-radius: 10px;
   padding: 5%;
-  transition:
-    transform 0.3s ease,
-    opacity 0.3s ease;
-  touch-action: pan-x;
-
-  & .deleting {
-    transform: translateX(100%);
-    opacity: 0;
-  }
+  white-space: break-spaces;
 `;
 
 export const noNotificationCss = css`
@@ -45,4 +38,8 @@ export const noNotificationCss = css`
 
 export const imgCss = css`
   width: 10rem;
+`;
+
+export const textCss = css`
+  word-break: keep-all;
 `;

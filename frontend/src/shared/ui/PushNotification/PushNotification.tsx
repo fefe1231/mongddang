@@ -5,7 +5,7 @@ import { Typography } from '../Typography';
 import { container, textCss } from './PushNotification.styles';
 import { usePushNotificationStore } from '@/shared/model/usePushNotificationStore';
 
-const PushNotification = () => {
+export const PushNotification = () => {
   const { title, message, removePushNotification } = usePushNotificationStore();
   return (
     <>
@@ -32,4 +32,26 @@ const PushNotification = () => {
   );
 };
 
-export default PushNotification;
+const medicineNotification = () => {
+  const { title, message, removePushNotification } = usePushNotificationStore();
+  return (
+    <Notification
+      bluehandler={() => {
+        removePushNotification();
+      }}
+      ment={
+        <div css={textCss}>
+          <Typography color="dark" size="1.25" weight={600}>
+            {title}
+          </Typography>
+          <Typography color="dark" size="1" weight={500}>
+            {message}
+          </Typography>
+        </div>
+      }
+      type="confirm"
+      css={container}
+    />
+  );
+};
+

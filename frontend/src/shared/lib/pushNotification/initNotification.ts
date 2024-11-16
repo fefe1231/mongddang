@@ -1,4 +1,4 @@
-import { sendTokenToServer } from '@/shared/api/pushNotificationApi';
+import { sendTokenToServer } from '@/shared/api/push-notification/pushNotificationApi';
 import { PushNotifications } from '@capacitor/push-notifications';
 
 // 푸시 알림 권한 설정

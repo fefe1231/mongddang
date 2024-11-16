@@ -19,11 +19,11 @@ import { Variability } from './pages/report/ui/detail/variability';
 import { Mean } from './pages/report/ui/detail/mean';
 import { Tir } from './pages/report/ui/detail/tir/indesx';
 import { DayRecordPage } from './pages/day-record';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { SocialLogin } from '@capgo/capacitor-social-login';
-import PushNotification from './shared/ui/PushNotification/PushNotification';
 import { PushNotifications } from '@capacitor/push-notifications';
 import { usePushNotificationStore } from './shared/model/usePushNotificationStore';
+import { PushNotification } from './shared/ui/PushNotification/PushNotification';
 
 function App() {
   useLoadState();

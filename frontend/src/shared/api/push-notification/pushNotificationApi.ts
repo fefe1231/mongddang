@@ -1,4 +1,4 @@
-import { api } from './interceptors';
+import { api } from '../interceptors';
 
 export const sendTokenToServer = async (token: any) => {
   console.log('알림 서버 전송용 토큰', token);
