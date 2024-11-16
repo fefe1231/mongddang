@@ -8,9 +8,9 @@ export const menuBtnData: MenuBtnItem[] = [
       protector: '복약관리',
     },
     urlTo: {
-      child: "",
-      protector: "",
-    }
+      child: '',
+      protector: '',
+    },
   },
   {
     icon: '/img/%EB%A7%90%EB%9E%911.png',
@@ -19,8 +19,8 @@ export const menuBtnData: MenuBtnItem[] = [
       protector: '급식표 등록',
     },
     urlTo: {
-      child: "",
-      protector: "",
+      child: '',
+      protector: '',
     },
   },
   {
@@ -31,7 +31,7 @@ export const menuBtnData: MenuBtnItem[] = [
     },
     urlTo: {
       child: '/report',
-      protector: "",
+      protector: '',
     },
   },
   {
@@ -42,7 +42,7 @@ export const menuBtnData: MenuBtnItem[] = [
     },
     urlTo: {
       child: '/record',
-      protector: "",
+      protector: '',
     },
   },
   {
@@ -53,7 +53,7 @@ export const menuBtnData: MenuBtnItem[] = [
     },
     urlTo: {
       child: '/profile',
-      protector: "",
+      protector: '',
     },
   },
   {
@@ -63,8 +63,30 @@ export const menuBtnData: MenuBtnItem[] = [
       protector: '설정',
     },
     urlTo: {
-      child: "",
+      child: '/setting',
       protector: '/invitecode',
+    },
+  },
+  {
+    icon: '/img/%EB%A7%90%EB%9E%911.png',
+    menu: {
+      child: '삼성설정',
+      protector: '삼성설정',
+    },
+    urlTo: {
+      child: '/samsungsetting',
+      protector: '',
+    },
+  },
+  {
+    icon: '/img/%EB%A7%90%EB%9E%911.png',
+    menu: {
+      child: '포그라운드 설정',
+      protector: '포그라운드설정',
+    },
+    urlTo: {
+      child: '/foregroundsetting',
+      protector: '',
     },
   },
 ];

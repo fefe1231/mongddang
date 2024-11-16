@@ -4,7 +4,6 @@ export const container = css`
   display: flex;
   position: relative;
   width: 10rem;
-  height: 4rem;
   background-color: #fff;
   justify-content: center;
   align-items: center;
@@ -19,10 +18,10 @@ export const container = css`
     position: absolute;
     bottom: 0;
     transform: translateY(100%);
-    left: 15%; 
+    left: 15%;
     width: 0;
     height: 0;
     border: 0.75rem solid transparent;
-    border-top-color: #fff; 
+    border-top-color: #fff;
   }
 `;
