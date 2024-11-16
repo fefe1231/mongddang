@@ -19,20 +19,38 @@ import { Variability } from './pages/report/ui/detail/variability';
 import { Mean } from './pages/report/ui/detail/mean';
 import { Tir } from './pages/report/ui/detail/tir/indesx';
 import { DayRecordPage } from './pages/day-record';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { SocialLogin } from '@capgo/capacitor-social-login';
+import PushNotification from './shared/ui/PushNotification/PushNotification';
+import { PushNotifications } from '@capacitor/push-notifications';
+import { usePushNotificationStore } from './shared/model/usePushNotificationStore';
 
 function App() {
   useLoadState();
+  const { setPushNotification } = usePushNotificationStore();
   useEffect(() => {
     SocialLogin.initialize({
       google: {
         webClientId: import.meta.env.VITE_GOOGLE_WEB_CLIENT_ID,
       },
     });
+
+    // 푸시 알림 받기
+    const initializePushListener = () => {
+      PushNotifications.removeAllListeners();
+      PushNotifications.addListener(
+        'pushNotificationReceived',
+        (notification) => {
+          setPushNotification(notification);
+        }
+      );
+    };
+    initializePushListener();
   }, []);
+
   return (
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_AUTH_CLIENT_ID}>
+      <PushNotification />
       <Router>
         <Routes>
           <Route path="/main" element={<KidsMainPage />} />
