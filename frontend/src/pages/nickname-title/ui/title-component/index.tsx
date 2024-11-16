@@ -9,6 +9,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { getTitleAchievement, getTitleMain } from '../../api/api';
 import { ItitleData } from '../../model/types';
 import AchievementToast from '../Toast';
+import MainToast from '../Toast/main.tsx';
 
 interface TitleComponentProps {
   title: ItitleData;
@@ -17,8 +18,8 @@ interface TitleComponentProps {
 export const TitleComponent = ({ title }: TitleComponentProps) => {
   const [isModal, setIsModal] = useState(false);
   const [isToast, setIsToast] = useState(false);
+  const [isMainToast, setIsMainToast] = useState(false);
   const queryClient = useQueryClient();
-  // const queryClient = new QueryClient();
 
   const { mutate: achievementMutate } = useMutation({
     mutationFn: async () => {
@@ -30,8 +31,8 @@ export const TitleComponent = ({ title }: TitleComponentProps) => {
     },
     onSuccess: () => {
       setIsModal(false);
-      setIsToast(true); // 토스트 표시
       queryClient.invalidateQueries({ queryKey: ['titles'] });
+      window.location.href = window.location.pathname + '?showToast=true';
     },
     onError: () => {
       alert('업적 달성에 실패했습니다.');
@@ -44,11 +45,12 @@ export const TitleComponent = ({ title }: TitleComponentProps) => {
       if (!accessToken) {
         throw new Error('AccessToken이 필요합니다.');
       }
-      return await getTitleMain(accessToken, title.titleId);
+      return await getTitleMain(title.titleId);
     },
     onSuccess: () => {
       setIsModal(false);
       queryClient.invalidateQueries({ queryKey: ['titles'] });
+      window.location.href = window.location.pathname + '?showMainToast=true';
     },
     onError: () => {
       alert('대표 달성에 실패했습니다.');
@@ -59,16 +61,41 @@ export const TitleComponent = ({ title }: TitleComponentProps) => {
     achievementMutate();
   };
 
-  // 토스트 상태를 일정 시간 후에 자동으로 숨기기
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const shouldShowToast = urlParams.get('showToast');
+    const shouldShowMainToast = urlParams.get('showMainToast');
+    
+    if (shouldShowToast === 'true') {
+      setIsToast(true);
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+
+    if (shouldShowMainToast === 'true') {
+      setIsMainToast(true);
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, []);
+
   useEffect(() => {
     if (isToast) {
       const timer = setTimeout(() => {
         setIsToast(false);
-      }, 5000); // 5초 후에 사라짐
-
-      return () => clearTimeout(timer); // 컴포넌트 언마운트 시 타이머 클리어
+      }, 4000);
+  
+      return () => clearTimeout(timer);
     }
   }, [isToast]);
+
+  useEffect(() => {
+    if (isMainToast) {
+      const timer = setTimeout(() => {
+        setIsMainToast(false);
+      }, 4000);
+  
+      return () => clearTimeout(timer);
+    }
+  }, [isMainToast]);
 
   return (
     <div css={base}>
@@ -104,7 +131,6 @@ export const TitleComponent = ({ title }: TitleComponentProps) => {
               fontSize="1"
               variant="contained"
               handler={() => setIsModal(true)}
-              disabled={title.count !== title.executionCount}
             >
               대표설정
             </Button>
@@ -150,6 +176,7 @@ export const TitleComponent = ({ title }: TitleComponentProps) => {
         />
       )}
       {isToast && <AchievementToast />}
+      {isMainToast && <MainToast />}
     </div>
   );
 };
