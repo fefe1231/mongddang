@@ -1,3 +1,5 @@
+import { BaseApiResponse } from '../base.types';
+
 type UserName = string;
 type UserNickname = string;
 
@@ -34,13 +36,28 @@ export interface User extends CreateUser {
 }
 
 export interface UserInfo {
-  user?: User;
-  userToken?: string;
+  user: User | null;
+  userAccessToken: string | null;
+  userIdToken: string | null;
 }
-
 
 export interface UserResponse {
   code: number;
   message: string;
   data: User;
 }
+
+export interface LoginResponseData {
+  isRegistered: boolean;
+  accessToken: string;
+  userInfo: User;
+}
+
+export type LoginResponse = BaseApiResponse<LoginResponseData>;
+
+export interface SignupResponseData {
+  accessToken: string;
+  userInfo: User;
+}
+
+export type SignupResponse = BaseApiResponse<SignupResponseData>;

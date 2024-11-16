@@ -8,6 +8,6 @@ export class BloodsugarService {
   }): Promise<AxiosResponse<BloodsugarResponse>> {
     return config.params.nickname === 'test'
       ? axios.get('/public/dummy/blood-sugar.json')
-      : api.get(`/api/vital/bloodsuger`, config);
+      : api.get(`/api/vital/bloodsugar`, config);
   }
 }
