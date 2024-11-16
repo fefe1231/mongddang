@@ -7,6 +7,7 @@ interface OwnModalProps {
   redhandler: () => void;
 }
 
+
 export const BuyModal = ({bluehandler, redhandler}:OwnModalProps) => {
   return (
     <div>

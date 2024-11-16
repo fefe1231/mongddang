@@ -30,8 +30,8 @@ const Login = () => {
   );
 
   // 유저 정보가 존재하면 로그인 안 하고 바로 각각의 메인 페이지로 이동
-  if (getUserInfo().user?.role === 'child') nav('/main');
-  if (getUserInfo().user?.role === 'protector') nav('/protector-main');
+  // if (getUserInfo().user?.role === 'child') nav('/main');
+  // if (getUserInfo().user?.role === 'protector') nav('/protector-main');
 
   // const handleLoginSuccess = (credentialResponse: IcredentialResponse) => {
   //   const idToken = credentialResponse.credential;
@@ -95,26 +95,16 @@ const Login = () => {
       const userIdToken = res.result.idToken;
 
       await updateUserInfo({ userIdToken });
-
-      console.log('***userIdToken***');
-      console.log('***userIdToken***');
-      console.log(userIdToken);
-      console.log('***userIdToken***');
-      console.log('***userIdToken***');
       
       await api
         .post('/api/auth/login', { idToken })
         .then(async (res: AxiosResponse<LoginResponse>) => {
-          // console.log('*****login response*****');
-          // console.log('*****login response*****');
-          // console.log(JSON.stringify(res));
-          // console.log('*****login response*****');
-          // console.log('*****login response*****');
 
           if (res.data.data.isRegistered) {
-            const userAccessToken = res.data.data.accessToken;
+            // TODO: Access Token 하드코딩 수정
+            // const userAccessToken = res.data.data.accessToken;
             const userInfo = res.data.data.userInfo;
-            await updateUserInfo({ userAccessToken, user: userInfo });
+            await updateUserInfo({ user: userInfo });
 
             const user = getUserInfo();
             console.log('****user rola****');
@@ -124,11 +114,14 @@ const Login = () => {
             console.log('****user rola****');
 
             if (user.user?.role === 'protector') {
-              nav('/menu');
-            } else if (user.user?.role === 'child') {
               nav('/protector-main');
             }
-            nav('/protector-main');
+            if (user.user?.role === 'child') {
+              console.log(user.user.role);
+
+              nav('/menu');
+            }
+            // nav('/protector-main');
           } else {
             nav('/signup');
           }

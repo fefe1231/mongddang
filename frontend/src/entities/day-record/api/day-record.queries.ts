@@ -1,4 +1,4 @@
-import { DayRecordService, DayRecords } from '@/shared/api/day-record';
+import { DayRecordService, DayRecordTypes } from '@/shared/api/day-record';
 import { queryOptions } from '@tanstack/react-query';
 import { RecordCategory, RecordFilter, RecordType } from './type';
 // import dayjs from 'dayjs';
@@ -13,7 +13,7 @@ export class DayRecordQueries {
   private static dayRecordQuery(nickname: string, date: string) {
     return queryOptions({
       queryKey: DayRecordQueries.queryKeys.all,
-      queryFn: async (): Promise<DayRecords> => {
+      queryFn: async (): Promise<DayRecordTypes> => {
         const { data } = await DayRecordService.dayRecordQuery({
           params: {
             nickname,
@@ -21,7 +21,7 @@ export class DayRecordQueries {
           },
         });
 
-        return data.data.dates[0];
+        return data.data[0].records;
       },
       enabled: !!nickname,
     });
@@ -46,7 +46,8 @@ export class DayRecordQueries {
         //   startTime: dayjs(item.startTime).format('HH:mm'),
         //   endTime: item.endTime ? dayjs(item.endTime).format('HH:mm') : null,
         // })) as RecordType<T>;
-        return data.data.dates[0].records[filters.category];
+
+        return data.data[0].records[filters.category];
       },
       enabled: !!filters.nickname,
     });
@@ -56,35 +57,39 @@ export class DayRecordQueries {
     return this.dayRecordQuery(nickname, date);
   }
 
-  // 각 카테고리별 편의 메서드
+  // 각 카테고리별 편의 메서드 // TODO: 하드코딩 수정
   static mealRecordsQuery(nickname: string, date: string) {
+    console.log(nickname, date);
     return this.filteredDayRecordsQuery({
-      nickname,
-      date,
+      nickname: '어린이 서원',
+      date: '2024-11-11',
       category: 'meal',
     });
   }
 
   static exerciseRecordsQuery(nickname: string, date: string) {
+    console.log(nickname, date);
     return this.filteredDayRecordsQuery({
-      nickname,
-      date,
+      nickname: '어린이 서원',
+      date: '2024-11-11',
       category: 'exercise',
     });
   }
 
   static sleepRecordsQuery(nickname: string, date: string) {
+    console.log(nickname, date);
     return this.filteredDayRecordsQuery({
-      nickname,
-      date,
+      nickname: '어린이 서원',
+      date: '2024-11-11',
       category: 'sleep',
     });
   }
 
   static medicationRecordsQuery(nickname: string, date: string) {
+    console.log(nickname, date);
     return this.filteredDayRecordsQuery({
-      nickname,
-      date,
+      nickname: '어린이 서원',
+      date: '2024-11-11',
       category: 'medication',
     });
   }

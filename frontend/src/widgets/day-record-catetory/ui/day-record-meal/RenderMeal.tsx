@@ -37,11 +37,16 @@ export const RenderMeal = ({
     data: mealData,
     isLoading,
     isError,
+    error,
   } = useQuery<MealRecord[]>(DayRecordQueries.mealRecordsQuery(nickname, date));
 
   const nearestTimeBloodSugar = useNearestBloodSugar(mealData, bloodSugarData);
 
   if (isError) {
+    console.log('Error in RenderMeal');
+    console.log('Error in RenderMeal');
+    console.log(JSON.stringify(error.message));
+    console.log('Error in RenderMeal');
     console.log('Error in RenderMeal');
     throw new Error('Error in RenderMeal');
   }

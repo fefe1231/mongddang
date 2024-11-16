@@ -47,6 +47,22 @@ export const menuBtnData: MenuBtnItem[] = [
       child: '설정',
       protector: '설정',
     },
-    urlTo: '',
+    urlTo: '/setting',
+  },
+  {
+    icon: '/img/%EB%A7%90%EB%9E%911.png',
+    menu: {
+      child: '삼성설정',
+      protector: '삼성설정',
+    },
+    urlTo: '/samsungsetting',
+  },
+  {
+    icon: '/img/%EB%A7%90%EB%9E%911.png',
+    menu: {
+      child: '포그라운드 설정',
+      protector: '포그라운드설정',
+    },
+    urlTo: '/foregroundsetting',
   },
 ];
