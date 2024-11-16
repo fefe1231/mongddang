@@ -2,22 +2,32 @@
 import { Button } from '@/shared/ui/Button';
 import { TextField } from '@/shared/ui/TextField';
 import { TopBar } from '@/shared/ui/TopBar';
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { containerCss, editCss } from './styles';
 import { Typography } from '@/shared/ui/Typography';
 import { Palette } from '@/shared/model/globalStylesTyes';
 import { useMutation } from '@tanstack/react-query';
 import { INickname, checkNickname, updateNickname } from './api';
 import { AxiosResponse } from 'axios';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useUserStore } from '@/entities/user/model';
+import { useShallow } from 'zustand/shallow';
+import { UserInfo } from '@/shared/api/user';
 
 export const NicknameEdit = () => {
   const [nickname, setNickname] = useState<string>('');
   const [color, setColor] = useState<Palette>('primary');
   const [msg, setMsg] = useState<string>('');
   const nav = useNavigate();
-  const location = useLocation();
-  const prenickname = location.state?.nickname;
+  // const location = useLocation();
+  // const prenickname = location.state?.nickname;
+  const { getUserInfo, setUserInfo } = useUserStore(
+    useShallow((state) => ({
+      getUserInfo: state.getUserInfo,
+      setUserInfo: state.setUserInfo,
+    }))
+  );
+  const userInfo = getUserInfo();
 
   const nicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNickname(e.target.value);
@@ -46,7 +56,8 @@ export const NicknameEdit = () => {
     },
   });
 
-  const accessToken = localStorage.getItem('accessToken') || '';
+  // const accessToken = localStorage.getItem('accessToken') || '';
+  const accessToken = userInfo.userAccessToken ?? '';
   const { mutate: updateNicknameMutation } = useMutation<
     AxiosResponse<INickname>,
     Error,
@@ -55,10 +66,14 @@ export const NicknameEdit = () => {
     mutationFn: async (nickname: string): Promise<AxiosResponse<INickname>> => {
       return await updateNickname(accessToken, nickname);
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       console.log('닉네임 업데이트 성공');
+
       setMsg('닉네임이 변경되었습니다.');
       setColor('primary');
+      const userInfo = getUserInfo();
+      const newUserInfo = { ...userInfo, user: { ...userInfo.user, nickname } };
+      await setUserInfo(newUserInfo as UserInfo);
       nav('/profile');
     },
     onError: (error) => {
@@ -73,12 +88,19 @@ export const NicknameEdit = () => {
     },
   });
 
+  useEffect(() => {
+    const userNickname = getUserInfo().user?.nickname ?? '';
+    setNickname(userNickname);
+  }, []);
+
   return (
     <div>
-      <TopBar type="iconpage" iconHandler={()=>nav('/profile')}>닉네임 수정</TopBar>
+      <TopBar type="iconpage" iconHandler={() => nav('/profile')}>
+        닉네임 수정
+      </TopBar>
       <div css={containerCss}>
         <Typography color="dark" size="1" weight={700}>
-          현재 닉네임 : {prenickname}
+          현재 닉네임 : {userInfo.user?.nickname}
         </Typography>
         <div css={editCss}>
           <TextField
