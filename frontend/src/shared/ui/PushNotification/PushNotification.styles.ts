@@ -15,3 +15,7 @@ export const textCss = css`
   gap: 0.7rem;
   word-break: keep-all;
 `;
+
+export const imgCss = css`
+  width: 5rem;
+`;
