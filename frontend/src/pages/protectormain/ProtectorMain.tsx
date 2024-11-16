@@ -41,9 +41,10 @@ const ProtectorMain = () => {
               }}
               isOpen={isOpen}
               onClose={() => setIsOpen(false)}
-              selectedValue={selected ? selected : '아이 추가하기'}
+              selectedValue={selected ? selected : '아이를 추가하세요'}
               buttonLabel={selected} // 버튼 라벨을 선택된 값으로 설정
               onOpen={() => setIsOpen(true)} // 드롭다운 열기 기능 추가
+              disabled={connectedChild?.length !== 0}
             />
             <div css={bubbleChat}>
               <Typography color="dark" size="1.25" weight={600}>

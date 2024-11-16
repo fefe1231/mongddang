@@ -53,7 +53,7 @@ export const menuBtnData: MenuBtnItem[] = [
     },
     urlTo: {
       child: '/profile',
-      protector: '',
+      protector: '/profile',
     },
   },
   {

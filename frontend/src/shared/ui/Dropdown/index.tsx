@@ -12,6 +12,7 @@ export const Dropdown = ({
   onSelect,
   selectedValue,
   buttonLabel = '선택하세요',
+  disabled
 }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
@@ -54,7 +55,7 @@ export const Dropdown = ({
   return (
     <div css={styles.dropdownContainer}>
       <div ref={buttonRef}>
-        <Button css={styles.button} fontSize="1" handler={handleButtonClick}>
+        <Button css={styles.button} fontSize="1" handler={handleButtonClick} disabled={disabled}>
           <span>{selectedValue || buttonLabel}</span>
           <Icon size={2} css={isOpen ? styles.iconOpen : styles.iconClose}>
             <RiArrowRightSFill />

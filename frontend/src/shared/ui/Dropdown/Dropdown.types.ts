@@ -1,4 +1,4 @@
-import { ConnectedUser } from "@/entities/user/model";
+import { ConnectedUser } from '@/entities/user/model';
 
 export interface DropdownProps {
   options: ConnectedUser[];
@@ -8,4 +8,5 @@ export interface DropdownProps {
   onClose: () => void;
   buttonLabel: string;
   selectedValue?: string;
+  disabled: boolean;
 }
