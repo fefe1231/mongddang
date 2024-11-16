@@ -47,7 +47,7 @@ export const menuBtnData: MenuBtnItem[] = [
       child: '설정',
       protector: '설정',
     },
-    urlTo: '',
+    urlTo: '/setting',
   },
   {
     icon: '/img/%EB%A7%90%EB%9E%911.png',
