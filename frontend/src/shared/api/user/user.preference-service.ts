@@ -7,7 +7,7 @@ export class PreferencesUser {
     if (value === null) {
       const state: UserInfo = {
         user: null,
-        userAccessToken: import.meta.env.VITE_TEST_USER_ACCESS_TOKEN,
+        userAccessToken: null,
         userIdToken: null,
       };
       await this.setState(state);

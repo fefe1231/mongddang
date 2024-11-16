@@ -36,9 +36,20 @@ import { mainIcons } from './constants/iconsData';
 import { getMainInfo } from './api/infoApi';
 import Loading from '@/shared/ui/Loading';
 import { characterImages, formatId } from '../Encyclopedia/model/mongddang-img';
+import { registerPlugin } from '@capacitor/core';
+
+export interface EchoPlugin {
+  echo(options: { value: string }): Promise<{ value: string }>;
+}
+
+export interface ForegroundPlugin {
+  startForeground(): Promise<{ message: string }>;
+  stopForeground(): Promise<{ message: string}>;
+}
+
+export const Foreground = registerPlugin<ForegroundPlugin>('Foreground')
 
 const KidsMainPage = () => {
-
   const navigate = useNavigate();
   const accessToken = localStorage.getItem('accessToken');
   const [mainInfo, setMainInfo] = useState({
@@ -163,19 +174,24 @@ console.log(closeMailBox)
           {/* 아이콘 모음 */}
           <div css={iconGroupCss}>
             <div css={iconHorizontalCss}>
-            <div css={iconVerticalCss}>
-              <IconTypo
-                icon={mainIcons.mission}
-                fontSize="0.75"
-                menu={
-                  <span>
-                    오늘의 <br />
-                    퀘스트
-                  </span>
-                }
-              />
-            </div>
+              <div
+                onClick={() => {
+                  setOpenBaseModal(true);
+                  setContentType('dailyMission');
+                }}
+              >
+                <IconTypo
+                  icon={mainIcons.mission}
+                  fontSize="0.75"
+                  menu={
+                    <span>
+                      오늘의 <br />
+                      퀘스트
+                    </span>
+                  }
+                />
               </div>
+            </div>
             <div css={iconVerticalCss}>
               <div
                 onClick={() => {

@@ -33,11 +33,18 @@ function App() {
       },
     });
   }, []);
+  useEffect(() => {
+    SocialLogin.initialize({
+      google: {
+        webClientId: import.meta.env.VITE_GOOGLE_WEB_CLIENT_ID,
+      },
+    });
+  }, []);
   return (
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_AUTH_CLIENT_ID}>
       <Router>
         <Routes>
-          <Route path="/" element={<KidsMainPage />} />
+          <Route path="/main" element={<KidsMainPage />} />
           <Route path="/btn" element={<Btn />} />
           <Route path="/" element={<Login />} />
           <Route path="/invitecode" element={<InviteCode />} />
