@@ -6,8 +6,10 @@ export class PreferencesUser {
     const { value } = await Preferences.get({ key: 'user' });
     if (value === null) {
       const state: UserInfo = {
-        user: undefined,
-        userToken: undefined,
+        user: null,
+        // TODO: Access Token 하드코딩 수정
+        userAccessToken: import.meta.env.VITE_TEST_USER_ACCESS_TOKEN,
+        userIdToken: null,
       };
       await this.setState(state);
       return state;
@@ -31,7 +33,7 @@ export class PreferencesUser {
     return userInfo;
   }
 
-  static async updateUser(userInfo: UserInfo) {
+  static async updateUser(userInfo: Partial<UserInfo>) {
     const currentState = await this.getState();
     const updateState: UserInfo = {
       ...currentState,

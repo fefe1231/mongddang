@@ -16,10 +16,10 @@ import {
 import ProfileStatus from './ui/ProfileStatus/ProfileStatus';
 import { IconTypo } from '@/shared/ui/IconTypo';
 import CurrentBloodSugar from './ui/CurrentBloodSugar/CurrentBloodSugar';
-import ChatBubble from './ui/ChatBubble/ChatBubble';
+// import ChatBubble from './ui/ChatBubble/ChatBubble';
 import { useEffect, useState } from 'react';
 import DietModal from './ui/DietModal/DietModal';
-import MailBox from './ui/MailBox/MailBox';
+// import MailBox from './ui/MailBox/MailBox';
 import { useNavigate } from 'react-router-dom';
 import RoutineBtnGroup from './ui/RoutineBtnGroup/RoutineBtnGroup';
 import {
@@ -36,6 +36,18 @@ import { mainIcons } from './constants/iconsData';
 import { getMainInfo } from './api/infoApi';
 import Loading from '@/shared/ui/Loading';
 import { characterImages, formatId } from '../Encyclopedia/model/mongddang-img';
+import { registerPlugin } from '@capacitor/core';
+
+export interface EchoPlugin {
+  echo(options: { value: string }): Promise<{ value: string }>;
+}
+
+export interface ForegroundPlugin {
+  startForeground(): Promise<{ message: string }>;
+  stopForeground(): Promise<{ message: string}>;
+}
+
+export const Foreground = registerPlugin<ForegroundPlugin>('Foreground')
 
 const KidsMainPage = () => {
   const navigate = useNavigate();
@@ -48,17 +60,19 @@ const KidsMainPage = () => {
   });
   const [openDietModal, setOpenDietModal] = useState(false);
   const [openMailBox, setOpenMailBox] = useState(false);
+
+  console.log(openMailBox)
   const [alertStatus, setAlertStatus] = useState('');
   const [alertBloodSugar, setAlertBloodSugar] = useState(0);
   const [currentRoutine, setCurrentRoutine] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true)
 
   // 초기 루틴 상태 조회
   useEffect(() => {
     const fetchMainInfo = async () => {
       const mainInfo = await getMainInfo();
       setMainInfo(mainInfo);
-      setIsLoading(false);
+      setIsLoading(false)
     };
     const fetchRoutine = async () => {
       const routineValue = await getInitialRoutine();
@@ -116,7 +130,7 @@ const KidsMainPage = () => {
   const closeMailBox = () => {
     setOpenMailBox(false);
   };
-
+console.log(closeMailBox)
   // 일상 수행 상태 관리
   const changeRoutine = (currentRoutine: string) => {
     console.log('루틴 변경', currentRoutine);
@@ -146,9 +160,8 @@ const KidsMainPage = () => {
   };
   console.log('알림창 상태', alertStatus);
   console.log('루틴 상태', currentRoutine);
-
-  return !isLoading ? (
-    <div css={kidsMainBase}>
+  return (
+    !isLoading ? <div css={kidsMainBase}>
       <div css={kidsMainContent}>
         {/* 상단 컴포넌트들 */}
         <div css={topContainer}>
@@ -161,16 +174,23 @@ const KidsMainPage = () => {
           {/* 아이콘 모음 */}
           <div css={iconGroupCss}>
             <div css={iconHorizontalCss}>
-              <IconTypo
-                icon={mainIcons.mission}
-                fontSize="0.75"
-                menu={
-                  <span>
-                    오늘의 <br />
-                    퀘스트
-                  </span>
-                }
-              />
+              <div
+                onClick={() => {
+                  setOpenBaseModal(true);
+                  setContentType('dailyMission');
+                }}
+              >
+                <IconTypo
+                  icon={mainIcons.mission}
+                  fontSize="0.75"
+                  menu={
+                    <span>
+                      오늘의 <br />
+                      퀘스트
+                    </span>
+                  }
+                />
+              </div>
             </div>
             <div css={iconVerticalCss}>
               <div
@@ -209,12 +229,8 @@ const KidsMainPage = () => {
         <div css={bottomContainer}>
           {/* 메인캐릭터 + 말풍선 */}
           <div css={CharacterContainer}>
-            <ChatBubble status={currentRoutine} />
-            <img
-              src={characterImages[formatId(mainInfo.mainMongddangId)]}
-              alt=""
-              css={mainCharacterCss}
-            />
+            {/* <ChatBubble /> */}
+            <img src={characterImages[formatId(mainInfo.mainMongddangId)]} alt="" css={mainCharacterCss} />
           </div>
 
           {/* 일상생활 버튼 3종 */}
@@ -246,7 +262,7 @@ const KidsMainPage = () => {
       )}
 
       {/* 알림창 */}
-      {openMailBox && <MailBox closeMailBox={closeMailBox} />}
+      {/* {openMailBox && <MailBox closeMailBox={closeMailBox} />} */}
 
       {
         // 루틴 시작 여부 질문 알림
@@ -285,9 +301,7 @@ const KidsMainPage = () => {
           <></>
         )
       }
-    </div>
-  ) : (
-    <Loading />
+    </div> : <Loading/>
   );
 };
 

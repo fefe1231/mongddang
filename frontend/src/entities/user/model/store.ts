@@ -4,34 +4,39 @@ import { UserInfo } from './types';
 import { PreferencesUser } from '@/shared/api/user';
 
 interface UserStoreState extends UserInfo {
-  fetchUser(): Promise<void>;
+  fetchUserInfo(): Promise<void>;
   getUserInfo(): UserInfo;
-  setUser(user: UserInfo): Promise<void>;
-  updateUser(newUserInfo: UserInfo): Promise<void>;
+  setUserInfo(user: UserInfo): Promise<void>;
+  updateUserInfo(newUserInfo: Partial<UserInfo>): Promise<void>;
 }
 
 export const useUserStore = create<UserStoreState>()(
   devtools((set, get) => ({
-    user: undefined,
-    userToken: undefined,
+    user: null,
+    userAccessToken: null,
+    userIdToken: null,
 
-    async fetchUser() {
+    async fetchUserInfo() {
       const userInfo = await PreferencesUser.getUser();
       set(() => ({ ...userInfo }));
     },
 
     getUserInfo() {
-      return { user: get().user, userToken: get().userToken };
+      return {
+        user: get().user,
+        userAccessToken: get().userAccessToken,
+        userIdToken: get().userIdToken,
+      };
     },
 
-    async setUser(newUserInfo: UserInfo) {
+    async setUserInfo(newUserInfo: UserInfo) {
       const userInfo = await PreferencesUser.setUser(newUserInfo);
       set(() => ({ ...userInfo }));
     },
 
-    async updateUser(newUserInfo: UserInfo) {
+    async updateUserInfo(newUserInfo: Partial<UserInfo>) {
       const userInfo = await PreferencesUser.updateUser(newUserInfo);
-      set(() => ({ ...userInfo }));
+      set((state) => ({ ...state, ...userInfo }));
     },
   }))
 );

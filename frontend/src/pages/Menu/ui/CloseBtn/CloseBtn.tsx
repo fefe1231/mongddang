@@ -11,7 +11,7 @@ const CloseBtn = () => {
       <div
         css={closeBtnCss}
         onClick={() => {
-          navigate('/');
+          navigate('/main');
         }}
       >
         <Typography color="light" size="1.25" weight={700}>

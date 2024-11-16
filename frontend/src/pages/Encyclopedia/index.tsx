@@ -5,10 +5,9 @@ import { TopBar } from '@/shared/ui/TopBar';
 import space from '../../assets/img/space.png';
 
 import { getCharacterInfo, getNewInfo } from './api/api';
-import { ICharacterData, ICharacterInfo } from './model/types';
+import { ICharacterData, ICharacterInfo, INewInfoResponse } from './model/types';
 
 import { AxiosResponse } from 'axios';
-import { CharacterResponse } from '../nickname-title/model/types';
 import {
   base,
   cardContainerCss,
@@ -18,7 +17,6 @@ import {
 } from './ui/styles';
 import { OwnModal } from './ui/modal/own-modal';
 import { useNavigate } from 'react-router-dom';
-import { MainModal } from './ui/modal/main-modal';
 import { Notmodal } from './ui/modal/Not-modal';
 import { Notowncharacter } from './ui/characterlist/notown-character';
 import { Newcharacter } from './ui/characterlist/new-character';
@@ -34,23 +32,9 @@ export const Encyclopedia = () => {
     useState<ICharacterData | null>(null);
 
   const queryClient = useQueryClient();
-
-  const mutation = useMutation<AxiosResponse<ICharacterData>, Error, number>({
+  const mutation = useMutation<AxiosResponse<INewInfoResponse>, Error, number>({
     mutationFn: getNewInfo,
-    onSuccess: async (_, characterId) => {
-      queryClient.setQueryData<CharacterResponse>(['character'], (oldData) => {
-        if (!oldData) return oldData;
-        return {
-          data: {
-            data: oldData.data.data.map((character) =>
-              character.id === characterId
-                ? { ...character, isNew: false }
-                : character
-            ),
-          },
-        };
-      });
-
+    onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['character'] });
       setIsMainModal(true);
     },
@@ -58,7 +42,7 @@ export const Encyclopedia = () => {
       console.error('상태 변경 실패:', error);
       alert('상태 변경에 실패했습니다. 다시 시도해주세요.');
     },
-  });
+});
   const openModal = (
     character: ICharacterData,
     modalType: 'own' | 'main' | 'not'
@@ -93,7 +77,7 @@ export const Encyclopedia = () => {
         <OwnModal data={selectedCharacter} setstate={setIsOwnModal} />
       )}
       {isMainModal && selectedCharacter && (
-        <MainModal data={selectedCharacter} setstate={setIsMainModal} />
+        <OwnModal data={selectedCharacter} setstate={setIsOwnModal} />
       )}
       {isNotModal && selectedCharacter && (
         <Notmodal data={selectedCharacter} setstate={setIsNotModal} />

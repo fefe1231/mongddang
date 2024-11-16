@@ -35,14 +35,11 @@ export const getTitleAchievement = (accessToken: string | null, achievementId: n
 };
 
 
-export const getTitleMain = (accessToken: string | null, titleId: number) => {
+export const getTitleMain = (titleId: number) => {
   return api({
-    method: 'post',
-    url: '/api/game/collection/achievement/claim',
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-    data: titleId
+    method: 'patch',
+    url: '/api/game/collection/title/main',
+    data: {titleId}
   })
   .then((res)=>{
     console.log(res.data)

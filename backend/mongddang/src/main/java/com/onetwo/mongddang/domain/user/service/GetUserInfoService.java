@@ -43,6 +43,18 @@ public class GetUserInfoService {
                 .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
         log.info("Existing User : {}", userId);
 
+        UserInfoDto data = getUserInfoDto(user, userId);
+
+        // response
+        ResponseDto response = ResponseDto.builder()
+                .message("사용자 정보 조회에 성공했습니다.")
+                .data(data)
+                .build();
+
+        return response;
+    }
+
+    public UserInfoDto getUserInfoDto(User user, Long userId) {
         // 메인 몽땅, 메인칭호, 연결 유저 리스트 초기화
         Long mainMongddangId = null;
         MaingameDto mainTitle = null;
@@ -124,12 +136,6 @@ public class GetUserInfoService {
                 .connected(responseConnectedUserList)
                 .build();
 
-        // response
-        ResponseDto response = ResponseDto.builder()
-                .message("사용자 정보 조회에 성공했습니다.")
-                .data(data)
-                .build();
-
-        return response;
+        return data;
     }
 }
