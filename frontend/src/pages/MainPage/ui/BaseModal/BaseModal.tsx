@@ -4,6 +4,7 @@ import { Modal } from '@/shared/ui/Modal';
 import { baseModalContainer, baseModalContent } from './BaseModal.styles';
 import { TopBar } from '@/shared/ui/TopBar';
 import DailyMissionContent from '../DailyMissionContent/DailyMissionContent';
+import NotificationContent from '../NotificationContent/NotificationContent';
 
 type BaseModalProps = {
   contentType: string;
@@ -28,7 +29,7 @@ const BaseModal = (props: BaseModalProps) => {
         {contentType === 'dailyMission' ? (
           <DailyMissionContent />
         ) : contentType === 'notification' ? (
-          <></>
+          <NotificationContent/>
         ) : (
           <></>
         )}
