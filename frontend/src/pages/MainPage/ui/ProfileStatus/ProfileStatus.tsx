@@ -39,7 +39,7 @@ const ProfileStatus = (props: ProfileStatusProps) => {
 
       {/* 총 별가루 */}
       <div css={coinContainer}>
-        <img css={coinCss} src={mainIcons.starCoin} alt="coin" />
+        <img css={coinCss} src={mainIcons.starCoinBag} alt="coin" />
         <div css={coinAmountCss}>
           <Typography color="dark" size="1" weight={600}>
             {props.coin}

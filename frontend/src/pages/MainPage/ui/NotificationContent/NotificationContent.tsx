@@ -3,28 +3,32 @@
 import { Typography } from '@/shared/ui/Typography';
 import {
   container,
+  imgCss,
+  noNotificationCss,
   notificationItemCss,
   notificationListCss,
 } from './NotificationContent.styles';
 import { useState } from 'react';
-// import {
-//   useNotificationQuery,
-//   // useNotificationReadMutation,
-// } from '../../model/useNotificationQuery';
-// import Loading from '@/shared/ui/Loading';
+import {
+  useNotificationQuery,
+  useNotificationReadMutation,
+} from '../../model/useNotificationQuery';
+import Loading from '@/shared/ui/Loading';
+import { mainIcons } from '../../constants/iconsData';
 
-// type NotificationItem = {
-//   category: string;
-//   content: string;
-//   createdAt: Date;
-// };
+type NotificationItem = {
+  notificationId: number;
+  category: string;
+  content: string;
+  createdAt: Date;
+};
 
 const NotificationContent = () => {
-  // const { data, isLoading } = useNotificationQuery();
+  const { data: notifications, isLoading } = useNotificationQuery();
   const [startX, setStartX] = useState(0);
   const [currentX, setCurrentX] = useState(0);
 
-  // if (isLoading) return <Loading />;
+  if (isLoading) return <Loading />;
 
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
     setStartX(e.changedTouches[0].clientX);
@@ -47,16 +51,30 @@ const NotificationContent = () => {
   return (
     <div css={container}>
       <div css={notificationListCss}>
-        <div
-          css={notificationItemCss}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-        >
-          <Typography color="dark" size="1" weight={500}>
-            저혈당이 심각합니다
-          </Typography>
-        </div>
+        {notifications ? (
+          notifications.map((notification: NotificationItem) => {
+            return (
+              <div
+                css={notificationItemCss}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+                key={`notification-${notification.notificationId}`}
+              >
+                <Typography color="dark" size="1" weight={500}>
+                  {notification.content}
+                </Typography>
+              </div>
+            );
+          })
+        ) : (
+          <div css={noNotificationCss}>
+            <img src={mainIcons.sleepMongddang} alt="sleepMong" css={imgCss} />
+            <Typography color="dark" size="1" weight={500}>
+              알림이 없어요
+            </Typography>
+          </div>
+        )}
       </div>
     </div>
   );

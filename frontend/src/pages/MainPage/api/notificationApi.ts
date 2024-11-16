@@ -1,17 +1,13 @@
 import { api } from '@/shared/api/interceptors';
 
-export const getNotification = async () => {
-  await api({
+export const getNotification = () => {
+  return api({
     method: 'GET',
     url: '/api/push/log',
-    params: {
-      page: 1,
-      size: 10,
-    },
   })
     .then((res) => {
-      console.log(res.data.data);
-      return res.data.data || [];
+      const data = res.data.data || null;
+      return data;
     })
     .catch((err) => {
       console.log(err);

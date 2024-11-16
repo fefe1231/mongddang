@@ -24,11 +24,25 @@ export const notificationItemCss = css`
   background-color: #e1f5fe;
   border-radius: 10px;
   padding: 5%;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
   touch-action: pan-x;
 
   & .deleting {
     transform: translateX(100%);
     opacity: 0;
   }
+`;
+
+export const noNotificationCss = css`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+`;
+
+export const imgCss = css`
+  width: 10rem;
 `;

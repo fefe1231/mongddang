@@ -11,6 +11,7 @@ import menu_icon from '@/assets/img/icon/menu_icon.png';
 import main_star from '@/assets/img/icon/main_star.png';
 import star_coin from '@/assets/img/icon/star_coin.png';
 import exercise_mongddang from '@/assets/img/main_mongddang/exercise_mongddang.png';
+import sleep_mongddang from '@/assets/img/main_mongddang/sleep_mongddang.png';
 
 export const mainIcons = {
   starCoinBag: star_coin_bag,
@@ -26,4 +27,5 @@ export const mainIcons = {
   star: main_star,
   starCoin: star_coin,
   exerciseMongddang: exercise_mongddang,
+  sleepMongddang: sleep_mongddang,
 };
