@@ -50,16 +50,6 @@ export interface ForegroundPlugin {
 export const Foreground = registerPlugin<ForegroundPlugin>('Foreground')
 
 const KidsMainPage = () => {
-
-  const startForegroundPermission = async() =>{
-    const response = Foreground.startForeground()
-    console.log(`startForeground: ${response}`)
-  }
-  const stopForegroundPermission = async() =>{
-    const response = Foreground.stopForeground()
-    console.log(`stopForeground: ${response}`)
-  }
-
   const navigate = useNavigate();
   const accessToken = localStorage.getItem('accessToken');
   const [mainInfo, setMainInfo] = useState({
@@ -184,39 +174,24 @@ console.log(closeMailBox)
           {/* 아이콘 모음 */}
           <div css={iconGroupCss}>
             <div css={iconHorizontalCss}>
-            <div css={iconVerticalCss}>
-              <IconTypo
-                icon={mainIcons.mission}
-                fontSize="0.75"
-                menu={
-                  <span>
-                    오늘의 <br />
-                    퀘스트
-                  </span>
-                }
-              />
-            </div>
-            <div>
-                  <div
-                    onClick={startForegroundPermission }
-                  >
-                    <IconTypo
-                      icon={mainIcons.notification}
-                      fontSize="0.75"
-                      menu="포그라운드 시작" 
-                    />
-                  </div>
-                  <div
-                    onClick={stopForegroundPermission}
-                  >
-                    <IconTypo
-                      icon={mainIcons.notification}
-                      fontSize="0.75"
-                      menu="포그라운드 종료" 
-                    />
-                  </div>
-                </div>
+              <div
+                onClick={() => {
+                  setOpenBaseModal(true);
+                  setContentType('dailyMission');
+                }}
+              >
+                <IconTypo
+                  icon={mainIcons.mission}
+                  fontSize="0.75"
+                  menu={
+                    <span>
+                      오늘의 <br />
+                      퀘스트
+                    </span>
+                  }
+                />
               </div>
+            </div>
             <div css={iconVerticalCss}>
               <div
                 onClick={() => {

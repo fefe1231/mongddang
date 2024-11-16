@@ -21,9 +21,18 @@ import { Tir } from './pages/report/ui/detail/tir/indesx';
 import { DayRecordPage } from './pages/day-record';
 import { useEffect } from 'react';
 import { SocialLogin } from '@capgo/capacitor-social-login';
+import { SamsungSetting } from './pages/samsung-setting/index';
+import {ForegoundServiceSetting } from './pages/foreground-setting/index';
 
 function App() {
   useLoadState();
+  useEffect(() => {
+    SocialLogin.initialize({
+      google: {
+        webClientId: import.meta.env.VITE_GOOGLE_WEB_CLIENT_ID,
+      },
+    });
+  }, []);
   useEffect(() => {
     SocialLogin.initialize({
       google: {
@@ -53,6 +62,8 @@ function App() {
           <Route path="/record" element={<RecordPage />} />
           <Route path="/record/:date" element={<DayRecordPage />} />
           <Route path="/protector-main" element={<ProtectorMain />} />
+          <Route path="/samsungsetting" element={<SamsungSetting />} />
+          <Route path="/foregroundsetting" element={<ForegoundServiceSetting />} />
         </Routes>
       </Router>
     </GoogleOAuthProvider>
