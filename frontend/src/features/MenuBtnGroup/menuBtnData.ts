@@ -47,6 +47,6 @@ export const menuBtnData: MenuBtnItem[] = [
       child: '설정',
       protector: '설정',
     },
-    urlTo: '',
+    urlTo: '/invitecode',
   },
 ];
