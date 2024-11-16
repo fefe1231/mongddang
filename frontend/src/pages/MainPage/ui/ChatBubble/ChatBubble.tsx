@@ -8,6 +8,7 @@ import {
   getRandomDefaultMessage,
   mongddangStatusMessages,
 } from '../../constants/mongddangDefaultMessages';
+import { TextField } from '@/shared/ui/TextField';
 
 interface ChatBubbleProps {
   status: string;
@@ -76,6 +77,21 @@ const ChatBubble = ({ status }: ChatBubbleProps) => {
         </span>
       </Typography>
 
+      {isChatStarted && (
+        <form onSubmit={(e) => handleSendChatMessage(e)}>
+          <TextField
+            color="primary"
+            defaultValue=""
+            label="몽땅과 대화하기"
+            maxRows={10}
+            placeholder="안녕!"
+            type="text"
+            variant="outlined"
+            value={chatInput}
+            onChange={(e) => setChatInput(e.target.value)}
+          />
+        </form>
+      )}
       <Typography
         color="primary"
         size="0.75"
@@ -88,17 +104,6 @@ const ChatBubble = ({ status }: ChatBubbleProps) => {
           <span>대화 시작하기</span>
         )}
       </Typography>
-      {isChatStarted && (
-        <form onSubmit={(e) => handleSendChatMessage(e)}>
-          <input
-            type="text"
-            value={chatInput}
-            onChange={(e) => setChatInput(e.target.value)}
-            style={{ width: '100%' }}
-          />
-          <button type="submit">전송</button>
-        </form>
-      )}
     </div>
   );
 };
