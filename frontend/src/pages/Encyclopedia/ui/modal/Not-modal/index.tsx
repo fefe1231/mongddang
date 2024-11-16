@@ -7,12 +7,24 @@ import { Typography } from '@/shared/ui/Typography';
 import { HiOutlineX } from 'react-icons/hi';
 import { Chip } from '@/shared/ui/Chip';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { base, modalCss, storyTypographyCss, xiconCss } from './styles';
+import {
+  alignmentStyle,
+  base,
+  modalCss,
+  storyTypographyCss,
+  xiconCss,
+} from './styles';
 import { ICharacterData } from '@/pages/Encyclopedia/model/types';
 import { getCoinInfo, postRecruitment } from '@/pages/Encyclopedia/api/api';
 import { BuyModal } from '../buy-modal';
 import { FindModal } from '../find-modal';
-import { formatId, noCharacterImages } from '@/pages/Encyclopedia/model/no-mongddang-img';
+import {
+  formatId,
+  noCharacterImages,
+} from '@/pages/Encyclopedia/model/no-mongddang-img';
+import coin from '@/assets/img/icon/star_coin.png';
+import { css } from '@emotion/react';
+import coinbag from '@/assets/img/icon/star_coin_bag.png';
 
 interface OwnModalProps {
   setstate: (value: boolean) => void;
@@ -48,12 +60,12 @@ export const Notmodal = ({ setstate, data }: OwnModalProps) => {
 
   const handleBuyModalBlue = () => {
     setBuyModal(false);
-    characterMutation.mutate(); 
+    characterMutation.mutate();
   };
 
   const handleFindModalClose = () => {
     setFindModal(false);
-    setstate(false); 
+    setstate(false);
   };
 
   return (
@@ -67,10 +79,7 @@ export const Notmodal = ({ setstate, data }: OwnModalProps) => {
             {data.name}
           </Chip>
           <Icon size={5}>
-            <img
-              alt={`${data.name} 캐릭터 이미지`}
-              src={imagePath}
-            />
+            <img alt={`${data.name} 캐릭터 이미지`} src={imagePath} />
           </Icon>
           <Typography
             color="dark"
@@ -85,16 +94,38 @@ export const Notmodal = ({ setstate, data }: OwnModalProps) => {
             color="primary"
             fontSize="1"
             variant="contained"
+            css={css`
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            `}
           >
+            <Icon size={1.6}>
+              <img alt="코인 사진" src={coin} />
+            </Icon>
             {data.price}
           </Button>
           <Typography
             color="dark"
-            size="1"
+            size="1.25"
             weight={600}
-            css={storyTypographyCss}
+            css={css`
+              ${storyTypographyCss}
+              display: flex;
+              align-items: center;
+              justify-content: center; // 수평 중앙 정렬
+              gap: 2px;
+              width: 100%; // 전체 너비 사용
+
+              img {
+                vertical-align: middle;
+              }
+            `}
           >
-            보유 코인 : {CoinQuery.data?.data.data.coin}
+            <Icon size={3}>
+              <img alt={'코인 사진'} src={coinbag} />
+            </Icon>
+            {CoinQuery.data?.data.data.coin}
           </Typography>
         </div>
       </Modal>
@@ -105,9 +136,9 @@ export const Notmodal = ({ setstate, data }: OwnModalProps) => {
         />
       )}
       {findModal && (
-        <FindModal 
+        <FindModal
           data={data}
-          setstate={handleFindModalClose} 
+          setstate={handleFindModalClose}
           setIsNew={setIsNew}
         />
       )}
