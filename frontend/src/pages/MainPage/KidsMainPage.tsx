@@ -36,29 +36,8 @@ import { mainIcons } from './constants/iconsData';
 import { getMainInfo } from './api/infoApi';
 import Loading from '@/shared/ui/Loading';
 import { characterImages, formatId } from '../Encyclopedia/model/mongddang-img';
-import { registerPlugin } from '@capacitor/core';
-
-export interface EchoPlugin {
-  echo(options: { value: string }): Promise<{ value: string }>;
-}
-
-export interface ForegroundPlugin {
-  startForeground(): Promise<{ message: string }>;
-  stopForeground(): Promise<{ message: string}>;
-}
-
-export const Foreground = registerPlugin<ForegroundPlugin>('Foreground')
 
 const KidsMainPage = () => {
-
-  const startForegroundPermission = async() =>{
-    const response = Foreground.startForeground()
-    console.log(`startForeground: ${response}`)
-  }
-  const stopForegroundPermission = async() =>{
-    const response = Foreground.stopForeground()
-    console.log(`stopForeground: ${response}`)
-  }
 
   const navigate = useNavigate();
   const accessToken = localStorage.getItem('accessToken');
@@ -196,26 +175,6 @@ console.log(closeMailBox)
                 }
               />
             </div>
-            <div>
-                  <div
-                    onClick={startForegroundPermission }
-                  >
-                    <IconTypo
-                      icon={mainIcons.notification}
-                      fontSize="0.75"
-                      menu="포그라운드 시작" 
-                    />
-                  </div>
-                  <div
-                    onClick={stopForegroundPermission}
-                  >
-                    <IconTypo
-                      icon={mainIcons.notification}
-                      fontSize="0.75"
-                      menu="포그라운드 종료" 
-                    />
-                  </div>
-                </div>
               </div>
             <div css={iconVerticalCss}>
               <div

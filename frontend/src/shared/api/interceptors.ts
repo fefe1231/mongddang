@@ -11,8 +11,8 @@ export const api = axios.create({
 
 // 요청에 자동으로 accessToken 추가
 api.interceptors.request.use(async (config) => {
-  const accessToken = localStorage.getItem('accessToken');
-
+  // const accessToken = localStorage.getItem('accessToken');
+  const accessToken = import.meta.env.VITE_TEST_USER_ACCESS_TOKEN;
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`;
   }
