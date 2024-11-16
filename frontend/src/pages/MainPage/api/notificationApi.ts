@@ -6,7 +6,9 @@ export const getNotification = () => {
     url: '/api/push/log',
   })
     .then((res) => {
+      console.log('알림 목록 조회 성공', res);
       const data = res.data.data || null;
+      console.log('알림 목록 조회 성공', data);
       return data;
     })
     .catch((err) => {

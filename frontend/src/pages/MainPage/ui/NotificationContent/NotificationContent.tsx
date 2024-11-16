@@ -25,10 +25,15 @@ type NotificationItem = {
 
 const NotificationContent = () => {
   const { data: notifications, isLoading } = useNotificationQuery();
+
   const [startX, setStartX] = useState(0);
   const [currentX, setCurrentX] = useState(0);
 
   if (isLoading) return <Loading />;
+
+  const onDelete = (notificationId: number) => {
+    useNotificationReadMutation().mutate(notificationId);
+  };
 
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
     setStartX(e.changedTouches[0].clientX);
@@ -41,9 +46,10 @@ const NotificationContent = () => {
     }
   };
 
-  const handleTouchEnd = () => {
+  const handleTouchEnd = (notificationId: number) => {
     if (currentX > 100) {
-      console.log('삭제');
+      console.log('알림', notificationId, '삭제');
+      onDelete(notificationId);
     }
     setCurrentX(0);
   };
@@ -58,7 +64,9 @@ const NotificationContent = () => {
                 css={notificationItemCss}
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
-                onTouchEnd={handleTouchEnd}
+                onTouchEnd={() => {
+                  handleTouchEnd(notification.notificationId);
+                }}
                 key={`notification-${notification.notificationId}`}
               >
                 <Typography color="dark" size="1" weight={500}>
