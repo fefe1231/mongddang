@@ -6,7 +6,7 @@ import { Bloodsugar } from '@/shared/api/blood-sugar';
 import { ExerciseRecord } from '@/shared/api/day-record';
 import { useQuery } from '@tanstack/react-query';
 import { exerciseItem, textBox } from './style';
-import dayjs from 'dayjs';
+import { calcTimeDuration } from '../../lib/calcTimeDuration';
 
 interface RenderExerciseProps {
   nickname: string;
@@ -31,17 +31,6 @@ export const RenderExercise = ({
   }
   if (isLoading) return <div>Loading...</div>;
 
-  const calcExerciseDuration = (startTime: string, endTime: string) => {
-    if (!endTime) {
-      return '종료 시각 없음';
-    }
-    const start = dayjs(startTime);
-    const end = dayjs(endTime);
-    console.log(end.diff(start, 'minute'));
-
-    return end.diff(start, 'minute');
-  };
-
   return (
     <section>
       {data &&
@@ -65,7 +54,7 @@ export const RenderExercise = ({
             </div>
             <div>
               <span>
-                {calcExerciseDuration(item.startTime, item.endTime ?? '')}
+                {calcTimeDuration(item.startTime, item.endTime ?? '')}
                 {item.endTime !== null ? '분' : ''}
               </span>
             </div>
