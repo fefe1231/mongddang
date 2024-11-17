@@ -151,7 +151,7 @@ const Login = () => {
       <div css={contentCss}>
         <div>
           <Icon size={14}>
-            <img alt="icon-0" src="/img/logo.png" />
+            <img alt="icon-0" src="" />
           </Icon>
           <Typography
             style={{ textAlign: 'center' }}

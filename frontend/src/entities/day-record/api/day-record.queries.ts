@@ -61,7 +61,7 @@ export class DayRecordQueries {
   static mealRecordsQuery(nickname: string, date: string) {
     console.log(nickname, date);
     return this.filteredDayRecordsQuery({
-      nickname: '어린이 서원',
+      nickname,
       date: '2024-11-11',
       category: 'meal',
     });
@@ -70,7 +70,7 @@ export class DayRecordQueries {
   static exerciseRecordsQuery(nickname: string, date: string) {
     console.log(nickname, date);
     return this.filteredDayRecordsQuery({
-      nickname: '어린이 서원',
+      nickname,
       date: '2024-11-11',
       category: 'exercise',
     });
@@ -79,7 +79,7 @@ export class DayRecordQueries {
   static sleepRecordsQuery(nickname: string, date: string) {
     console.log(nickname, date);
     return this.filteredDayRecordsQuery({
-      nickname: '어린이 서원',
+      nickname,
       date: '2024-11-11',
       category: 'sleep',
     });
@@ -88,7 +88,7 @@ export class DayRecordQueries {
   static medicationRecordsQuery(nickname: string, date: string) {
     console.log(nickname, date);
     return this.filteredDayRecordsQuery({
-      nickname: '어린이 서원',
+      nickname,
       date: '2024-11-11',
       category: 'medication',
     });

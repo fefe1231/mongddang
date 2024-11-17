@@ -25,15 +25,21 @@ const ProtectorMain = () => {
       connectedChild: state.getUserInfo().user?.connected,
     }))
   );
-  const setSelectedChild = useSelectedChildStore(
-    (state) => state.setSelectedChild
+  const { setSelectedChild, selectedChild } = useSelectedChildStore(
+    useShallow((state) => ({
+      setSelectedChild: state.setSelectedChild,
+      selectedChild: state.selectedChild,
+    }))
   );
 
   useEffect(() => {
-    if (connectedChild) {
-      setSelected(connectedChild[0].name);
+    if (!selectedChild && connectedChild) {
+      setSelected(connectedChild[0].name ?? '');
     }
-  }, [connectedChild]);
+    if (selectedChild) {
+      setSelected(selectedChild.name);
+    }
+  }, [connectedChild, selectedChild]);
 
   return (
     <div css={container}>
