@@ -16,10 +16,10 @@ import {
 import ProfileStatus from './ui/ProfileStatus/ProfileStatus';
 import { IconTypo } from '@/shared/ui/IconTypo';
 import CurrentBloodSugar from './ui/CurrentBloodSugar/CurrentBloodSugar';
-// import ChatBubble from './ui/ChatBubble/ChatBubble';
+import ChatBubble from './ui/ChatBubble/ChatBubble';
 import { useEffect, useState } from 'react';
 import DietModal from './ui/DietModal/DietModal';
-// import MailBox from './ui/MailBox/MailBox';
+import BaseModal from './ui/BaseModal/BaseModal';
 import { useNavigate } from 'react-router-dom';
 import RoutineBtnGroup from './ui/RoutineBtnGroup/RoutineBtnGroup';
 import {
@@ -60,9 +60,8 @@ const KidsMainPage = () => {
     coin: 0,
   });
   const [openDietModal, setOpenDietModal] = useState(false);
-  const [openMailBox, setOpenMailBox] = useState(false);
-
-  console.log(openMailBox);
+  const [openBaseModal, setOpenBaseModal] = useState(false);
+  const [contentType, setContentType] = useState('');
   const [alertStatus, setAlertStatus] = useState('');
   const [alertBloodSugar, setAlertBloodSugar] = useState(0);
   const [currentRoutine, setCurrentRoutine] = useState('');
@@ -128,10 +127,10 @@ const KidsMainPage = () => {
     setOpenDietModal(false);
   };
 
-  const closeMailBox = () => {
-    setOpenMailBox(false);
+  const closeBaseModal = () => {
+    setOpenBaseModal(false);
   };
-  console.log(closeMailBox);
+
   // 일상 수행 상태 관리
   const changeRoutine = (currentRoutine: string) => {
     console.log('루틴 변경', currentRoutine);
@@ -161,6 +160,7 @@ const KidsMainPage = () => {
   };
   console.log('알림창 상태', alertStatus);
   console.log('루틴 상태', currentRoutine);
+
   return !isLoading ? (
     <div css={kidsMainBase}>
       <div css={kidsMainContent}>
@@ -197,7 +197,8 @@ const KidsMainPage = () => {
               </div>
               <div
                 onClick={() => {
-                  setOpenMailBox(true);
+                  setOpenBaseModal(true);
+                  setContentType('notification');
                 }}
               >
                 <IconTypo
@@ -268,7 +269,9 @@ const KidsMainPage = () => {
       )}
 
       {/* 알림창 */}
-      {/* {openMailBox && <MailBox closeMailBox={closeMailBox} />} */}
+      {openBaseModal && (
+        <BaseModal contentType={contentType} closeBaseModal={closeBaseModal} />
+      )}
 
       {
         // 루틴 시작 여부 질문 알림
