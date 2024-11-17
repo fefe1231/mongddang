@@ -38,7 +38,6 @@ const MedicationTime = () => {
         </Typography>
       </div>
       {timeFields.map((item) => {
-        console.log(item.id);
         return (
           <div css={amountNumCss}>
             <TextField

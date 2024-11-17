@@ -1,12 +1,12 @@
 import { create } from 'zustand';
 
-type MedicationType = {
+type MedicationTimeType = {
   timeFields: { id: number }[];
   addTimeField: () => void;
   deleteTimeField: () => void;
 };
 
-export const useMedicationTimeStore = create<MedicationType>((set) => ({
+export const useMedicationTimeStore = create<MedicationTimeType>((set) => ({
   timeFields: [{ id: 0 }],
   addTimeField: () => {
     set((state) => ({
