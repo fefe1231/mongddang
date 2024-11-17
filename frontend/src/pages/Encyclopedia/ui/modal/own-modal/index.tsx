@@ -25,7 +25,6 @@ interface CharacterResponse {
   };
 }
 
-
 export const OwnModal = ({ setstate, data }: OwnModalProps) => {
   const queryClient = useQueryClient();
   const [isParentModalOpen, setIsParentModalOpen] = useState(true);
@@ -60,8 +59,6 @@ export const OwnModal = ({ setstate, data }: OwnModalProps) => {
   const handleSetMain = () => {
     if (data?.id) {
       mainMutation.mutate(data.id);
-      setIsParentModalOpen(false);
-      setIsModal(true);
     }
   };
   
@@ -76,6 +73,7 @@ export const OwnModal = ({ setstate, data }: OwnModalProps) => {
   };
   
   if (!data) return null;
+  
   const imageKey = formatId(data.id);
   const imagePath = characterImages[imageKey];
   

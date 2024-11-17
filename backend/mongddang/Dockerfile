@@ -19,7 +19,9 @@ FROM openjdk:21-oracle AS prod
 EXPOSE 8080
 ARG PROFILE
 ARG JAR_FILE=build/libs/*.jar
-COPY ${JAR_FILE} app.jar
+WORKDIR /app
+COPY ${JAR_FILE} ./app.jar
+# COPY src/main/resources/certification.json ./resources/certification.json
 ENV TZ=Asia/Seoul
 ENV SPRING_PROFILES_ACTIVE=${PROFILE}
-ENTRYPOINT ["java", "-jar","/app.jar"]
+ENTRYPOINT ["java", "-jar","./app.jar"]

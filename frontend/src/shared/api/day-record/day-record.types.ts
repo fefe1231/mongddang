@@ -82,9 +82,9 @@ export interface DayRecords {
   records: DayRecordTypes;
 }
 
-export interface DayRecordsResponse {
-  dates: DayRecords[];
-}
+// export interface DayRecordsResponse {
+//   data: DayRecords[];
+// }
 
 export interface RecordParams {
   nickname: string;

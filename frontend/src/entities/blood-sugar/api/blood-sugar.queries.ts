@@ -2,6 +2,7 @@ import { Bloodsugar, BloodsugarService } from '@/shared/api/blood-sugar';
 import { queryOptions } from '@tanstack/react-query';
 // import { BloodsugarFilter } from '../model';
 // import dayjs from 'dayjs';
+import { sample } from 'lodash';
 
 export class BloodsugarQueries {
   static readonly queryKeys = {
@@ -15,10 +16,21 @@ export class BloodsugarQueries {
     return queryOptions({
       queryKey: [...this.queryKeys.all, date],
       queryFn: async (): Promise<Bloodsugar[]> => {
+        console.log(nickname, date);
+        const randomDate = sample([
+          '2024-02-26',
+          '2024-02-27',
+          '2024-02-28',
+          '2024-02-29',
+          '2024-03-01',
+          '2024-03-02',
+          '2024-03-03',
+        ]);
+
         const { data } = await BloodsugarService.bloodSugarQuery({
           params: {
-            nickname,
-            date,
+            nickname: '어린이 서원',
+            date: randomDate,
           },
         });
         // const formattedData = data.data.bloodSugar.map((item) => ({
@@ -26,7 +38,7 @@ export class BloodsugarQueries {
         //   measurementTime: dayjs(item.measurementTime).format('HH:mm'),
         // }));
         // return formattedData;
-        return data.data.bloodSugar;
+        return data.data;
       },
       enabled: !!nickname,
     });

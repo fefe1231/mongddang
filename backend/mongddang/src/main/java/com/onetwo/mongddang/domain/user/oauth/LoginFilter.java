@@ -2,11 +2,16 @@ package com.onetwo.mongddang.domain.user.oauth;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.onetwo.mongddang.common.responseDto.ResponseDto;
 import com.onetwo.mongddang.domain.user.dto.LoginRequestDto;
+import com.onetwo.mongddang.domain.user.dto.UserInfoDto;
 import com.onetwo.mongddang.domain.user.jwt.JwtTokenProvider;
 import com.onetwo.mongddang.domain.user.model.User;
 import com.onetwo.mongddang.domain.user.repository.UserRepository;
 import com.onetwo.mongddang.domain.user.service.CustomUserDetailsService;
+import com.onetwo.mongddang.domain.user.service.GetUserInfoService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,19 +33,25 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
     private final CustomUserDetailsService userDetailsService;
     private final UserRepository userRepository;
     private final GoogleTokenService googleTokenService;
+    private final GetUserInfoService getUserInfoService;
+    private final ObjectMapper objectMapper = new ObjectMapper()
+            .registerModule(new JavaTimeModule())
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // yyyy-MM-dd 형식으로 설정
 
     public LoginFilter(String defaultFilterProcessesUrl,
                        AuthenticationManager authenticationManager,
                        JwtTokenProvider jwtTokenProvider,
                        CustomUserDetailsService userDetailsService,
                        UserRepository userRepository,
-                       GoogleTokenService googleTokenService) {
+                       GoogleTokenService googleTokenService,
+                       GetUserInfoService getUserInfoService) {
         super(defaultFilterProcessesUrl);
         setAuthenticationManager(authenticationManager);
         this.jwtTokenProvider = jwtTokenProvider;
         this.userDetailsService = userDetailsService;
         this.userRepository = userRepository;
         this.googleTokenService = googleTokenService;
+        this.getUserInfoService = getUserInfoService;
     }
 
     @Override
@@ -98,12 +109,20 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
         dataMap.put("accessToken", jwtToken);
         dataMap.put("isRegistered", is_registered);
 
-        Map<String, Object> responseMap = new HashMap<>();
-        responseMap.put("success", "google oAuth 로그인에 성공하였습니다.");
-        responseMap.put("body", dataMap);
-        // Convert the response map to JSON
-        ObjectMapper objectMapper = new ObjectMapper();
-        String jsonResponse = objectMapper.writeValueAsString(responseMap);
+        // 기존 회원인 경우 사용자 정보 전달
+        if (is_registered) {
+            User user = userOptional.get();
+            UserInfoDto userInfoDto = getUserInfoService.getUserInfoDto(user,user.getId());
+            dataMap.put("userInfo", userInfoDto);
+        }
+
+        ResponseDto responseDto = ResponseDto.builder()
+                .message("로그인 성공")
+                .data(dataMap)
+                .build();
+
+        // ObjectMapper로 JSON 변환
+        String jsonResponse = objectMapper.writeValueAsString(responseDto);
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");

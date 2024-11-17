@@ -20,4 +20,5 @@ export const xiconCss = css`
   position: absolute; 
   top: 1rem; 
   right: 1rem; 
+  z-index: 3;
 `

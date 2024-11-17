@@ -3,13 +3,14 @@ import { css } from '@emotion/react';
 export const btnGroup = css`
   display: flex;
   width: 100%;
-  height: fit-content;
+  height: 100%;
   justify-content: center;
   align-items: center;
   align-content: center;
   align-self: stretch;
   flex-wrap: wrap;
   gap: 0.5rem;
+  padding: 10px 10px 10px 10px;
 `;
 
 export const btn = css`

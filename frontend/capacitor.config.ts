@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: 'mongddang',
   webDir: 'dist',
   server: {
-    url: 'http://172.29.239.195:8100',
+    url: 'http://192.168.0.18:8100',
     cleartext: true,
   },
   plugins: {

@@ -17,7 +17,7 @@ export const SignUp = () => {
       <TopBar
         type="iconpage"
         iconHandler={() => {
-          nav('/login');
+          nav('/');
         }}
       >
         회원가입

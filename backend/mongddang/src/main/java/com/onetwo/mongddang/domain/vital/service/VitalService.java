@@ -2,6 +2,8 @@ package com.onetwo.mongddang.domain.vital.service;
 
 import com.onetwo.mongddang.common.responseDto.ResponseDto;
 import com.onetwo.mongddang.common.utils.GptUtils;
+import com.onetwo.mongddang.domain.record.model.Record;
+import com.onetwo.mongddang.domain.record.repository.RecordRepository;
 import com.onetwo.mongddang.domain.user.application.CtoPUtils;
 import com.onetwo.mongddang.domain.user.error.CustomUserErrorCode;
 import com.onetwo.mongddang.domain.user.model.User;
@@ -19,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -32,6 +35,7 @@ public class VitalService {
 
     private final VitalRepository vitalRepository;
     private final UserRepository userRepository;
+    private final RecordRepository recordRepository;
     private final CtoPUtils ctoPUtils;
     private final VitalUtils vitalUtils;
     private final GptUtils gptUtils;
@@ -78,6 +82,7 @@ public class VitalService {
                 .build();
     }
 
+
     @Transactional
     public ResponseDto getCurrentBloodSugar(Long userId, String nickname) {
         log.info("getCurrentBloodSugar userId: {}, nickname: {}", userId, nickname);
@@ -90,48 +95,115 @@ public class VitalService {
         // 조회 권한 확인
         // ctoPUtils.validateProtectorAccessChildData(user, child);
 
+
         log.info("child: {}", child.getEmail());
-        Vital vital = vitalRepository.findTopByChildOrderById(child).orElse(null);
+        Vital vital = vitalRepository.findTopByChildOrderByIdDesc(child).orElse(null);
 
-        // 현재 혈당이 없는 경우 랜덤으로 생성
-        if (vital == null) {
-            Random random = new Random();
-            int bloodSugarLevel = random.nextInt(31) + 90; // 90부터 120까지의 랜덤 수치 생성
-
-            vital = Vital.builder()
-                    .child(child)
-                    .bloodSugarLevel(bloodSugarLevel)
-                    .measurementTime(LocalDateTime.now()) // 필요한 경우 현재 시간으로 설정 가능
+        // 측정 시간과 현재 시간의 차이를 계산, 1분 이내에 조회한 경우라면 동일한 결과 반환
+        LocalDateTime measurementTime = vital.getMeasurementTime();
+        LocalDateTime currentTime = LocalDateTime.now();
+        Duration duration = Duration.between(measurementTime, currentTime);
+        log.info("measurementTime: {}", measurementTime);
+        log.info("currentTime: {}", currentTime);
+        log.info("duration: {}", duration.toMinutes());
+        if (duration.toMinutes() < 1) {
+            log.info("동일한 결과 반환 (There's a vital that passed time is less than 1min.");
+            // 1분이내 => 동일한 결과 반환
+            ResponseDailyGlucoseDto responseDailyGlucoseDto = ResponseDailyGlucoseDto.builder()
+                    .id(vital.getId())
+                    .bloodSugarLevel(vital.getBloodSugarLevel())
+                    .measurementTime(vital.getMeasurementTime())
                     .content(null)
-                    .status(Vital.GlucoseStatusType.normal)
-                    .isNotification(false)
+                    .status(ResponseDailyGlucoseDto.Status.valueOf(vital.getStatus().name()))
+                    .notification(vital.getIsNotification())
+                    .build();
+
+            return ResponseDto.builder()
+                    .message("현재 혈당 조회 성공")
+                    .data(responseDailyGlucoseDto)
                     .build();
 
         } else {
-            // 현재 혈당이 있는 경우 +-10 범위의 랜덤 수치 생성
-            Random random = new Random();
-            int randomNumber = random.nextInt(21) - 10; // 0부터 20까지의 랜덤 수치에 -10을 더함
-            log.info(randomNumber + "");
+            // 1분 이내의 기록이 없는 경우
 
-            Vital.GlucoseStatusType status;
+            // 최근 30분 이내의 기록 조회
+            Record recentRecord = recordRepository.findTopByChildAndEndTimeIsBetweenOrderByIdDesc(child, LocalDateTime.now().minusMinutes(30), LocalDateTime.now()).orElse(null);
 
-            if (vital.getBloodSugarLevel() + randomNumber < 70) {
-                status = Vital.GlucoseStatusType.low;
-            } else if (vital.getBloodSugarLevel() + randomNumber > 200) {
-                status = Vital.GlucoseStatusType.high;
-            } else {
-                status = Vital.GlucoseStatusType.normal;
+            // 가중치 계산
+            int weight = 0;
+            if (recentRecord != null) {
+                if (recentRecord.getCategory().equals(Record.RecordCategoryType.exercise)) {
+                    weight = -5;
+                    log.info("운동 가중치 exercise weight: {}", weight);
+                } else if (recentRecord.getCategory().equals(Record.RecordCategoryType.meal
+                )) {
+                    weight = 5;
+                    log.info("식사 가중치 meal weight: {}", weight);
+                } else if (recentRecord.getCategory().equals(Record.RecordCategoryType.medication)) {
+                    weight = -10;
+                    log.info("복약 가중치 medication weight : {}", weight);
+                }
             }
 
-            log.info("bloodSugarLevel: {}", vital.getBloodSugarLevel());
-            vital = Vital.builder()
-                    .child(child)
-                    .bloodSugarLevel(vital.getBloodSugarLevel() + randomNumber)
-                    .measurementTime(LocalDateTime.now()) // 필요한 경우 현재 시간으로 설정 가능
-                    .content(null)
-                    .status(status)
-                    .isNotification(false)
-                    .build();
+            if (vital == null) {
+                // 현재 혈당이 없는 경우 랜덤으로 생성
+                log.info("새로운 결과 생성 (Created new vital data.");
+                Random random = new Random();
+                int bloodSugarLevel = random.nextInt(31) + 90; // 90부터 120까지의 랜덤 수치 생성
+
+                vital = Vital.builder()
+                        .child(child)
+                        .bloodSugarLevel(bloodSugarLevel + weight)
+                        .measurementTime(LocalDateTime.now()) // 필요한 경우 현재 시간으로 설정 가능
+                        .content(null)
+                        .status(Vital.GlucoseStatusType.normal)
+                        .isNotification(false)
+                        .build();
+            } else {
+                // 혈당이 있는 경우 보정치 반영
+                log.info("보정치 반영 (reflect a vital with correctionValue.");
+                int curBloodSugarLevel = vital.getBloodSugarLevel();
+
+                Random random = new Random();
+
+                int correctionValue;
+                if (curBloodSugarLevel > 300) {
+                    // 수치가 매우 높은 경우 -15~5
+                    correctionValue = curBloodSugarLevel + random.nextInt(20) - 15;
+                } else if (curBloodSugarLevel > 200) {
+                    // 수치가 높은 경우 -10~5
+                    correctionValue = curBloodSugarLevel + random.nextInt(16) - 10;
+                } else if (curBloodSugarLevel < 90) {
+                    // 수치가 낮은 경우 -5~15
+                    correctionValue = curBloodSugarLevel + random.nextInt(21) - 5;
+                } else if (curBloodSugarLevel < 60) {
+                    // 수치가 극도로 낮은 경우 5~20
+                    correctionValue = curBloodSugarLevel + random.nextInt(15) + 5;
+                } else {
+                    // 일반적인 상황에서는 +-10 범위의 랜덤 수치 생성
+                    correctionValue = curBloodSugarLevel + random.nextInt(21) - 10;
+                }
+
+                // 반환할 상태값 설정
+                Vital.GlucoseStatusType status;
+                if (correctionValue < 70) {
+                    status = Vital.GlucoseStatusType.low;
+                } else if (correctionValue > 200) {
+                    status = Vital.GlucoseStatusType.high;
+                } else {
+                    status = Vital.GlucoseStatusType.normal;
+                }
+
+                log.info("bloodSugarLevel: {}", vital.getBloodSugarLevel());
+                vital = Vital.builder()
+                        .child(child)
+                        .bloodSugarLevel(correctionValue + weight)
+                        .measurementTime(LocalDateTime.now()) // 필요한 경우 현재 시간으로 설정 가능
+                        .content(null)
+                        .status(status)
+                        .isNotification(false)
+                        .build();
+            }
         }
 
         // 저장

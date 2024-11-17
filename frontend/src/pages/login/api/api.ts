@@ -18,12 +18,3 @@ export const login = (idToken: string) => {
     },
   });
 };
-
-export interface LoginResponse {
-  code: number;
-  message: string;
-  data: {
-    isRegistered: boolean;
-    accessToken: string;
-  };
-}

@@ -23,6 +23,7 @@ export const menuBtnContainer = css`
   background-color: #fff;
   border: 0.5rem solid #e1f5fe;
   border-radius: 10px;
+  margin-bottom: 50px;
 `;
 
 export const menuBtnGroup = css`

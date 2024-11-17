@@ -60,7 +60,7 @@ export const WeekChart = ({ data }: WeekChartProps) => {
   const yAxisMax = HIGH_THRESHOLD + 20;
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: 'relative', margin:'1rem'}}>
   {/* Y축 레이블 */}
   <div style={{
       position: 'absolute',
