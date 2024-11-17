@@ -1,5 +1,6 @@
 import { RecordCategory } from '@/entities/day-record/api';
 import { ErrorMessage } from './error-message';
+import Loading from '@/shared/ui/Loading';
 
 interface RecordErrorBoundaryProps {
   isError: boolean;
@@ -16,8 +17,9 @@ export const RecordErrorBoundary = ({
   category,
   children,
 }: RecordErrorBoundaryProps) => {
+
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   if (isError) {

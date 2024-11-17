@@ -50,7 +50,7 @@ export const RenderMedication = ({
   //   return <div>알 수 없는 오류가 발생했습니다.</div>;
   // }
 
-  if (isLoading) return <div>Loading...</div>;
+  // if (isLoading) return <div>Loading...</div>;
 
   // 빌드 에러 방지용
   console.log('Prevent Error log', nearestTimeBloodSugar);

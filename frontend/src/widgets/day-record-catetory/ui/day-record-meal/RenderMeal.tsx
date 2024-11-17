@@ -52,7 +52,7 @@ export const RenderMeal = ({
   // throw new Error('Error in RenderMeal');
   // }
 
-  if (isLoading) return <div>Loading...</div>;
+  // if (isLoading) return <Loading />;
 
   return (
     <RecordErrorBoundary
