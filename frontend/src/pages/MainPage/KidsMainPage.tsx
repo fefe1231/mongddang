@@ -174,25 +174,26 @@ const KidsMainPage = () => {
           {/* 아이콘 모음 */}
           <div css={iconGroupCss}>
             <div css={iconHorizontalCss}>
-              <div
-                onClick={() => {
-                  setOpenBaseModal(true);
-                  setContentType('dailyMission');
-                }}
-              >
-                <IconTypo
-                  icon={mainIcons.mission}
-                  fontSize="0.75"
-                  menu={
-                    <span>
-                      오늘의 <br />
-                      퀘스트
-                    </span>
-                  }
-                />
+              <div css={iconVerticalCss}>
+                <div
+                // TODO: 어디에 사용했었는지, 필요한지 체크
+                // onClick={() => {
+                //   setOpenBaseModal(true);
+                //   setContentType('dailyMission');
+                // }}
+                >
+                  <IconTypo
+                    icon={mainIcons.mission}
+                    fontSize="0.75"
+                    menu={
+                      <span>
+                        오늘의 <br />
+                        퀘스트
+                      </span>
+                    }
+                  />
+                </div>
               </div>
-            </div>
-            <div css={iconVerticalCss}>
               <div
                 onClick={() => {
                   setOpenBaseModal(true);
@@ -309,7 +310,7 @@ const KidsMainPage = () => {
     </div>
   ) : (
     <Loading />
-  );
+  )
 };
 
 export default KidsMainPage;
