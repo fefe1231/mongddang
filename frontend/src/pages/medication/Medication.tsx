@@ -12,23 +12,8 @@ import { Button } from '@/shared/ui/Button';
 import MedicationItem from './ui/MedicationItem/MedicationItem';
 import { useMedicationQuery } from './model/useMedicationQuery';
 import { useNavigate } from 'react-router-dom';
+import { MedicationItemType } from './types';
 
-type MedicationStandard = {
-  volume: number;
-  minGlucose: number;
-  maxGlucose: number;
-};
-
-export type MedicationItemType = {
-  nickname: string;
-  name: string;
-  image: File | null;
-  repeatStartTime: Date;
-  repeatEndTime: Date;
-  isFast: boolean;
-  repeatTimes: string[];
-  standards: MedicationStandard[] | null;
-};
 
 const Medication = () => {
   // const userRole = useUserStore((state) => state.user?.role);
