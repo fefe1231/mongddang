@@ -46,6 +46,23 @@ export const medicineItemCss = css`
 export const medicineTextCss = css`
   display: flex;
   flex-direction: column;
+  gap: 0.5rem;
+`;
+
+export const medicineTitleCss = css`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+export const medicineChipCss = css`
+  padding: 2% 6%;
+`;
+
+export const medicineContentCss = css`
+  display: flex;
+  flex-direction: column;
   gap: 0.25rem;
 `;
 
