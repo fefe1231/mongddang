@@ -69,7 +69,10 @@ export class DayRecordQueries {
 
         const firstRecord = this.validateBaseResponse(data);
 
-        if (!firstRecord.records[filters.category]) {
+        if (
+          !firstRecord.records[filters.category] ||
+          firstRecord.records[filters.category].length === 0
+        ) {
           throw new DayRecordError(
             `No ${filters.category} records found`,
             'NO_CATEGORY_RECORDS'

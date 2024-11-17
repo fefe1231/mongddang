@@ -54,8 +54,9 @@ export const ErrorMessage = ({ error, category }: ErrorMessageProps) => {
         );
       case 'NO_CATEGORY_RECORDS':
         return (
-          <div>
-            해당 날짜의 {categoryFeedback[category].category} 기록이 없습니다.
+          <div css={imgBox}>
+            <img css={img} src={`${categoryFeedback[category].img}`} />
+            <div>{categoryFeedback[category].message}</div>
           </div>
         );
       case 'INVALID_STRUCTURE':
