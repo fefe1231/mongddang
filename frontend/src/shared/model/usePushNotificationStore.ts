@@ -1,4 +1,3 @@
-import { PushNotifications } from '@capacitor/push-notifications';
 import { create } from 'zustand';
 
 export type PushNotificationInfo = {
@@ -11,7 +10,7 @@ export type PushNotificationInfo = {
 };
 
 export const usePushNotificationStore = create<PushNotificationInfo>(
-  (set, get) => ({
+  (set) => ({
     receiverNickname: null,
     childNickname: null,
     title: null,

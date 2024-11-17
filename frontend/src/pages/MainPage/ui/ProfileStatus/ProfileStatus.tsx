@@ -10,7 +10,6 @@ import {
   typoCss,
 } from './ProfileStatus.styles';
 import { mainIcons } from '../../constants/iconsData';
-import { initPushNotification } from '@/shared/lib/pushNotification/initNotification';
 
 type ProfileStatusProps = {
   nickname: string;
@@ -19,11 +18,6 @@ type ProfileStatusProps = {
 };
 
 const ProfileStatus = (props: ProfileStatusProps) => {
-
-  const handleNote = async () => {
-    console.log('알림 권한 요청')
-    await initPushNotification()
-  }
 
   return (
     <div css={container}>
@@ -47,7 +41,6 @@ const ProfileStatus = (props: ProfileStatusProps) => {
           &nbsp;
         </div>
       </div>
-      <div onClick={handleNote}>알림 권한 요청</div>
     </div>
   );
 };

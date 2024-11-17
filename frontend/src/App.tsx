@@ -26,7 +26,8 @@ import { PushNotifications } from '@capacitor/push-notifications';
 import { usePushNotificationStore } from './shared/model/usePushNotificationStore';
 import { PushNotification } from './shared/ui/PushNotification/PushNotification';
 import { SamsungSetting } from './pages/samsung-setting/index';
-import {ForegoundServiceSetting } from './pages/foreground-setting/index';
+import { ForegoundServiceSetting } from './pages/foreground-setting/index';
+import { initPushNotification } from './shared/lib/pushNotification/initNotification';
 
 function App() {
   useLoadState();
@@ -39,7 +40,8 @@ function App() {
     });
 
     // 푸시 알림 받기
-    const initializePushListener = () => {
+    const initializePushListener = async () => {
+      await initPushNotification()
       PushNotifications.removeAllListeners();
       PushNotifications.addListener(
         'pushNotificationReceived',
@@ -76,7 +78,10 @@ function App() {
           <Route path="/protector-main" element={<ProtectorMain />} />
           <Route path="/setting" element={<SettingPage />} />
           <Route path="/samsungsetting" element={<SamsungSetting />} />
-          <Route path="/foregroundsetting" element={<ForegoundServiceSetting />} />
+          <Route
+            path="/foregroundsetting"
+            element={<ForegoundServiceSetting />}
+          />
         </Routes>
       </Router>
     </GoogleOAuthProvider>

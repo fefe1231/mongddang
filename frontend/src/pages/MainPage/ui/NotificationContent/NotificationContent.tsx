@@ -9,7 +9,7 @@ import {
   notificationListCss,
   textCss,
 } from './NotificationContent.styles';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import {
   useNotificationQuery,
   useNotificationReadMutation,
@@ -27,15 +27,14 @@ type NotificationItem = {
 const NotificationContent = () => {
   const { data: notifications, isLoading } = useNotificationQuery();
   const { mutate } = useNotificationReadMutation();
-
-  if (isLoading) return <Loading />;
-
   const onDelete = useCallback(
     (notificationId: number) => {
       mutate(notificationId);
     },
     [mutate]
   );
+
+  if (isLoading) return <Loading />;
 
   return (
     <div css={container}>
