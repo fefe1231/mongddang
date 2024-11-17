@@ -23,23 +23,32 @@ export const InviteCode = () => {
 
   const inviteMutation = useMutation({
     mutationFn: async () => {
-      return await invitation(code);
+      await invitation(code);
     },
     onSuccess: async () => {
-      alert('연결이 되었습니다.');
+      // alert('연결이 되었습니다.');
       const userInfo = getUserInfo();
-      const newUserInfo = userInfo.user && {
-        ...userInfo,
-        user: {
-          ...userInfo.user,
-          connected: [...userInfo.user.connected, code],
-        },
-      };
-      updateUserInfo(newUserInfo as Partial<UserInfo>);
-      nav('/');
+      try {
+        const newUserInfo = userInfo.user && {
+          ...userInfo,
+          user: {
+            ...userInfo.user,
+            connected: [...(userInfo.user.connected ?? []), code],
+          },
+        };
+        await updateUserInfo(newUserInfo as Partial<UserInfo>);
+      } catch (err) {
+        console.log(err);
+        console.log(JSON.stringify(err));
+      }
+      nav(-1);
     },
     onError: (error) => {
-      console.error('회원가입 실패:', error);
+      console.error('환아 등록 실패:', JSON.stringify(error));
+      const userInfo = getUserInfo();
+      console.log(userInfo.user?.role);
+      console.log(userInfo.userAccessToken);
+
       alert('연결이 실패하였습니다. 다시 시도해주세요');
     },
   });
