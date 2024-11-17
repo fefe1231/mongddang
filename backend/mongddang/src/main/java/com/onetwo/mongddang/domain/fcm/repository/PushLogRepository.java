@@ -6,9 +6,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface PushLogRepository extends JpaRepository<PushLog, Long> {
-    Page<PushLog> findAllByUserId(Long userId, Pageable pageable);
+    List<PushLog> findAllByUserId(Long userId);
 
     Boolean existsByUserIdAndIsNewTrue(Long userId);
 }

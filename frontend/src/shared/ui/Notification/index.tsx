@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { NotificationProps } from './Notification.types';
 import { Backdrop } from '../Backdrop';
-import { base, btnContainerCss, btnCss } from './Notification.styles';
+import { backdropCss, base, btnContainerCss, btnCss } from './Notification.styles';
 import { Typography } from '../Typography';
 import { Button } from '../Button';
 
@@ -12,38 +12,31 @@ export const Notification = ({
   bluehandler = () => {},
   redHandler = () => {},
   children = ['취소하기', '확인하기'],
-  width=20.625,
-  height=6.25,
+  width = 20.625,
+  height = 6.25,
   ...props
 }: NotificationProps) => {
   return (
-    <Backdrop
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
+    <Backdrop css={backdropCss}>
       <div css={base(type, width, height)} {...props}>
-        <div >
-          <Typography style={{display:'flex', justifyContent:'center'}} color="dark" size={'1'} weight={500}>
+        <div>
+          <Typography
+            style={{ display: 'flex', justifyContent: 'center' }}
+            color="dark"
+            size={'1'}
+            weight={500}
+          >
             {ment}
           </Typography>
         </div>
         {twoBtn ? (
           <div css={btnContainerCss}>
-            <Button
-              handler={redHandler}
-              color={'danger'}
-            >
+            <Button handler={redHandler} color={'danger'}>
               <Typography color="light" weight={600} size={'0.75'}>
                 {children[0]}
               </Typography>
             </Button>
-            <Button
-              handler={bluehandler}
-              color='primary'
-            >
+            <Button handler={bluehandler} color="primary">
               <Typography color="light" weight={600} size={'0.75'}>
                 {children[1]}
               </Typography>
@@ -53,7 +46,9 @@ export const Notification = ({
           <Button
             css={btnCss}
             handler={bluehandler}
-            color={type === 'confirm' || type === 'primary' ? 'primary' : 'danger'}
+            color={
+              type === 'confirm' || type === 'primary' ? 'primary' : 'danger'
+            }
           >
             <Typography color="light" weight={600} size={'0.75'}>
               확인

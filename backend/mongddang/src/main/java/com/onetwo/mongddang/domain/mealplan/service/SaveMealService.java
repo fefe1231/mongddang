@@ -24,7 +24,7 @@ import java.util.List;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class SaveMealService {
+public class  SaveMealService {
 
     private final UserRepository userRepository;
     private final CtoPRepository ctoPRepository;

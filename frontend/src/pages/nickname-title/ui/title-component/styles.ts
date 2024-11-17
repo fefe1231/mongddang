@@ -17,13 +17,13 @@ export const containerCss =css`
 export const progressCss = css`
   display: flex;
   align-items: center;
-  gap: 1rem;  // 프로그레스바와 텍스트 사이 간격
+  gap: 1rem;  
 
   > :first-child {
-    flex: 0 0 70%;  // 프로그레스바 너비 80% 고정
+    flex: 0 0 70%; 
   }
 
   > :last-child {
-    flex-shrink: 0;  // 타이포그래피 크기 유지
+    flex-shrink: 0;
   }
 `

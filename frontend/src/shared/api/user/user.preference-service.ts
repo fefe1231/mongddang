@@ -7,7 +7,8 @@ export class PreferencesUser {
     if (value === null) {
       const state: UserInfo = {
         user: null,
-        userAccessToken: null,
+        // TODO: Access Token 하드코딩 수정
+        userAccessToken: import.meta.env.VITE_TEST_USER_ACCESS_TOKEN,
         userIdToken: null,
       };
       await this.setState(state);

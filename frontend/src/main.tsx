@@ -9,6 +9,7 @@ import 'dayjs/locale/ko';
 import '@mantine/core/styles.layer.css';
 import '@mantine/dates/styles.layer.css';
 import '@mantine/charts/styles.css';
+import AudioCollection from './shared/ui/AudioCollection/AudioCollection.tsx';
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,7 @@ createRoot(document.getElementById('root')!).render(
           settings={{ locale: 'ko', firstDayOfWeek: 0, weekendDays: [0] }}
         >
           <App />
+          <AudioCollection />
         </DatesProvider>
       </MantineProvider>
     </QueryClientProvider>

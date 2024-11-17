@@ -14,6 +14,7 @@ import { Toast } from '@/shared/ui/Toast';
 
 import { useState } from 'react';
 import { useUserStore } from '@/entities/user/model';
+import { Clipboard } from '@capacitor/clipboard';
 
 export const Profile = () => {
   const nav = useNavigate();
@@ -31,19 +32,24 @@ export const Profile = () => {
   const user = getUserInfo().user;
   const inviteCode = user?.invitationCode;
 
-  const copyToClipboard = () => {
+  const copyToClipboard = async () => {
     if (inviteCode) {
-      navigator.clipboard
-        .writeText(inviteCode)
-        .then(() => {
-          setShowToast(true); // Toast 표시
-          setTimeout(() => {
-            setShowToast(false); // 3초 후 Toast 숨김
-          }, 3000);
-        })
-        .catch((err) => {
-          console.error('복사 실패:', err);
-        });
+      await Clipboard.write({ string: inviteCode });
+      setShowToast(true); // Toast 표시
+      setTimeout(() => {
+        setShowToast(false); // 3초 후 Toast 숨김
+      }, 3000);
+      // navigator.clipboard
+      //   .writeText(inviteCode)
+      //   .then(() => {
+      //     setShowToast(true); // Toast 표시
+      //     setTimeout(() => {
+      //       setShowToast(false); // 3초 후 Toast 숨김
+      //     }, 3000);
+      //   })
+      //   .catch((err) => {
+      //     console.error('복사 실패:', err);
+      //   });
     } else {
       alert('초대 코드가 없습니다.');
     }

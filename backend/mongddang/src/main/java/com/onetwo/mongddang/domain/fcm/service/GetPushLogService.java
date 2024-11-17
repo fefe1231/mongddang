@@ -27,18 +27,15 @@ public class GetPushLogService {
     private final PushLogRepository pushLogRepository;
     private final UserRepository userRepository;
 
-    public ResponseDto GetPushLog(Long userId, int page, int size) {
+    public ResponseDto GetPushLog(Long userId) {
 
         //사용자 유무 검사
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RestApiException(CustomUserErrorCode.USER_NOT_FOUND));
         log.info("Existing User : {}", userId);
 
-        // 페이지네이션 설정
-        Pageable pageable = PageRequest.of(page, size);
-
         // 알림 로그 데이터 조회
-        Page<PushLog> pushLogs = pushLogRepository.findAllByUserId(userId, pageable);
+        List<PushLog> pushLogs = pushLogRepository.findAllByUserId(userId);
 
         // 알림 기록이 없으면 null반환
         if (pushLogs.isEmpty()) {
@@ -51,9 +48,9 @@ public class GetPushLogService {
         // 반환 리스트 초기화
         List<PushLogDto> pushLogDtoList = new ArrayList<>();
         // 하나씩 dto에 맞춰 감싸기
-        for (PushLog pushLog : pushLogs.getContent()) {
+        for (PushLog pushLog : pushLogs) {
             PushLogDto pushLogDto = PushLogDto.builder()
-                    .id(pushLog.getId())
+                    .notificationId(pushLog.getId())
                     .category(pushLog.getCategory())
                     .content(pushLog.getContent())
                     .createdAt(pushLog.getCreatedAt())
@@ -62,19 +59,10 @@ public class GetPushLogService {
             pushLogDtoList.add(pushLogDto);
         }
 
-        //map형식으로 감싸기
-        Map<String,Object> data = new HashMap<>();
-        data.put("pushLogDtoList",pushLogDtoList);
-        // 페이지네이션 정보 추가
-        data.put("currentPage", pushLogs.getNumber());
-        data.put("totalPages", pushLogs.getTotalPages());
-        data.put("totalItems", pushLogs.getTotalElements());
-        data.put("pageSize", pushLogs.getSize());
-
         //response
         ResponseDto response = ResponseDto.builder()
                 .message("알림기록 조회에 성공했습니다.")
-                .data(data)
+                .data(pushLogDtoList)
                 .build();
 
         return response;

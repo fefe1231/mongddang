@@ -36,3 +36,9 @@ export const storyTypographyCss = css`
   line-height: 1.5;
   text-align: center;
 `;
+
+export const alignmentStyle = css`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
