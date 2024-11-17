@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { ChangeEvent } from 'react';
 import { UserInfo, useUserStore } from '@/entities/user/model';
 import { useShallow } from 'zustand/shallow';
+import { UserService } from '@/shared/api/user/user.service';
 
 export const InviteCode = () => {
   const nav = useNavigate();
@@ -28,13 +29,11 @@ export const InviteCode = () => {
     onSuccess: async () => {
       // alert('연결이 되었습니다.');
       const userInfo = getUserInfo();
+      const newUser = (await UserService.userQuery()).data.data;
       try {
         const newUserInfo = userInfo.user && {
           ...userInfo,
-          user: {
-            ...userInfo.user,
-            connected: [...(userInfo.user.connected ?? []), code],
-          },
+          user: newUser,
         };
         await updateUserInfo(newUserInfo as Partial<UserInfo>);
       } catch (err) {

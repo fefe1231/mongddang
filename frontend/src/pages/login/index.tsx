@@ -100,11 +100,19 @@ const Login = () => {
         .post('/api/auth/login', { idToken })
         .then(async (res: AxiosResponse<LoginResponse>) => {
           if (res.data.data.isRegistered) {
-            const userAccessToken =
-              res.data.data.userInfo.role === 'child'
-                ? import.meta.env.VITE_TEST_USER_ACCESS_TOKEN
-                : import.meta.env.VITE_TEST_PROTECTOR_ACCESS_TOKEN;
+            // const userAccessToken =
+            //   res.data.data.userInfo.role === 'child'
+            //     ? import.meta.env.VITE_TEST_USER_ACCESS_TOKEN
+            //     : import.meta.env.VITE_TEST_PROTECTOR_ACCESS_TOKEN;
+            const userAccessToken = res.data.data.accessToken;
             const userInfo = res.data.data.userInfo;
+
+            console.log('*******userInfo when login*********');
+            console.log('*******userInfo when login*********');
+            console.log(userInfo);
+            console.log('*******userInfo when login*********');
+            console.log('*******userInfo when login*********');
+
             await updateUserInfo({ userAccessToken, user: userInfo });
 
             const user = getUserInfo();
