@@ -20,16 +20,34 @@ import { Mean } from './pages/report/ui/detail/mean';
 import { Tir } from './pages/report/ui/detail/tir/indesx';
 import { DayRecordPage } from './pages/day-record';
 import SettingPage from './pages/settingPage/SettingPage';
+import { useEffect } from 'react';
+import { SocialLogin } from '@capgo/capacitor-social-login';
+import { SamsungSetting } from './pages/samsung-setting/index';
+import {ForegoundServiceSetting } from './pages/foreground-setting/index';
 
 function App() {
   useLoadState();
+  useEffect(() => {
+    SocialLogin.initialize({
+      google: {
+        webClientId: import.meta.env.VITE_GOOGLE_WEB_CLIENT_ID,
+      },
+    });
+  }, []);
+  useEffect(() => {
+    SocialLogin.initialize({
+      google: {
+        webClientId: import.meta.env.VITE_GOOGLE_WEB_CLIENT_ID,
+      },
+    });
+  }, []);
   return (
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_AUTH_CLIENT_ID}>
       <Router>
         <Routes>
-          <Route path="/" element={<KidsMainPage />} />
+          <Route path="/main" element={<KidsMainPage />} />
           <Route path="/btn" element={<Btn />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Login />} />
           <Route path="/invitecode" element={<InviteCode />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/encyclopedia" element={<Encyclopedia />} />
@@ -46,6 +64,8 @@ function App() {
           <Route path="/record/:date" element={<DayRecordPage />} />
           <Route path="/protector-main" element={<ProtectorMain />} />
           <Route path="/setting" element={<SettingPage />} />
+          <Route path="/samsungsetting" element={<SamsungSetting />} />
+          <Route path="/foregroundsetting" element={<ForegoundServiceSetting />} />
         </Routes>
       </Router>
     </GoogleOAuthProvider>

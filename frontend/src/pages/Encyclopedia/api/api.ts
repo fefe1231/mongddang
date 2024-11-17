@@ -1,7 +1,7 @@
 
 import { api } from '@/shared/api/interceptors';
 import { AxiosResponse } from 'axios';
-import { ICharacterData, ICharacterInfo } from '../model/types';
+import { ICharacterData, ICharacterInfo, INewInfoResponse } from '../model/types';
 
 
 // 회원정보 조회
@@ -30,7 +30,7 @@ export const getCoinInfo = () => {
 }
 
 // 새로 획득한 캐릭터(NEW) 표시 제거
-export const getNewInfo = (mongddangId: number): Promise<AxiosResponse<ICharacterData>> => {
+export const getNewInfo = (mongddangId: number): Promise<AxiosResponse<INewInfoResponse>> => {
   return api({
     method: 'patch',
     url: '/api/game/collection/mongddang/check',

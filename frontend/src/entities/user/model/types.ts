@@ -34,6 +34,7 @@ export interface User extends CreateUser {
 }
 
 export interface UserInfo {
-  user?: User;
-  userToken?: string
+  user: User | null;
+  userAccessToken: string | null;
+  userIdToken: string | null;
 }
