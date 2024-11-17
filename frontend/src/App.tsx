@@ -28,6 +28,7 @@ import { PushNotification } from './shared/ui/PushNotification/PushNotification'
 import { SamsungSetting } from './pages/samsung-setting/index';
 import { ForegoundServiceSetting } from './pages/foreground-setting/index';
 import { initPushNotification } from './shared/lib/pushNotification/initNotification';
+import Medication from './pages/medication/Medication';
 
 function App() {
   useLoadState();
@@ -81,6 +82,10 @@ function App() {
           <Route
             path="/foregroundsetting"
             element={<ForegoundServiceSetting />}
+          />
+          <Route
+            path="/medication"
+            element={<Medication />}
           />
         </Routes>
       </Router>
