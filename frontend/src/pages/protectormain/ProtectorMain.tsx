@@ -34,12 +34,13 @@ const ProtectorMain = () => {
 
   useEffect(() => {
     if (!selectedChild && connectedChild) {
-      setSelected(connectedChild[0].name ?? '');
+      setSelected(connectedChild[0].name);
+      setSelectedChild(connectedChild[0]);
     }
     if (selectedChild) {
       setSelected(selectedChild.name);
     }
-  }, [connectedChild, selectedChild]);
+  }, [connectedChild, selectedChild, setSelected, setSelectedChild]);
 
   return (
     <div css={container}>
