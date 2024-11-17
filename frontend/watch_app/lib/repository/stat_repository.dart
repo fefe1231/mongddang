@@ -7,40 +7,35 @@ class StatRepository {
   static const platform = MethodChannel('com.example.watch_app');
 
   // 워치로 혈당값 전송하는 메소드
-  static Future<void> sendGlucoseToWatch(String glucoseValue) async {
+  static Future<void> sendGlucoseToWatch(dynamic data) async {
     try {
-      print('워치로 전송 시도: $glucoseValue'); // 전송 시도 로그
+      // 혈당 값만 추출
+      final glucoseValue = data['bloodSugarLevel'].toString();
+      print('워치로 전송 시도: $glucoseValue'); // 혈당값만 전송되는지 확인
+
       await platform.invokeMethod('sendGlucoseUpdate', {
-        'glucose_value': glucoseValue
+        'glucose_value': glucoseValue // 숫자값만 전송
       });
-      print('워치로 전송 성공'); // 성공 로그
+      print('워치로 전송 성공: $glucoseValue');
     } catch (e) {
-      print('워치 전송 에러: $e'); // 에러 로그
+      print('워치 전송 에러: $e');
     }
   }
 
   static Future<dynamic> fetchData() async {
     try {
-      // Dio 인스턴스 생성
       final dio = Dio();
-
-      // 헤더 설정
       dio.options.headers = {
         'Authorization': 'Bearer ',
         'Content-Type': 'application/json',
       };
 
-      // API 요청
       final response = await dio.post(
         'https://baseurl/api/vital/bloodsugar/current?nickname=어린이 서원',
       );
 
-      print('API 응답: ${response.data}'); // 디버깅용
-
-      // 혈당 데이터 추출 및 워치로 전송
       if (response.data != null && response.data['data'] != null) {
-        final glucoseValue = response.data['data'].toString();
-        await sendGlucoseToWatch(glucoseValue); // 워치로 데이터 전송
+        await sendGlucoseToWatch(response.data['data']); // 전체 데이터 객체 전달
       }
 
       return response.data['data'];
