@@ -14,12 +14,16 @@ import { Dropdown } from '@/shared/ui/Dropdown';
 import { useEffect, useState } from 'react';
 import { Typography } from '@/shared/ui/Typography';
 import { useUserStore } from '@/entities/user/model';
+import { useSelectedChildStore } from '@/entities/selected-child/model/store';
 
 const ProtectorMain = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState('');
+  const [selected, setSelected] = useState<string | undefined>(undefined);
   const connectedChild = useUserStore(
     (state) => state.getUserInfo().user?.connected
+  );
+  const setSelectedChild = useSelectedChildStore(
+    (state) => state.setSelectedChild
   );
 
   useEffect(() => {
@@ -37,14 +41,14 @@ const ProtectorMain = () => {
             <Dropdown
               options={connectedChild ?? []}
               onSelect={(value) => {
-                setSelected(value);
+                setSelected(value.name);
+                setSelectedChild(value);
               }}
               isOpen={isOpen}
               onClose={() => setIsOpen(false)}
-              selectedValue={selected ? selected : '아이를 추가하세요'}
+              selectedValue={selected}
               buttonLabel={selected} // 버튼 라벨을 선택된 값으로 설정
               onOpen={() => setIsOpen(true)} // 드롭다운 열기 기능 추가
-              disabled={connectedChild?.length !== 0}
             />
             <div css={bubbleChat}>
               <Typography color="dark" size="1.25" weight={600}>

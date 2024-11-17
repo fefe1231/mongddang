@@ -31,7 +31,7 @@ export const menuBtnData: MenuBtnItem[] = [
     },
     urlTo: {
       child: '/report',
-      protector: '',
+      protector: '/report',
     },
   },
   {
@@ -42,7 +42,7 @@ export const menuBtnData: MenuBtnItem[] = [
     },
     urlTo: {
       child: '/record',
-      protector: '',
+      protector: '/record',
     },
   },
   {
