@@ -66,12 +66,12 @@ class _HomeScreenState extends State<HomeScreen> {
               _buildBackground(),
               _buildActivityIcon(
                 position: const Offset(50, 18),
-                imagePath: 'assets/img/exercise_icon.png',
+                imagePath: 'assets/img/sleep_icon.png',
                 onTap: () => _navigateToActivity(context, ActivityType.sleep),
               ),
               _buildActivityIcon(
                 position: const Offset(43, 18),
-                imagePath: 'assets/img/sleep_icon.png',
+                imagePath: 'assets/img/exercise_icon.png',
                 onTap: () => _navigateToActivity(context, ActivityType.exercise),
                 alignment: Alignment.topRight,
               ),
