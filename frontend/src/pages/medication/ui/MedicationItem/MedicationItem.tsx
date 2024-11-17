@@ -14,8 +14,12 @@ import {
 import { Typography } from '@/shared/ui/Typography';
 import { mainIcons } from '@/pages/MainPage/constants/iconsData';
 import { Chip } from '@/shared/ui/Chip';
+import { MedicationItemType } from '../../Medication';
 
-const MedicationItem = () => {
+type MedicationItemProps = {
+  medication: MedicationItemType;
+};
+const MedicationItem = (props: MedicationItemProps) => {
   return (
     <div css={medicineItemCss}>
       <div css={medicineTextCss}>
