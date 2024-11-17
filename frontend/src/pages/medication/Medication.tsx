@@ -10,7 +10,6 @@ import {
 } from './Medication.styles';
 import { Button } from '@/shared/ui/Button';
 import MedicationItem from './ui/MedicationItem/MedicationItem';
-import { useUserStore } from '@/entities/user/model';
 import { useMedicationQuery } from './model/useMedicationQuery';
 import { useNavigate } from 'react-router-dom';
 
@@ -32,8 +31,10 @@ export type MedicationItemType = {
 };
 
 const Medication = () => {
-  const userRole = useUserStore((state) => state.user?.role);
-  const selfNickname = useUserStore((state) => state.user?.nickname);
+  // const userRole = useUserStore((state) => state.user?.role);
+  const userRole = 'child';
+  // const selfNickname = useUserStore((state) => state.user?.nickname);
+  const selfNickname = '집에가고파';
   const kidNickname = '아이 닉네임';
   const { data: medicationList } = useMedicationQuery(
     userRole === 'child'
@@ -46,7 +47,19 @@ const Medication = () => {
   console.log(userRole);
   return (
     <div css={container}>
-      <TopBar type="iconpage" css={topbarCss}>
+      <TopBar
+        type="iconpage"
+        css={topbarCss}
+        iconHandler={() => {
+          navigate(
+            userRole === 'child'
+              ? '/menu'
+              : userRole === 'protector'
+                ? '/protector-main'
+                : ''
+          );
+        }}
+      >
         약 챙기기
       </TopBar>
       <div css={content}>
@@ -56,13 +69,7 @@ const Medication = () => {
             fontSize="1"
             variant="contained"
             handler={() => {
-              navigate(
-                userRole === 'child'
-                  ? '/menu'
-                  : userRole === 'protector'
-                    ? '/protector-main'
-                    : ''
-              );
+              navigate('/medication/add');
             }}
           >
             약 등록

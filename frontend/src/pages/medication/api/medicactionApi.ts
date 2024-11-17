@@ -1,7 +1,7 @@
 import { api } from '@/shared/api/interceptors';
 
-export const getMedicationList = (nickname: string) => {
-  return api({
+export const getMedicationList = async (nickname: string) => {
+  return await api({
     method: 'GET',
     url: '/api/medication',
     params: {
@@ -9,8 +9,8 @@ export const getMedicationList = (nickname: string) => {
     },
   })
     .then((res) => {
-      console.log(res.data);
-      return res.data;
+      console.log('복약 목록 조회 성공', res.data);
+      return res.data.data.medications;
     })
     .catch((err) => {
       console.log(err);

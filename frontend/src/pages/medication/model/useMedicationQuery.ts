@@ -4,6 +4,7 @@ import { getMedicationList } from '../api/medicactionApi';
 export const useMedicationQuery = (nickname: string | undefined) => {
   const fetchMedication = async ({ queryKey }: { queryKey: string[] }) => {
     const [, userNickname] = queryKey;
+    console.log('함수 실행')
     return getMedicationList(userNickname);
   };
 
