@@ -174,26 +174,25 @@ const KidsMainPage = () => {
           {/* 아이콘 모음 */}
           <div css={iconGroupCss}>
             <div css={iconHorizontalCss}>
-              <div css={iconVerticalCss}>
-                <div
-                // TODO: 어디에 사용했었는지, 필요한지 체크
-                // onClick={() => {
-                //   setOpenBaseModal(true);
-                //   setContentType('dailyMission');
-                // }}
-                >
-                  <IconTypo
-                    icon={mainIcons.mission}
-                    fontSize="0.75"
-                    menu={
-                      <span>
-                        오늘의 <br />
-                        퀘스트
-                      </span>
-                    }
-                  />
-                </div>
+              <div
+                onClick={() => {
+                  setOpenBaseModal(true);
+                  setContentType('dailyMission');
+                }}
+              >
+                <IconTypo
+                  icon={mainIcons.mission}
+                  fontSize="0.75"
+                  menu={
+                    <span>
+                      오늘의 <br />
+                      퀘스트
+                    </span>
+                  }
+                />
               </div>
+            </div>
+            <div css={iconVerticalCss}>
               <div
                 onClick={() => {
                   setOpenBaseModal(true);
@@ -231,7 +230,7 @@ const KidsMainPage = () => {
         <div css={bottomContainer}>
           {/* 메인캐릭터 + 말풍선 */}
           <div css={CharacterContainer}>
-            <ChatBubble status={currentRoutine}/>
+            <ChatBubble status={currentRoutine} />
             <img
               src={characterImages[formatId(mainInfo.mainMongddangId)]}
               alt=""
@@ -268,7 +267,9 @@ const KidsMainPage = () => {
       )}
 
       {/* 알림창 */}
-      {openBaseModal && <BaseModal contentType={contentType} closeBaseModal={closeBaseModal} />}
+      {openBaseModal && (
+        <BaseModal contentType={contentType} closeBaseModal={closeBaseModal} />
+      )}
 
       {
         // 루틴 시작 여부 질문 알림
@@ -310,7 +311,7 @@ const KidsMainPage = () => {
     </div>
   ) : (
     <Loading />
-  )
+  );
 };
 
 export default KidsMainPage;

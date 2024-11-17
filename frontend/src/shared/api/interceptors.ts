@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { PreferencesUser } from './user';
+// import { PreferencesUser } from './user';
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -13,13 +13,13 @@ export const api = axios.create({
 api.interceptors.request.use(async (config) => {
   // const accessToken = localStorage.getItem('accessToken');
   //const accessToken = import.meta.env.VITE_TEST_USER_ACCESS_TOKEN;
-  const accessToken = (await PreferencesUser.getUser()).userAccessToken;
-  console.log('***accessTokenaccessToken***');
-  console.log('***accessTokenaccessToken***');
-  console.log(accessToken);
-  console.log('***accessTokenaccessToken***');
-  console.log('***accessTokenaccessToken***');
-  
+  // const accessToken = (await PreferencesUser.getUser()).userAccessToken;
+  // console.log('***accessTokenaccessToken***');
+  // console.log('***accessTokenaccessToken***');
+  // console.log(accessToken);
+  // console.log('***accessTokenaccessToken***');
+  // console.log('***accessTokenaccessToken***');
+  const accessToken = import.meta.env.VITE_TEST_USER_ACCESS_TOKEN
   
 
   if (accessToken) {
