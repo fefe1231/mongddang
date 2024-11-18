@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { PreferencesUser } from './user';
+// import { PreferencesUser } from './user';
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -19,8 +19,6 @@ api.interceptors.request.use(async (config) => {
   console.log(accessToken);
   console.log('***accessTokenaccessToken***');
   console.log('***accessTokenaccessToken***');
-  
-  
 
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`;

@@ -15,22 +15,35 @@ import { useEffect, useState } from 'react';
 import { Typography } from '@/shared/ui/Typography';
 import { useUserStore } from '@/entities/user/model';
 import { useSelectedChildStore } from '@/entities/selected-child/model/store';
+import { useShallow } from 'zustand/shallow';
+import { Toggle } from '@/shared/ui/Toggle';
+import { useAudioStore } from '@/shared/model/useAudioStore';
 
 const ProtectorMain = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState<string | undefined>(undefined);
-  const connectedChild = useUserStore(
-    (state) => state.getUserInfo().user?.connected
+  const { connectedChild } = useUserStore(
+    useShallow((state) => ({
+      connectedChild: state.getUserInfo().user?.connected,
+    }))
   );
-  const setSelectedChild = useSelectedChildStore(
-    (state) => state.setSelectedChild
+  const { setSelectedChild, selectedChild } = useSelectedChildStore(
+    useShallow((state) => ({
+      setSelectedChild: state.setSelectedChild,
+      selectedChild: state.selectedChild,
+    }))
   );
+  const audio = useAudioStore();
 
   useEffect(() => {
-    if (connectedChild) {
+    if (!selectedChild && connectedChild) {
       setSelected(connectedChild[0].name);
+      setSelectedChild(connectedChild[0]);
     }
-  }, [connectedChild]);
+    if (selectedChild) {
+      setSelected(selectedChild.name);
+    }
+  }, [connectedChild, selectedChild, setSelected, setSelectedChild]);
 
   return (
     <div css={container}>
@@ -55,6 +68,9 @@ const ProtectorMain = () => {
                 어린이의 기록
               </Typography>
             </div>
+          </div>
+          <div>
+            <Toggle size={4} onToggle={audio.bgm.toggleMute} />
           </div>
         </div>
         <div css={menuBtnContainer}>
