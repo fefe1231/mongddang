@@ -50,7 +50,7 @@ export const btn = css`
 
   /* 클릭했을 때의 효과 */
   &:active {
-    transform: translateY(5px); /* 아래로 살짝 이동 */
+    transform: translate(3px, 3px); /* 아래로 살짝 이동 */
   }
 `;
 
