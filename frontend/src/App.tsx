@@ -25,6 +25,8 @@ import { SocialLogin } from '@capgo/capacitor-social-login';
 import { PushNotification } from './shared/ui/PushNotification/PushNotification';
 import { SamsungSetting } from './pages/samsung-setting/index';
 import { ForegoundServiceSetting } from './pages/foreground-setting/index';
+import Medication from './pages/medication/Medication';
+import MedicationAdd from './pages/medicationAdd/MedicationAdd';
 
 function App() {
   useLoadState();
@@ -65,6 +67,14 @@ function App() {
           <Route
             path="/foregroundsetting"
             element={<ForegoundServiceSetting />}
+          />
+          <Route
+            path="/medication"
+            element={<Medication />}
+          />
+          <Route
+            path="/medication/add"
+            element={<MedicationAdd />}
           />
         </Routes>
       </Router>
