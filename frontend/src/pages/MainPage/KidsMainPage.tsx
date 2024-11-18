@@ -37,6 +37,7 @@ import { getMainInfo } from './api/infoApi';
 import Loading from '@/shared/ui/Loading';
 import { characterImages, formatId } from '../Encyclopedia/model/mongddang-img';
 import { registerPlugin } from '@capacitor/core';
+import Microphone from './ui/Microphone/Microphone';
 
 export interface EchoPlugin {
   echo(options: { value: string }): Promise<{ value: string }>;
@@ -191,38 +192,45 @@ const KidsMainPage = () => {
                   }
                 />
               </div>
-            </div>
-            <div css={iconVerticalCss}>
-              <div
-                onClick={() => {
-                  setOpenBaseModal(true);
-                  setContentType('notification');
-                }}
-              >
-                <IconTypo
-                  icon={mainIcons.notification}
-                  fontSize="0.75"
-                  menu="알림"
-                />
+              <div css={iconVerticalCss}>
+                <div
+                  onClick={() => {
+                    setOpenBaseModal(true);
+                    setContentType('notification');
+                  }}
+                >
+                  <IconTypo
+                    icon={mainIcons.notification}
+                    fontSize="0.75"
+                    menu="알림"
+                  />
+                </div>
+                <div
+                  onClick={() => {
+                    navigate('/nickname/title');
+                  }}
+                >
+                  <IconTypo
+                    icon={mainIcons.achievement}
+                    fontSize="0.75"
+                    menu={
+                      <div>
+                        도전
+                        <br />
+                        퀘스트
+                      </div>
+                    }
+                  />
+                </div>
+                <CurrentBloodSugar />
+                <Microphone>
+                  <div
+                    onClick={() => {
+                      navigate('/nickname/title');
+                    }}
+                  ></div>
+                </Microphone>
               </div>
-              <div
-                onClick={() => {
-                  navigate('/nickname/title');
-                }}
-              >
-                <IconTypo
-                  icon={mainIcons.achievement}
-                  fontSize="0.75"
-                  menu={
-                    <div>
-                      도전
-                      <br />
-                      퀘스트
-                    </div>
-                  }
-                />
-              </div>
-              <CurrentBloodSugar />
             </div>
           </div>
         </div>
