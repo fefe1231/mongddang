@@ -10,6 +10,7 @@ import setting from '@/assets/img/icon/setting_icon.png'
 export const menuBtnData: MenuBtnItem[] = [
   {
     icon: medication,
+    category: 'medication',
     menu: {
       child: '약 챙기기',
       protector: '복약관리',
@@ -21,6 +22,7 @@ export const menuBtnData: MenuBtnItem[] = [
   },
   {
     icon: meal,
+    category: 'meal',
     menu: {
       child: '급식표 등록',
       protector: '급식표 등록',
@@ -32,6 +34,7 @@ export const menuBtnData: MenuBtnItem[] = [
   },
   {
     icon: report,
+    category: 'report',
     menu: {
       child: '주간 리포트',
       protector: '주간 리포트',
@@ -43,6 +46,7 @@ export const menuBtnData: MenuBtnItem[] = [
   },
   {
     icon: record,
+    category: 'record',
     menu: {
       child: '내 기록',
       protector: '어린이 기록',
@@ -54,6 +58,7 @@ export const menuBtnData: MenuBtnItem[] = [
   },
   {
     icon: profile,
+    category: 'profile',
     menu: {
       child: '프로필',
       protector: '프로필',
@@ -65,6 +70,7 @@ export const menuBtnData: MenuBtnItem[] = [
   },
   {
     icon: setting,
+    category: 'setting',
     menu: {
       child: '설정',
       protector: '설정',
@@ -76,6 +82,7 @@ export const menuBtnData: MenuBtnItem[] = [
   },
   {
     icon: '/img/%EB%A7%90%EB%9E%911.png',
+    category: '',
     menu: {
       child: '삼성설정',
       protector: '삼성설정',
@@ -87,6 +94,7 @@ export const menuBtnData: MenuBtnItem[] = [
   },
   {
     icon: '/img/%EB%A7%90%EB%9E%911.png',
+    category: '',
     menu: {
       child: '포그라운드 설정',
       protector: '포그라운드설정',

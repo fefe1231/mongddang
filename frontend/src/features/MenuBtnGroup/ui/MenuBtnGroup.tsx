@@ -16,8 +16,9 @@ const MenuBtnGroup = (props: MenuBtnGroupProps) => {
       {menuBtnData.map((item, i) => {
         return (
           <div
-            css={btn}
+            css={btn(item.category === 'meal')}
             onClick={() => {
+              if (item.category === 'meal') return;
               navigate(item.urlTo[props.userRole]);
             }}
             key={`menuBtn-${i}`}
