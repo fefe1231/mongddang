@@ -53,7 +53,7 @@ const Login = () => {
 
             if (user.user?.role === 'child') {
               console.log(user.user.role);
-              nav('/menu');
+              nav('/main');
             }
           } else {
             nav('/signup');
