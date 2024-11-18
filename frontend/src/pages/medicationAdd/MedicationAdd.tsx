@@ -20,7 +20,6 @@ import ToggleNone from '@/assets/img/medication_none.svg.svg';
 import ToggleSelected from '@/assets/img/medication_selected.svg.svg';
 import { useCallback, useState } from 'react';
 import MedicationStandard from './ui/MedicationStandard/MedicationStandard';
-import MedicationImg from './ui/MedicationImg/MedicationImg';
 import MedicationPeriod from './ui/MedicationPeriod/MedicationPeriod';
 import MedicationTime from './ui/MedicationTime/MedicationTime';
 import { Button } from '@/shared/ui/Button';
@@ -30,20 +29,11 @@ import { useMedicationAddStore } from './model/useMedicationAddStore';
 
 const MedicationAdd = () => {
   const navigate = useNavigate();
-  const { setMedicationInfo } = useMedicationAddStore()
+  const { setMedicationInfo } = useMedicationAddStore();
   const [isFast, setIsFast] = useState(false);
-  const [medicationImgFile, setMedicationImgFile] = useState<File | null>(null);
   const handleToggle = () => {
     setIsFast(!isFast);
   };
-
-  // 약 이미지 등록
-  const handleMedicationImg = (file: File | null) => {
-    if (file) {
-      setMedicationImgFile(file);
-    }
-  };
-  console.log(medicationImgFile)
 
   const debounceInput = useCallback(
     debounce((value: string) => {
@@ -106,7 +96,6 @@ const MedicationAdd = () => {
           <MedicationPeriod />
           <MedicationTime />
           {isFast ? <MedicationStandard /> : <MedicationOnce />}
-          <MedicationImg handleMedicationImg={handleMedicationImg} />
         </div>
         <Button
           color="primary"

@@ -22,7 +22,7 @@ const MedicationPeriod = () => {
     endMonth: 0,
     endDate: 0,
   });
-  const debounceInput = useCallback(
+  const debouncePeriodInput = useCallback(
     debounce((updatedPeriod) => {
       const startDate = new Date(
         `${updatedPeriod.startYear}-${updatedPeriod.startMonth}-${updatedPeriod.startDate}`
@@ -35,10 +35,10 @@ const MedicationPeriod = () => {
     []
   );
 
-  const handleInput = (key: string, value: string) => {
+  const handlePeriodInput = (key: string, value: string) => {
     const updatedPeriod = { ...period, [key]: value };
     setPeriod(updatedPeriod);
-    debounceInput(updatedPeriod);
+    debouncePeriodInput(updatedPeriod);
   };
 
   return (
@@ -57,7 +57,7 @@ const MedicationPeriod = () => {
             variant="standard"
             css={periodFieldCss}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              handleInput('startYear', e.target.value)
+              handlePeriodInput('startYear', e.target.value)
             }
           />
           <Typography color="dark" size="1" weight={500}>
@@ -72,7 +72,7 @@ const MedicationPeriod = () => {
             variant="standard"
             css={periodFieldCss}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              handleInput('startMonth', e.target.value)
+              handlePeriodInput('startMonth', e.target.value)
             }
           />
           <Typography color="dark" size="1" weight={500}>
@@ -87,7 +87,7 @@ const MedicationPeriod = () => {
             variant="standard"
             css={periodFieldCss}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              handleInput('startDate', e.target.value)
+              handlePeriodInput('startDate', e.target.value)
             }
           />
           <Typography color="dark" size="1" weight={500}>
@@ -104,7 +104,7 @@ const MedicationPeriod = () => {
             variant="standard"
             css={periodFieldCss}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              handleInput('endYear', e.target.value)
+              handlePeriodInput('endYear', e.target.value)
             }
           />
           <Typography color="dark" size="1" weight={500}>
@@ -119,7 +119,7 @@ const MedicationPeriod = () => {
             variant="standard"
             css={periodFieldCss}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              handleInput('endMonth', e.target.value)
+              handlePeriodInput('endMonth', e.target.value)
             }
           />
           <Typography color="dark" size="1" weight={500}>
@@ -134,7 +134,7 @@ const MedicationPeriod = () => {
             variant="standard"
             css={periodFieldCss}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              handleInput('endDate', e.target.value)
+              handlePeriodInput('endDate', e.target.value)
             }
           />
           <Typography color="dark" size="1" weight={500}>

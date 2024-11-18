@@ -5,7 +5,6 @@ import {
   alertItemCss,
   medicineChipCss,
   medicineContentCss,
-  medicineImgCss,
   medicineInfoCss,
   medicineItemCss,
   medicineTextCss,
@@ -58,7 +57,6 @@ const MedicationItem = (props: MedicationItemProps) => {
           </div>
         </div>
       </div>
-      <div css={medicineImgCss}></div>
     </div>
   );
 };

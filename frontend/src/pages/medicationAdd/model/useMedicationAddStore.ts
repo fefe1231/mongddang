@@ -1,5 +1,6 @@
 import { MedicationStandard } from '@/pages/medication/types';
 import { create } from 'zustand';
+import dayjs from 'dayjs';
 
 type MedicationAddItem = {
   nickname: string;
@@ -11,9 +12,12 @@ type MedicationAddItem = {
   repeatTimes: string[];
   standards: MedicationStandard[] | null;
   setUserInfo: (nickname: string) => void;
+  setIsFastInfo: (isFast: boolean) => void;
   setMedicationInfo: (name: string) => void;
   setMedicationPeriod: (startDate: Date, endDate: Date) => void;
-  setMedicationTime: (repeatTime: string[]) => void;
+  setMedicationTime: (
+    timeFields: { id: number; hour: number; minute: number }[]
+  ) => void;
   setStandard: (standard: MedicationStandard[]) => void;
   initializeAdd: () => void;
 };
@@ -47,11 +51,9 @@ export const useMedicationAddStore = create<MedicationAddItem>((set) => ({
     });
   },
 
-  // 약 사진
-  setMedicationImg: (medicationImg: File) => {
-    set({
-      image: medicationImg,
-    });
+  // 속효, 지효
+  setIsFastInfo: (isFast: boolean) => {
+    set({ isFast: isFast });
   },
 
   // 복약 기간
@@ -64,10 +66,24 @@ export const useMedicationAddStore = create<MedicationAddItem>((set) => ({
   },
 
   // 복약 시간
-  setMedicationTime: (repeatTime: string[]) => {
-    set({
-      repeatTimes: repeatTime,
-    });
+  setMedicationTime: (timeFields) => {
+    const timeStrings = timeFields.reduce<string[]>(
+      (acc, { id, hour, minute }) => {
+        console.log('timeFields', timeFields);
+        if (hour < 0 || hour > 23 || minute < 0 || minute > 59) {
+          console.warn(`Invalid time for id ${id}: ${hour}:${minute}`);
+          return acc;
+        }
+
+        const timeString = dayjs().hour(hour).minute(minute).format('HH:mm');
+
+        return [...acc, timeString];
+      },
+      []
+    );
+
+    set({ repeatTimes: timeStrings });
+    console.log('복약 시간', timeStrings);
   },
 
   // 복약 용량

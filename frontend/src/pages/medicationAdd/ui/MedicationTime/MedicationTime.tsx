@@ -9,10 +9,38 @@ import {
   timeFieldCss,
 } from './MedicationTime.styles';
 import { useMedicationTimeStore } from '../../model/useMedicationTimeStore';
+import { useCallback, useEffect } from 'react';
+import { debounce, toNumber } from 'lodash';
+import { useMedicationAddStore } from '../../model/useMedicationAddStore';
 
 const MedicationTime = () => {
-  const { timeFields, addTimeField, deleteTimeField } =
+  const { timeFields, addTimeField, deleteTimeField, setTimeField } =
     useMedicationTimeStore();
+
+  const { setMedicationTime } = useMedicationAddStore();
+
+  useEffect(() => {
+    debounceMedTimeInput([...timeFields]);
+  }, [timeFields]);
+
+  const debounceMedTimeInput = useCallback(
+    debounce((fields) => {
+      setMedicationTime(fields);
+    }, 500),
+    []
+  );
+
+  const handleMedTimeInput = (
+    id: number,
+    field: 'hour' | 'minute',
+    value: number
+  ) => {
+    const currentField = timeFields.find((item) => item.id === id);
+    if (!currentField) return;
+
+    setTimeField(id, field, value);
+    debounceMedTimeInput([...timeFields]);
+  };
 
   const handleTimeField = () => {
     addTimeField();
@@ -48,6 +76,9 @@ const MedicationTime = () => {
               type="text"
               variant="standard"
               css={timeFieldCss}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                handleMedTimeInput(item.id, 'hour', toNumber(e.target.value))
+              }
             />
             <Typography color="dark" size="1" weight={500}>
               시
@@ -60,6 +91,9 @@ const MedicationTime = () => {
               type="text"
               variant="standard"
               css={timeFieldCss}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                handleMedTimeInput(item.id, 'minute', toNumber(e.target.value))
+              }
             />
             <Typography color="dark" size="1" weight={500}>
               분
