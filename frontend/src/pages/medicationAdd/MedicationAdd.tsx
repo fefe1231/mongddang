@@ -26,13 +26,25 @@ import { Button } from '@/shared/ui/Button';
 import MedicationOnce from './ui/MedicationOnce/MedicationOnce';
 import { debounce } from 'lodash';
 import { useMedicationAddStore } from './model/useMedicationAddStore';
+import { saveMedication } from './api/saveMedicationApi';
 
 const MedicationAdd = () => {
   const navigate = useNavigate();
-  const { setMedicationInfo } = useMedicationAddStore();
+  const {
+    name,
+    nickname,
+    image,
+    repeatStartTime,
+    repeatEndTime,
+    repeatTimes,
+    standards,
+    setMedicationInfo,
+    resetStandard,
+  } = useMedicationAddStore();
   const [isFast, setIsFast] = useState(false);
   const handleToggle = () => {
     setIsFast(!isFast);
+    resetStandard();
   };
 
   const debounceInput = useCallback(
@@ -46,6 +58,19 @@ const MedicationAdd = () => {
     debounceInput(e.target.value);
   };
 
+  const handleSaveMed = () => {
+    const medicationData = {
+      name,
+      nickname,
+      image,
+      repeatStartTime,
+      repeatEndTime,
+      isFast,
+      repeatTimes,
+      standards,
+    };
+    saveMedication(medicationData);
+  };
   return (
     <div css={container}>
       <TopBar
@@ -102,7 +127,9 @@ const MedicationAdd = () => {
           fontSize="1.25"
           isShadow
           variant="contained"
-          handler={() => {}}
+          handler={() => {
+            handleSaveMed();
+          }}
           css={medicationAddBtnCss}
         >
           약 저장 하기

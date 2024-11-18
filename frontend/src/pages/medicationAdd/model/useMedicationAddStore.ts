@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 type MedicationAddItem = {
   nickname: string;
   name: string;
-  image: File | null;
+  image: null;
   repeatStartTime: Date | null;
   repeatEndTime: Date | null;
   isFast: boolean;
@@ -19,6 +19,7 @@ type MedicationAddItem = {
     timeFields: { id: number; hour: number; minute: number }[]
   ) => void;
   setStandard: (standard: MedicationStandard[]) => void;
+  resetStandard: () => void;
   initializeAdd: () => void;
 };
 
@@ -90,6 +91,13 @@ export const useMedicationAddStore = create<MedicationAddItem>((set) => ({
   setStandard: (standard: MedicationStandard[]) => {
     set({
       standards: standard,
+    });
+  },
+
+  // 복약 용량 초기화
+  resetStandard: () => {
+    set({
+      standards: [],
     });
   },
 

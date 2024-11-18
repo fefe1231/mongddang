@@ -4,6 +4,7 @@ type MedicationStandardType = {
   standardFields: { id: number }[];
   addStandardField: () => void;
   deleteStandardField: () => void;
+  setStandardField: (id: number, field: string, value: number) => void;
 };
 
 export const useMedicationStandardStore = create<MedicationStandardType>(
@@ -17,12 +18,26 @@ export const useMedicationStandardStore = create<MedicationStandardType>(
         ],
       }));
     },
+
     deleteStandardField: () => {
       set((state) => ({
         standardFields:
           state.standardFields.length > 1
             ? state.standardFields.slice(0, -1)
             : state.standardFields,
+      }));
+    },
+
+    setStandardField: (id: number, field: string, value: number) => {
+      set((state) => ({
+        standardFields: state.standardFields.map((item) =>
+          item.id === id
+            ? {
+                ...item,
+                [field]: value,
+              }
+            : item
+        ),
       }));
     },
   })

@@ -9,10 +9,43 @@ import {
   amountNumCss,
 } from './MedicationStandard.styles';
 import { useMedicationStandardStore } from '../../model/useMedicationStandardStore';
+import { useMedicationAddStore } from '../../model/useMedicationAddStore';
+import { useCallback, useEffect } from 'react';
+import { debounce, toNumber } from 'lodash';
 
 const MedicationStandard = () => {
-  const { standardFields, addStandardField, deleteStandardField } =
-    useMedicationStandardStore();
+  const {
+    standardFields,
+    addStandardField,
+    deleteStandardField,
+    setStandardField,
+  } = useMedicationStandardStore();
+
+  const { setStandard } = useMedicationAddStore();
+
+  useEffect(() => {
+    debounceStandardInput([...standardFields]);
+  }, [standardFields]);
+
+  const debounceStandardInput = useCallback(
+    debounce((fields) => {
+      setStandard(fields);
+    }, 500),
+    []
+  );
+
+  const handleStandardInput = (
+    id: number,
+    field: 'volume' | 'minGlucose' | 'maxGlucose',
+    value: number
+  ) => {
+    const currentField = standardFields.find((item) => item.id === id);
+    if (!currentField) return;
+    if (value !== 0) {
+      setStandardField(id, field, value);
+      debounceStandardInput([...standardFields]);
+    }
+  };
 
   const handleStandardField = () => {
     addStandardField();
@@ -48,6 +81,13 @@ const MedicationStandard = () => {
               type="text"
               variant="standard"
               css={amountFieldCss}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                handleStandardInput(
+                  item.id,
+                  'minGlucose',
+                  toNumber(e.target.value)
+                )
+              }
             />
             <Typography color="dark" size="1.25" weight={600}>
               ~
@@ -60,6 +100,13 @@ const MedicationStandard = () => {
               type="text"
               variant="standard"
               css={amountFieldCss}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                handleStandardInput(
+                  item.id,
+                  'maxGlucose',
+                  toNumber(e.target.value)
+                )
+              }
             />
             <Typography color="dark" size="1.25" weight={600}>
               =
@@ -72,6 +119,9 @@ const MedicationStandard = () => {
               type="text"
               variant="standard"
               css={amountFieldCss}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                handleStandardInput(item.id, 'volume', toNumber(e.target.value))
+              }
             />
             {standardFields.length === item.id ? (
               <Typography
