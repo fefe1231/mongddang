@@ -28,6 +28,6 @@ public class SleepService {
                 .build();
         pushNotificationService.sendPushNotification(child, notification, PushLog.Category.game);
 
-        return "어린이에게 복약 시간 알림 발송 완료";
+        return "어린이에게 수면 알림 발송 완료";
     }
 }
