@@ -11,6 +11,8 @@ import { article, chart } from './style';
 import { BloodSugarChart } from '@/widgets/blood-sugar-chart';
 import { useSelectedChildStore } from '@/entities/selected-child/model/store';
 import { useMemo } from 'react';
+import Loading from '@/shared/ui/Loading';
+import useMinimumLoading from '@/shared/hooks/useMinimumLoading';
 
 export const DayRecordPage = () => {
   const nav = useNavigate();
@@ -39,12 +41,14 @@ export const DayRecordPage = () => {
     error,
   } = useQuery(BloodsugarQueries.todayBloodSugarQuery(nickname, date));
 
+  const showLoading = useMinimumLoading(isBloodSugarLoading);
+
   if (isBloodSugarErr) {
     console.log(JSON.stringify(error));
     throw new Error('Blood data error');
   }
 
-  if (isBloodSugarLoading) return <div>Loading...</div>;
+  if (showLoading) return <Loading />;
 
   if (!nickname) {
     return <div>no nickname</div>;
