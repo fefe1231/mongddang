@@ -1,3 +1,4 @@
+import { PushNotificationSchema } from '@capacitor/push-notifications';
 import { create } from 'zustand';
 
 export type PushNotificationInfo = {
@@ -5,35 +6,33 @@ export type PushNotificationInfo = {
   childNickname: string | null;
   title: string | null;
   message: string | null;
-  setPushNotification: (notification: any) => void;
+  setPushNotification: (notification: PushNotificationSchema) => void;
   removePushNotification: () => void;
 };
 
-export const usePushNotificationStore = create<PushNotificationInfo>(
-  (set) => ({
-    receiverNickname: null,
-    childNickname: null,
-    title: null,
-    message: null,
+export const usePushNotificationStore = create<PushNotificationInfo>((set) => ({
+  receiverNickname: null,
+  childNickname: null,
+  title: null,
+  message: null,
 
-    setPushNotification: (notification) => {
-      const { receiverNickname, childNickname, title, message } =
-        notification.data;
-      set({
-        receiverNickname,
-        childNickname,
-        title,
-        message,
-      });
-    },
+  setPushNotification: (notification) => {
+    const { receiverNickname, childNickname, title, message } =
+      notification.data;
+    set({
+      receiverNickname,
+      childNickname,
+      title,
+      message,
+    });
+  },
 
-    removePushNotification: () => {
-      set({
-        receiverNickname: null,
-        childNickname: null,
-        title: null,
-        message: null,
-      });
-    },
-  })
-);
+  removePushNotification: () => {
+    set({
+      receiverNickname: null,
+      childNickname: null,
+      title: null,
+      message: null,
+    });
+  },
+}));
