@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'screens/home_screen.dart';
-import 'repository/stat_repository.dart';  // StatRepository import 추가
+import 'repository/stat_repository.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();  // Flutter 바인딩 초기화
   StatRepository.startSync();  // 동기화 시작
+  await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 

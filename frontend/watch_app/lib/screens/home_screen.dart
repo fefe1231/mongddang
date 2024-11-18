@@ -1,3 +1,6 @@
+// home_screen.dart
+
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../models/activity.dart';
 import '../repository/stat_repository.dart';
@@ -13,11 +16,26 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int? bloodSugar;
   bool isLoading = false;
+  StreamSubscription? _bloodSugarSubscription;
 
   @override
   void initState() {
     super.initState();
-    fetchBloodSugar();
+    _bloodSugarSubscription = StatRepository.bloodSugarStream.listen((newValue) {
+      setState(() {
+        bloodSugar = newValue;
+        print('새로운 혈당 수치 업데이트: $bloodSugar');
+      });
+    });
+
+    StatRepository.startSync();
+  }
+
+  @override
+  void dispose() {
+    StatRepository.stopSync();
+    _bloodSugarSubscription?.cancel();
+    super.dispose();
   }
 
   Future<void> fetchBloodSugar() async {
@@ -27,14 +45,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
     try {
       final response = await StatRepository.fetchData();
-      setState(() {
-        bloodSugar = response['bloodSugarLevel'] as int?;
-      });
+      if (response != null) {
+        setState(() {
+          bloodSugar = response['bloodSugarLevel'] as int?;
+        });
+      }
     } catch (e) {
       print('혈당 데이터 가져오기 실패: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('혈당 데이터를 가져오는데 실패했습니다.')),
-      );
     } finally {
       setState(() {
         isLoading = false;
@@ -94,22 +111,28 @@ class _HomeScreenState extends State<HomeScreen> {
       bottom: 0,
       left: 0,
       right: 0,
-      child: Image.asset(
-        'assets/img/img4.png',
-        height: 150,
-        fit: BoxFit.fill,
-        errorBuilder: (context, error, stackTrace) {
-          return Container(
-            height: 70,
-            decoration: BoxDecoration(
-              color: Colors.green[300],
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(96),
-                bottomRight: Radius.circular(96),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(43),
+          bottom: Radius.circular(96),
+        ),
+        child: Image.asset(
+          'assets/img/background.png',
+          height: 150,
+          fit: BoxFit.fill,
+          errorBuilder: (context, error, stackTrace) {
+            return Container(
+              height: 150,
+              decoration: BoxDecoration(
+                color: Colors.green[300],
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(43),
+                  bottom: Radius.circular(96),
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
@@ -164,8 +187,9 @@ class _HomeScreenState extends State<HomeScreen> {
       top: 70,
       right: 20,
       child: GestureDetector(
-        onTap: fetchBloodSugar,  // 새로고침 기능 추가
-        child: Container(
+        onTap: fetchBloodSugar,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
           width: 36,
           height: 36,
           decoration: BoxDecoration(
@@ -180,7 +204,10 @@ class _HomeScreenState extends State<HomeScreen> {
               ? const SizedBox(
             width: 20,
             height: 20,
-            child: CircularProgressIndicator(strokeWidth: 2),
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+            ),
           )
               : Center(
             child: Text(
@@ -219,7 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const SizedBox(height: 4),
           const Text(
-            '너 뭐 되는 갱얼쥐',
+            '어린이 서원',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 12,
