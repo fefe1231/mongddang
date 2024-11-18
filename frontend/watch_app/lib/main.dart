@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,  // DEBUG 배너 제거
       title: '혈당 모니터 앱',
       theme: ThemeData(
         primarySwatch: Colors.blue,
