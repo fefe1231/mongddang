@@ -66,3 +66,9 @@ export const iconVerticalCss = css`
   flex-direction: column;
   gap: 1rem;
 `;
+
+export const dotCss = css`
+  position: absolute;
+  top: 0;
+  right: 5%;
+`;
