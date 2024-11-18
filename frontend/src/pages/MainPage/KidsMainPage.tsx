@@ -222,7 +222,7 @@ const KidsMainPage = () => {
                     }
                   />
                 </div>
-                <CurrentBloodSugar />
+                <CurrentBloodSugar nickname={mainInfo.nickname}/>
                 <Microphone>
                   <div
                     onClick={() => {
