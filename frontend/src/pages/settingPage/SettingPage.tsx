@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { Toggle } from '@/shared/ui/Toggle';
 import { Typography } from '@/shared/ui/Typography';
 import { useAudioStore } from '@/shared/model/useAudioStore';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const SettingPage = () => {
   const navigate = useNavigate();
@@ -15,14 +15,8 @@ const SettingPage = () => {
 
   console.log('bgm', bgm.audioRef?.volume);
 
-  const [bgmState, setBgmState] = useState<boolean>(
-    bgm?.audioRef?.volume === 0 ? false : true
-  );
-  const [bubbleState, setBubbleState] = useState<boolean>(
-    bubble?.audioRef?.volume === 0 ? false : true
-  );
-
-  useEffect(() => {}, []);
+  const [bgmState, setBgmState] = useState<boolean>(!bgm.isMuted);
+  const [bubbleState, setBubbleState] = useState<boolean>(!bubble.isMuted);
 
   const handleClickBgmToggle = () => {
     bgm.toggleMute();
