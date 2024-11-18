@@ -44,7 +44,7 @@ const MedicationTime = () => {
               color="primary"
               defaultValue=""
               label=""
-              placeholder="HH"
+              placeholder="ex) 17"
               type="text"
               variant="standard"
               css={timeFieldCss}
@@ -56,7 +56,7 @@ const MedicationTime = () => {
               color="primary"
               defaultValue=""
               label=""
-              placeholder="MM"
+              placeholder="ex) 30"
               type="text"
               variant="standard"
               css={timeFieldCss}

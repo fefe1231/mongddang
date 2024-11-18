@@ -27,7 +27,6 @@ export const inputContentCss = css`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100vh;
   padding: 3%;
   gap: 1rem;
 `;
@@ -62,7 +61,6 @@ export const medicationTypeItemCss = css`
 `;
 
 export const medicationAddBtnCss = css`
-  display: flex;
-  width: 100%;
-  padding: 0 3%;
+  position: static;
+  width: 95%;
 `;

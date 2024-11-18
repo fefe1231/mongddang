@@ -73,7 +73,7 @@ const MedicationStandard = () => {
               variant="standard"
               css={amountFieldCss}
             />
-            {standardFields.length - 1 === item.id ? (
+            {standardFields.length === item.id ? (
               <Typography
                 color="dark"
                 size="1.25"

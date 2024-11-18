@@ -1,7 +1,7 @@
-type MedicationStandard = {
+export type MedicationStandard = {
   volume: number;
-  minGlucose: number;
-  maxGlucose: number;
+  minGlucose: number | null;
+  maxGlucose: number | null;
 };
 
 export type MedicationItemType = {
