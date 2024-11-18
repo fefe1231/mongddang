@@ -164,7 +164,7 @@ const Login = () => {
             <br />
             당뇨 관리!
           </Typography> */}
-          <a css={pocket} href="/main">메인</a>
+          <a css={pocket} href="/main"></a>
         </div>
         {/* <div css={googleCss}>
           <GoogleLogin

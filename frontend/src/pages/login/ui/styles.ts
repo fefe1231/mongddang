@@ -62,5 +62,8 @@ export const btnImg = css`
 
 export const pocket = css`
   position: absolute;
-  transform: translate(-5.7rem, 5.3rem);
-`
+  width: 0.5rem;
+  height: 1rem;
+  background-color: black;
+  transform: translate(-6rem, 5.3rem);
+`;
