@@ -2,9 +2,9 @@
 // import { GoogleLogin } from '@react-oauth/google';
 // import axios, { AxiosResponse } from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { base, contentCss, googleCss } from './ui/styles';
-import { Icon } from '@/shared/ui/Icon';
-import { Typography } from '@/shared/ui/Typography';
+import { base, btn, btnImg, contentCss, pocket } from './ui/styles';
+// import { Icon } from '@/shared/ui/Icon';
+// import { Typography } from '@/shared/ui/Typography';
 import { useUserStore } from '@/entities/user/model';
 // import { UserService } from '@/shared/api/user/user.service';
 // import { LoginResponse } from './api/api';
@@ -13,6 +13,7 @@ import { api } from './api/api';
 import { AxiosResponse } from 'axios';
 import { LoginResponse } from '@/shared/api/user/user.type';
 import { useShallow } from 'zustand/shallow';
+import loginBtn from '@/assets/img/page/login/login_button.png';
 
 // interface IcredentialResponse {
 //   credential?: string;
@@ -150,10 +151,10 @@ const Login = () => {
     <div css={base}>
       <div css={contentCss}>
         <div>
-          <Icon size={14}>
-            <img alt="icon-0" src="" />
-          </Icon>
-          <Typography
+          {/* <Icon size={14}>
+            <img alt="icon-0" src={loginBackground} />
+          </Icon> */}
+          {/* <Typography
             style={{ textAlign: 'center' }}
             color="dark"
             size="1.25"
@@ -162,16 +163,18 @@ const Login = () => {
             몽땅과 함께하는
             <br />
             당뇨 관리!
-          </Typography>
-          <a href="/main">메인</a>
+          </Typography> */}
+          <a css={pocket} href="/main">메인</a>
         </div>
-        <div css={googleCss}>
-          {/* <GoogleLogin
+        {/* <div css={googleCss}>
+          <GoogleLogin
             onSuccess={handleLoginSuccess}
             onError={handleLoginError}
-          /> */}
-          <button onClick={googleLogin}>Google Login Btn</button>
-        </div>
+          />
+        </div> */}
+        <button css={btn} onClick={googleLogin}>
+          <img css={btnImg} src={loginBtn} alt="" />
+        </button>
       </div>
     </div>
   );
