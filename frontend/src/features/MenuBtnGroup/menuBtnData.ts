@@ -1,8 +1,15 @@
 import { MenuBtnItem } from './model/types';
+import medication from '@/assets/img/icon/medication_icon.png'
+import meal from '@/assets/img/icon/meal_icon.png'
+import record from '@/assets/img/icon/record_icon.png'
+import report from '@/assets/img/icon/report_icon.png'
+import profile from '@/assets/img/icon/profile_icon.png'
+import setting from '@/assets/img/icon/setting_icon.png'
+
 
 export const menuBtnData: MenuBtnItem[] = [
   {
-    icon: '/img/%EB%A7%90%EB%9E%911.png',
+    icon: medication,
     menu: {
       child: '약 챙기기',
       protector: '복약관리',
@@ -13,7 +20,7 @@ export const menuBtnData: MenuBtnItem[] = [
     },
   },
   {
-    icon: '/img/%EB%A7%90%EB%9E%911.png',
+    icon: meal,
     menu: {
       child: '급식표 등록',
       protector: '급식표 등록',
@@ -24,7 +31,7 @@ export const menuBtnData: MenuBtnItem[] = [
     },
   },
   {
-    icon: '/img/%EB%A7%90%EB%9E%911.png',
+    icon: report,
     menu: {
       child: '주간 리포트',
       protector: '주간 리포트',
@@ -35,7 +42,7 @@ export const menuBtnData: MenuBtnItem[] = [
     },
   },
   {
-    icon: '/img/%EB%A7%90%EB%9E%911.png',
+    icon: record,
     menu: {
       child: '내 기록',
       protector: '어린이 기록',
@@ -46,7 +53,7 @@ export const menuBtnData: MenuBtnItem[] = [
     },
   },
   {
-    icon: '/img/%EB%A7%90%EB%9E%911.png',
+    icon: profile,
     menu: {
       child: '프로필',
       protector: '프로필',
@@ -57,7 +64,7 @@ export const menuBtnData: MenuBtnItem[] = [
     },
   },
   {
-    icon: '/img/%EB%A7%90%EB%9E%911.png',
+    icon: setting,
     menu: {
       child: '설정',
       protector: '설정',
