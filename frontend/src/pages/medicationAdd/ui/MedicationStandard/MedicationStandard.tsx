@@ -70,9 +70,9 @@ const MedicationStandard = () => {
           +
         </Typography>
       </div>
-      {standardFields.map((item) => {
+      {standardFields.map((item, i) => {
         return (
-          <div css={amountNumCss}>
+          <div css={amountNumCss} key={`standard-${i}`}>
             <TextField
               color="primary"
               defaultValue=""

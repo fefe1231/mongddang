@@ -24,7 +24,7 @@ type MedicationAddItem = {
 };
 
 export const useMedicationAddStore = create<MedicationAddItem>((set) => ({
-  nickname: '',
+  nickname: '집에가고파',
   name: '',
   image: null,
   repeatStartTime: null,
@@ -77,7 +77,7 @@ export const useMedicationAddStore = create<MedicationAddItem>((set) => ({
         }
 
         const timeString = dayjs().hour(hour).minute(minute).format('HH:mm');
-
+        console.log('timeString', timeString);
         return [...acc, timeString];
       },
       []

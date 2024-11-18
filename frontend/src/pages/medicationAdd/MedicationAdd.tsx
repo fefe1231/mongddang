@@ -27,9 +27,13 @@ import MedicationOnce from './ui/MedicationOnce/MedicationOnce';
 import { debounce } from 'lodash';
 import { useMedicationAddStore } from './model/useMedicationAddStore';
 import { saveMedication } from './api/saveMedicationApi';
+import { useMedicationStandardStore } from './model/useMedicationStandardStore';
+import { useMedicationTimeStore } from './model/useMedicationTimeStore';
+import { useQueryClient } from '@tanstack/react-query';
 
 const MedicationAdd = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const {
     name,
     nickname,
@@ -40,11 +44,16 @@ const MedicationAdd = () => {
     standards,
     setMedicationInfo,
     resetStandard,
+    initializeAdd,
   } = useMedicationAddStore();
+  const { resetStandardField } = useMedicationStandardStore();
+  const { resetTimeField } = useMedicationTimeStore();
   const [isFast, setIsFast] = useState(false);
   const handleToggle = () => {
     setIsFast(!isFast);
     resetStandard();
+    resetStandardField();
+    resetTimeField();
   };
 
   const debounceInput = useCallback(
@@ -58,10 +67,10 @@ const MedicationAdd = () => {
     debounceInput(e.target.value);
   };
 
-  const handleSaveMed = () => {
+  const handleSaveMed = async () => {
     const medicationData = {
       name,
-      nickname,
+      nickname: '집에가고파',
       image,
       repeatStartTime,
       repeatEndTime,
@@ -69,7 +78,10 @@ const MedicationAdd = () => {
       repeatTimes,
       standards,
     };
-    saveMedication(medicationData);
+    await saveMedication(medicationData);
+    queryClient.invalidateQueries({
+      queryKey: ['medicationList', nickname ?? ''],
+    });
   };
   return (
     <div css={container}>
@@ -127,8 +139,12 @@ const MedicationAdd = () => {
           fontSize="1.25"
           isShadow
           variant="contained"
-          handler={() => {
-            handleSaveMed();
+          handler={async () => {
+            await handleSaveMed();
+            initializeAdd();
+            resetStandardField();
+            resetTimeField();
+            navigate('/medication');
           }}
           css={medicationAddBtnCss}
         >

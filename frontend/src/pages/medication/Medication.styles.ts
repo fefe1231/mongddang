@@ -19,6 +19,7 @@ export const content = css`
   height: 100%;
   padding: 3%;
   gap: 0.5rem;
+  overflow-y: auto;
 `;
 
 export const addMedicineBtnCss = css`
@@ -32,4 +33,6 @@ export const medicineListCss = css`
   flex-direction: column;
   width: 100%;
   height: 100%;
+  gap: 0.5rem;
+  overflow-y: auto;
 `;

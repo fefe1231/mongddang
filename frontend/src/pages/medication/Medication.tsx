@@ -14,11 +14,12 @@ import { useMedicationQuery } from './model/useMedicationQuery';
 import { useNavigate } from 'react-router-dom';
 import { MedicationItemType } from './types';
 
-
 const Medication = () => {
   // const userRole = useUserStore((state) => state.user?.role);
   const userRole = 'child';
   // const selfNickname = useUserStore((state) => state.user?.nickname);
+  // console.log(userRole, selfNickname);
+  // console.log(useUserStore);
   const selfNickname = '집에가고파';
   const kidNickname = '아이 닉네임';
   const { data: medicationList } = useMedicationQuery(
@@ -29,6 +30,7 @@ const Medication = () => {
         : ''
   );
   const navigate = useNavigate();
+
   console.log(userRole);
   return (
     <div css={container}>

@@ -5,6 +5,7 @@ type MedicationStandardType = {
   addStandardField: () => void;
   deleteStandardField: () => void;
   setStandardField: (id: number, field: string, value: number) => void;
+  resetStandardField: () => void;
 };
 
 export const useMedicationStandardStore = create<MedicationStandardType>(
@@ -40,5 +41,10 @@ export const useMedicationStandardStore = create<MedicationStandardType>(
         ),
       }));
     },
+
+    resetStandardField: () =>
+      set({
+        standardFields: [{ id: 0 }],
+      }),
   })
 );

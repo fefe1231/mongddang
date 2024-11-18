@@ -5,6 +5,7 @@ type MedicationTimeType = {
   addTimeField: () => void;
   deleteTimeField: () => void;
   setTimeField: (id: number, field: string, value: number) => void;
+  resetTimeField: () => void;
 };
 
 export const useMedicationTimeStore = create<MedicationTimeType>((set) => ({
@@ -40,4 +41,8 @@ export const useMedicationTimeStore = create<MedicationTimeType>((set) => ({
       ),
     }));
   },
+  resetTimeField: () =>
+    set({
+      timeFields: [{ id: 0, hour: 0, minute: 0 }],
+    }),
 }));
