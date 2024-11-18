@@ -14,6 +14,7 @@ import { AxiosResponse } from 'axios';
 import { LoginResponse } from '@/shared/api/user/user.type';
 import { useShallow } from 'zustand/shallow';
 import loginBtn from '@/assets/img/page/login/login_button.png';
+import { Button } from '@/shared/ui/Button';
 
 // interface IcredentialResponse {
 //   credential?: string;
@@ -172,9 +173,9 @@ const Login = () => {
             onError={handleLoginError}
           />
         </div> */}
-        <button css={btn} onClick={googleLogin}>
+        <Button css={btn} handler={googleLogin}>
           <img css={btnImg} src={loginBtn} alt="" />
-        </button>
+        </Button>
       </div>
     </div>
   );

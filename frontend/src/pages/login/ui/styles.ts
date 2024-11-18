@@ -35,22 +35,27 @@ export const googleCss = css`
   border-radius: 0.625rem;
 `;
 
+// Button base 스타일 수정
 export const btn = css`
   position: absolute;
+  bottom: 3rem;
+  padding: 0; // 패딩 제거
   border: 0;
   background-color: transparent;
-  bottom: 3rem;
-  /* 부드러운 전환 효과를 위한 transition */
-  transition:
-    transform 0.1s,
-    box-shadow 0.1s;
+  transition: transform 0.1s;
 
-  /* 기본 상태에서 살짝 떠있는 효과 */
-  transform: translateY(0);
-
-  /* 클릭했을 때의 효과 */
+  /* 클릭 효과만 남기고 배경색 변경 제거 */
   &:active {
-    transform: translate(3px, 3px); /* 아래로 살짝 이동 */
+    transform: translate(3px, 3px);
+  }
+
+  -webkit-tap-highlight-color: transparent;
+
+  /* 기본 버튼 스타일 재정의 */
+  &:enabled:active {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
   }
 `;
 
