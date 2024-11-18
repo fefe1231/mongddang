@@ -9,7 +9,10 @@ export const InitializePushListener = async (
 ) => {
   await initPushNotification();
   PushNotifications.removeAllListeners();
-  PushNotifications.addListener('pushNotificationReceived', (notification) => {
-    setPushNotification(notification);
-  });
+  PushNotifications.addListener(
+    'pushNotificationReceived',
+    (notification) => {
+      setPushNotification(notification);
+    }
+  );
 };

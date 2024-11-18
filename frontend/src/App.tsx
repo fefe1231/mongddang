@@ -28,7 +28,7 @@ import { ForegoundServiceSetting } from './pages/foreground-setting/index';
 
 function App() {
   useLoadState();
-  
+
   useEffect(() => {
     SocialLogin.initialize({
       google: {
