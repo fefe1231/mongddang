@@ -55,15 +55,23 @@
 
 ---
 
-### 3️⃣ 기술 스택
-![img](assets/tech.png)
----
+### 3️⃣ Figma
 
-### 4️⃣ 아키텍처
-![img](assets/architecture.png)
----
+## ![img](assets/figma.png)
 
-### 5️⃣ 기대효과
+### 3️⃣ ERD
+
+## ![img](assets/erd.png)
+
+### 4️⃣ 기술 스택
+
+## ![img](assets/tech.png)
+
+### 5️⃣ 아키텍처
+
+## ![img](assets/architecture.png)
+
+### 6️⃣ 기대효과
 
 - 몽땅과의 대화로 인한 어린이 정서적 안정
 
@@ -76,3 +84,33 @@
 - 게임화 된 건강관리로 인한 지속적 습관 형성
 
 ---
+
+### API
+
+##### User
+
+## ![img](assets/api1.PNG)
+
+##### FCM
+
+## ![img](assets/api2.PNG)
+
+##### Notificatioin
+
+## ![img](assets/api3.PNG)
+
+##### Game
+
+## ![img](assets/api4.PNG)
+
+##### Record
+
+## ![img](assets/api5.PNG)
+
+##### Medication
+
+## ![img](assets/api6.PNG)
+
+##### vital
+
+## ![img](assets/api7.PNG)
