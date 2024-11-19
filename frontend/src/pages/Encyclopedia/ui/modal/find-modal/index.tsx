@@ -73,7 +73,9 @@ export const FindModal = ({ setstate, data }: OwnModalProps) => {
 
   const closeAllModals = () => {
     queryClient.setQueryData<CharacterResponse>(['character'], (oldData) => {
-      // window.location.reload();
+      console.log('FindModal mutation query oldData');
+      console.log(JSON.stringify(oldData));
+
       if (!oldData) return oldData;
 
       return {
