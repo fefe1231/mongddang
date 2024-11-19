@@ -24,7 +24,7 @@ public class GlycemiaProtectorService {
         User child = userRepository.findById(childId).get();
         Notification notification = Notification.builder()
                 .title("이상 혈당 지속 알림")
-                .message("저혈당 증상이 15분 이상 지속되고 있습니다.")
+                .message("'" + child.getNickname() + "'" + "의 저혈당 증상이 15분 이상 지속되고 있습니다.")
                 .receiver(protector)
                 .child(child)
                 .build();
@@ -39,7 +39,7 @@ public class GlycemiaProtectorService {
         User child = userRepository.findById(childId).get();
         Notification notification = Notification.builder()
                 .title("이상 혈당 지속 알림")
-                .message("고혈당 증상이 15분 이상 지속되고 있습니다.")
+                .message("'" + child.getNickname() + "'" + "의 고혈당 증상이 15분 이상 지속되고 있습니다.")
                 .receiver(protector)
                 .child(child)
                 .build();
