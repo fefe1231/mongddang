@@ -73,7 +73,7 @@ export const Encyclopedia = () => {
   if (isError) return <div>에러 발생: {error.message}</div>;
   if (!characterData?.data) return <div>데이터가 없습니다.</div>; 
   return (
-    <div css={base}>
+    <div css={base} className='Encyclopedia'>
       {isOwnModal && selectedCharacter && (
         <OwnModal data={selectedCharacter} setstate={setIsOwnModal} />
       )}
