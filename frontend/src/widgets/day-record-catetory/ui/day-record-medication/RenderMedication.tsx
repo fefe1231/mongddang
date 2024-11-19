@@ -14,6 +14,7 @@ import {
 } from './style';
 import dayjs from 'dayjs';
 import { RecordErrorBoundary } from '../error-boundary/record-error-boundary';
+import { SLEEP_DEFAULT_IMG } from '@/shared/constans';
 
 interface RenderMedicationProps {
   nickname: string;
@@ -60,7 +61,7 @@ export const RenderMedication = ({
                 </div>
               </div>
               <div>
-                <img css={imgBox} src={`${item.imageUrl}`} />
+                <img css={imgBox} src={SLEEP_DEFAULT_IMG} />
               </div>
             </div>
           ))}
