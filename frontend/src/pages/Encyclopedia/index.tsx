@@ -62,7 +62,7 @@ export const Encyclopedia = () => {
     isLoading,
     isError,
     error,
-  } = useQuery<ICharacterInfo>({ 
+  } = useQuery<AxiosResponse<ICharacterInfo>>({ 
     queryKey: ['character'],
     queryFn: getCharacterInfo,
     refetchOnWindowFocus: true,
@@ -95,7 +95,7 @@ export const Encyclopedia = () => {
         </Description>
 
         <div css={cardsWrapperCss}>
-        {characterData.data.map((data: ICharacterData) => (  // data.data.data 대신 data.data로 수정
+        {characterData.data.data.map((data: ICharacterData) => (  // data.data.data 대신 data.data로 수정
           <div key={data.id} css={cardContainerCss}>
             {!data.isOwned ? (
               <div onClick={() => openModal(data, 'not')}>
