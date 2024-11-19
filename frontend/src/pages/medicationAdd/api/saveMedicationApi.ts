@@ -16,6 +16,7 @@ export const saveMedication = async (medicationData: MedicationItemType) => {
       console.log(res.data);
     })
     .catch((err) => {
+      console.log('saveMedication Err');
       console.log(err);
     });
 };
