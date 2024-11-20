@@ -15,6 +15,7 @@ import { signUp } from '../../api/api';
 import { useUserStore } from '@/entities/user/model';
 import { useShallow } from 'zustand/shallow';
 import { SignupResponse } from '@/shared/api/user/user.type';
+import { useMedicationAddStore } from '@/pages/medicationAdd/model/useMedicationAddStore';
 
 export const DataForm = ({ role }: { role: UserRole }) => {
   const [gender, setGender] = useState<'male' | 'female' | undefined>(
@@ -36,6 +37,7 @@ export const DataForm = ({ role }: { role: UserRole }) => {
       getUserInfo: state.getUserInfo,
     }))
   );
+  const { setUserInfo } = useMedicationAddStore();
 
   const handleDateChangeWrapper =
     (type: 'year' | 'month' | 'day') =>
@@ -99,6 +101,9 @@ export const DataForm = ({ role }: { role: UserRole }) => {
       const userAccessToken = data.data.data.accessToken;
       const user = data.data.data.userInfo;
       await updateUserInfo({ userAccessToken, user });
+      // FIXME: 회원가입도 동일하게 약 등록을 위한 닉네임 할당 필요
+      setUserInfo(user.nickname);
+
       if (user.role === 'child') nav('/main');
       if (user.role === 'protector') nav('/protector-main');
     },
