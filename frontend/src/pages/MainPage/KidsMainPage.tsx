@@ -40,6 +40,7 @@ import Loading from '@/shared/ui/Loading';
 import { characterImages, formatId } from '../Encyclopedia/model/mongddang-img';
 import { registerPlugin } from '@capacitor/core';
 import Microphone from './ui/Microphone/Microphone';
+import dayjs from 'dayjs';
 
 export interface EchoPlugin {
   echo(options: { value: string }): Promise<{ value: string }>;
@@ -160,7 +161,7 @@ const KidsMainPage = () => {
     } else if (menu === 1) {
       navigate('/menu');
     } else if (menu === 2) {
-      navigate(`/record/${new Date()}`);
+      navigate(`/record/${dayjs().format('YYYY-MM-DD')}`);
     }
   };
   console.log('알림창 상태', alertStatus);
