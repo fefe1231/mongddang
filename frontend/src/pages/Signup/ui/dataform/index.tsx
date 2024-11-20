@@ -104,8 +104,12 @@ export const DataForm = ({ role }: { role: UserRole }) => {
       // FIXME: 회원가입도 동일하게 약 등록을 위한 닉네임 할당 필요
       setUserInfo(user.nickname);
 
-      if (user.role === 'child') nav('/main');
-      if (user.role === 'protector') nav('/protector-main');
+      // 회원가입 후 유저 롤과 관계없이 바로 로그인 페이지로 이동하도록 수정
+      // 유저 정보가 각기 다른 스토어에서 관리되다 보니, 로그인 시 한 번에 처리
+      // 해 주는 게 편하다.
+      // if (user.role === 'child') nav('/main');
+      // if (user.role === 'protector') nav('/protector-main');
+      nav('/');
     },
     onError: (error) => {
       console.error('회원가입 실패:', error);
