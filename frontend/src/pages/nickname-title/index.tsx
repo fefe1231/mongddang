@@ -33,12 +33,15 @@ export const NicknameTitle = () => {
   };
 
   const TitleQuery = useQuery({
-    queryKey: ['title'],
+    queryKey: ['titles'],
     queryFn: async () => {
       return await getTitleInfo();
     },
   });
+
+  console.log('TitleQuery data');
   console.log(TitleQuery.data?.data?.data)
+
   return (
     <div className='mongddang-title'>
       <TopBar type="iconpage" iconHandler={() => nav('/main')}>
