@@ -11,6 +11,7 @@ import {
   iconVerticalCss,
   kidsMainBase,
   kidsMainContent,
+  mainCharacterClickedCss,
   mainCharacterCss,
   mainCharacterMovingCss,
   topContainer,
@@ -63,6 +64,7 @@ const KidsMainPage = () => {
   const [alertStatus, setAlertStatus] = useState('');
   const [alertBloodSugar, setAlertBloodSugar] = useState(0);
   const [currentRoutine, setCurrentRoutine] = useState('');
+  const [isMongClicked, setIsMongClicked] = useState(false);
   const refreshMainInfo = useRefreshMainInfo();
 
   if (isLoading || !mainInfo) {
@@ -148,6 +150,11 @@ const KidsMainPage = () => {
     setAlertBloodSugar(bloodSugar);
   };
 
+  // 몽땅 움직임
+  const handleMong = () => {
+    setIsMongClicked(!isMongClicked);
+  };
+
   // 바텀바 url 이동
   const moveBottomBar = (menu: number | undefined) => {
     if (menu === 0) {
@@ -158,6 +165,7 @@ const KidsMainPage = () => {
       navigate(`/record/${dayjs().format('YYYY-MM-DD')}`);
     }
   };
+
   console.log('알림창 상태', alertStatus);
   console.log('루틴 상태', currentRoutine);
 
@@ -276,7 +284,12 @@ const KidsMainPage = () => {
 
         <div css={bottomContainer}>
           {/* 메인캐릭터 + 말풍선 */}
-          <div css={CharacterContainer}>
+          <div
+            css={CharacterContainer}
+            onClick={() => {
+              handleMong();
+            }}
+          >
             <ChatBubble status={currentRoutine} />
             <img
               // src={
@@ -305,9 +318,11 @@ const KidsMainPage = () => {
               }
               alt="mainMong"
               css={
-                currentRoutine === '운동 중'
+                currentRoutine === '운동 중' && !isMongClicked
                   ? mainCharacterMovingCss
-                  : mainCharacterCss
+                  : currentRoutine !== '운동 중' && isMongClicked
+                    ? mainCharacterClickedCss
+                    : mainCharacterCss
               }
             />
           </div>
