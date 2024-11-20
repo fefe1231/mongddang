@@ -12,6 +12,7 @@ import {
   kidsMainBase,
   kidsMainContent,
   mainCharacterCss,
+  mainCharacterMovingCss,
   topContainer,
 } from './styles';
 import ProfileStatus from './ui/ProfileStatus/ProfileStatus';
@@ -308,7 +309,11 @@ const KidsMainPage = () => {
                       : characterImages[formatId(mainInfo.mainMongddangId)]
               }
               alt="mainMong"
-              css={mainCharacterCss}
+              css={
+                currentRoutine === '운동 중'
+                  ? mainCharacterMovingCss
+                  : mainCharacterCss
+              }
             />
           </div>
 

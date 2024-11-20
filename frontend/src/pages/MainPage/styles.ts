@@ -51,6 +51,23 @@ export const mainCharacterCss = css`
   object-fit: contain;
 `;
 
+export const mainCharacterMovingCss = css`
+  @keyframes bounce {
+    0% {
+      transform: translateY(0) scaleX(1); /* 원래 방향 */
+    }
+    50% {
+      transform: translateY(0) scaleX(-1); /* 즉시 반전 */
+    }
+    100% {
+      transform: translateY(0) scaleX(1); /* 원래 방향 복귀 */
+    }
+  }
+  height: 12rem;
+  animation: bounce 1s infinite steps(1, end);
+  object-fit: contain;
+`;
+
 export const iconGroupCss = css`
   display: flex;
   padding: 2% 0;
