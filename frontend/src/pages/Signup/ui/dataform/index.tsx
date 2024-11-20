@@ -94,11 +94,11 @@ export const DataForm = ({ role }: { role: UserRole }) => {
       //TODO: capa 토스트 고려해보기
       alert('회원가입이 완료되었습니다.');
       // preference에 user 정보 저장
-      
+
       // TODO: Access Token 하드코딩 수정
-      // const userAccessToken = data.data.data.accessToken;
+      const userAccessToken = data.data.data.accessToken;
       const user = data.data.data.userInfo;
-      await updateUserInfo({ user });
+      await updateUserInfo({ userAccessToken, user });
       if (user.role === 'child') nav('/main');
       if (user.role === 'protector') nav('/protector-main');
     },
