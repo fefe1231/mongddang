@@ -35,12 +35,12 @@ import { getInitialRoutine } from './api/routineApi';
 import { useStopwatchStore } from './model/useStopwatchStore';
 import { setExitTime, setStopwatch } from './hooks/useStopwatchStatus';
 import { mainIcons } from './constants/iconsData';
-import { getMainInfo } from './api/infoApi';
 import Loading from '@/shared/ui/Loading';
 import { characterImages, formatId } from '../Encyclopedia/model/mongddang-img';
 import { registerPlugin } from '@capacitor/core';
 import Microphone from './ui/Microphone/Microphone';
 import dayjs from 'dayjs';
+import { useMainInfoQuery, useRefreshMainInfo } from './model/useMainIfoQuery';
 
 export interface EchoPlugin {
   echo(options: { value: string }): Promise<{ value: string }>;
@@ -56,30 +56,21 @@ export const Foreground = registerPlugin<ForegroundPlugin>('Foreground');
 const KidsMainPage = () => {
   const navigate = useNavigate();
   const accessToken = localStorage.getItem('accessToken');
-  const [mainInfo, setMainInfo] = useState({
-    nickname: '',
-    mainTitleName: '',
-    mainMongddangId: 0,
-    coin: 0,
-    unreadNotification: false,
-    unclaimedMissionReward: false,
-    unclaimedAchivementReward: false,
-  });
+  const { data: mainInfo, isLoading } = useMainInfoQuery();
   const [openDietModal, setOpenDietModal] = useState(false);
   const [openBaseModal, setOpenBaseModal] = useState(false);
   const [contentType, setContentType] = useState('');
   const [alertStatus, setAlertStatus] = useState('');
   const [alertBloodSugar, setAlertBloodSugar] = useState(0);
   const [currentRoutine, setCurrentRoutine] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+  const refreshMainInfo = useRefreshMainInfo();
+
+  if (isLoading || !mainInfo) {
+    return <Loading />;
+  }
 
   // 초기 루틴 상태 조회
   useEffect(() => {
-    const fetchMainInfo = async () => {
-      const mainInfo = await getMainInfo();
-      setMainInfo(mainInfo);
-      setIsLoading(false);
-    };
     const fetchRoutine = async () => {
       const routineValue = await getInitialRoutine();
       if (routineValue.data === undefined) {
@@ -117,7 +108,6 @@ const KidsMainPage = () => {
       }
     });
 
-    fetchMainInfo();
     fetchRoutine();
 
     return () => {
@@ -134,6 +124,7 @@ const KidsMainPage = () => {
   };
 
   const closeBaseModal = () => {
+    refreshMainInfo();
     setOpenBaseModal(false);
   };
 
@@ -147,6 +138,9 @@ const KidsMainPage = () => {
   // 알림창 상태 관리
   const handleAlert = (status: string) => {
     setAlertStatus(status);
+    if (status === 'endRoutine') {
+      refreshMainInfo();
+    }
   };
 
   // 알림창 혈당 관리
@@ -167,7 +161,7 @@ const KidsMainPage = () => {
   console.log('알림창 상태', alertStatus);
   console.log('루틴 상태', currentRoutine);
 
-  return !isLoading ? (
+  return (
     <div css={kidsMainBase}>
       <div css={kidsMainContent}>
         {/* 상단 컴포넌트들 */}
@@ -389,8 +383,6 @@ const KidsMainPage = () => {
         )
       }
     </div>
-  ) : (
-    <Loading />
   );
 };
 
