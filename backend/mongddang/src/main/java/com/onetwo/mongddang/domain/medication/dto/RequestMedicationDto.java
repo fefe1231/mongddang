@@ -23,6 +23,7 @@ public class RequestMedicationDto {
 
     @NotNull(message = "repeatStartTime은 필수값입니다.")
     private LocalDateTime repeatStartTime;
+//    sdcasdasasdsdasdasd
 
     @NotNull(message = "repeatEndTime은 필수값입니다.")
     private LocalDateTime repeatEndTime;
@@ -35,6 +36,7 @@ public class RequestMedicationDto {
 
     @NotNull(message = "standards은 필수값입니다.")
     private List<MedicationStandardDto> standards;
+
 
     private String image;
 

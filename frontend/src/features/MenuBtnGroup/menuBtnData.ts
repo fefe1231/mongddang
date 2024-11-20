@@ -1,11 +1,10 @@
 import { MenuBtnItem } from './model/types';
-import medication from '@/assets/img/icon/medication_icon.png'
-import meal from '@/assets/img/icon/meal_icon.png'
-import record from '@/assets/img/icon/record_icon.png'
-import report from '@/assets/img/icon/report_icon.png'
-import profile from '@/assets/img/icon/profile_icon.png'
-import setting from '@/assets/img/icon/setting_icon.png'
-
+import medication from '@/assets/img/icon/medication_icon.png';
+import meal from '@/assets/img/icon/meal_icon.png';
+import record from '@/assets/img/icon/record_icon.png';
+import report from '@/assets/img/icon/report_icon.png';
+import profile from '@/assets/img/icon/profile_icon.png';
+import setting from '@/assets/img/icon/setting_icon.png';
 
 export const menuBtnData: MenuBtnItem[] = [
   {
@@ -16,8 +15,8 @@ export const menuBtnData: MenuBtnItem[] = [
       protector: '복약관리',
     },
     urlTo: {
-      child: '',
-      protector: '',
+      child: '/medication',
+      protector: '/medication',
     },
   },
   {
@@ -78,30 +77,6 @@ export const menuBtnData: MenuBtnItem[] = [
     urlTo: {
       child: '/setting',
       protector: '/invitecode',
-    },
-  },
-  {
-    icon: '/img/%EB%A7%90%EB%9E%911.png',
-    category: '',
-    menu: {
-      child: '삼성설정',
-      protector: '삼성설정',
-    },
-    urlTo: {
-      child: '/samsungsetting',
-      protector: '',
-    },
-  },
-  {
-    icon: '/img/%EB%A7%90%EB%9E%911.png',
-    category: '',
-    menu: {
-      child: '포그라운드 설정',
-      protector: '포그라운드설정',
-    },
-    urlTo: {
-      child: '/foregroundsetting',
-      protector: '',
     },
   },
 ];

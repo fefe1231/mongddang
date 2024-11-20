@@ -5,6 +5,7 @@ import { BottomBar } from '@/shared/ui/BottomBar';
 import {
   bottomContainer,
   CharacterContainer,
+  dotCss,
   iconGroupCss,
   iconHorizontalCss,
   iconVerticalCss,
@@ -37,6 +38,7 @@ import { getMainInfo } from './api/infoApi';
 import Loading from '@/shared/ui/Loading';
 import { characterImages, formatId } from '../Encyclopedia/model/mongddang-img';
 import { registerPlugin } from '@capacitor/core';
+import Microphone from './ui/Microphone/Microphone';
 
 export interface EchoPlugin {
   echo(options: { value: string }): Promise<{ value: string }>;
@@ -57,6 +59,9 @@ const KidsMainPage = () => {
     mainTitleName: '',
     mainMongddangId: 0,
     coin: 0,
+    unreadNotification: false,
+    unclaimedMissionReward: false,
+    unclaimedAchivementReward: false,
   });
   const [openDietModal, setOpenDietModal] = useState(false);
   const [openBaseModal, setOpenBaseModal] = useState(false);
@@ -174,56 +179,101 @@ const KidsMainPage = () => {
           {/* 아이콘 모음 */}
           <div css={iconGroupCss}>
             <div css={iconHorizontalCss}>
-              <div css={iconVerticalCss}>
-                <div
-                // TODO: 어디에 사용했었는지, 필요한지 체크
-                // onClick={() => {
-                //   setOpenBaseModal(true);
-                //   setContentType('dailyMission');
-                // }}
-                >
-                  <IconTypo
-                    icon={mainIcons.mission}
-                    fontSize="0.75"
-                    menu={
-                      <span>
-                        오늘의 <br />
-                        퀘스트
-                      </span>
-                    }
-                  />
-                </div>
-              </div>
               <div
                 onClick={() => {
                   setOpenBaseModal(true);
-                  setContentType('notification');
+                  setContentType('dailyMission');
+                }}
+                style={{
+                  position: 'relative',
                 }}
               >
-                <IconTypo
-                  icon={mainIcons.notification}
-                  fontSize="0.75"
-                  menu="알림"
+                <img
+                  src={mainIcons.redDot}
+                  alt="dot"
+                  css={dotCss}
+                  style={{
+                    display:
+                      mainInfo.unclaimedMissionReward === false ? 'none' : '',
+                  }}
                 />
-              </div>
-              <div
-                onClick={() => {
-                  navigate('/nickname/title');
-                }}
-              >
                 <IconTypo
-                  icon={mainIcons.achievement}
+                  icon={mainIcons.mission}
                   fontSize="0.75"
                   menu={
-                    <div>
-                      도전
-                      <br />
+                    <span>
+                      오늘의 <br />
                       퀘스트
-                    </div>
+                    </span>
                   }
                 />
               </div>
-              <CurrentBloodSugar />
+              <div css={iconVerticalCss}>
+                <div
+                  onClick={() => {
+                    setOpenBaseModal(true);
+                    setContentType('notification');
+                  }}
+                  style={{
+                    position: 'relative',
+                  }}
+                >
+                  <img
+                    src={mainIcons.redDot}
+                    alt="dot"
+                    css={dotCss}
+                    style={{
+                      display:
+                        mainInfo.unreadNotification === false ? 'none' : '',
+                    }}
+                  />
+
+                  <IconTypo
+                    icon={mainIcons.notification}
+                    fontSize="0.75"
+                    menu="알림"
+                  />
+                </div>
+                <div
+                  onClick={() => {
+                    navigate('/nickname/title');
+                  }}
+                  style={{
+                    position: 'relative',
+                  }}
+                >
+                  <img
+                    src={mainIcons.redDot}
+                    alt="dot"
+                    css={dotCss}
+                    style={{
+                      display:
+                        mainInfo.unclaimedAchivementReward === false
+                          ? 'none'
+                          : '',
+                    }}
+                  />
+                  <IconTypo
+                    icon={mainIcons.achievement}
+                    fontSize="0.75"
+                    menu={
+                      <div>
+                        도전
+                        <br />
+                        퀘스트
+                      </div>
+                    }
+                  />
+                </div>
+                <CurrentBloodSugar nickname={mainInfo.nickname} />
+                <Microphone>
+                  <div
+                    onClick={() => {
+                      navigate('/nickname/title');
+                    }}
+                  ></div>
+                </Microphone>
+              </div>
             </div>
           </div>
         </div>
