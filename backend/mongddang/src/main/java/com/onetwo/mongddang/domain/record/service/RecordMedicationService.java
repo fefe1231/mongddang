@@ -106,7 +106,7 @@ public class RecordMedicationService {
         Integer bloodSugarLevel = responseDailyGlucoseDto.getBloodSugarLevel();
 
         log.info("create volume");
-        Long volume = -1L;
+        Long volume = 2L;
         if (medicationTimeListString.size() != 0) {
             for (MedicationTime medicationTime : medicationTimeList) {
                 if (medicationTime.getMinGlucose() == null) {
