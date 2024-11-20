@@ -283,8 +283,31 @@ const KidsMainPage = () => {
           <div css={CharacterContainer}>
             <ChatBubble status={currentRoutine} />
             <img
-              src={characterImages[formatId(mainInfo.mainMongddangId)]}
-              alt=""
+              // src={
+              //   currentRoutine === '먹는 중'
+              //     ? characterImages[
+              //         `${formatId(mainInfo.mainMongddangId)}_meal`
+              //       ]
+              //     : currentRoutine === '운동 중'
+              //       ? characterImages[
+              //           `${formatId(mainInfo.mainMongddangId)}_exercise`
+              //         ]
+              //       : currentRoutine === '자는 중'
+              //         ? characterImages[
+              //             `${formatId(mainInfo.mainMongddangId)}_sleep`
+              //           ]
+              //         : characterImages[formatId(mainInfo.mainMongddangId)]
+              // }
+              src={
+                currentRoutine === '먹는 중'
+                  ? characterImages[`01_meal`]
+                  : currentRoutine === '운동 중'
+                    ? characterImages[`01_exercise`]
+                    : currentRoutine === '자는 중'
+                      ? characterImages[`01_sleep`]
+                      : characterImages[formatId(mainInfo.mainMongddangId)]
+              }
+              alt="mainMong"
               css={mainCharacterCss}
             />
           </div>
