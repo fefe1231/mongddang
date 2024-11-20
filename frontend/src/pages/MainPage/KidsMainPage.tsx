@@ -56,8 +56,9 @@ export const Foreground = registerPlugin<ForegroundPlugin>('Foreground');
 
 const KidsMainPage = () => {
   const navigate = useNavigate();
-  const accessToken = localStorage.getItem('accessToken');
   const { data: mainInfo, isLoading } = useMainInfoQuery();
+  const refreshMainInfo = useRefreshMainInfo();
+
   const [openDietModal, setOpenDietModal] = useState(false);
   const [openBaseModal, setOpenBaseModal] = useState(false);
   const [contentType, setContentType] = useState('');
@@ -65,11 +66,6 @@ const KidsMainPage = () => {
   const [alertBloodSugar, setAlertBloodSugar] = useState(0);
   const [currentRoutine, setCurrentRoutine] = useState('');
   const [isMongClicked, setIsMongClicked] = useState(false);
-  const refreshMainInfo = useRefreshMainInfo();
-
-  if (isLoading || !mainInfo) {
-    return <Loading />;
-  }
 
   // 초기 루틴 상태 조회
   useEffect(() => {
@@ -116,6 +112,10 @@ const KidsMainPage = () => {
       App.removeAllListeners();
     };
   }, []);
+
+  if (isLoading || !mainInfo) {
+    return <Loading />;
+  }
 
   const handleDietModal = () => {
     setOpenDietModal(true);
@@ -347,7 +347,6 @@ const KidsMainPage = () => {
       {/* 식단 등록 모달 */}
       {openDietModal && (
         <DietModal
-          accessToken={accessToken}
           closeDietModal={closeDietModal}
           changeRoutine={changeRoutine}
           handleAlert={handleAlert}
@@ -365,7 +364,6 @@ const KidsMainPage = () => {
         alertStatus === 'askStartRoutine' ? (
           <AskStartRoutineAlert
             currentRoutine={currentRoutine}
-            accessToken={accessToken}
             handleAlert={handleAlert}
             changeRoutine={changeRoutine}
             handleBloodSugar={handleBloodSugar}
@@ -381,7 +379,6 @@ const KidsMainPage = () => {
           // 루틴 종료 여부 질문 알림
           <AskEndRoutineAlert
             currentRoutine={currentRoutine}
-            accessToken={accessToken}
             handleAlert={handleAlert}
             changeRoutine={changeRoutine}
             handleBloodSugar={handleBloodSugar}
