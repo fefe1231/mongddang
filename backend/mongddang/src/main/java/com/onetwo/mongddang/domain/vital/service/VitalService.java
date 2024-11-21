@@ -157,8 +157,8 @@ public class VitalService {
             if (measurementDayOfWeek == currentDayOfWeek) {
                 log.info("currentDayOfWeek: {}", currentDayOfWeek);
 
-                List<Vital> vitals = vitalRepository.findByChildAndMeasurementTimeBetween(
-                        child, date.atStartOfDay(), date.atTime(23, 59, 59)
+                List<Vital> vitals = vitalRepository.findByChildIdAndMeasurementTimeBetween(
+                        1L, date.atStartOfDay(), date.atTime(23, 59, 59)
                 );
 
                 // 4. 조회한 혈당 기록 목록 중에서 현재 시간과 측정 시간의 차의 절댓값이 5분보다 작은 데이터를 조회한다.
