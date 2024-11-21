@@ -1,5 +1,6 @@
 package com.onetwo.mongddang.domain.fcm.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.onetwo.mongddang.domain.fcm.model.PushLog;
 import lombok.Builder;
@@ -28,6 +29,7 @@ public class FcmMessage {
     @RequiredArgsConstructor
     @Getter
     @Builder
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public static class Data {
 
         private final String receiverNickname; // 알림 수신인의 닉네임
