@@ -23,6 +23,7 @@ import { Newcharacter } from './ui/characterlist/new-character';
 import { Owncharacter } from './ui/characterlist/owncharacter';
 import { Description } from './ui/description';
 import Loading from '@/shared/ui/Loading';
+import { MainModal } from './ui/modal/main-modal';
 
 export const Encyclopedia = () => {
   const [isOwnModal, setIsOwnModal] = useState(false);
@@ -78,7 +79,7 @@ export const Encyclopedia = () => {
         <OwnModal data={selectedCharacter} setstate={setIsOwnModal} />
       )}
       {isMainModal && selectedCharacter && (
-        <OwnModal data={selectedCharacter} setstate={setIsOwnModal} />
+        <MainModal data={selectedCharacter} setstate={setIsMainModal} />
       )}
       {isNotModal && selectedCharacter && (
         <Notmodal data={selectedCharacter} setstate={setIsNotModal} />
