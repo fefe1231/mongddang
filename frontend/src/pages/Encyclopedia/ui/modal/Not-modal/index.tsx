@@ -25,6 +25,7 @@ import {
 import coin from '@/assets/img/icon/star_coin.png';
 import { css } from '@emotion/react';
 import coinbag from '@/assets/img/icon/star_coin_bag.png';
+import { queryClient } from '@/shared/lib/queryClient';
 
 interface OwnModalProps {
   setstate: (value: boolean) => void;
@@ -43,6 +44,7 @@ export const Notmodal = ({ setstate, data }: OwnModalProps) => {
       return await postRecruitment(data.id);
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['character'] });
       setFindModal(true);
     },
     onError: (error) => {
