@@ -91,11 +91,11 @@ export const OwnModal = ({ setstate, data }: OwnModalProps) => {
   return (
     <div>
       {isParentModalOpen && (
-        <Modal height={40} width={70} css={modalCss}>
-          <Icon size={2} css={xiconCss} onClick={() => setstate(false)}>
+        <Modal height={40} width={70} css={modalCss} className='own-modal'>
+          <Icon size={2} css={xiconCss} onClick={() => setstate(false)} className='icon'>
             <HiOutlineX />
           </Icon>
-          <div css={base}>
+          <div css={base} className='base-container'>
             <Chip border={0.625} color="primary" fontSize={1} fontWeight={700}>
               {data?.name}
             </Chip>
