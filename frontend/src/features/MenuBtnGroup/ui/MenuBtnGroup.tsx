@@ -18,7 +18,7 @@ const MenuBtnGroup = (props: MenuBtnGroupProps) => {
       {menuBtnData.map((item, i) => {
         return (
           <div
-            css={btn(item.category === 'meal')}
+            css={btn}
             onClick={() => {
               navigate(item.urlTo[props.userRole]);
               bubble.play();
