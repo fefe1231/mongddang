@@ -20,7 +20,6 @@ const MenuBtnGroup = (props: MenuBtnGroupProps) => {
           <div
             css={btn(item.category === 'meal')}
             onClick={() => {
-              if (item.category === 'meal') return;
               navigate(item.urlTo[props.userRole]);
               bubble.play();
             }}
