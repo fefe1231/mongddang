@@ -198,14 +198,14 @@ public class VitalService {
         int weight = 0;
         if (recentRecord != null) {
             if (recentRecord.getCategory().equals(Record.RecordCategoryType.exercise)) {
-                weight = -5;
+                weight = -2;
                 log.info("운동 가중치 exercise weight: {}", weight);
             } else if (recentRecord.getCategory().equals(Record.RecordCategoryType.meal
             )) {
-                weight = 5;
+                weight = 2;
                 log.info("식사 가중치 meal weight: {}", weight);
             } else if (recentRecord.getCategory().equals(Record.RecordCategoryType.medication)) {
-                weight = -10;
+                weight = -4;
                 log.info("복약 가중치 medication weight : {}", weight);
             }
         }
@@ -232,37 +232,34 @@ public class VitalService {
             Random random = new Random();
 
             int correctionValue;
+            int randomValue;
             if (curBloodSugarLevel > 300) {
-                // 수치가 매우 높은 경우 -15~5
+                // 수치가 매우 높은 경우 -5~2
                 log.info("over 300");
-                int randomValue = random.nextInt(21) - 15;
+                randomValue = random.nextInt(7) - 5;
                 correctionValue = curBloodSugarLevel + randomValue;
-                log.info("randomValue: {}", randomValue);
             } else if (curBloodSugarLevel > 300 && curBloodSugarLevel > 200) {
-                // 수치가 높은 경우 -10~5
+                // 수치가 높은 경우 -3~2
                 log.info("over 200");
-                int randomValue = random.nextInt(16) - 10;
-                correctionValue = curBloodSugarLevel + random.nextInt(16) - 10;
-                log.info("randomValue: {}", randomValue);
+                randomValue = random.nextInt(5) - 3;
+                correctionValue = curBloodSugarLevel + randomValue;
             } else if (curBloodSugarLevel > 200 && curBloodSugarLevel < 90) {
-                // 수치가 낮은 경우 -5~15
+                // 수치가 낮은 경우 -1~6
                 log.info("under 90");
-                int randomValue = random.nextInt(21) - 5;
-                correctionValue = curBloodSugarLevel + random.nextInt(21) - 5;
-                log.info("randomValue: {}", randomValue);
+                randomValue = random.nextInt(7) - 1;
+                correctionValue = curBloodSugarLevel + randomValue;
             } else if (curBloodSugarLevel < 60) {
-                // 수치가 극도로 낮은 경우 5~20
+                // 수치가 극도로 낮은 경우 1~6
                 log.info("under 60");
-                int randomValue = random.nextInt(16) + 5;
-                correctionValue = curBloodSugarLevel + random.nextInt(16) + 5;
-                log.info("randomValue: {}", randomValue);
+                randomValue = random.nextInt(5) + 1;
+                correctionValue = curBloodSugarLevel + randomValue;
             } else {
-                // 일반적인 상황에서는 +-10 범위의 랜덤 수치 생성
+                // 일반적인 상황에서는 -3~4 범위의 랜덤 수치 생성
                 log.info("normal");
-                int randomValue = random.nextInt(21) - 10;
-                correctionValue = curBloodSugarLevel + random.nextInt(21) - 10;
-                log.info("randomValue: {}", randomValue);
+                randomValue = random.nextInt(7) - 3;
+                correctionValue = curBloodSugarLevel + randomValue;
             }
+            log.info("randomValue: {}", randomValue);
 
             // 반환할 상태값 설정
             Vital.GlucoseStatusType status;
