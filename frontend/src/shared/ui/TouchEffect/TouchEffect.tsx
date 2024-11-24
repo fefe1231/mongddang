@@ -7,7 +7,7 @@ import {
   effectCssInitialize,
   imageSize,
 } from './TouchEffect.styles';
-import touchEffectGif from '@/assets/img/icon/main_star-sm.png';
+import touchEffectImage from '@/assets/img/icon/main_star-sm.png';
 
 interface TouchEffect {
   x: number;
@@ -19,6 +19,14 @@ const TouchEffect = ({ children }: PropsWithChildren) => {
   const [touches, setTouches] = useState<TouchEffect[]>([]);
 
   const handleTouch = (event: TouchEvent<HTMLDivElement>) => {
+    console.log(event);
+    console.log('clientX:', event.touches[0].clientX);
+    console.log('clientY:', event.touches[0].clientY);
+    console.log('pageX:', event.touches[0].pageX);
+    console.log('pageY:', event.touches[0].pageY);
+    console.log('screenX:', event.touches[0].screenX);
+    console.log('screenY:', event.touches[0].screenY);
+    console.log('--------------------------------------------');
     const touchX = event.touches[0].clientX;
     const touchY = event.touches[0].clientY;
     const id = Date.now(); // 현재 시간을 ID로 사용
@@ -37,7 +45,7 @@ const TouchEffect = ({ children }: PropsWithChildren) => {
             left: touch.x,
           }}
         >
-          <img src={touchEffectGif} alt="touch effect" css={imageSize} />
+          <img src={touchEffectImage} alt="touch effect" css={imageSize} />
         </div>
       ))}
       <div css={effectCssInitialize}>{children}</div>
