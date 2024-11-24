@@ -14,8 +14,9 @@ import { TextField } from '@/shared/ui/TextField';
 import { Button } from '@/shared/ui/Button';
 import { useCallback, useEffect, useState } from 'react';
 import { debounce } from 'lodash';
-import { saveDiet } from '../../api/dietApi';
+import { getTodayMeal, saveDiet } from '../../api/dietApi';
 import { useStopwatchStore } from '../../model/useStopwatchStore';
+import { useUserStore } from '@/entities/user/model';
 
 type DietModalProps = {
   closeDietModal: () => void;
@@ -25,17 +26,51 @@ type DietModalProps = {
 };
 
 const DietModal = (props: DietModalProps) => {
+  console.log(props, 'props');
   const [selectedMealTime, setSelectedMealTime] = useState('breakfast');
   const [isDisabled, setIsDisabled] = useState(true);
+  const [initialDiet, setInitialDiet] = useState('');
   const [diet, setDiet] = useState('');
   const [dietImgFile, setDietImgFile] = useState<File | null>(null);
+
+  const nickname = useUserStore((state) => state.user?.nickname);
 
   const { startStopwatch } = useStopwatchStore();
 
   // 식사 타임 선택
-  const handleBtnClick = (info: string) => {
+  const handleBtnClick = async (info: string) => {
     setSelectedMealTime(info);
+
+    if (selectedMealTime !== 'lunch') {
+      return;
+    }
+
+    const response = await getTodayMeal(info, nickname);
+    console.log(response.data, 'response.data');
+    console.log(response.data.join(', '), 'response.data.join');
+    if (response) {
+      console.log('res check', response);
+      console.log(diet, 'diet');
+      const mealData = response.data.join(', ');
+      setDiet(mealData);
+
+      // 저장 버튼 활성화 상태 업데이트
+      if (mealData !== '' || dietImgFile) {
+        setIsDisabled(false);
+      } else {
+        setIsDisabled(true);
+      }
+    }
   };
+
+  useEffect(() => {
+    const initializeDiet = async () => {
+      const response = await getTodayMeal('lunch', nickname);
+      setInitialDiet(response.data.join(', '));
+    };
+
+    initializeDiet();
+  }, []);
 
   // 식단 텍스트 등록
   const debounceSaveDiet = useCallback(
@@ -46,7 +81,15 @@ const DietModal = (props: DietModalProps) => {
   );
 
   const handleInputDiet = (e: React.ChangeEvent<HTMLInputElement>) => {
-    debounceSaveDiet(e.target.value);
+    const inputValue = e.target.value;
+    debounceSaveDiet(inputValue);
+
+    // 저장 버튼 활성화 상태 업데이트
+    if (inputValue !== '' || dietImgFile) {
+      setIsDisabled(false);
+    } else {
+      setIsDisabled(true);
+    }
   };
 
   // 식단 이미지 등록
@@ -59,14 +102,18 @@ const DietModal = (props: DietModalProps) => {
   // 식단 저장 버튼 활성화
   useEffect(() => {
     const handleDisabledBtn = () => {
-      if (diet !== '' || dietImgFile) {
+      if (
+        diet !== '' ||
+        dietImgFile ||
+        (selectedMealTime === 'lunch' && initialDiet)
+      ) {
         setIsDisabled(false);
       } else if (diet === '' && !dietImgFile) {
         setIsDisabled(true);
       }
     };
-    return handleDisabledBtn();
-  }, [diet, dietImgFile]);
+    handleDisabledBtn();
+  }, [initialDiet, selectedMealTime, diet, dietImgFile]);
 
   // 식단 저장
   const handleSaveDiet = async (
@@ -75,11 +122,7 @@ const DietModal = (props: DietModalProps) => {
     diet: string
   ) => {
     try {
-      const response = await saveDiet(
-        selectedMealTime,
-        dietImgFile,
-        diet
-      );
+      const response = await saveDiet(selectedMealTime, dietImgFile, diet);
       if (response.code === 200) {
         props.closeDietModal();
         props.changeRoutine('먹는 중');
@@ -91,6 +134,16 @@ const DietModal = (props: DietModalProps) => {
       console.log('에러');
     }
   };
+
+  useEffect(() => {
+    const initializeDiet = async () => {
+      const response = await getTodayMeal('lunch', nickname);
+      const initial = response.data.join(', ');
+      setInitialDiet(initial);
+    };
+
+    initializeDiet();
+  }, []);
 
   return (
     <div>
@@ -119,7 +172,7 @@ const DietModal = (props: DietModalProps) => {
           {/* 식단 텍스트 입력 */}
           <TextField
             color="dark"
-            defaultValue=""
+            defaultValue={selectedMealTime === 'lunch' ? initialDiet : ''}
             label=""
             maxRows={10}
             multiLine
@@ -139,11 +192,7 @@ const DietModal = (props: DietModalProps) => {
             scale="A200"
             variant="contained"
             handler={() => {
-              handleSaveDiet(
-                selectedMealTime,
-                dietImgFile,
-                diet
-              );
+              handleSaveDiet(selectedMealTime, dietImgFile, diet);
             }}
             disabled={isDisabled}
           >
