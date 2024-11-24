@@ -2,6 +2,7 @@ package com.onetwo.mongddang.domain.mealplan.repository;
 
 import com.onetwo.mongddang.domain.mealplan.model.Mealplan;
 import com.onetwo.mongddang.domain.user.model.CtoP;
+import com.onetwo.mongddang.domain.user.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -22,5 +23,9 @@ public interface MealplanRepository extends JpaRepository<Mealplan, Long> {
     Optional<Mealplan> findOneByChildIdAndMealTimeToday(
             @Param("childId") Long childId,
             @Param("mealTime") String mealTime);
+
+
+    @Query("SELECT m FROM Mealplan m WHERE m.child = :child ORDER BY m.startTime DESC LIMIT 1")
+    Optional<Mealplan> findFirstByChildOrderByStartTimeDesc(@Param("child") User child);
 
 }
